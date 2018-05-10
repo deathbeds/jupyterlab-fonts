@@ -1,7 +1,7 @@
 {
   "author": "Dead Pixels Collective",
   "bugs": {
-    "url": "https://github.com/deathbeds/jupyterlab_firacode/issues"
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "^0.1.0",
@@ -19,7 +19,7 @@
   "name": "@deathbeds/jupyterlab-font-fira-code",
   "repository": {
     "type": "git",
-    "url": "https://github.com/deathbeds/jupyterlab_firacode.git"
+    "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
   "version": "0.1.1"
