@@ -1,0 +1,26 @@
+{
+  "author": "Dead Pixels Collective",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab_firacode/issues"
+  },
+  "dependencies": {
+    "@deathbeds/jupyterlab-fonts": "^0.1.0",
+    "firacode": "^1.205.0",
+    "@jupyterlab/application": "^0.16.0"
+  },
+  "description": "Code Fonts for JupyterLab",
+  "files": ["{lib,style}/*.{d.ts,js,css}"],
+  "jupyterlab": {
+    "extension": true
+  },
+  "keywords": ["jupyter", "jupyterlab", "jupyterlab-extension"],
+  "license": "BSD-3-Clause",
+  "main": "lib/index.js",
+  "name": "@deathbeds/jupyterlab-font-fira-code",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deathbeds/jupyterlab_firacode.git"
+  },
+  "types": "lib/index.d.ts",
+  "version": "0.1.1"
+}

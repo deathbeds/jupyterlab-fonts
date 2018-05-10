@@ -1,0 +1,6 @@
+envs/
+.ipynb_checkpoints/
+node_modules/
+*.log 
+packages/*/lib
+Untitled*.ipynb
