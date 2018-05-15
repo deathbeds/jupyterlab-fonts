@@ -8,7 +8,7 @@ const plugin: JupyterLabPlugin<void> = {
   autoStart: true,
   requires: [IFontManager],
   activate: function(app: JupyterLab, fonts: IFontManager) {
-    fonts.registerCodeFont('Fira Code', ['Light', 'Regular', 'Medium', 'Bold']);
+    fonts.registerFont('Fira Code', ['Light', 'Regular', 'Medium', 'Bold']);
   },
 };
 

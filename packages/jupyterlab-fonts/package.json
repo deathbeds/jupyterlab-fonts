@@ -20,7 +20,7 @@
     "@phosphor/widgets": "^1.5.0",
     "@phosphor/commands": "^1.4.0",
     "jss": "^9.8.1",
-    "jss-nested": "^6.0.1"
+    "jss-preset-default": "^4.5.0"
   },
   "devDependencies": {
     "@types/jss": "^9.5.3"

@@ -1,5 +1,8 @@
 import {JupyterLab, JupyterLabPlugin} from '@jupyterlab/application';
 import {IMainMenu} from '@jupyterlab/mainmenu';
+
+import {ICommandPalette} from '@jupyterlab/apputils';
+
 import {IFontManager} from '@deathbeds/jupyterlab-fonts';
 import {FontManager} from '@deathbeds/jupyterlab-fonts/lib/manager';
 
@@ -10,14 +13,15 @@ const PLUGIN_ID = '@deathbeds/jupyterlab-fonts:fonts';
 const plugin: JupyterLabPlugin<IFontManager> = {
   id: PLUGIN_ID,
   autoStart: true,
-  requires: [IMainMenu, ISettingRegistry],
+  requires: [IMainMenu, ISettingRegistry, ICommandPalette],
   provides: IFontManager,
   activate: function(
     app: JupyterLab,
     menu: IMainMenu,
-    settingRegistry: ISettingRegistry
+    settingRegistry: ISettingRegistry,
+    palette: ICommandPalette
   ): IFontManager {
-    const manager = new FontManager(app.commands);
+    const manager = new FontManager(app.commands, palette);
 
     manager.menus.forEach((m) =>
       menu.settingsMenu.addGroup([
@@ -28,20 +32,18 @@ const plugin: JupyterLabPlugin<IFontManager> = {
       ])
     );
 
-    const onSettingsUpdated = (settings: ISettingRegistry.ISettings) => {
-      manager.settingsUpdate(settings);
-    };
-
     Promise.all([settingRegistry.load(PLUGIN_ID), app.restored])
       .then(([settings]) => {
-        settings.changed.connect(onSettingsUpdated);
-        onSettingsUpdated(settings);
-        console.log('settings were restored');
+        manager.settings = settings;
+        settingRegistry
+          .load('@jupyterlab/apputils-extension:themes')
+          .then((settings) => {
+            settings.changed.connect(() => {
+              setTimeout(() => manager.hack(), 100);
+            });
+          });
       })
-      .catch((reason: Error) => {
-        console.error(reason.message);
-      });
-    // Fetch the initial
+      .catch((reason: Error) => console.error(reason.message));
 
     return manager;
   },

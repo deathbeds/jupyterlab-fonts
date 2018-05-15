@@ -1,12 +1,31 @@
 {
-  "anyOf": [
-    {"type": "object"},
-    {"type": "string"},
-    {"type": "number"},
-    {"type": "array"},
-    {"type": "null"}
-  ],
-  "description": "Settings for Typography",
-  "jupyter.lab.setting-icon-label": "Typography",
-  "title": "Typography"
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "title": "Enable Custom Fonts",
+      "description": "Enable all font customizations"
+    },
+    "version": {
+      "type": "string",
+      "title": "Configuration Version",
+      "description": "Reserved for future use to provide forwards/backwards compatibility",
+      "default": "v1",
+      "pattern": "v\\d+"
+    },
+    "styles": {
+      "title": "Global Styles",
+      "description": "A dictionary of CSS3 selectors to CSS values to apply globally. To learn more, visit http://cssinjs.org. As of v1, everything in jss-preset-default is enabled",
+      "$ref": "#/definitions/styles", "default": {}
+    }
+  },
+  "definitions": {
+    "styles": {
+      "type": "object"
+    }
+  },
+  "description": "Settings for Fonts",
+  "jupyter.lab.setting-icon-label": "Fonts",
+  "title": "Fonts"
 }
