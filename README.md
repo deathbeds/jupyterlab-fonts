@@ -10,9 +10,11 @@ jupyter labextension install \
   @deathbeds/jupyterlab-fonts-extension \
   @deathbeds/jupyterlab-font-fira-code
 ```
+
 > Yes, there is only one extra font enabled at this time.
 
 ## Configuration
+
 From the _Settings_ menu, select _Code Font_ and change the _Font Face_
 or _Size_.
 
@@ -20,6 +22,7 @@ or _Size_.
 > `--jp-code-font-family` and `--jp-code-font-size`.
 
 ## Advanced Configuration
+
 You can pretty much do anything you want from the _Fonts_ section of
 _Advanced Settings_... even things entirely unrelated to fonts.
 
