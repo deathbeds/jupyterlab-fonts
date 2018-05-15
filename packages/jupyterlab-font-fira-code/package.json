@@ -4,7 +4,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "^0.1.1",
+    "@deathbeds/jupyterlab-fonts": "^0.2.0",
     "firacode": "^1.205.0",
     "@jupyterlab/application": "^0.16.0"
   },
@@ -22,5 +22,5 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.1.1"
+  "version": "0.2.0"
 }
