@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {"type": "object"},
+    {"type": "string"},
+    {"type": "number"},
+    {"type": "array"},
+    {"type": "null"}
+  ],
+  "description": "Settings for Typography",
+  "jupyter.lab.setting-icon-label": "Typography",
+  "title": "Typography"
+}

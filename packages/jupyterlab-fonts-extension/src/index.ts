@@ -3,12 +3,20 @@ import {IMainMenu} from '@jupyterlab/mainmenu';
 import {IFontManager} from '@deathbeds/jupyterlab-fonts';
 import {FontManager} from '@deathbeds/jupyterlab-fonts/lib/manager';
 
+import {ISettingRegistry} from '@jupyterlab/coreutils';
+
+const PLUGIN_ID = '@deathbeds/jupyterlab-fonts:fonts';
+
 const plugin: JupyterLabPlugin<IFontManager> = {
-  id: '@deathbeds/jupyterlab-fonts-extension',
+  id: PLUGIN_ID,
   autoStart: true,
-  requires: [IMainMenu],
+  requires: [IMainMenu, ISettingRegistry],
   provides: IFontManager,
-  activate: function(app: JupyterLab, menu: IMainMenu): IFontManager {
+  activate: function(
+    app: JupyterLab,
+    menu: IMainMenu,
+    settingRegistry: ISettingRegistry
+  ): IFontManager {
     const manager = new FontManager(app.commands);
 
     manager.menus.forEach((m) =>
@@ -20,9 +28,20 @@ const plugin: JupyterLabPlugin<IFontManager> = {
       ])
     );
 
-    setTimeout(function() {
-      manager.styles.map((s) => document.body.appendChild(s));
-    }, 0);
+    const onSettingsUpdated = (settings: ISettingRegistry.ISettings) => {
+      manager.settingsUpdate(settings);
+    };
+
+    Promise.all([settingRegistry.load(PLUGIN_ID), app.restored])
+      .then(([settings]) => {
+        settings.changed.connect(onSettingsUpdated);
+        onSettingsUpdated(settings);
+        console.log('settings were restored');
+      })
+      .catch((reason: Error) => {
+        console.error(reason.message);
+      });
+    // Fetch the initial
 
     return manager;
   },

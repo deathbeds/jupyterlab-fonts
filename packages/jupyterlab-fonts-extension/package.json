@@ -4,15 +4,16 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "^0.1.0",
+    "@deathbeds/jupyterlab-fonts": "^0.1.1",
     "@jupyterlab/application": "^0.16.0",
     "@jupyterlab/mainmenu": "^0.5.2",
     "@phosphor/commands": "^1.4.0"
   },
   "description": "Code Fonts for JupyterLab",
-  "files": ["lib/*.{d.ts,js}"],
+  "files": ["{lib,schema}/*.{d.ts,js,json}"],
   "jupyterlab": {
-    "extension": true
+    "extension": true,
+    "schemaDir": "schema"
   },
   "keywords": ["jupyter", "jupyterlab", "jupyterlab-extension"],
   "license": "BSD-3-Clause",

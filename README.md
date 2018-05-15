@@ -1,10 +1,11 @@
-
 # jupyterlab-fonts
 
+> interactive typography for JupyterLab
 
 ## Installation
+
 ```bash
 jupyter labextension install \
-  @deathbeds\jupyterlab-fonts-extension \
-  @deathbeds\jupyterlab-font-fira-code
+  @deathbeds/jupyterlab-fonts-extension \
+  @deathbeds/jupyterlab-font-fira-code
 ```

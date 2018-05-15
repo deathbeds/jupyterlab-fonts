@@ -4,7 +4,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "description": "Code Fonts for JupyterLab",
-  "files": ["lib/*.{d.ts,js}"],
+  "files": ["lib/*.{d.ts,js}", "{LICENSE,README.md}"],
   "keywords": ["jupyter", "jupyterlab", "fonts"],
   "license": "BSD-3-Clause",
   "main": "lib/index.js",
@@ -18,6 +18,11 @@
   "dependencies": {
     "@phosphor/coreutils": "^1.3.0",
     "@phosphor/widgets": "^1.5.0",
-    "@phosphor/commands": "^1.4.0"
+    "@phosphor/commands": "^1.4.0",
+    "jss": "^9.8.1",
+    "jss-nested": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/jss": "^9.5.3"
   }
 }

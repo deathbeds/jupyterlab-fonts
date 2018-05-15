@@ -1,6 +1,9 @@
 import {Menu} from '@phosphor/widgets';
 import {CommandRegistry} from '@phosphor/commands';
 
+import {ISettingRegistry} from '@jupyterlab/coreutils';
+import * as jss from 'jss';
+
 import {IFontManager} from '.';
 
 export class FontManager implements IFontManager {
@@ -14,6 +17,7 @@ export class FontManager implements IFontManager {
     this._codeFontMenu = new Menu({commands});
     this._codeFontMenu.title.label = 'Code Font';
     this._codeStyle = document.createElement('style');
+    setTimeout(() => this.hack(), 0);
   }
 
   get menus() {
@@ -25,7 +29,19 @@ export class FontManager implements IFontManager {
   }
 
   get codeFontFamily() {
+    this.hack();
     return this._codeFontFamily;
+  }
+
+  settingsUpdate(settings: ISettingRegistry.ISettings): void {
+    const apiVersion = 1;
+    // settings.get('version').composite as string | null | undefined;
+    console.log(jss);
+    console.log(apiVersion, settings);
+  }
+
+  hack() {
+    this.styles.map((s) => document.body.appendChild(s));
   }
 
   set codeFontFamily(fontFamily) {
