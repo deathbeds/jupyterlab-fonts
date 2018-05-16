@@ -1,0 +1,70 @@
+{
+  "author": "Dead Pixels Collective",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
+  "description": "FatFonts as webfonts",
+  "fatfonts": {
+    "7Segments": {
+      "authors": [
+        {
+          "name": "R. Wheeler",
+          "url": "http://www.richardwheeler.net"
+        }
+      ],
+      "license": "CC BY-SA 3.0",
+      "url": "http://fatfonts.org/wp-content/uploads/2012/05/FatFont7.otf"
+    },
+    "Miguta": {
+      "authors": [
+        {
+          "name": "U. Hinrichs",
+          "url": "http://www.utahinrichs.de"
+        },
+        {
+          "name": "M. Nacenta",
+          "url": "http://nacenta.com"
+        }
+      ],
+      "contributors": [
+        {
+          "name": "R. Wheeler",
+          "url": "http://www.richardwheeler.net"
+        }
+      ],
+      "license": "CC BY-SA 3.0",
+      "url": "http://fatfonts.org/wp-content/uploads/2012/05/Miguta.otf"
+    },
+    "Rotunda": {
+      "authors": [
+        {
+          "name": "U. Hinrichs",
+          "url": "http://www.utahinrichs.de"
+        }
+      ],
+      "contributors": [
+        {
+          "name": "M. Nacenta",
+          "url": "http://nacenta.com"
+        },
+        {
+          "name": "R. Wheeler",
+          "url": "http://www.richardwheeler.net"
+        }
+      ],
+      "license": "CC BY-SA 3.0",
+      "url": "http://fatfonts.org/wp-content/uploads/2012/05/Rotunda.otf"
+    }
+  },
+  "files": ["{lib,style,fonts}/*.{d.ts,js,css,woff,woff2}", "{README.md,LICENSE}"],
+  "keywords": ["jupyter", "jupyterlab", "jupyterlab-extension"],
+  "license": "BSD-3-Clause",
+  "main": "lib/index.js",
+  "name": "@deathbeds/fatfonts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
+  },
+  "types": "lib/index.d.ts",
+  "version": "0.2.0"
+}

@@ -1,0 +1,26 @@
+{
+  "author": "Dead Pixels Collective",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
+  "dependencies": {
+    "@deathbeds/fatfonts": "^0.2.0",
+    "@deathbeds/jupyterlab-fonts": "^0.2.0",
+    "@jupyterlab/application": "^0.16.0"
+  },
+  "description": "Fat Fonts for JupyterLab",
+  "files": ["{lib,style}/*.{d.ts,js,css}", "{README.md,LICENSE}"],
+  "jupyterlab": {
+    "extension": true
+  },
+  "keywords": ["jupyter", "jupyterlab", "jupyterlab-extension"],
+  "license": "BSD-3-Clause",
+  "main": "lib/index.js",
+  "name": "@deathbeds/jupyterlab-font-fatfonts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
+  },
+  "types": "lib/index.d.ts",
+  "version": "0.2.0"
+}
