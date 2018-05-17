@@ -1,0 +1,9 @@
+.jp-FontsEditor {
+  color: var(--jp-ui-font-color0);
+  padding: calc(1.6 * var(--jp-notebook-padding));
+}
+
+.jp-FontsEditor h1 {
+  padding: 0;
+  margin: 0;
+}

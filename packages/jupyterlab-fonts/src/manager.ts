@@ -1,12 +1,13 @@
 import {Menu} from '@phosphor/widgets';
 import {CommandRegistry} from '@phosphor/commands';
 import {ICommandPalette} from '@jupyterlab/apputils';
+import {INotebookTracker, NotebookPanel} from '@jupyterlab/notebook';
 
 import {ISettingRegistry} from '@jupyterlab/coreutils';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
 
-import {IFontManager} from '.';
+import {IFontManager, PACKAGE_NAME, CMD_EDIT_FONTS} from '.';
 
 const ALL_PALETTE = 'Fonts';
 const CODE_PALETTE = 'Fonts (Code)';
@@ -14,33 +15,106 @@ const CODE_PALETTE = 'Fonts (Code)';
 const CMD_CODE_FONT_SIZE = 'code-font-size';
 const CMD_CODE_FONT_FAMILY = 'code-font-family';
 
-const ROOT = ':root';
-const CODE_FONT_FAMILY = '--jp-code-font-family';
-const CODE_FONT_FAMILY_DEFAULT = '"Source Code Pro", monospace';
-const CODE_FONT_SIZE = '--jp-code-font-size';
-const CODE_FONT_SIZE_DEFAULT = '13px';
+export const ROOT = ':root';
+export const CODE_FONT_FAMILY = '--jp-code-font-family';
+export const CODE_FONT_FAMILY_DEFAULT = 'Source Code Pro';
+export const CODE_FONT_FAMILY_FALLBACK = 'monospace';
+export const CODE_FONT_SIZE = '--jp-code-font-size';
+export const CODE_FONT_SIZE_DEFAULT = '13px';
 
 export class FontManager implements IFontManager {
-  private _stylesheet: HTMLStyleElement;
+  private _globalStyles: HTMLStyleElement;
+  private _editorMenu: Menu;
   private _codeFontMenu: Menu;
   private _codeFontFamilyMenu: Menu;
   private _codeFontSizeMenu: Menu;
   private _palette: ICommandPalette;
   private _commands: CommandRegistry;
+  private _notebooks: INotebookTracker;
   private _jss = JSS.create(jssPresetDefault());
+  private _notebookStyles = new Map<string, HTMLStyleElement>();
+  private _fonts = new Map<string, string[]>();
 
   private _settings: ISettingRegistry.ISettings;
 
-  constructor(commands: CommandRegistry, palette: ICommandPalette) {
+  constructor(
+    commands: CommandRegistry,
+    palette: ICommandPalette,
+    notebooks: INotebookTracker
+  ) {
     this._commands = commands;
     this._palette = palette;
+    this._notebooks = notebooks;
 
-    this._stylesheet = document.createElement('style');
+    this._globalStyles = document.createElement('style');
+
+    this._notebooks.currentChanged.connect(this._onNotebooksChanged, this);
 
     this.makeMenus(commands);
     this.makeCommands();
 
-    setTimeout(() => this.hack(), 0);
+    this.hack();
+  }
+
+  get fonts() {
+    return this._fonts;
+  }
+
+  private _onNotebooksChanged() {
+    this._notebooks.forEach((notebook) => {
+      if (this._notebookStyles.has(notebook.id)) {
+        return;
+      }
+      this._registerNotebook(notebook);
+    });
+  }
+
+  private _registerNotebook(notebook: NotebookPanel) {
+    const id = notebook.id;
+    this._notebookStyles.set(id, document.createElement('style'));
+    let watcher = this._notebookMetaWatcher(id);
+
+    notebook.model.metadata.changed.connect(watcher);
+    notebook.disposed.connect(() => this._notebookStyles.delete(id));
+    watcher();
+    this.hack();
+  }
+
+  private _notebookMetaWatcher(id: string) {
+    return () => {
+      this._notebooks.forEach((notebook) => {
+        if (notebook.id !== id) {
+          return;
+        }
+        const meta = notebook.model.metadata.get(PACKAGE_NAME);
+        let newStyle = '';
+
+        if (meta) {
+          let jss: any = {'@global': {}};
+          let idStyles: any = (jss['@global'][`#${id}`] = {});
+          let styles = (meta as any)['styles'] || {};
+          for (let k in styles) {
+            if (k === ROOT) {
+              for (let rootK in styles[k]) {
+                idStyles[rootK] = styles[k][rootK];
+              }
+            } else if (typeof styles[k] === 'object') {
+              idStyles[`& ${k}`] = styles[k];
+            } else {
+              idStyles[k] = styles[k];
+            }
+          }
+          const style = this._jss.createStyleSheet(jss);
+          newStyle = style.toString();
+        }
+
+        const sheet = this._notebookStyles.get(id);
+        if (sheet.textContent !== newStyle) {
+          sheet.textContent = newStyle;
+          this.hack();
+        }
+      });
+    };
   }
 
   fontSizeOptions() {
@@ -85,6 +159,9 @@ export class FontManager implements IFontManager {
         label: `${label} Custom Fonts`,
         isVisible: () => this.enabled === !!i,
         execute: () => {
+          if (!this._settings) {
+            return;
+          }
           this._settings.set('enabled', !i);
         },
       });
@@ -93,10 +170,20 @@ export class FontManager implements IFontManager {
   }
 
   get enabled() {
+    if (!this.settings) {
+      return false;
+    }
     return !!this._settings.get('enabled').composite;
   }
 
   makeMenus(commands: CommandRegistry) {
+    const editor = (this._editorMenu = new Menu({commands}));
+    editor.addItem({
+      command: CMD_EDIT_FONTS,
+      args: {global: true},
+    });
+    editor.title.label = 'Customize Fonts';
+
     const code = (this._codeFontMenu = new Menu({commands}));
     code.title.label = 'Code Font';
 
@@ -125,14 +212,17 @@ export class FontManager implements IFontManager {
   }
 
   get menus() {
-    return [this._codeFontMenu];
+    return [this._editorMenu, this._codeFontMenu];
   }
 
   get styles() {
-    return [this._stylesheet];
+    return [this._globalStyles, ...Array.from(this._notebookStyles.values())];
   }
 
   get codeFontFamily() {
+    if (!this.settings) {
+      return null;
+    }
     try {
       return (this._settings.get('styles').composite as any)[ROOT][CODE_FONT_FAMILY];
     } catch (err) {
@@ -146,7 +236,9 @@ export class FontManager implements IFontManager {
       styles[ROOT] = {};
     }
     if (fontFamily) {
-      styles[ROOT][CODE_FONT_FAMILY] = `"${fontFamily}", ${CODE_FONT_FAMILY_DEFAULT}`;
+      styles[ROOT][
+        CODE_FONT_FAMILY
+      ] = `"${fontFamily}", "${CODE_FONT_FAMILY_DEFAULT}", "${CODE_FONT_FAMILY_FALLBACK}"`;
     } else {
       delete styles[ROOT][CODE_FONT_FAMILY];
     }
@@ -154,6 +246,9 @@ export class FontManager implements IFontManager {
   }
 
   get codeFontSize() {
+    if (!this.settings) {
+      return CODE_FONT_SIZE_DEFAULT;
+    }
     try {
       return (this._settings.get('styles').composite as any)[ROOT][CODE_FONT_SIZE];
     } catch (err) {
@@ -176,7 +271,7 @@ export class FontManager implements IFontManager {
 
   settingsUpdate(): void {
     if (!this.enabled) {
-      this._stylesheet.textContent = '';
+      this._globalStyles.textContent = '';
       return;
     }
 
@@ -185,7 +280,7 @@ export class FontManager implements IFontManager {
       const style = this._jss.createStyleSheet({
         '@global': raw as any,
       });
-      this._stylesheet.textContent = style.toString();
+      this._globalStyles.textContent = style.toString();
       this.hack();
     } catch (err) {
       console.error('Font rendering error');
@@ -194,7 +289,7 @@ export class FontManager implements IFontManager {
   }
 
   hack() {
-    this.styles.map((s) => document.body.appendChild(s));
+    setTimeout(() => this.styles.map((s) => document.body.appendChild(s)), 0);
   }
 
   registerFont(fontFamily: string, variants: string[] = []) {
@@ -203,6 +298,8 @@ export class FontManager implements IFontManager {
     } else {
       variants = variants.map((v) => `${fontFamily} ${v}`);
     }
+
+    this._fonts.set(fontFamily, variants);
 
     variants.forEach((fontFamily) => {
       const slug = fontFamily.replace(/[^a-z\d]/gi, '-').toLowerCase();

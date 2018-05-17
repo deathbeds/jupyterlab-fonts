@@ -27,5 +27,6 @@
   },
   "description": "Settings for Fonts",
   "jupyter.lab.setting-icon-label": "Fonts",
+  "jupyter.lab.setting-icon-class": "jp-FontsIcon",
   "title": "Fonts"
 }
