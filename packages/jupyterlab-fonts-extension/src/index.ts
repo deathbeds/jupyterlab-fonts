@@ -33,14 +33,7 @@ const plugin: JupyterLabPlugin<IFontManager> = {
   ): IFontManager {
     const manager = new FontManager(app.commands, palette, notebooks);
 
-    manager.menus.forEach((m) =>
-      menu.settingsMenu.addGroup([
-        {
-          type: 'submenu',
-          submenu: m,
-        },
-      ])
-    );
+    menu.addMenu(manager.menu, {rank: 2});
 
     app.commands.addCommand(CMD_EDIT_FONTS, {
       label: 'Open Font Editor',

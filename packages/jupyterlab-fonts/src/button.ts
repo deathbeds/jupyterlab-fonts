@@ -31,7 +31,7 @@ export class NotebookFontsButton
       tooltip: 'Notebook Fonts',
     });
 
-    panel.toolbar.insertItem(10, 'fonts', button);
+    panel.toolbar.insertItem(9, 'fonts', button);
     return new DisposableDelegate(() => {
       button.dispose();
     });

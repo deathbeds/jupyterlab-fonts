@@ -14,6 +14,7 @@ const CODE_PALETTE = 'Fonts (Code)';
 
 const CMD_CODE_FONT_SIZE = 'code-font-size';
 const CMD_CODE_FONT_FAMILY = 'code-font-family';
+const CMD_CODE_LINE_HEIGHT = 'code-line-height';
 
 export const ROOT = ':root';
 export const CODE_FONT_FAMILY = '--jp-code-font-family';
@@ -21,6 +22,9 @@ export const CODE_FONT_FAMILY_DEFAULT = 'Source Code Pro';
 export const CODE_FONT_FAMILY_FALLBACK = 'monospace';
 export const CODE_FONT_SIZE = '--jp-code-font-size';
 export const CODE_FONT_SIZE_DEFAULT = '13px';
+export const CODE_LINE_HEIGHT = '--jp-code-line-height';
+export const CODE_LINE_HEIGHT_DEFAULT = 'Source Code Pro';
+
 
 export class FontManager implements IFontManager {
   private _globalStyles: HTMLStyleElement;
@@ -28,6 +32,8 @@ export class FontManager implements IFontManager {
   private _codeFontMenu: Menu;
   private _codeFontFamilyMenu: Menu;
   private _codeFontSizeMenu: Menu;
+  private _codeLineHeightMenu: Menu;
+  private _menu: Menu;
   private _palette: ICommandPalette;
   private _commands: CommandRegistry;
   private _notebooks: INotebookTracker;
@@ -98,14 +104,20 @@ export class FontManager implements IFontManager {
               for (let rootK in styles[k]) {
                 idStyles[rootK] = styles[k][rootK];
               }
+            } else if (k === '@font-face') {
+              jss[k] = styles[k];
             } else if (typeof styles[k] === 'object') {
               idStyles[`& ${k}`] = styles[k];
             } else {
               idStyles[k] = styles[k];
             }
           }
+          console.group('FIXME: don\'t show this');
+          console.log(jss);
           const style = this._jss.createStyleSheet(jss);
           newStyle = style.toString();
+          console.log(newStyle);
+          console.groupEnd();
         }
 
         const sheet = this._notebookStyles.get(id);
@@ -125,13 +137,17 @@ export class FontManager implements IFontManager {
     return this.fontSizeOptions().map((px) => `${prefix}:${px}`);
   }
 
+  lineHeightOptions() {
+    return Array.from(Array(8).keys()).map((i) => `${(i * 0.25) + 1}`);
+  }
+
   makeCommands() {
     ['Increase', 'Decrease'].map((label, i) => {
       let command = `${CMD_CODE_FONT_SIZE}:${label.toLowerCase()}`;
       this._commands.addCommand(command, {
         label: `${label} Code Font Size`,
         execute: () => {
-          let cfs = parseInt(this.codeFontSize, 10);
+          let cfs = parseInt(this.codeFontSize.replace(/px$/, ''), 10);
           this.codeFontSize = `${cfs + (i ? -1 : 1)}px`;
         },
         isVisible: () => this.enabled,
@@ -139,6 +155,18 @@ export class FontManager implements IFontManager {
       });
       this._codeFontSizeMenu.addItem({command});
       this._palette.addItem({command, category: CODE_PALETTE, rank: 0});
+    });
+
+    this.lineHeightOptions().map((lineHeight, i) => {
+      const command = `${CMD_CODE_LINE_HEIGHT}:${lineHeight}`;
+      this._commands.addCommand(command, {
+        label: lineHeight,
+        isToggled: () => this.codeLineHeight === lineHeight,
+        isVisible: () => this.enabled,
+        execute: () => (this.codeLineHeight = lineHeight),
+        mnemonic: 0,
+      });
+      this._codeLineHeightMenu.addItem({command});
     });
 
     this.fontSizeOptions().map((px) => {
@@ -193,7 +221,16 @@ export class FontManager implements IFontManager {
     const size = (this._codeFontSizeMenu = new Menu({commands}));
     size.title.label = 'Size';
 
-    [family, size].map((submenu) => code.addItem({type: 'submenu', submenu}));
+    const height = (this._codeLineHeightMenu = new Menu({commands}));
+    height.title.label = 'Line Height';
+
+    [family, size, height].map((submenu) => code.addItem({type: 'submenu', submenu}));
+
+    this._menu = new Menu({commands});
+    this._menu.title.label = 'Format';
+
+    this._menu.addItem({type: 'submenu', submenu: code});
+    this._menu.addItem({type: 'submenu', submenu: editor});
   }
 
   set settings(settings) {
@@ -211,8 +248,8 @@ export class FontManager implements IFontManager {
     return this._settings;
   }
 
-  get menus() {
-    return [this._editorMenu, this._codeFontMenu];
+  get menu() {
+    return this._menu;
   }
 
   get styles() {
@@ -265,6 +302,30 @@ export class FontManager implements IFontManager {
       styles[ROOT][CODE_FONT_SIZE] = fontSize;
     } else {
       delete styles[ROOT][CODE_FONT_SIZE];
+    }
+    this._settings.set('styles', styles);
+  }
+
+  get codeLineHeight() {
+    if (!this.settings) {
+      return CODE_LINE_HEIGHT_DEFAULT;
+    }
+    try {
+      return (this._settings.get('styles').composite as any)[ROOT][CODE_LINE_HEIGHT];
+    } catch (err) {
+      return CODE_LINE_HEIGHT_DEFAULT;
+    }
+  }
+
+  set codeLineHeight(lineHeight) {
+    let styles: any = this._settings.get('styles').composite || {};
+    if (!styles[ROOT]) {
+      styles[ROOT] = {};
+    }
+    if (lineHeight) {
+      styles[ROOT][CODE_LINE_HEIGHT] = lineHeight;
+    } else {
+      delete styles[ROOT][CODE_LINE_HEIGHT];
     }
     this._settings.set('styles', styles);
   }

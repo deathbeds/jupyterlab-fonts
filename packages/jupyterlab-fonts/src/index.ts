@@ -32,5 +32,5 @@ export interface IFontManager {
   registerFont(fontFamily: string, variants?: string[]): void;
   fonts: Map<string, string[]>;
   styles: HTMLStyleElement[];
-  menus: Menu[];
+  menu: Menu;
 }
