@@ -25,7 +25,6 @@ export const CODE_FONT_SIZE_DEFAULT = '13px';
 export const CODE_LINE_HEIGHT = '--jp-code-line-height';
 export const CODE_LINE_HEIGHT_DEFAULT = 'Source Code Pro';
 
-
 export class FontManager implements IFontManager {
   private _globalStyles: HTMLStyleElement;
   private _editorMenu: Menu;
@@ -112,7 +111,7 @@ export class FontManager implements IFontManager {
               idStyles[k] = styles[k];
             }
           }
-          console.group('FIXME: don\'t show this');
+          console.group("FIXME: don't show this");
           console.log(jss);
           const style = this._jss.createStyleSheet(jss);
           newStyle = style.toString();
@@ -138,7 +137,7 @@ export class FontManager implements IFontManager {
   }
 
   lineHeightOptions() {
-    return Array.from(Array(8).keys()).map((i) => `${(i * 0.25) + 1}`);
+    return Array.from(Array(8).keys()).map((i) => `${i * 0.25 + 1}`);
   }
 
   makeCommands() {

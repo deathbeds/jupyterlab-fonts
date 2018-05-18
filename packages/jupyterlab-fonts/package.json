@@ -4,7 +4,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "description": "Code Fonts for JupyterLab",
-  "files": ["{lib,style}/*.{d.ts,js,css,svg}", "{LICENSE,README.md}"],
+  "files": ["{lib,style,schema}/*.{d.ts,js,css,svg,json}", "{LICENSE,README.md}"],
   "keywords": ["jupyter", "jupyterlab", "fonts"],
   "license": "BSD-3-Clause",
   "main": "lib/index.js",
@@ -24,6 +24,10 @@
     "jss-preset-default": "^4.5.0"
   },
   "devDependencies": {
-    "@types/jss": "^9.5.3"
+    "@types/jss": "^9.5.3",
+    "dtsgenerator": "^1.0.0"
+  },
+  "scripts": {
+    "schema": "DEBUG=dtsgen dtsgen -o src/_schema.d.ts ./schema/fonts.json"
   }
 }

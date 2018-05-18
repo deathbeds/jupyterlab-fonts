@@ -6,7 +6,13 @@ import {VDomModel, VDomRenderer} from '@jupyterlab/apputils';
 
 import {PACKAGE_NAME} from '.';
 
-import {FontManager, ROOT, CODE_FONT_FAMILY, CODE_LINE_HEIGHT, CODE_FONT_SIZE} from './manager';
+import {
+  FontManager,
+  ROOT,
+  CODE_FONT_FAMILY,
+  CODE_LINE_HEIGHT,
+  CODE_FONT_SIZE,
+} from './manager';
 
 import '../style/editor.css';
 
@@ -150,17 +156,20 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     const fonts = [null, ...Array.from(m.fonts.fonts.keys())];
 
     const onCodeFontFamily = (evt: React.FormEvent<HTMLSelectElement>) => {
-      const val = (evt.target as HTMLSelectElement).value;
+      let val = (evt.target as HTMLSelectElement).value;
+      val = val === '- default -' ? null : val;
       m.codeFontFamily = val;
     };
 
     const onCodeFontSize = (evt: React.FormEvent<HTMLSelectElement>) => {
-      const val = (evt.target as HTMLSelectElement).value;
+      let val = (evt.target as HTMLSelectElement).value;
+      val = val === '- default -' ? null : val;
       m.codeFontSize = val;
     };
 
     const onCodeLineHeight = (evt: React.FormEvent<HTMLSelectElement>) => {
-      const val = (evt.target as HTMLSelectElement).value;
+      let val = (evt.target as HTMLSelectElement).value;
+      val = val === '- default -' ? null : val;
       m.codeLineHeight = val;
     };
 
@@ -170,28 +179,31 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     return h('div', null, [
       h('h1', {key: 1}, [
-        ...(m.notebook ? [h('div', {
-          className: 'jp-NotebookIcon',
-          style: {
-            width: 'var(--jp-ui-font-size2)',
-            height: 'var(--jp-ui-font-size2)',
-            display: 'inline-block',
-            verticalAlign: 'middle'
-          }
-        })] : []),
-        `${title} Fonts`
+        ...(m.notebook
+          ? [
+              h('div', {
+                className: 'jp-NotebookIcon',
+                style: {
+                  width: 'var(--jp-ui-font-size2)',
+                  height: 'var(--jp-ui-font-size2)',
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                },
+              }),
+            ]
+          : []),
+        `${title} Fonts`,
       ]),
       h('h2', {key: 2}, 'Code'),
       h(
         'select',
-        {className: 'jp-mod-styled', onChange: onCodeFontFamily, key: 3},
-        fonts.map((label, key) => {
+        {className: 'jp-mod-styled', onChange: onCodeFontFamily, key: 3, defaultValue: codeFontFamily},
+        [null, ...fonts].map((label, key) => {
           return h(
             'optgroup',
             {label, key},
             (m.fonts.fonts.get(label) || [null]).map((face, key) => {
-              const selected = codeFontFamily === face ? {selected: true} : {};
-              return h('option', {key, ...selected}, face || '- default -');
+              return h('option', {key, value: face}, face || '- default -');
             })
           );
         })
@@ -199,19 +211,17 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       h('h3', {key: 5}, 'Font Size'),
       h(
         'select',
-        {className: 'jp-mod-styled', onChange: onCodeFontSize},
-        (m.fonts.fontSizeOptions()).map((fontSize, key) => {
-          const selected = codeFontSize === fontSize ? {selected: true} : {};
-          return h('option', {key, ...selected}, fontSize || '- default -');
+        {className: 'jp-mod-styled', onChange: onCodeFontSize, defaultValue: codeFontSize},
+        [null, ...m.fonts.fontSizeOptions()].map((fontSize, key) => {
+          return h('option', {key, value: fontSize}, fontSize || '- default -');
         })
       ),
       h('h3', {key: 6}, 'Line Height'),
       h(
         'select',
-        {className: 'jp-mod-styled', onChange: onCodeLineHeight, key: 7},
-        (m.fonts.lineHeightOptions()).map((lineHeight, key) => {
-          const selected = codeLineHeight === lineHeight ? {selected: true} : {};
-          return h('option', {key, ...selected}, lineHeight || '- default -');
+        {className: 'jp-mod-styled', onChange: onCodeLineHeight, key: 7, defaultValue: codeLineHeight},
+        [null, ...m.fonts.lineHeightOptions()].map((lineHeight, key) => {
+          return h('option', {key, value: lineHeight}, lineHeight || '- default -');
         })
       ),
     ]);

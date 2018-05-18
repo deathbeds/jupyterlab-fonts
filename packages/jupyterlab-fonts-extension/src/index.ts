@@ -74,7 +74,9 @@ const plugin: JupyterLabPlugin<IFontManager> = {
             });
           });
       })
-      .catch((reason: Error) => console.error(reason.message));
+      .catch((reason: Error) => {
+        console.error(reason);
+      });
 
     return manager;
   },
