@@ -7,13 +7,37 @@ import {Menu} from '@phosphor/widgets';
 
 import '../style/index.css';
 
+export const CMD = {
+  code: {
+    fontSize: 'code-font-size',
+    fontFamily: 'code-font-family',
+    lineHeight: 'code-line-height',
+  },
+  editFonts: 'font-editor:open',
+};
+
+export const CSS = {
+  root: ':root',
+  code: {
+    fontFamily: '--jp-code-font-family',
+    fontSize: '--jp-code-font-size',
+    lineHeight: '--jp-code-line-height',
+  },
+};
+
+export const DEFAULT = {
+  code: {
+    fontSize: '13px',
+    lineHeight: '1',
+    fontFamily: '"Source Code Pro", monospace',
+  },
+};
+
 // tslint:disable-next-line
 const pkg = require('../package.json');
 
 export const PACKAGE_NAME: string = pkg.name;
 export const ICON_CLASS = 'jp-FontsIcon';
-
-export const CMD_EDIT_FONTS = 'font-editor:open';
 
 // tslint:disable-next-line
 export const IFontManager = new Token<IFontManager>(

@@ -5,12 +5,7 @@ import {ICommandPalette} from '@jupyterlab/apputils';
 
 import {INotebookTracker} from '@jupyterlab/notebook';
 
-import {
-  IFontManager,
-  PACKAGE_NAME,
-  ICON_CLASS,
-  CMD_EDIT_FONTS,
-} from '@deathbeds/jupyterlab-fonts';
+import {IFontManager, PACKAGE_NAME, ICON_CLASS, CMD} from '@deathbeds/jupyterlab-fonts';
 import {FontManager} from '@deathbeds/jupyterlab-fonts/lib/manager';
 import {NotebookFontsButton} from '@deathbeds/jupyterlab-fonts/lib/button';
 import {FontEditor, FontEditorModel} from '@deathbeds/jupyterlab-fonts/lib/editor';
@@ -35,7 +30,7 @@ const plugin: JupyterLabPlugin<IFontManager> = {
 
     menu.addMenu(manager.menu, {rank: 2});
 
-    app.commands.addCommand(CMD_EDIT_FONTS, {
+    app.commands.addCommand(CMD.editFonts, {
       label: 'Open Font Editor',
       execute: (args) => {
         const editor = new FontEditor();
@@ -58,7 +53,7 @@ const plugin: JupyterLabPlugin<IFontManager> = {
 
     const fontsButton = new NotebookFontsButton();
     fontsButton.widgetRequested.connect(() => {
-      app.commands.execute(CMD_EDIT_FONTS);
+      app.commands.execute(CMD.editFonts);
     });
 
     app.docRegistry.addWidgetExtension('Notebook', fontsButton);

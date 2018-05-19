@@ -7,23 +7,10 @@ import {ISettingRegistry} from '@jupyterlab/coreutils';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
 
-import {IFontManager, PACKAGE_NAME, CMD_EDIT_FONTS} from '.';
+import {IFontManager, PACKAGE_NAME, CSS, CMD, DEFAULT} from '.';
 
 const ALL_PALETTE = 'Fonts';
 const CODE_PALETTE = 'Fonts (Code)';
-
-const CMD_CODE_FONT_SIZE = 'code-font-size';
-const CMD_CODE_FONT_FAMILY = 'code-font-family';
-const CMD_CODE_LINE_HEIGHT = 'code-line-height';
-
-export const ROOT = ':root';
-export const CODE_FONT_FAMILY = '--jp-code-font-family';
-export const CODE_FONT_FAMILY_DEFAULT = 'Source Code Pro';
-export const CODE_FONT_FAMILY_FALLBACK = 'monospace';
-export const CODE_FONT_SIZE = '--jp-code-font-size';
-export const CODE_FONT_SIZE_DEFAULT = '13px';
-export const CODE_LINE_HEIGHT = '--jp-code-line-height';
-export const CODE_LINE_HEIGHT_DEFAULT = 'Source Code Pro';
 
 export class FontManager implements IFontManager {
   private _globalStyles: HTMLStyleElement;
@@ -99,7 +86,7 @@ export class FontManager implements IFontManager {
           let idStyles: any = (jss['@global'][`#${id}`] = {});
           let styles = (meta as any)['styles'] || {};
           for (let k in styles) {
-            if (k === ROOT) {
+            if (k === CSS.root) {
               for (let rootK in styles[k]) {
                 idStyles[rootK] = styles[k][rootK];
               }
@@ -142,7 +129,7 @@ export class FontManager implements IFontManager {
 
   makeCommands() {
     ['Increase', 'Decrease'].map((label, i) => {
-      let command = `${CMD_CODE_FONT_SIZE}:${label.toLowerCase()}`;
+      let command = `${CMD.code.fontSize}:${label.toLowerCase()}`;
       this._commands.addCommand(command, {
         label: `${label} Code Font Size`,
         execute: () => {
@@ -157,7 +144,7 @@ export class FontManager implements IFontManager {
     });
 
     this.lineHeightOptions().map((lineHeight, i) => {
-      const command = `${CMD_CODE_LINE_HEIGHT}:${lineHeight}`;
+      const command = `${CMD.code.lineHeight}:${lineHeight}`;
       this._commands.addCommand(command, {
         label: lineHeight,
         isToggled: () => this.codeLineHeight === lineHeight,
@@ -169,7 +156,7 @@ export class FontManager implements IFontManager {
     });
 
     this.fontSizeOptions().map((px) => {
-      const command = `${CMD_CODE_FONT_SIZE}:${px}`;
+      const command = `${CMD.code.fontSize}:${px}`;
       this._commands.addCommand(command, {
         label: px,
         isToggled: () => this.codeFontSize === px,
@@ -206,7 +193,7 @@ export class FontManager implements IFontManager {
   makeMenus(commands: CommandRegistry) {
     const editor = (this._editorMenu = new Menu({commands}));
     editor.addItem({
-      command: CMD_EDIT_FONTS,
+      command: CMD.editFonts,
       args: {global: true},
     });
     editor.title.label = 'Customize Fonts';
@@ -260,7 +247,9 @@ export class FontManager implements IFontManager {
       return null;
     }
     try {
-      return (this._settings.get('styles').composite as any)[ROOT][CODE_FONT_FAMILY];
+      return (this._settings.get('styles').composite as any)[CSS.root][
+        CSS.code.fontFamily
+      ];
     } catch (err) {
       return null;
     }
@@ -268,63 +257,67 @@ export class FontManager implements IFontManager {
 
   set codeFontFamily(fontFamily) {
     let styles: any = this._settings.get('styles').composite || {};
-    if (!styles[ROOT]) {
-      styles[ROOT] = {};
+    if (!styles[CSS.root]) {
+      styles[CSS.root] = {};
     }
     if (fontFamily) {
-      styles[ROOT][
-        CODE_FONT_FAMILY
-      ] = `"${fontFamily}", "${CODE_FONT_FAMILY_DEFAULT}", "${CODE_FONT_FAMILY_FALLBACK}"`;
+      styles[CSS.root][CSS.code.fontFamily] = `"${fontFamily}", ${
+        DEFAULT.code.fontFamily
+      }`;
     } else {
-      delete styles[ROOT][CODE_FONT_FAMILY];
+      delete styles[CSS.root][CSS.code.fontFamily];
     }
     this._settings.set('styles', styles);
   }
 
   get codeFontSize() {
     if (!this.settings) {
-      return CODE_FONT_SIZE_DEFAULT;
+      return DEFAULT.code.fontSize;
     }
     try {
-      return (this._settings.get('styles').composite as any)[ROOT][CODE_FONT_SIZE];
+      return (this._settings.get('styles').composite as any)[CSS.root][
+        CSS.code.fontSize
+      ];
     } catch (err) {
-      return CODE_FONT_SIZE_DEFAULT;
+      return DEFAULT.code.fontSize;
     }
   }
 
   set codeFontSize(fontSize) {
     let styles: any = this._settings.get('styles').composite || {};
-    if (!styles[ROOT]) {
-      styles[ROOT] = {};
+    if (!styles[CSS.root]) {
+      styles[CSS.root] = {};
     }
     if (fontSize) {
-      styles[ROOT][CODE_FONT_SIZE] = fontSize;
+      styles[CSS.root][CSS.code.fontSize] = fontSize;
     } else {
-      delete styles[ROOT][CODE_FONT_SIZE];
+      delete styles[CSS.root][CSS.code.fontSize];
     }
     this._settings.set('styles', styles);
   }
 
   get codeLineHeight() {
     if (!this.settings) {
-      return CODE_LINE_HEIGHT_DEFAULT;
+      return DEFAULT.code.lineHeight;
     }
     try {
-      return (this._settings.get('styles').composite as any)[ROOT][CODE_LINE_HEIGHT];
+      return (this._settings.get('styles').composite as any)[CSS.root][
+        CSS.code.lineHeight
+      ];
     } catch (err) {
-      return CODE_LINE_HEIGHT_DEFAULT;
+      return DEFAULT.code.lineHeight;
     }
   }
 
   set codeLineHeight(lineHeight) {
     let styles: any = this._settings.get('styles').composite || {};
-    if (!styles[ROOT]) {
-      styles[ROOT] = {};
+    if (!styles[CSS.root]) {
+      styles[CSS.root] = {};
     }
     if (lineHeight) {
-      styles[ROOT][CODE_LINE_HEIGHT] = lineHeight;
+      styles[CSS.root][CSS.code.lineHeight] = lineHeight;
     } else {
-      delete styles[ROOT][CODE_LINE_HEIGHT];
+      delete styles[CSS.root][CSS.code.lineHeight];
     }
     this._settings.set('styles', styles);
   }
@@ -363,7 +356,7 @@ export class FontManager implements IFontManager {
 
     variants.forEach((fontFamily) => {
       const slug = fontFamily.replace(/[^a-z\d]/gi, '-').toLowerCase();
-      let command = `${CMD_CODE_FONT_FAMILY}:${slug}`;
+      let command = `${CMD.code.fontFamily}:${slug}`;
       this._commands.addCommand(command, {
         label: fontFamily,
         isToggled: () => {

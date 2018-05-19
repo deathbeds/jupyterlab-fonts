@@ -22,5 +22,9 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.2.0"
+  "version": "0.2.0",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  }
 }

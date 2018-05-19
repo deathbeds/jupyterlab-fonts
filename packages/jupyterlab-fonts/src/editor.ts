@@ -4,15 +4,9 @@ import * as React from 'react';
 
 import {VDomModel, VDomRenderer} from '@jupyterlab/apputils';
 
-import {PACKAGE_NAME} from '.';
+import {PACKAGE_NAME, CSS} from '.';
 
-import {
-  FontManager,
-  ROOT,
-  CODE_FONT_FAMILY,
-  CODE_LINE_HEIGHT,
-  CODE_FONT_SIZE,
-} from './manager';
+import {FontManager} from './manager';
 
 import '../style/editor.css';
 
@@ -50,8 +44,8 @@ export class FontEditorModel extends VDomModel {
     let cff: string;
     if (this.notebook) {
       try {
-        cff = (this.notebook.model.metadata.get(PACKAGE_NAME) as any).styles[ROOT][
-          CODE_FONT_FAMILY
+        cff = (this.notebook.model.metadata.get(PACKAGE_NAME) as any).styles[CSS.root][
+          CSS.code.fontFamily
         ];
       } catch (e) {
         return null;
@@ -68,8 +62,8 @@ export class FontEditorModel extends VDomModel {
     if (nb) {
       const md = JSON.parse(JSON.stringify(nb.model.metadata.get(PACKAGE_NAME) || {}));
       const styles = (md as any).styles || ((md as any).styles = {});
-      const root = styles[ROOT] || (styles[ROOT] = {});
-      root[CODE_FONT_FAMILY] = `"${fontFamily}", monospace`;
+      const root = styles[CSS.root] || (styles[CSS.root] = {});
+      root[CSS.code.fontFamily] = `"${fontFamily}", monospace`;
       nb.model.metadata.set(PACKAGE_NAME, md);
     } else {
       this._fonts.codeFontFamily = fontFamily;
@@ -80,8 +74,8 @@ export class FontEditorModel extends VDomModel {
     let clh: string;
     if (this.notebook) {
       try {
-        clh = (this.notebook.model.metadata.get(PACKAGE_NAME) as any).styles[ROOT][
-          CODE_LINE_HEIGHT
+        clh = (this.notebook.model.metadata.get(PACKAGE_NAME) as any).styles[CSS.root][
+          CSS.code.lineHeight
         ];
       } catch (e) {
         return null;
@@ -98,8 +92,8 @@ export class FontEditorModel extends VDomModel {
     if (nb) {
       const md = JSON.parse(JSON.stringify(nb.model.metadata.get(PACKAGE_NAME) || {}));
       const styles = (md as any).styles || ((md as any).styles = {});
-      const root = styles[ROOT] || (styles[ROOT] = {});
-      root[CODE_LINE_HEIGHT] = lineHeight;
+      const root = styles[CSS.root] || (styles[CSS.root] = {});
+      root[CSS.code.lineHeight] = lineHeight;
       nb.model.metadata.set(PACKAGE_NAME, md);
     } else {
       this._fonts.codeLineHeight = lineHeight;
@@ -110,8 +104,8 @@ export class FontEditorModel extends VDomModel {
     let cfs: string;
     if (this.notebook) {
       try {
-        cfs = (this.notebook.model.metadata.get(PACKAGE_NAME) as any).styles[ROOT][
-          CODE_FONT_SIZE
+        cfs = (this.notebook.model.metadata.get(PACKAGE_NAME) as any).styles[CSS.root][
+          CSS.code.fontSize
         ];
       } catch (e) {
         return null;
@@ -128,8 +122,8 @@ export class FontEditorModel extends VDomModel {
     if (nb) {
       const md = JSON.parse(JSON.stringify(nb.model.metadata.get(PACKAGE_NAME) || {}));
       const styles = (md as any).styles || ((md as any).styles = {});
-      const root = styles[ROOT] || (styles[ROOT] = {});
-      root[CODE_FONT_SIZE] = fontSize;
+      const root = styles[CSS.root] || (styles[CSS.root] = {});
+      root[CSS.code.fontSize] = fontSize;
       nb.model.metadata.set(PACKAGE_NAME, md);
     } else {
       this._fonts.codeFontSize = fontSize;
@@ -197,7 +191,12 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       h('h2', {key: 2}, 'Code'),
       h(
         'select',
-        {className: 'jp-mod-styled', onChange: onCodeFontFamily, key: 3, defaultValue: codeFontFamily},
+        {
+          className: 'jp-mod-styled',
+          onChange: onCodeFontFamily,
+          key: 3,
+          defaultValue: codeFontFamily,
+        },
         [null, ...fonts].map((label, key) => {
           return h(
             'optgroup',
@@ -211,7 +210,11 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       h('h3', {key: 5}, 'Font Size'),
       h(
         'select',
-        {className: 'jp-mod-styled', onChange: onCodeFontSize, defaultValue: codeFontSize},
+        {
+          className: 'jp-mod-styled',
+          onChange: onCodeFontSize,
+          defaultValue: codeFontSize,
+        },
         [null, ...m.fonts.fontSizeOptions()].map((fontSize, key) => {
           return h('option', {key, value: fontSize}, fontSize || '- default -');
         })
@@ -219,7 +222,12 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       h('h3', {key: 6}, 'Line Height'),
       h(
         'select',
-        {className: 'jp-mod-styled', onChange: onCodeLineHeight, key: 7, defaultValue: codeLineHeight},
+        {
+          className: 'jp-mod-styled',
+          onChange: onCodeLineHeight,
+          key: 7,
+          defaultValue: codeLineHeight,
+        },
         [null, ...m.fonts.lineHeightOptions()].map((lineHeight, key) => {
           return h('option', {key, value: lineHeight}, lineHeight || '- default -');
         })

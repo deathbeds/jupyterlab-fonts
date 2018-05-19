@@ -24,11 +24,11 @@
     "bootstrap":
       "jlpm --no-optional --prefer-offline && jlpm clean && jlpm lint && jlpm lerna bootstrap && jlpm build && jlpm lab:link",
     "build": "jlpm build:core && jlpm build:ext && jlpm build:fonts",
-    "build:ext": "lerna exec --scope '@deathbeds/jupyterlab-fonts-extension' -- tsc",
-    "build:core": "lerna exec --scope '@deathbeds/jupyterlab-fonts' -- tsc",
-    "build:fonts": "lerna exec --scope '@deathbeds/jupyterlab-font-*' -- tsc",
+    "build:ext": "lerna run build --scope '@deathbeds/jupyterlab-fonts-extension'",
+    "build:core": "lerna run build --scope '@deathbeds/jupyterlab-fonts'",
+    "build:fonts": "lerna run build --scope '@deathbeds/jupyterlab-font-*'",
     "lab:link": "lerna exec -- jupyter labextension link . --no-build",
-    "watch": "lerna exec --parallel -- tsc --watch",
+    "watch": "lerna run watch --parallel",
     "lint": "jlpm lint:prettier && jlpm lint:tslint",
     "lint:tslint": "lerna exec -- tslint -c ../../tslint.json --fix ./src/**/*.ts",
     "lab:watch":
