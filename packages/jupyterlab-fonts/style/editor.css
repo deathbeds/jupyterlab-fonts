@@ -7,3 +7,36 @@
   padding: 0;
   margin: 0;
 }
+
+.jp-FontsEditor select {
+  border: none;
+  background: transparent;
+  background-image: var(--jp-ui-select-caret);
+  background-repeat: no-repeat;
+  background-position: 99% center;
+  text-align: right;
+  text-align-last: right;
+  margin-left: var(--jp-notebook-padding);
+  padding-right: calc(4 * var(--jp-notebook-padding));
+}
+
+.jp-FontsEditor option {
+  text-align: right;
+}
+
+.jp-FontsEditor h3 {
+  display: flex;
+  white-space: nowrap;
+}
+
+.jp-FontsEditor h3 input {
+  flex: 0;
+}
+
+.jp-FontsEditor h1 .jp-NotebookIcon {
+  width: var(--jp-ui-font-size2);
+  height: calc(var(--jp-ui-font-size2) * 0.75);
+  display: inline-block;
+  vertical-align: "middle";
+  background-repeat: no-repeat;
+}
