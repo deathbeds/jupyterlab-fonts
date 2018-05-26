@@ -16,7 +16,7 @@ export type Scope = 'global' | 'notebook';
 
 export enum TextKind {
   code = 'code',
-  ui = 'ui',
+  content = 'content',
 }
 
 export type TextProperty = 'font-family' | 'font-size' | 'line-height';
@@ -26,6 +26,11 @@ export const CMD = {
     fontSize: 'code-font-size',
     fontFamily: 'code-font-family',
     lineHeight: 'code-line-height',
+  },
+  content: {
+    fontSize: 'content-font-size',
+    fontFamily: 'content-font-family',
+    lineHeight: 'content-line-height',
   },
   editFonts: 'font-editor:open',
 };
@@ -40,10 +45,10 @@ export const CSS: ICSSVars = {
     'font-size': '--jp-code-font-size',
     'line-height': '--jp-code-line-height',
   },
-  ui: {
-    'font-family': '--jp-ui-font-family',
-    'font-size': '--jp-ui-font-size',
-    'line-height': '--jp-ui-line-height',
+  content: {
+    'font-family': '--jp-content-font-family',
+    'font-size': '--jp-content-font-size1',
+    'line-height': '--jp-content-line-height',
   },
 };
 

@@ -55,18 +55,27 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     return h('div', null, [
       this.header(),
-      h('h2', {key: 2}, 'Code'),
-      this.textSelect('font-family', {key: 3}),
-      this.textSelect('font-size', {key: 4}),
-      this.textSelect('line-height', {key: 5}),
+      h('section', {key: 2}, [
+        h('h2', {key: 1}, 'Code'),
+        this.textSelect('font-family', TextKind.code, {key: 2}),
+        this.textSelect('font-size', TextKind.code, {key: 3}),
+        this.textSelect('line-height', TextKind.code, {key: 4}),
+      ]),
+      h('section', {key: 3}, [
+        h('h2', {key: 1}, 'Content'),
+        // TODO re-enable in 0.33
+        // this.textSelect('font-family', TextKind.content, {key: 2}),
+        this.textSelect('font-size', TextKind.content, {key: 3}),
+        this.textSelect('line-height', TextKind.content, {key: 4}),
+      ]),
     ]);
   }
 
-  protected textSelect(prop: TextProperty, sectionProps: any) {
+  protected textSelect(prop: TextProperty, kind: TextKind, sectionProps: any) {
     const m = this.model;
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
       let value = (evt.target as HTMLSelectElement).value;
-      m.fonts.setTextStyle(prop, value, {kind: TextKind.code});
+      m.fonts.setTextStyle(prop, value, {kind, notebook: m.notebook});
     };
 
     return h('h3', sectionProps, [
@@ -76,11 +85,16 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
         {
           className: 'jp-mod-styled',
           onChange,
-          defaultValue: m.fonts.getTextStyle(prop, {kind: TextKind.code}),
+          defaultValue: m.fonts.getTextStyle(prop, {kind}),
           key: 2,
         },
         [null, ...TEXT_OPTIONS[prop](m.fonts)].map((value, key) => {
-          return h('option', {key, value}, value || '-');
+          return h('option', {
+            key,
+            value: prop !== 'font-family' ?
+              value :
+              value ? `"${value}"` : ''
+          }, value || '-');
         })
       ),
     ]);

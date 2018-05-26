@@ -28,10 +28,10 @@ const plugin: JupyterLabPlugin<IFontManager> = {
   ): IFontManager {
     const manager = new FontManager(app.commands, palette, notebooks);
 
-    menu.addMenu(manager.menu, {rank: 2});
+    menu.settingsMenu.addGroup([{type: 'submenu', submenu: manager.menu}]);
 
     app.commands.addCommand(CMD.editFonts, {
-      label: 'Open Font Editor',
+      label: 'Global Fonts',
       execute: (args) => {
         const editor = new FontEditor();
         const model = (editor.model = new FontEditorModel());

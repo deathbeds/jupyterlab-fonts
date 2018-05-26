@@ -26,7 +26,6 @@ const CODE_PALETTE = 'Fonts (Code)';
 
 export class FontManager implements IFontManager {
   private _globalStyles: HTMLStyleElement;
-  private _editorMenu: Menu;
   private _codeFontMenu: Menu;
   private _codeFontFamilyMenu: Menu;
   private _codeFontSizeMenu: Menu;
@@ -85,6 +84,7 @@ export class FontManager implements IFontManager {
     value: SCHEMA.ICSSOM,
     {scope, kind, notebook}: ITextStyleOptions
   ): void {
+    console.log(property, value, scope, kind, notebook);
     if (!notebook && !this.settings) {
       return null;
     }
@@ -263,15 +263,8 @@ export class FontManager implements IFontManager {
   }
 
   makeMenus(commands: CommandRegistry) {
-    const editor = (this._editorMenu = new Menu({commands}));
-    editor.addItem({
-      command: CMD.editFonts,
-      args: {global: true},
-    });
-    editor.title.label = 'Customize Fonts';
-
     const code = (this._codeFontMenu = new Menu({commands}));
-    code.title.label = 'Code Font';
+    code.title.label = 'Code';
 
     const family = (this._codeFontFamilyMenu = new Menu({commands}));
     family.title.label = 'Family';
@@ -285,10 +278,13 @@ export class FontManager implements IFontManager {
     [family, size, height].map((submenu) => code.addItem({type: 'submenu', submenu}));
 
     this._menu = new Menu({commands});
-    this._menu.title.label = 'Format';
+    this._menu.title.label = 'Fonts';
 
     this._menu.addItem({type: 'submenu', submenu: code});
-    this._menu.addItem({type: 'submenu', submenu: editor});
+    this._menu.addItem({
+      command: CMD.editFonts,
+      args: {global: true},
+    });
   }
 
   set settings(settings) {
