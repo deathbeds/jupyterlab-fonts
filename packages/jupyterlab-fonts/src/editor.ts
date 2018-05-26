@@ -89,12 +89,14 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           key: 2,
         },
         [null, ...TEXT_OPTIONS[prop](m.fonts)].map((value, key) => {
-          return h('option', {
-            key,
-            value: prop !== 'font-family' ?
-              value :
-              value ? `"${value}"` : ''
-          }, value || '-');
+          return h(
+            'option',
+            {
+              key,
+              value: prop !== 'font-family' ? value : value ? `"${value}"` : '',
+            },
+            value || '-'
+          );
         })
       ),
     ]);

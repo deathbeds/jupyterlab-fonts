@@ -195,13 +195,8 @@ export class FontManager implements IFontManager {
       this._commands.addCommand(command, {
         label: `${label} Code Font Size`,
         execute: () => {
-          let cfs = parseInt(
-            (this.getTextStyle('font-size', {kind: TextKind.code}) as string).replace(
-              /px$/,
-              ''
-            ),
-            10
-          );
+          let oldSize = this.getTextStyle('font-size', {kind: TextKind.code}) as string;
+          let cfs = parseInt((oldSize || '0').replace(/px$/, ''), 10) || 13;
           this.setTextStyle('font-size', `${cfs + (i ? -1 : 1)}px`, {
             kind: TextKind.code,
           });

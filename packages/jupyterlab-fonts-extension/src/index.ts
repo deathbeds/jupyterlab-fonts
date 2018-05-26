@@ -31,7 +31,7 @@ const plugin: JupyterLabPlugin<IFontManager> = {
     menu.settingsMenu.addGroup([{type: 'submenu', submenu: manager.menu}]);
 
     app.commands.addCommand(CMD.editFonts, {
-      label: 'Global Fonts',
+      label: 'Global Fonts...',
       execute: (args) => {
         const editor = new FontEditor();
         const model = (editor.model = new FontEditorModel());
