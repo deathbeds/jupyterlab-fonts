@@ -11,7 +11,10 @@
         {"$ref": "#/definitions/ICSSOMPrimitive"},
         {"type": "array", "items": {"anyOf": [
           {"$ref": "#/definitions/ICSSOMPrimitive"}
-        ]}}
+        ]}},
+        {"type": "object", "patternProperties": {
+          ".*": {"$ref": "#/definitions/ICSSOM"}
+        }}
       ]
     },
     "ICSSOMPrimitive": {

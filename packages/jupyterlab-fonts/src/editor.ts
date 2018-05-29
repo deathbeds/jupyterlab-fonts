@@ -93,7 +93,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
             'option',
             {
               key,
-              value: prop !== 'font-family' ? value : value ? `"${value}"` : '',
+              value: prop !== 'font-family' ? value : value ? `'${value}'` : '',
             },
             value || '-'
           );

@@ -22,14 +22,17 @@ import {
 import * as SCHEMA from './schema';
 
 const ALL_PALETTE = 'Fonts';
-const CODE_PALETTE = 'Fonts (Code)';
+
+const PALETTE = {
+  code: 'Fonts (Code)',
+  content: 'Fonts (Content)',
+};
 
 export class FontManager implements IFontManager {
   private _globalStyles: HTMLStyleElement;
-  private _codeFontMenu: Menu;
-  private _codeFontFamilyMenu: Menu;
-  private _codeFontSizeMenu: Menu;
-  private _codeLineHeightMenu: Menu;
+  private _fontFamilyMenus = new Map<TextKind, Menu>();
+  private _fontSizeMenus = new Map<TextKind, Menu>();
+  private _lineHeightMenus = new Map<TextKind, Menu>();
   private _menu: Menu;
   private _palette: ICommandPalette;
   private _commands: CommandRegistry;
@@ -190,48 +193,50 @@ export class FontManager implements IFontManager {
   }
 
   makeCommands() {
-    ['Increase', 'Decrease'].map((label, i) => {
-      let command = `${CMD.code.fontSize}:${label.toLowerCase()}`;
-      this._commands.addCommand(command, {
-        label: `${label} Code Font Size`,
-        execute: () => {
-          let oldSize = this.getTextStyle('font-size', {kind: TextKind.code}) as string;
-          let cfs = parseInt((oldSize || '0').replace(/px$/, ''), 10) || 13;
-          this.setTextStyle('font-size', `${cfs + (i ? -1 : 1)}px`, {
-            kind: TextKind.code,
-          });
-        },
-        isVisible: () => this.enabled,
-        mnemonic: 0,
+    [TextKind.code, TextKind.content].map((kind) => {
+      ['Increase', 'Decrease'].map((label, i) => {
+        let command = `${CMD[kind].fontSize}:${label.toLowerCase()}`;
+        this._commands.addCommand(command, {
+          label: `${label} Code Font Size`,
+          execute: () => {
+            let oldSize = this.getTextStyle('font-size', {kind}) as string;
+            let cfs = parseInt((oldSize || '0').replace(/px$/, ''), 10) || 13;
+            this.setTextStyle('font-size', `${cfs + (i ? -1 : 1)}px`, {
+              kind: TextKind.code,
+            });
+          },
+          isVisible: () => this.enabled,
+          mnemonic: 0,
+        });
+        this._fontSizeMenus.get(kind).addItem({command});
+        this._palette.addItem({command, category: PALETTE[kind], rank: 0});
       });
-      this._codeFontSizeMenu.addItem({command});
-      this._palette.addItem({command, category: CODE_PALETTE, rank: 0});
-    });
 
-    TEXT_OPTIONS['line-height'](this).map((lineHeight, i) => {
-      const command = `${CMD.code.lineHeight}:${lineHeight}`;
-      this._commands.addCommand(command, {
-        label: `${lineHeight}`,
-        isToggled: () =>
-          this.getTextStyle('line-height', {kind: TextKind.code}) === lineHeight,
-        isVisible: () => this.enabled,
-        execute: () =>
-          this.setTextStyle('line-height', lineHeight, {kind: TextKind.code}),
-        mnemonic: 0,
+      TEXT_OPTIONS['line-height'](this).map((lineHeight, i) => {
+        const command = `${CMD[kind].lineHeight}:${lineHeight}`;
+        this._commands.addCommand(command, {
+          label: `${lineHeight}`,
+          isToggled: () =>
+            this.getTextStyle('line-height', {kind}) === lineHeight,
+          isVisible: () => this.enabled,
+          execute: () =>
+            this.setTextStyle('line-height', lineHeight, {kind}),
+          mnemonic: 0,
+        });
+        this._lineHeightMenus.get(kind).addItem({command});
       });
-      this._codeLineHeightMenu.addItem({command});
-    });
 
-    TEXT_OPTIONS['line-height'](this).map((px) => {
-      const command = `${CMD.code.fontSize}:${px}`;
-      this._commands.addCommand(command, {
-        label: `${px}`,
-        isToggled: () => this.getTextStyle('font-size', {kind: TextKind.code}) === px,
-        isVisible: () => this.enabled,
-        execute: () => this.setTextStyle('font-size', px, {kind: TextKind.code}),
-        mnemonic: 0,
+      TEXT_OPTIONS['font-size'](this).map((px) => {
+        const command = `${CMD[kind].fontSize}:${px}`;
+        this._commands.addCommand(command, {
+          label: `${px}`,
+          isToggled: () => this.getTextStyle('font-size', {kind}) === px,
+          isVisible: () => this.enabled,
+          execute: () => this.setTextStyle('font-size', px, {kind}),
+          mnemonic: 0,
+        });
+        this._fontSizeMenus.get(kind).addItem({command});
       });
-      this._codeFontSizeMenu.addItem({command});
     });
 
     ['Enable', 'Disable'].map((label, i) => {
@@ -258,28 +263,36 @@ export class FontManager implements IFontManager {
   }
 
   makeMenus(commands: CommandRegistry) {
-    const code = (this._codeFontMenu = new Menu({commands}));
-    code.title.label = 'Code';
-
-    const family = (this._codeFontFamilyMenu = new Menu({commands}));
-    family.title.label = 'Family';
-
-    const size = (this._codeFontSizeMenu = new Menu({commands}));
-    size.title.label = 'Size';
-
-    const height = (this._codeLineHeightMenu = new Menu({commands}));
-    height.title.label = 'Line Height';
-
-    [family, size, height].map((submenu) => code.addItem({type: 'submenu', submenu}));
-
     this._menu = new Menu({commands});
     this._menu.title.label = 'Fonts';
 
-    this._menu.addItem({type: 'submenu', submenu: code});
+    [TextKind.code, TextKind.content].map((kind) => {
+      const submenu = new Menu({commands});
+      const height = new Menu({commands});
+      const family = new Menu({commands});
+      const size = new Menu({commands});
+
+      submenu.title.label = kind[0].toUpperCase() + kind.slice(1);
+      height.title.label = 'Line Height';
+      family.title.label = 'Family';
+      size.title.label = 'Size';
+
+      this._fontFamilyMenus.set(kind, family);
+      this._lineHeightMenus.set(kind, height);
+      this._fontSizeMenus.set(kind, size);
+
+      [family, size, height].map((propMenu) => {
+        submenu.addItem({type: 'submenu', submenu: propMenu});
+      });
+
+      this._menu.addItem({type: 'submenu', submenu});
+    });
+
     this._menu.addItem({
       command: CMD.editFonts,
       args: {global: true},
     });
+
   }
 
   set settings(settings) {
@@ -337,23 +350,25 @@ export class FontManager implements IFontManager {
 
     this._fonts.set(fontFamily, variants);
 
-    variants.forEach((fontFamily) => {
-      const slug = fontFamily.replace(/[^a-z\d]/gi, '-').toLowerCase();
-      let command = `${CMD.code.fontFamily}:${slug}`;
-      this._commands.addCommand(command, {
-        label: fontFamily,
-        isToggled: () => {
-          let cff = this.getTextStyle('font-family', {kind: TextKind.code});
-          return cff && `${cff}`.indexOf(fontFamily) > -1;
-        },
-        isVisible: () => this.enabled,
-        execute: () => {
-          this.setTextStyle('font-family', fontFamily, {kind: TextKind.code});
-        },
-        mnemonic: 0,
+    [TextKind.code, TextKind.content].map((kind) => {
+      variants.forEach((fontFamily) => {
+        const slug = fontFamily.replace(/[^a-z\d]/gi, '-').toLowerCase();
+        let command = `${CMD[kind].fontFamily}:${slug}`;
+        this._commands.addCommand(command, {
+          label: fontFamily,
+          isToggled: () => {
+            let cff = this.getTextStyle('font-family', {kind});
+            return cff && `${cff}`.indexOf(fontFamily) > -1;
+          },
+          isVisible: () => this.enabled,
+          execute: () => {
+            this.setTextStyle('font-family', `'${fontFamily}'`, {kind});
+          },
+          mnemonic: 0,
+        });
+        this._fontFamilyMenus.get(kind).addItem({command});
+        this._palette.addItem({command, category: PALETTE[kind]});
       });
-      this._codeFontFamilyMenu.addItem({command});
-      this._palette.addItem({command, category: CODE_PALETTE});
     });
   }
 }
