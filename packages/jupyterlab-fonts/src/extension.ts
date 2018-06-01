@@ -1,16 +1,16 @@
 import {JupyterLab, JupyterLabPlugin} from '@jupyterlab/application';
 import {IMainMenu} from '@jupyterlab/mainmenu';
-
 import {ICommandPalette} from '@jupyterlab/apputils';
-
 import {INotebookTracker} from '@jupyterlab/notebook';
-
-import {IFontManager, PACKAGE_NAME, ICON_CLASS, CMD} from '@deathbeds/jupyterlab-fonts';
-import {FontManager} from '@deathbeds/jupyterlab-fonts/lib/manager';
-import {NotebookFontsButton} from '@deathbeds/jupyterlab-fonts/lib/button';
-import {FontEditor, FontEditorModel} from '@deathbeds/jupyterlab-fonts/lib/editor';
-
 import {ISettingRegistry} from '@jupyterlab/coreutils';
+
+
+
+import {IFontManager, PACKAGE_NAME, ICON_CLASS, CMD} from '.';
+import {FontManager} from './manager';
+import {NotebookFontsButton} from './button';
+import {FontEditor, FontEditorModel} from './editor';
+
 
 const PLUGIN_ID = `${PACKAGE_NAME}:fonts`;
 
@@ -58,7 +58,8 @@ const plugin: JupyterLabPlugin<IFontManager> = {
 
     app.docRegistry.addWidgetExtension('Notebook', fontsButton);
 
-    Promise.all([settingRegistry.load(PLUGIN_ID), app.restored])
+    Promise
+      .all([settingRegistry.load(PLUGIN_ID), app.restored])
       .then(([settings]) => {
         manager.settings = settings;
         settingRegistry

@@ -1,0 +1,17 @@
+# This is used by repo2docker. conda can install all the Jupyter dependencies.
+name: jupyterlab-fonts-dev
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - black
+  - flake8
+  - geckodriver
+  - jupyterlab >=0.32.1,<0.33
+  - nodejs >=8.9.3,<10
+  - python >=3.6,<3.7
+  - robotframework-seleniumlibrary
+  - pip:
+    - beautysh

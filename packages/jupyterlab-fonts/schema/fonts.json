@@ -1,1 +1,131 @@
-../../jupyterlab-fonts-extension/schema/fonts.json
+{
+  "id": "/ISettings",
+  "title": "Fonts",
+  "description": "Settings for JupyterLab Fonts",
+  "type": "object",
+  "jupyter.lab.setting-icon-class": "jp-FontsIcon",
+  "jupyter.lab.setting-icon-label": "Fonts",
+  "definitions": {
+    "ICSSOM": {
+      "oneOf": [
+        {"$ref": "#/definitions/ICSSOMPrimitive"},
+        {"type": "array", "items": {"anyOf": [
+          {"$ref": "#/definitions/ICSSOMPrimitive"}
+        ]}},
+        {"type": "object", "patternProperties": {
+          ".*": {"$ref": "#/definitions/ICSSOM"}
+        }}
+      ]
+    },
+    "ICSSOMPrimitive": {
+      "oneOf": [
+        {"type": "string"},
+        {"type": "number"}
+      ]
+    },
+    "IFontFaceCommon": {
+      "type": "object",
+      "required": ["src"],
+      "properties": {
+        "src": {"$ref": "#/definitions/ICSSOM"},
+        "unicode-range": {"$ref": "#/definitions/ICSSOM"},
+        "font-variant": {"$ref": "#/definitions/ICSSOM"},
+        "font-feature-settings": {"$ref": "#/definitions/ICSSOM"},
+        "font-variation-settings": {"$ref": "#/definitions/ICSSOM"},
+        "font-stretch": {"$ref": "#/definitions/ICSSOM"},
+        "font-weight": {"$ref": "#/definitions/ICSSOM"},
+        "font-style": {"$ref": "#/definitions/ICSSOM"},
+        "unicodeRange": {"$ref": "#/definitions/ICSSOM"},
+        "fontVariant": {"$ref": "#/definitions/ICSSOM"},
+        "fontFeatureSettings": {"$ref": "#/definitions/ICSSOM"},
+        "fontVariationSettings": {"$ref": "#/definitions/ICSSOM"},
+        "fontStretch": {"$ref": "#/definitions/ICSSOM"},
+        "fontWeight": {"$ref": "#/definitions/ICSSOM"},
+        "fontStyle": {"$ref": "#/definitions/ICSSOM"}
+      }
+    },
+    "IFontFaceCamel": {
+      "allOf" : [
+        {"type": "object", "required": ["fontFamily"], "properties": {
+          "fontFamily": {"type": "string"}
+        }},
+        {"$ref": "#/definitions/IFontFaceCommon"}
+      ]
+    },
+    "IFontFaceCanonical": {
+      "allOf" : [
+        {"type": "object", "required": ["font-family"], "properties": {
+          "font-family": {"type": "string"}
+        }},
+        {"$ref": "#/definitions/IFontFaceCommon"}
+      ]
+    },
+    "IFontFacePrimitive": {
+      "oneOf": [
+        {"$ref": "#/definitions/IFontFaceCamel"},
+        {"$ref": "#/definitions/IFontFaceCanonical"}
+      ]
+    },
+    "IFontFace": {
+      "oneOf": [
+        {"type": "array", "items": {"$ref": "#/definitions/IFontFacePrimitive"}},
+        {"$ref": "#/definitions/IFontFacePrimitive"}
+      ]
+    },
+    "IJSS": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {"$ref": "#/definitions/IJSS"},
+          {"#ref": "#/definitions/ICSSOM"}
+        ]
+      }
+    },
+    "IStyles": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {"$ref": "#/definitions/ICSSOM"},
+          {"$ref": "#/definitions/IJSS"}
+        ]
+      },
+      "properties": {
+        "@font-face": {
+          "$ref": "#/definitions/IFontFace"
+        },
+        ":root": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/ICSSOM"
+          },
+          "patternProperties": {
+            ".*": {
+              "$ref": "#/definitions/ICSSOM"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "properties": {
+    "enabled": {
+      "description": "Enable all font customizations",
+      "title": "Enable Custom Fonts",
+      "type": "boolean",
+      "default": true
+    },
+    "version": {
+      "description": "Reserved for future use to provide backwards compatibility",
+      "default": "v1",
+      "title": "Configuration Version",
+      "type": "string"
+    },
+    "styles": {
+      "description": "JSS-compatible JSON applied to the Global scope",
+      "default": {},
+      "title": "Global Styles",
+      "$ref": "#/definitions/IStyles"
+    }
+  }
+}

@@ -5,3 +5,4 @@ node_modules/
 packages/*/lib
 Untitled*.ipynb
 *.egg-info/
+__pycache__
