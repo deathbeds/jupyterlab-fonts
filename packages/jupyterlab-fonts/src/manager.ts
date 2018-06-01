@@ -216,11 +216,9 @@ export class FontManager implements IFontManager {
         const command = `${CMD[kind].lineHeight}:${lineHeight}`;
         this._commands.addCommand(command, {
           label: `${lineHeight}`,
-          isToggled: () =>
-            this.getTextStyle('line-height', {kind}) === lineHeight,
+          isToggled: () => this.getTextStyle('line-height', {kind}) === lineHeight,
           isVisible: () => this.enabled,
-          execute: () =>
-            this.setTextStyle('line-height', lineHeight, {kind}),
+          execute: () => this.setTextStyle('line-height', lineHeight, {kind}),
           mnemonic: 0,
         });
         this._lineHeightMenus.get(kind).addItem({command});
@@ -292,7 +290,6 @@ export class FontManager implements IFontManager {
       command: CMD.editFonts,
       args: {global: true},
     });
-
   }
 
   set settings(settings) {

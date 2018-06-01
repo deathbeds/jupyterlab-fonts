@@ -25,12 +25,14 @@
     "build": "jlpm build:core && jlpm build:fonts",
     "build:core": "lerna run build --scope '@deathbeds/jupyterlab-fonts'",
     "build:fonts": "lerna run build --scope '@deathbeds/jupyterlab-font-*'",
+    "build:schema": "lerna run build:schema --scope '@deathbeds/jupyterlab-fonts'",
     "lab:link": "lerna exec -- jupyter labextension link . --no-build",
     "watch": "lerna run watch --parallel",
-    "lint": "jlpm lint:prettier && jlpm lint:tslint && jlpm lint:black && jlpm lint:flake8",
+    "lint":
+      "jlpm lint:prettier && jlpm lint:black && jlpm lint:tslint && jlpm lint:flake8",
     "lint:tslint": "lerna exec -- tslint -c ../../tslint.json --fix ./src/**/*.ts",
     "lint:beautysh": "beautysh -i 2 -f scripts/**/*.sh postBuild",
-    "lint:black": "black jyve setup.py",
+    "lint:black": "black nbjss setup.py",
     "lint:flake8": "flake8 nbjss setup.py",
     "lab:watch":
       "cd $CONDA_PREFIX/share/jupyter/lab/staging && rm -rf ../static && jlpm watch",

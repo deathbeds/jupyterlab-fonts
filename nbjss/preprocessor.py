@@ -4,6 +4,7 @@ from .constants import METADATA_KEY, ROOT
 
 
 class JSSHeaderPreprocessor(Preprocessor):
+
     def preprocess(self, nb, resources):
         jss = nb.metadata.get(METADATA_KEY)
         if jss is not None:
