@@ -1,6 +1,5 @@
 import * as JSS from 'jss';
 import {PromiseDelegate} from '@phosphor/coreutils';
-// import {Base64} from 'js-base64';
 import {Menu} from '@phosphor/widgets';
 import {CommandRegistry} from '@phosphor/commands';
 import {ICommandPalette} from '@jupyterlab/apputils';

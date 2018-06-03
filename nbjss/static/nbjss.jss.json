@@ -1,0 +1,9 @@
+{
+  "#notebook": {
+    "& code, & kbd, & pre, & samp, & .prompt": {
+      "font-family": "var(--jp-code-font-family)",
+      "line-height": "var(--jp-code-line-height)",
+      "font-size": "var(--jp-code-font-size)"
+    }
+  }
+}

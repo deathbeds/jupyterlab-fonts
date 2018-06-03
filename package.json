@@ -9,7 +9,8 @@
     "prettier": "1.12.1",
     "rimraf": "^2.6.1",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.3"
+    "typescript": "^2.8.3",
+    "webpack": "~2.7.0"
   },
   "dependencies": {
     "@jupyterlab/application": "^0.16.0",
@@ -22,7 +23,7 @@
     "clean": "lerna exec --parallel -- rimraf lib",
     "bootstrap":
       "jlpm --no-optional --prefer-offline && jlpm clean && jlpm lint && jlpm lerna bootstrap && jlpm build && jlpm lab:link",
-    "build": "jlpm build:core && jlpm build:fonts",
+    "build": "jlpm webpack -p && jlpm build:core && jlpm build:fonts",
     "build:core": "lerna run build --scope '@deathbeds/jupyterlab-fonts'",
     "build:fonts": "lerna run build --scope '@deathbeds/jupyterlab-font-*'",
     "build:schema": "lerna run build:schema --scope '@deathbeds/jupyterlab-fonts'",

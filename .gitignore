@@ -6,3 +6,4 @@ packages/*/lib
 Untitled*.ipynb
 *.egg-info/
 __pycache__
+nbjss/static/nbjss.js

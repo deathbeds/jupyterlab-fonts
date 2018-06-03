@@ -146,7 +146,7 @@
     },
     "fonts": {
       "description": "Embedded JSS `@font-face` declarations grouped by `font-family`",
-      "default": [],
+      "default": {},
       "title": "Embedded Fonts",
       "$ref": "#/definitions/IFontFaceObject"
     }
