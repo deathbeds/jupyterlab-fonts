@@ -19,6 +19,7 @@ setup_args = dict(
     packages=[name],
     setup_requires=["nbconvert"],
     zip_safe=False,
+    include_package_data=True,
 )
 
 if __name__ == "__main__":
