@@ -121,9 +121,10 @@ export class FontManager implements IFontManager {
     }
 
     if (notebook) {
-      let metadata = (notebook.model.metadata.get(PACKAGE_NAME) as any) || {};
+      let metadata = (notebook.model.metadata.get(PACKAGE_NAME) ||
+        {}) as SCHEMA.ISettings;
       metadata = JSON.parse(JSON.stringify(metadata));
-      metadata['styles'] = styles;
+      metadata.styles = styles;
       switch (property) {
         case 'font-family':
           await this.embedFont(value, metadata);
@@ -131,13 +132,25 @@ export class FontManager implements IFontManager {
         default:
           break;
       }
-      notebook.model.metadata.set(PACKAGE_NAME, metadata);
+      this.cleanMetadata(metadata);
+      notebook.model.metadata.set(PACKAGE_NAME, metadata as any);
     } else {
       this._settings.set('styles', styles);
     }
   }
 
-  async embedFont(fontFamily: SCHEMA.ICSSOM, metadata: any) {
+  cleanMetadata(metadata: SCHEMA.ISettings) {
+    const rawStyle = JSON.stringify(metadata.styles, null, 2);
+    const oldFonts = Object.keys(metadata.fonts || {});
+    for (let fontFamily of oldFonts) {
+      let pattern = `'${fontFamily}'`;
+      if (rawStyle.indexOf(pattern) === -1) {
+        delete metadata.fonts[fontFamily];
+      }
+    }
+  }
+
+  async embedFont(fontFamily: SCHEMA.ICSSOM, metadata: SCHEMA.ISettings) {
     const unquoted = (fontFamily as string).replace(/(['"]?)(.*)\1/, '$2');
     const registered = this._fonts.get(unquoted);
     if (!registered) {
@@ -145,9 +158,9 @@ export class FontManager implements IFontManager {
     }
     try {
       const faces = await registered.faces();
-      const oldFaces = (metadata['fonts'] || {}) as SCHEMA.IFontFaceObject;
+      const oldFaces = (metadata.fonts || {}) as SCHEMA.IFontFaceObject;
       oldFaces[unquoted] = faces;
-      metadata['fonts'] = oldFaces;
+      metadata.fonts = oldFaces;
     } catch (err) {
       console.warn('error embedding font');
       console.warn(err);
