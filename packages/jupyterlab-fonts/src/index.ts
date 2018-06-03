@@ -19,7 +19,34 @@ export enum TextKind {
   content = 'content',
 }
 
+export enum FontFormat {
+  woff2 = 'woff2',
+  woff = 'woff',
+}
+
+export type TFontMimeTypes = {[key in FontFormat]: string};
+
+export const FONT_FORMATS = {
+  woff2: 'font/woff2',
+  woff: 'font/woff',
+};
+
 export type TextProperty = 'font-family' | 'font-size' | 'line-height';
+
+export interface IFontCallback {
+  (): Promise<SCHEMA.IFontFacePrimitive[]>;
+}
+
+export interface IFontFaceOptions {
+  name: string;
+  faces: IFontCallback;
+  license: {
+    name: string;
+    spdx: string;
+    text: () => Promise<string>;
+    holders: string[];
+  };
+}
 
 export const CMD = {
   code: {
@@ -60,7 +87,9 @@ export const TEXT_OPTIONS: ICSSTextOptions = {
   'font-size': (m) => Array.from(Array(25).keys()).map((i) => `${i + 8}px`),
   'line-height': (m) => Array.from(Array(8).keys()).map((i) => `${i * 0.25 + 1}`),
   'font-family': (m) => {
-    return Array.from(m.fonts.values()).reduce((m, f) => [...m, ...f]);
+    return Array.from(m.fonts.values()).reduce((m, f) => {
+      return m.concat(f.name);
+    }, []);
   },
 };
 
@@ -98,8 +127,9 @@ export interface IFontManagerConstructor {
 }
 
 export interface IFontManager {
-  registerFont(fontFamily: string, variants?: string[]): void;
-  fonts: Map<string, string[]>;
+  ready: Promise<void>;
+  registerFontFace(options: IFontFaceOptions): void;
+  fonts: Map<string, IFontFaceOptions>;
   stylesheets: HTMLStyleElement[];
   menu: Menu;
   getVarName(property: TextProperty, options: ITextStyleOptions): SCHEMA.ICSSOM;
@@ -109,6 +139,7 @@ export interface IFontManager {
     value: SCHEMA.ICSSOM,
     options: ITextStyleOptions
   ): void;
+  dataURISrc(url: string, format: FontFormat): string;
 }
 
 export interface ITextStyleOptions {

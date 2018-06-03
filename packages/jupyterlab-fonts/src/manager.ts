@@ -1,10 +1,12 @@
+import * as JSS from 'jss';
+import {PromiseDelegate} from '@phosphor/coreutils';
+// import {Base64} from 'js-base64';
 import {Menu} from '@phosphor/widgets';
 import {CommandRegistry} from '@phosphor/commands';
 import {ICommandPalette} from '@jupyterlab/apputils';
 import {INotebookTracker, NotebookPanel} from '@jupyterlab/notebook';
 
 import {ISettingRegistry} from '@jupyterlab/coreutils';
-import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
 
 import {
@@ -17,6 +19,9 @@ import {
   TextKind,
   ROOT,
   TEXT_OPTIONS,
+  FONT_FORMATS,
+  FontFormat,
+  IFontFaceOptions,
 } from '.';
 
 import * as SCHEMA from './schema';
@@ -39,7 +44,8 @@ export class FontManager implements IFontManager {
   private _notebooks: INotebookTracker;
   private _jss = JSS.create(jssPresetDefault());
   private _notebookStyles = new Map<string, HTMLStyleElement>();
-  private _fonts = new Map<string, string[]>();
+  private _fonts = new Map<string, IFontFaceOptions>();
+  private _ready = new PromiseDelegate<void>();
 
   private _settings: ISettingRegistry.ISettings;
 
@@ -62,6 +68,10 @@ export class FontManager implements IFontManager {
     this.hack();
   }
 
+  get ready() {
+    return this._ready.promise;
+  }
+
   getVarName(property: TextProperty, {kind}: Partial<ITextStyleOptions>) {
     return CSS[kind][property];
   }
@@ -82,12 +92,11 @@ export class FontManager implements IFontManager {
     }
   }
 
-  setTextStyle(
+  async setTextStyle(
     property: TextProperty,
     value: SCHEMA.ICSSOM,
     {scope, kind, notebook}: ITextStyleOptions
-  ): void {
-    console.log(property, value, scope, kind, notebook);
+  ): Promise<void> {
     if (!notebook && !this.settings) {
       return null;
     }
@@ -112,12 +121,36 @@ export class FontManager implements IFontManager {
     }
 
     if (notebook) {
-      let md = (notebook.model.metadata.get(PACKAGE_NAME) as any) || {};
-      md = JSON.parse(JSON.stringify(md));
-      md['styles'] = styles;
-      notebook.model.metadata.set(PACKAGE_NAME, md);
+      let metadata = (notebook.model.metadata.get(PACKAGE_NAME) as any) || {};
+      metadata = JSON.parse(JSON.stringify(metadata));
+      metadata['styles'] = styles;
+      switch (property) {
+        case 'font-family':
+          await this.embedFont(value, metadata);
+          break;
+        default:
+          break;
+      }
+      notebook.model.metadata.set(PACKAGE_NAME, metadata);
     } else {
       this._settings.set('styles', styles);
+    }
+  }
+
+  async embedFont(fontFamily: SCHEMA.ICSSOM, metadata: any) {
+    const unquoted = (fontFamily as string).replace(/(['"]?)(.*)\1/, '$2');
+    const registered = this._fonts.get(unquoted);
+    if (!registered) {
+      return;
+    }
+    try {
+      const faces = await registered.faces();
+      const oldFaces = (metadata['fonts'] || {}) as SCHEMA.IFontFaceObject;
+      oldFaces[unquoted] = faces;
+      metadata['fonts'] = oldFaces;
+    } catch (err) {
+      console.warn('error embedding font');
+      console.warn(err);
     }
   }
 
@@ -151,20 +184,25 @@ export class FontManager implements IFontManager {
         if (notebook.id !== id) {
           return;
         }
-        const meta = notebook.model.metadata.get(PACKAGE_NAME);
+        const meta = notebook.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings;
         let newStyle = '';
 
         if (meta) {
-          let jss: any = {'@global': {}};
+          let jss: any = {'@font-face': [], '@global': {}};
           let idStyles: any = (jss['@global'][`#${id}`] = {});
-          let styles = (meta as any)['styles'] || {};
+
+          if (meta.fonts) {
+            for (let fontFamily in meta.fonts) {
+              jss['@font-face'] = jss['@font-face'].concat(meta.fonts[fontFamily]);
+            }
+          }
+
+          let styles = meta.styles || {};
           for (let k in styles) {
             if (k === ROOT) {
               for (let rootK in styles[k]) {
                 idStyles[rootK] = styles[k][rootK];
               }
-            } else if (k === '@font-face') {
-              jss[k] = styles[k];
             } else if (typeof styles[k] === 'object') {
               idStyles[`& ${k}`] = styles[k];
             } else {
@@ -336,36 +374,86 @@ export class FontManager implements IFontManager {
 
   hack() {
     setTimeout(() => this.stylesheets.map((s) => document.body.appendChild(s)), 0);
+    this._ready.resolve(void 0);
   }
 
-  registerFont(fontFamily: string, variants: string[] = []) {
-    if (!variants.length) {
-      variants = [fontFamily];
-    } else {
-      variants = variants.map((v) => `${fontFamily} ${v}`);
-    }
+  registerFontFace(options: IFontFaceOptions): void {
+    this._fonts.set(options.name, options);
+    this.registerFontCommands(options);
+  }
 
-    this._fonts.set(fontFamily, variants);
-
-    [TextKind.code, TextKind.content].map((kind) => {
-      variants.forEach((fontFamily) => {
-        const slug = fontFamily.replace(/[^a-z\d]/gi, '-').toLowerCase();
-        let command = `${CMD[kind].fontFamily}:${slug}`;
-        this._commands.addCommand(command, {
-          label: fontFamily,
-          isToggled: () => {
-            let cff = this.getTextStyle('font-family', {kind});
-            return cff && `${cff}`.indexOf(fontFamily) > -1;
-          },
-          isVisible: () => this.enabled,
-          execute: () => {
-            this.setTextStyle('font-family', `'${fontFamily}'`, {kind});
-          },
-          mnemonic: 0,
-        });
-        this._fontFamilyMenus.get(kind).addItem({command});
-        this._palette.addItem({command, category: PALETTE[kind]});
+  private registerFontCommands(options: IFontFaceOptions) {
+    [TextKind.code, TextKind.content].forEach((kind) => {
+      const slug = options.name.replace(/[^a-z\d]/gi, '-').toLowerCase();
+      let command = `${CMD[kind].fontFamily}:${slug}`;
+      this._commands.addCommand(command, {
+        label: options.name,
+        isToggled: () => {
+          let cff = this.getTextStyle('font-family', {kind});
+          return cff && `${cff}`.indexOf(options.name) > -1;
+        },
+        isVisible: () => this.enabled,
+        execute: () => {
+          this.setTextStyle('font-family', `'${options.name}'`, {kind});
+        },
+        mnemonic: 0,
       });
+      this._fontFamilyMenus.get(kind).addItem({command});
+      this._palette.addItem({command, category: PALETTE[kind]});
     });
   }
+
+  dataURISrc(url: string, format = FontFormat.woff2): string {
+    const pre = `data:${FONT_FORMATS[format]};charset=utf-8;base64`;
+    const base64Font = base64Encode(getBinary(url));
+    const post = `format('${format}')`;
+    const src = `url('${pre},${base64Font}') ${post}`;
+    return src;
+  }
+}
+
+/* below from https://gist.github.com/viljamis/c4016ff88745a0846b94 */
+function getBinary(url: string) {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', url, false);
+  xhr.overrideMimeType('text/plain; charset=x-user-defined');
+  xhr.send(null);
+  return xhr.responseText;
+}
+
+const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+export function base64Encode(str: string): string {
+  let out = '';
+  let i = 0;
+  let len = str.length;
+  let c1: number;
+  let c2: number;
+  let c3: number;
+
+  // tslint:disable
+  while (i < len) {
+    c1 = str.charCodeAt(i++) & 0xff;
+    if (i === len) {
+      out += CHARS.charAt(c1 >> 2);
+      out += CHARS.charAt((c1 & 0x3) << 4);
+      out += '==';
+      break;
+    }
+    c2 = str.charCodeAt(i++);
+    if (i === len) {
+      out += CHARS.charAt(c1 >> 2);
+      out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xf0) >> 4));
+      out += CHARS.charAt((c2 & 0xf) << 2);
+      out += '=';
+      break;
+    }
+    c3 = str.charCodeAt(i++);
+    out += CHARS.charAt(c1 >> 2);
+    out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xf0) >> 4));
+    out += CHARS.charAt(((c2 & 0xf) << 2) | ((c3 & 0xc0) >> 6));
+    out += CHARS.charAt(c3 & 0x3f);
+  }
+  // tslint:enable
+  return out;
 }

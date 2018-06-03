@@ -85,7 +85,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
         {
           className: 'jp-mod-styled',
           onChange,
-          defaultValue: m.fonts.getTextStyle(prop, {kind}),
+          defaultValue: m.fonts.getTextStyle(prop, {kind, notebook: m.notebook}),
           key: 2,
         },
         [null, ...TEXT_OPTIONS[prop](m.fonts)].map((value, key) => {

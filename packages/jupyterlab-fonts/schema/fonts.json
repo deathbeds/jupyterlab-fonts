@@ -66,6 +66,23 @@
         {"$ref": "#/definitions/IFontFaceCanonical"}
       ]
     },
+    "IFontFaceObject": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IFontFacePrimitive"
+          }
+        }
+      },
+      "additionalProperties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IFontFacePrimitive"
+          }
+      }
+    },
     "IFontFace": {
       "oneOf": [
         {"type": "array", "items": {"$ref": "#/definitions/IFontFacePrimitive"}},
@@ -126,6 +143,12 @@
       "default": {},
       "title": "Global Styles",
       "$ref": "#/definitions/IStyles"
+    },
+    "fonts": {
+      "description": "Embedded JSS `@font-face` declarations grouped by `font-family`",
+      "default": [],
+      "title": "Embedded Fonts",
+      "$ref": "#/definitions/IFontFaceObject"
     }
   }
 }
