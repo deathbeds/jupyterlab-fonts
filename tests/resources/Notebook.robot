@@ -20,7 +20,7 @@ Make a Hello World
   [Arguments]   ${kernel}   ${category}
   Launch a new    ${kernel}   ${category}
   Add and Run Cell
-    ...   print("Hello World")
+    ...   for i in range(10):\n\tprint("Hello World")
 
 Wait Until Kernel Is Idle
   Wait Until Page Does Not Contain Element    ${BUSY_KERNEL}
