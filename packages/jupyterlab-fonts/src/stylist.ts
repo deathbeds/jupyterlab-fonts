@@ -27,7 +27,10 @@ export class Stylist {
   registerNotebook(notebook: NotebookPanel, register: boolean) {
     if (register) {
       this._notebookStyles.set(notebook, document.createElement('style'));
-      notebook.disposed.connect(this._onDisposed, this);
+      notebook.disposed.connect(
+        this._onDisposed,
+        this
+      );
       this.hack();
     } else {
       this._onDisposed(notebook);

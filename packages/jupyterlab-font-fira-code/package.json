@@ -11,11 +11,18 @@
     "@jupyterlab/application": "^0.16.0"
   },
   "description": "Code Fonts for JupyterLab",
-  "files": ["{lib,style}/*.{d.ts,js,css}", "{README.md,LICENSE}"],
+  "files": [
+    "{lib,style}/*.{d.ts,js,css}",
+    "{README.md,LICENSE}"
+  ],
   "jupyterlab": {
     "extension": true
   },
-  "keywords": ["jupyter", "jupyterlab", "jupyterlab-extension"],
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
   "license": "BSD-3-Clause",
   "main": "lib/index.js",
   "name": "@deathbeds/jupyterlab-font-fira-code",

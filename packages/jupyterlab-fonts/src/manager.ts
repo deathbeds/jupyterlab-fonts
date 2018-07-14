@@ -52,12 +52,18 @@ export class FontManager implements IFontManager {
     notebooks: INotebookTracker
   ) {
     this._stylist = new Stylist();
-    this._stylist.cacheUpdated.connect(this.settingsUpdate, this);
+    this._stylist.cacheUpdated.connect(
+      this.settingsUpdate,
+      this
+    );
     this._commands = commands;
     this._palette = palette;
     this._notebooks = notebooks;
 
-    this._notebooks.currentChanged.connect(this._onNotebooksChanged, this);
+    this._notebooks.currentChanged.connect(
+      this._onNotebooksChanged,
+      this
+    );
 
     this.makeMenus(commands);
     this.makeCommands();
@@ -316,7 +322,10 @@ export class FontManager implements IFontManager {
     }
     this._settings = settings;
     if (settings) {
-      settings.changed.connect(this.settingsUpdate, this);
+      settings.changed.connect(
+        this.settingsUpdate,
+        this
+      );
     }
     this.settingsUpdate();
   }

@@ -9,7 +9,7 @@
   "devDependencies": {
     "@types/node": "~9.4.2",
     "lerna": "2.11.0",
-    "prettier": "1.12.1",
+    "prettier": "1.13.7",
     "rimraf": "~2.6.1",
     "tslint": "~5.10.0",
     "typescript": "~2.8.3",
@@ -35,15 +35,15 @@
     "lint": "run-p lint:**",
     "lint:sh": "beautysh -i 2 -f postBuild",
     "lint:py": "black nbjss setup.py && flake8 nbjss setup.py",
-    "lint:ts":
-      "prettier --write *.json *.md && lerna exec -- prettier --write --config=../../.prettierrc ./src/**/*.ts ./style/**/*.css ./*.json ./*.md && lerna exec -- tslint -c ../../tslint.json --fix ./src/**/*.ts",
+    "lint:ts": "prettier --write *.json *.md && lerna exec -- prettier --write --config=../../.prettierrc ./src/**/*.ts ./style/**/*.css ./*.json ./*.md && lerna exec -- tslint -c ../../tslint.json --fix ./src/**/*.ts",
     "test": "run-p test:**",
     "test:robot": "python -m robot -d _testoutput tests/acceptance",
     "watch": "run-p watch:** lab:watch",
     "watch:ts": "lerna run watch --parallel",
-    "watch:schema":
-      "jlpm lerna run watch:schema --parallel --scope '@deathbeds/jupyterlab-fonts'"
+    "watch:schema": "jlpm lerna run watch:schema --parallel --scope '@deathbeds/jupyterlab-fonts'"
   },
   "version": "0.1.0",
-  "workspaces": ["packages/*"]
+  "workspaces": [
+    "packages/*"
+  ]
 }

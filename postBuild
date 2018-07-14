@@ -14,5 +14,5 @@ else
   fi
 fi
 
-jlpm all:bootstrap
+jlpm bootstrap
 jupyter labextension list

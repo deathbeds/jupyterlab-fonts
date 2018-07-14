@@ -4,8 +4,16 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "description": "Code Fonts for JupyterLab",
-  "files": ["{lib,style,schema}/*.{d.ts,js,css,svg,json}", "{LICENSE,README.md}"],
-  "keywords": ["jupyter", "jupyterlab", "fonts", "jupyterlab-extension"],
+  "files": [
+    "{lib,style,schema}/*.{d.ts,js,css,svg,json}",
+    "{LICENSE,README.md}"
+  ],
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "fonts",
+    "jupyterlab-extension"
+  ],
   "license": "BSD-3-Clause",
   "main": "lib/index.js",
   "name": "@deathbeds/jupyterlab-fonts",
@@ -35,8 +43,7 @@
     "watch": "^1.0.2"
   },
   "scripts": {
-    "build:schema":
-      "dtsgen schema/fonts.json | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
+    "build:schema": "dtsgen schema/fonts.json | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
     "build": "jlpm build:schema && tsc && jlpm copy:schema",
     "copy:schema": "cp src/_schema.d.ts lib/",
     "watch": "tsc -w",
