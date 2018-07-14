@@ -1,27 +1,29 @@
-*** Settings **
+*** Settings ***
+Documentation   Test whether the JupyterLab Fonts Menu performs as advertised.
 Library         SeleniumLibrary
 Library         BuiltIn
 Resource        ../resources/Browser.robot
 Resource        ../resources/Lab.robot
 Resource        ../resources/Notebook.robot
-Suite Teardown  Kill'em all
+Test Teardown   Reset Application State and Close
+Suite Teardown  Clean Up JupyterLab
 
 
-*** Test Cases **
+*** Test Cases ***
 Customize code font with the JupyterLab Menu
+  [Documentation]   Try out some font settings with the menu
   Start Jupyterlab
   Open JupyterLab with        ${BROWSER}
-  Sleep                       1s
   Make a Hello World          Python 3    Notebook
   Use the Menu to set the Code Font Family to Fira Code Bold
   Capture Page Screenshot     01_fira_bold.png
   Use the Menu to set the Code Font Family to Fira Code Light
   Capture Page Screenshot     02_fira_reg.png
-  [Teardown]                  Reset Application State and Close
 
 
 *** Keywords ***
 Use the Menu to set the ${kind} Font ${aspect} to ${setting}
+  [Documentation]   Set a font value in the JupyterLab Fonts Menu
   Click JupyterLab Menu       Settings
   Capture Page Screenshot     000_${kind}_${aspect}_${setting}_settings.png
   Click JupyterLab Menu Item  Fonts
