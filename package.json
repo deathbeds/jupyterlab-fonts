@@ -1,43 +1,49 @@
 {
-  "name": "@deathbed/fonts",
-  "private": true,
-  "version": "0.1.0",
-  "workspaces": ["packages/*"],
-  "devDependencies": {
-    "@types/node": "^9.4.2",
-    "lerna": "^2.11.0",
-    "prettier": "1.12.1",
-    "rimraf": "^2.6.1",
-    "tslint": "^5.10.0",
-    "typescript": "^2.8.3",
-    "webpack": "~2.7.0"
-  },
   "dependencies": {
     "@jupyterlab/application": "^0.16.0",
+    "@jupyterlab/mainmenu": "^0.5.2",
     "@phosphor/commands": "^1.4.0",
-    "@phosphor/widgets": "^1.5.0",
     "@phosphor/coreutils": "^1.3.0",
-    "@jupyterlab/mainmenu": "^0.5.2"
+    "@phosphor/widgets": "^1.5.0"
   },
+  "devDependencies": {
+    "@types/node": "~9.4.2",
+    "lerna": "2.11.0",
+    "prettier": "1.12.1",
+    "rimraf": "~2.6.1",
+    "tslint": "~5.10.0",
+    "typescript": "~2.8.3",
+    "webpack": "~2.7.0",
+    "npm-run-all": "~4.1.3"
+  },
+  "name": "@deathbed/fonts",
+  "private": true,
   "scripts": {
-    "clean": "lerna exec --parallel -- rimraf lib",
-    "bootstrap":
-      "jlpm --no-optional --prefer-offline && jlpm clean && jlpm lint && jlpm lerna bootstrap && jlpm build && jlpm lab:link",
-    "build": "jlpm webpack -p && jlpm build:core && jlpm build:fonts",
+    "bootstrap": "run-s bootstrap:py bootstrap:js bootstrap:lab",
+    "bootstrap:py": "python -m pip install -e . --no-deps --ignore-installed",
+    "bootstrap:js": "jlpm && jlpm lerna bootstrap && jlpm build",
+    "bootstrap:lab": "jlpm lab:link && jlpm lab:build",
+    "build": "run-s lint clean build:static build:schema build:core build:fonts",
     "build:core": "lerna run build --scope '@deathbeds/jupyterlab-fonts'",
     "build:fonts": "lerna run build --scope '@deathbeds/jupyterlab-font-*'",
     "build:schema": "lerna run build:schema --scope '@deathbeds/jupyterlab-fonts'",
+    "build:static": "jlpm webpack -p",
+    "clean": "lerna exec --parallel -- rimraf lib",
+    "lab:build": "jupyter lab build --dev",
+    "lab:watch": "jupyter lab --no-browser --debug --watch",
     "lab:link": "lerna exec -- jupyter labextension link . --no-build",
-    "watch": "lerna run watch --parallel",
-    "lint":
-      "jlpm lint:prettier && jlpm lint:black && jlpm lint:tslint && jlpm lint:flake8",
-    "lint:tslint": "lerna exec -- tslint -c ../../tslint.json --fix ./src/**/*.ts",
-    "lint:beautysh": "beautysh -i 2 -f scripts/**/*.sh postBuild",
-    "lint:black": "black nbjss setup.py",
-    "lint:flake8": "flake8 nbjss setup.py",
-    "lab:watch":
-      "cd $CONDA_PREFIX/share/jupyter/lab/staging && rm -rf ../static && jlpm watch",
-    "lint:prettier":
-      "prettier --write *.json *.md && lerna exec -- prettier --write --config=../../.prettierrc ./src/**/*.ts ./style/**/*.css ./*.json ./*.md"
-  }
+    "lint": "run-p lint:**",
+    "lint:sh": "beautysh -i 2 -f postBuild",
+    "lint:py": "black nbjss setup.py && flake8 nbjss setup.py",
+    "lint:ts":
+      "prettier --write *.json *.md && lerna exec -- prettier --write --config=../../.prettierrc ./src/**/*.ts ./style/**/*.css ./*.json ./*.md && lerna exec -- tslint -c ../../tslint.json --fix ./src/**/*.ts",
+    "test": "run-p test:**",
+    "test:robot": "python -m robot -d _testoutput tests/acceptance",
+    "watch": "run-p watch:** lab:watch",
+    "watch:ts": "lerna run watch --parallel",
+    "watch:schema":
+      "jlpm lerna run watch:schema --parallel --scope '@deathbeds/jupyterlab-fonts'"
+  },
+  "version": "0.1.0",
+  "workspaces": ["packages/*"]
 }

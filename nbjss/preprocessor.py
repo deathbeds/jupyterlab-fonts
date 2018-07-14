@@ -44,10 +44,8 @@ class JSSHeaderPreprocessor(Preprocessor):
                 )
             )
 
-        print(len(inlining["css"]))
         if css is not None:
             inlining["css"] += [css]
-        print(len(inlining["css"]))
 
         return nb, resources
 
@@ -68,7 +66,6 @@ class JSSHeaderPreprocessor(Preprocessor):
         <script>%s</script>
         <script>
             ;(function(){
-                console.log(nbjss);
                 nbjss.createStyleSheet(%s).attach();
                 nbjss.createStyleSheet(%s).attach();
             }).call(this);
