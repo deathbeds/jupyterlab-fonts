@@ -139,7 +139,7 @@ export interface IFontManager {
     value: SCHEMA.ICSSOM,
     options: ITextStyleOptions
   ): void;
-  dataURISrc(url: string, format: FontFormat): string;
+  dataURISrc(url: string, format: FontFormat): Promise<string>;
 }
 
 export interface ITextStyleOptions {

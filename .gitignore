@@ -7,3 +7,4 @@ Untitled*.ipynb
 *.egg-info/
 __pycache__
 nbjss/static/nbjss.js
+_testoutput/

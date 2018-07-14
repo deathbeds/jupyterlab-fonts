@@ -1,4 +1,3 @@
-import * as JSS from 'jss';
 import {PromiseDelegate} from '@phosphor/coreutils';
 import {Menu} from '@phosphor/widgets';
 import {CommandRegistry} from '@phosphor/commands';
@@ -6,7 +5,8 @@ import {ICommandPalette} from '@jupyterlab/apputils';
 import {INotebookTracker, NotebookPanel} from '@jupyterlab/notebook';
 
 import {ISettingRegistry} from '@jupyterlab/coreutils';
-import jssPresetDefault from 'jss-preset-default';
+
+import {Stylist} from './stylist';
 
 import {
   IFontManager,
@@ -18,10 +18,11 @@ import {
   TextKind,
   ROOT,
   TEXT_OPTIONS,
-  FONT_FORMATS,
   FontFormat,
   IFontFaceOptions,
 } from '.';
+
+import {dataURISrc} from './util';
 
 import * as SCHEMA from './schema';
 
@@ -33,7 +34,7 @@ const PALETTE = {
 };
 
 export class FontManager implements IFontManager {
-  private _globalStyles: HTMLStyleElement;
+  protected _stylist: Stylist;
   private _fontFamilyMenus = new Map<TextKind, Menu>();
   private _fontSizeMenus = new Map<TextKind, Menu>();
   private _lineHeightMenus = new Map<TextKind, Menu>();
@@ -41,9 +42,6 @@ export class FontManager implements IFontManager {
   private _palette: ICommandPalette;
   private _commands: CommandRegistry;
   private _notebooks: INotebookTracker;
-  private _jss = JSS.create(jssPresetDefault());
-  private _notebookStyles = new Map<string, HTMLStyleElement>();
-  private _fonts = new Map<string, IFontFaceOptions>();
   private _ready = new PromiseDelegate<void>();
 
   private _settings: ISettingRegistry.ISettings;
@@ -53,11 +51,11 @@ export class FontManager implements IFontManager {
     palette: ICommandPalette,
     notebooks: INotebookTracker
   ) {
+    this._stylist = new Stylist();
+    this._stylist.cacheUpdated.connect(this.settingsUpdate, this);
     this._commands = commands;
     this._palette = palette;
     this._notebooks = notebooks;
-
-    this._globalStyles = document.createElement('style');
 
     this._notebooks.currentChanged.connect(this._onNotebooksChanged, this);
 
@@ -151,7 +149,7 @@ export class FontManager implements IFontManager {
 
   async embedFont(fontFamily: SCHEMA.ICSSOM, metadata: SCHEMA.ISettings) {
     const unquoted = (fontFamily as string).replace(/(['"]?)(.*)\1/, '$2');
-    const registered = this._fonts.get(unquoted);
+    const registered = this._stylist.fonts.get(unquoted);
     if (!registered) {
       return;
     }
@@ -167,68 +165,41 @@ export class FontManager implements IFontManager {
   }
 
   get fonts() {
-    return this._fonts;
+    return this._stylist.fonts;
   }
 
   private _onNotebooksChanged() {
+    let styled = this._stylist.notebooks();
+
     this._notebooks.forEach((notebook) => {
-      if (this._notebookStyles.has(notebook.id)) {
-        return;
+      if (styled.indexOf(notebook) === -1) {
+        this._registerNotebook(notebook);
       }
-      this._registerNotebook(notebook);
     });
   }
 
   private _registerNotebook(notebook: NotebookPanel) {
-    const id = notebook.id;
-    this._notebookStyles.set(id, document.createElement('style'));
-    let watcher = this._notebookMetaWatcher(id);
-
+    this._stylist.registerNotebook(notebook, true);
+    let watcher = this._notebookMetaWatcher(notebook);
     notebook.model.metadata.changed.connect(watcher);
-    notebook.disposed.connect(() => this._notebookStyles.delete(id));
+    notebook.disposed.connect(this._onNotebookDisposed);
     watcher();
     this.hack();
   }
 
-  private _notebookMetaWatcher(id: string) {
+  private _onNotebookDisposed(notebook: NotebookPanel) {
+    this._stylist.registerNotebook(notebook, false);
+  }
+
+  private _notebookMetaWatcher(notebook: NotebookPanel) {
     return () => {
       this._notebooks.forEach((notebook) => {
-        if (notebook.id !== id) {
+        if (notebook.id !== notebook.id) {
           return;
         }
         const meta = notebook.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings;
-        let newStyle = '';
-
         if (meta) {
-          let jss: any = {'@font-face': [], '@global': {}};
-          let idStyles: any = (jss['@global'][`#${id}`] = {});
-
-          if (meta.fonts) {
-            for (let fontFamily in meta.fonts) {
-              jss['@font-face'] = jss['@font-face'].concat(meta.fonts[fontFamily]);
-            }
-          }
-
-          let styles = meta.styles || {};
-          for (let k in styles) {
-            if (k === ROOT) {
-              for (let rootK in styles[k]) {
-                idStyles[rootK] = styles[k][rootK];
-              }
-            } else if (typeof styles[k] === 'object') {
-              idStyles[`& ${k}`] = styles[k];
-            } else {
-              idStyles[k] = styles[k];
-            }
-          }
-          const style = this._jss.createStyleSheet(jss);
-          newStyle = style.toString();
-        }
-
-        const sheet = this._notebookStyles.get(id);
-        if (sheet.textContent !== newStyle) {
-          sheet.textContent = newStyle;
-          this.hack();
+          this._stylist.stylesheet(meta, notebook);
         }
       });
     };
@@ -256,7 +227,6 @@ export class FontManager implements IFontManager {
             });
           },
           isVisible: () => this.enabled,
-          mnemonic: 0,
         });
         this._fontSizeMenus.get(kind).addItem({command});
         this._palette.addItem({command, category: PALETTE[kind], rank: 0});
@@ -269,7 +239,6 @@ export class FontManager implements IFontManager {
           isToggled: () => this.getTextStyle('line-height', {kind}) === lineHeight,
           isVisible: () => this.enabled,
           execute: () => this.setTextStyle('line-height', lineHeight, {kind}),
-          mnemonic: 0,
         });
         this._lineHeightMenus.get(kind).addItem({command});
       });
@@ -281,7 +250,6 @@ export class FontManager implements IFontManager {
           isToggled: () => this.getTextStyle('font-size', {kind}) === px,
           isVisible: () => this.enabled,
           execute: () => this.setTextStyle('font-size', px, {kind}),
-          mnemonic: 0,
         });
         this._fontSizeMenus.get(kind).addItem({command});
       });
@@ -362,35 +330,23 @@ export class FontManager implements IFontManager {
   }
 
   get stylesheets() {
-    return [this._globalStyles, ...Array.from(this._notebookStyles.values())];
+    return this._stylist.stylesheets;
   }
 
   settingsUpdate(): void {
-    if (!this.enabled) {
-      this._globalStyles.textContent = '';
-      return;
-    }
-
-    const raw = this._settings.get('styles').composite;
-    try {
-      const style = this._jss.createStyleSheet({
-        '@global': raw as any,
-      });
-      this._globalStyles.textContent = style.toString();
-      this.hack();
-    } catch (err) {
-      console.error('Font rendering error');
-      console.error(err);
-    }
+    let meta: SCHEMA.ISettings = {
+      styles: this._settings.get('styles').composite as SCHEMA.IStyles,
+    };
+    this._stylist.stylesheet(meta, null, true);
   }
 
   hack() {
-    setTimeout(() => this.stylesheets.map((s) => document.body.appendChild(s)), 0);
+    this._stylist.hack();
     this._ready.resolve(void 0);
   }
 
   registerFontFace(options: IFontFaceOptions): void {
-    this._fonts.set(options.name, options);
+    this._stylist.fonts.set(options.name, options);
     this.registerFontCommands(options);
   }
 
@@ -408,64 +364,13 @@ export class FontManager implements IFontManager {
         execute: () => {
           this.setTextStyle('font-family', `'${options.name}'`, {kind});
         },
-        mnemonic: 0,
       });
       this._fontFamilyMenus.get(kind).addItem({command});
       this._palette.addItem({command, category: PALETTE[kind]});
     });
   }
 
-  dataURISrc(url: string, format = FontFormat.woff2): string {
-    const pre = `data:${FONT_FORMATS[format]};charset=utf-8;base64`;
-    const base64Font = base64Encode(getBinary(url));
-    const post = `format('${format}')`;
-    const src = `url('${pre},${base64Font}') ${post}`;
-    return src;
+  async dataURISrc(url: string, format = FontFormat.woff2): Promise<string> {
+    return await dataURISrc(url, format);
   }
-}
-
-/* below from https://gist.github.com/viljamis/c4016ff88745a0846b94 */
-function getBinary(url: string) {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', url, false);
-  xhr.overrideMimeType('text/plain; charset=x-user-defined');
-  xhr.send(null);
-  return xhr.responseText;
-}
-
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-
-export function base64Encode(str: string): string {
-  let out = '';
-  let i = 0;
-  let len = str.length;
-  let c1: number;
-  let c2: number;
-  let c3: number;
-
-  // tslint:disable
-  while (i < len) {
-    c1 = str.charCodeAt(i++) & 0xff;
-    if (i === len) {
-      out += CHARS.charAt(c1 >> 2);
-      out += CHARS.charAt((c1 & 0x3) << 4);
-      out += '==';
-      break;
-    }
-    c2 = str.charCodeAt(i++);
-    if (i === len) {
-      out += CHARS.charAt(c1 >> 2);
-      out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xf0) >> 4));
-      out += CHARS.charAt((c2 & 0xf) << 2);
-      out += '=';
-      break;
-    }
-    c3 = str.charCodeAt(i++);
-    out += CHARS.charAt(c1 >> 2);
-    out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xf0) >> 4));
-    out += CHARS.charAt(((c2 & 0xf) << 2) | ((c3 & 0xc0) >> 6));
-    out += CHARS.charAt(c3 & 0x3f);
-  }
-  // tslint:enable
-  return out;
 }

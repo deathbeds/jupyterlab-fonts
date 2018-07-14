@@ -22,7 +22,8 @@ class JSSHeaderPreprocessor(Preprocessor):
         StaticStrategy,
         default_value=StaticStrategy.inline_js,
         config=True,
-        help="A strategy for applying style from JSS.. only `inline_js` supported")
+        help="A strategy for applying style from JSS.. only `inline_js` supported",
+    )
 
     def preprocess(self, nb, resources):
         jss = nb.metadata.get(METADATA_KEY)
@@ -39,7 +40,9 @@ class JSSHeaderPreprocessor(Preprocessor):
         else:
             raise NotImplementedError(
                 "Sorry, {} is not yet supported for static_strategy".format(
-                    self.static_strategy))
+                    self.static_strategy
+                )
+            )
 
         print(len(inlining["css"]))
         if css is not None:

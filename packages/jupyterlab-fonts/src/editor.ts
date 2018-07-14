@@ -55,13 +55,13 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     return h('div', null, [
       this.header(),
-      h('section', {key: 2}, [
+      h('section', {key: 2, title: 'Code'}, [
         h('h2', {key: 1}, 'Code'),
         this.textSelect('font-family', TextKind.code, {key: 2}),
         this.textSelect('font-size', TextKind.code, {key: 3}),
         this.textSelect('line-height', TextKind.code, {key: 4}),
       ]),
-      h('section', {key: 3}, [
+      h('section', {key: 3, title: 'Content'}, [
         h('h2', {key: 1}, 'Content'),
         // TODO re-enable in 0.33
         // this.textSelect('font-family', TextKind.content, {key: 2}),
@@ -84,6 +84,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
         'select',
         {
           className: 'jp-mod-styled',
+          title: `${TEXT_LABELS[prop]}`,
           onChange,
           defaultValue: m.fonts.getTextStyle(prop, {kind, notebook: m.notebook}),
           key: 2,

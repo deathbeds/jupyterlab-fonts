@@ -6,7 +6,7 @@ ROOT = ":root"
 
 
 class StaticStrategy(enum.Enum):
-    # TODO: implement other strategies
+    # TODO: implement other strategiesz
     inline_js = "inline_js"
     inline_css = "inline_css"
     relative = "relative"

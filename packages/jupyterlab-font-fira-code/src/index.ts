@@ -20,7 +20,7 @@ function register(fonts: IFontManager) {
       },
       faces: async () => {
         const font = (await import(`!!file-loader!firacode/distr/woff2/FiraCode-${variant}.woff2`)) as string;
-        const uri = fonts.dataURISrc(font, FontFormat.woff2);
+        const uri = await fonts.dataURISrc(font, FontFormat.woff2);
         return [{fontFamily: `'Fira Code ${variant}'`, src: uri}];
       },
     });
