@@ -39,21 +39,21 @@ Click JupyterLab Menu
   [Arguments]   ${menu_label}
   [Documentation]   Click a top-level JupyterLab Menu bar, e.g. File, Help, etc.
   Wait Until Page Contains Element
-  ...  ${TOP}${BAR_ITEM}[contains(text(), '${menu_label}')]
+  ...  ${TOP}${BAR_ITEM}[text() = '${menu_label}']
   Mouse Over
-  ...  ${TOP}${BAR_ITEM}[contains(text(), '${menu_label}')]
+  ...  ${TOP}${BAR_ITEM}[text() = '${menu_label}']
   Click Element
-  ...  ${TOP}${BAR_ITEM}[contains(text(), '${menu_label}')]
+  ...  ${TOP}${BAR_ITEM}[text() = '${menu_label}']
 
 Click JupyterLab Menu Item
   [Arguments]   ${item_label}
   [Documentation]   Click a top-level JupyterLab Menu Item (not File, Help, etc.)
   Wait Until Page Contains Element
-  ...  //div[@class='p-Menu-itemLabel' and contains(text(), '${item_label}')]
+  ...  //div[@class='p-Menu-itemLabel' and text() = '${item_label}']
   Mouse Over
-  ...  //div[@class='p-Menu-itemLabel' and contains(text(), '${item_label}')]
+  ...  //div[@class='p-Menu-itemLabel' and text() = '${item_label}']
   Click Element
-  ...  //div[@class='p-Menu-itemLabel' and contains(text(), '${item_label}')]
+  ...  //div[@class='p-Menu-itemLabel' and text() = '${item_label}']
 
 Open JupyterLab with
   [Arguments]   ${browser}

@@ -54,19 +54,19 @@ export class Stylist {
   }
 
   stylesheet(meta: SCHEMA.ISettings, notebook: NotebookPanel = null, clear = false) {
+    let sheet = notebook ? this._notebookStyles.get(notebook) : this._globalStyles;
+
     let style = notebook
       ? this._nbMetaToStyle(meta, notebook)
       : this._settingsToStyle(meta);
-
-    let sheet = notebook ? this._notebookStyles.get(notebook) : this._globalStyles;
 
     let jss = this._jss.createStyleSheet(style as any);
     let css = jss.toString();
 
     if (sheet.textContent !== css) {
       sheet.textContent = css;
-      this.hack();
     }
+    this.hack();
   }
 
   private _nbMetaToStyle(
@@ -107,7 +107,8 @@ export class Stylist {
         if (this._fontCache.has(font)) {
           faces[font] = this._fontCache.get(font);
         } else {
-          let promise = new Promise((resolve, reject) => {
+          // tslint:disable-next-line
+          new Promise((resolve, reject) => {
             this.fonts
               .get(font)
               .faces()
@@ -126,7 +127,6 @@ export class Stylist {
                 }
               );
           });
-          console.log('what do you do with this promise', promise);
         }
       }
     }
@@ -151,7 +151,11 @@ export class Stylist {
     }
   }
 
-  hack() {
-    setTimeout(() => this.stylesheets.map((s) => document.body.appendChild(s)), 0);
+  hack(show = true) {
+    if (show) {
+      setTimeout(() => this.stylesheets.map((s) => document.body.appendChild(s)), 0);
+    } else {
+      this.stylesheets.map((el) => el.remove());
+    }
   }
 }

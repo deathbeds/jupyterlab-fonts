@@ -60,6 +60,10 @@ export const CMD = {
     lineHeight: 'content-line-height',
   },
   editFonts: 'font-editor:open',
+  customFonts: {
+    disable: 'custom-fonts:disable',
+    enable: 'custom-fonts:enable',
+  },
 };
 
 export const ROOT = ':root';
@@ -74,7 +78,7 @@ export const CSS: ICSSVars = {
   },
   content: {
     'font-family': '--jp-content-font-family',
-    'font-size': '--jp-content-font-size1',
+    'font-size': '--jp-content-font-size',
     'line-height': '--jp-content-line-height',
   },
 };

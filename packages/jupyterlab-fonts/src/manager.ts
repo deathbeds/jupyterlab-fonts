@@ -15,6 +15,7 @@ import {
   CMD,
   TextProperty,
   ITextStyleOptions,
+  TEXT_LABELS,
   TextKind,
   ROOT,
   TEXT_OPTIONS,
@@ -73,6 +74,60 @@ export class FontManager implements IFontManager {
 
   get ready() {
     return this._ready.promise;
+  }
+
+  get fonts() {
+    return this._stylist.fonts;
+  }
+
+  get enabled() {
+    if (!this.settings) {
+      return false;
+    }
+    const enabled = !!this._settings.get('enabled').composite;
+    return enabled;
+  }
+
+  set enabled(enabled) {
+    if (!this.settings) {
+      return;
+    }
+    this._settings.set('enabled', enabled);
+  }
+
+  get settings() {
+    return this._settings;
+  }
+
+  get menu() {
+    return this._menu;
+  }
+
+  get stylesheets() {
+    return this._stylist.stylesheets;
+  }
+
+  set settings(settings) {
+    if (this._settings) {
+      this._settings.changed.disconnect(this.settingsUpdate, this);
+    }
+    this._settings = settings;
+    if (settings) {
+      settings.changed.connect(
+        this.settingsUpdate,
+        this
+      );
+    }
+    this.settingsUpdate();
+  }
+
+  public async dataURISrc(url: string, format = FontFormat.woff2): Promise<string> {
+    return await dataURISrc(url, format);
+  }
+
+  registerFontFace(options: IFontFaceOptions): void {
+    this._stylist.fonts.set(options.name, options);
+    this.registerFontCommands(options);
   }
 
   getVarName(property: TextProperty, {kind}: Partial<ITextStyleOptions>) {
@@ -138,6 +193,9 @@ export class FontManager implements IFontManager {
       this.cleanMetadata(metadata);
       notebook.model.metadata.set(PACKAGE_NAME, metadata as any);
     } else {
+      if (!Object.keys(styles[ROOT] || {}).length) {
+        delete styles[ROOT];
+      }
       this._settings.set('styles', styles);
     }
   }
@@ -154,6 +212,9 @@ export class FontManager implements IFontManager {
   }
 
   async embedFont(fontFamily: SCHEMA.ICSSOM, metadata: SCHEMA.ISettings) {
+    if (fontFamily == null) {
+      return;
+    }
     const unquoted = (fontFamily as string).replace(/(['"]?)(.*)\1/, '$2');
     const registered = this._stylist.fonts.get(unquoted);
     if (!registered) {
@@ -168,10 +229,6 @@ export class FontManager implements IFontManager {
       console.warn('error embedding font');
       console.warn(err);
     }
-  }
-
-  get fonts() {
-    return this._stylist.fonts;
   }
 
   private _onNotebooksChanged() {
@@ -228,14 +285,24 @@ export class FontManager implements IFontManager {
           execute: () => {
             let oldSize = this.getTextStyle('font-size', {kind}) as string;
             let cfs = parseInt((oldSize || '0').replace(/px$/, ''), 10) || 13;
-            this.setTextStyle('font-size', `${cfs + (i ? -1 : 1)}px`, {
-              kind: TextKind.code,
-            });
+            this.setTextStyle('font-size', `${cfs + (i ? -1 : 1)}px`, {kind});
           },
           isVisible: () => this.enabled,
         });
         this._fontSizeMenus.get(kind).addItem({command});
         this._palette.addItem({command, category: PALETTE[kind], rank: 0});
+      });
+
+      ['line-height', 'font-size', 'font-family'].forEach((prop: TextProperty) => {
+        const command = `${kind}-${prop}:-reset`;
+        this._commands.addCommand(command, {
+          label: `Default ${kind[0].toUpperCase()}${kind.slice(1)} ${
+            TEXT_LABELS[prop]
+          }`,
+          execute: () => this.setTextStyle(prop, null, {kind}),
+          isVisible: () => this.enabled,
+          isToggled: () => this.getTextStyle(prop, {kind}) == null,
+        });
       });
 
       TEXT_OPTIONS['line-height'](this).map((lineHeight, i) => {
@@ -277,86 +344,64 @@ export class FontManager implements IFontManager {
     });
   }
 
-  get enabled() {
-    if (!this.settings) {
-      return false;
-    }
-    return !!this._settings.get('enabled').composite;
+  protected fontPropMenu(parent: Menu, kind: TextKind, property: TextProperty) {
+    let menu = new Menu({commands: parent.commands});
+    menu.title.label = TEXT_LABELS[property];
+
+    menu.addItem({
+      command: `${kind}-${property}:-reset`,
+    });
+
+    menu.addItem({
+      type: 'separator',
+    });
+
+    parent.addItem({type: 'submenu', submenu: menu});
+
+    return menu;
   }
 
-  makeMenus(commands: CommandRegistry) {
+  protected makeMenus(commands: CommandRegistry) {
     this._menu = new Menu({commands});
     this._menu.title.label = 'Fonts';
 
     [TextKind.code, TextKind.content].map((kind) => {
       const submenu = new Menu({commands});
-      const height = new Menu({commands});
-      const family = new Menu({commands});
-      const size = new Menu({commands});
-
       submenu.title.label = kind[0].toUpperCase() + kind.slice(1);
-      height.title.label = 'Line Height';
-      family.title.label = 'Family';
-      size.title.label = 'Size';
+      this._menu.addItem({type: 'submenu', submenu});
+
+      const family = this.fontPropMenu(submenu, kind, 'font-family');
+      const height = this.fontPropMenu(submenu, kind, 'line-height');
+      const size = this.fontPropMenu(submenu, kind, 'font-size');
 
       this._fontFamilyMenus.set(kind, family);
       this._lineHeightMenus.set(kind, height);
       this._fontSizeMenus.set(kind, size);
-
-      [family, size, height].map((propMenu) => {
-        submenu.addItem({type: 'submenu', submenu: propMenu});
-      });
-
-      this._menu.addItem({type: 'submenu', submenu});
     });
 
     this._menu.addItem({
       command: CMD.editFonts,
       args: {global: true},
     });
-  }
 
-  set settings(settings) {
-    if (this._settings) {
-      this._settings.changed.disconnect(this.settingsUpdate, this);
-    }
-    this._settings = settings;
-    if (settings) {
-      settings.changed.connect(
-        this.settingsUpdate,
-        this
-      );
-    }
-    this.settingsUpdate();
-  }
+    this._menu.addItem({
+      command: CMD.customFonts.enable,
+    });
 
-  get settings() {
-    return this._settings;
-  }
-
-  get menu() {
-    return this._menu;
-  }
-
-  get stylesheets() {
-    return this._stylist.stylesheets;
+    this._menu.addItem({
+      command: CMD.customFonts.disable,
+    });
   }
 
   settingsUpdate(): void {
     let meta: SCHEMA.ISettings = {
       styles: this._settings.get('styles').composite as SCHEMA.IStyles,
     };
-    this._stylist.stylesheet(meta, null, true);
-  }
-
-  hack() {
-    this._stylist.hack();
-    this._ready.resolve(void 0);
-  }
-
-  registerFontFace(options: IFontFaceOptions): void {
-    this._stylist.fonts.set(options.name, options);
-    this.registerFontCommands(options);
+    if (this.enabled) {
+      this._stylist.stylesheet(meta, null, true);
+    } else {
+      this._stylist.hack(false);
+    }
   }
 
   private registerFontCommands(options: IFontFaceOptions) {
@@ -367,7 +412,7 @@ export class FontManager implements IFontManager {
         label: options.name,
         isToggled: () => {
           let cff = this.getTextStyle('font-family', {kind});
-          return cff && `${cff}`.indexOf(options.name) > -1;
+          return `${cff}`.indexOf(`'${options.name}'`) > -1;
         },
         isVisible: () => this.enabled,
         execute: () => {
@@ -379,7 +424,8 @@ export class FontManager implements IFontManager {
     });
   }
 
-  async dataURISrc(url: string, format = FontFormat.woff2): Promise<string> {
-    return await dataURISrc(url, format);
+  hack() {
+    this._stylist.hack();
+    this._ready.resolve(void 0);
   }
 }

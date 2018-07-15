@@ -1,4 +1,4 @@
-## Contributing
+# Contributing
 
 We would love to have contributions of
 
@@ -6,6 +6,19 @@ We would love to have contributions of
 - [ ] additional strategies for making fonts available
 
 > Note: PRs will be reviewed on a time-permitting basis!
+
+## Adding a Font
+
+While anyone can add more fonts as an extension, fonts included and maintained
+in this monorepo should be:
+
+- licensed and attributed
+- available in `woff2` format
+- tested
+
+If there is an `npm` upstream for your font, great! However, if it ships every
+possible font format, you should probably vendor it. For an example, see
+[jupyterlab-font-dejavu-sans-mono](./packages/jupyterlab-font-dejavu-sans-mono).
 
 ## Development
 

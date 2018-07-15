@@ -1,0 +1,42 @@
+{
+  "author": "Dead Pixels Collective",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
+  "peerDependencies": {
+    "@deathbeds/jupyterlab-fonts": "^0.3.0"
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^0.16.0"
+  },
+  "devDependencies": {
+    "dejavu-fonts-ttf": "2.37.3"
+  },
+  "description": "Dejavu Fonts for JupyterLab",
+  "files": [
+    "{lib,style}/**/*.{d.ts,js,css,woff2}",
+    "{README.md,LICENSE}",
+    "vendor/dejavu-fonts-ttf/LICENSE"
+  ],
+  "jupyterlab": {
+    "extension": true
+  },
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "lib/index.js",
+  "name": "@deathbeds/jupyterlab-font-dejavu",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
+  },
+  "types": "lib/index.d.ts",
+  "version": "0.3.0",
+  "scripts": {
+    "build": "python scripts/convert.py && tsc",
+    "watch": "tsc -w"
+  }
+}

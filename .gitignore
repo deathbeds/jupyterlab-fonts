@@ -1,10 +1,11 @@
 envs/
 .ipynb_checkpoints/
 node_modules/
-*.log 
+*.log
 packages/*/lib
 Untitled*.ipynb
 *.egg-info/
 __pycache__
 nbjss/static/nbjss.js
 _testoutput/
+*.woff2

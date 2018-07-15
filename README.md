@@ -95,15 +95,17 @@ in the Notebook metadata.
 
 You can pretty much do anything you want from the _Fonts_ section of
 _Advanced Settings_... even things entirely unrelated to fonts.
+There's no guarantee that super-customized styles will work nicely with the
+Font Editor!
 
-Here's an example of changing how the Notebook works when in Presentation
+Here's an example of changing how the Notebook looks when in Presentation
 Mode.
 
 ```json
 {
   "styles": {
     ":root": {
-      "--jp-code-font-family": "\"Fira Code Regular\", \"Source Code Pro\", monospace",
+      "--jp-code-font-family": "'Fira Code Regular', 'Source Code Pro', monospace",
       "--jp-code-font-size": "19px"
     },
     ".jp-mod-presentationMode .jp-Notebook": {

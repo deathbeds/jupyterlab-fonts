@@ -13,6 +13,8 @@ import '../style/editor.css';
 const h = React.createElement;
 
 const EDITOR_CLASS = 'jp-FontsEditor';
+const ENABLED_CLASS = 'jp-FontsEditor-enable';
+const DUMMY = '-';
 
 export class FontEditorModel extends VDomModel {
   private _notebook: NotebookPanel;
@@ -23,8 +25,18 @@ export class FontEditorModel extends VDomModel {
   }
 
   set fonts(fonts) {
+    if (this._fonts && this._fonts.settings) {
+      this._fonts.settings.changed.disconnect(this.onSettingsChange, this);
+    }
     this._fonts = fonts;
-    fonts.settings.changed.connect(() => () => this.stateChanged.emit(void 0));
+    fonts.settings.changed.connect(
+      this.onSettingsChange,
+      this
+    );
+    this.stateChanged.emit(void 0);
+  }
+
+  private onSettingsChange() {
     this.stateChanged.emit(void 0);
   }
 
@@ -34,10 +46,33 @@ export class FontEditorModel extends VDomModel {
 
   set notebook(notebook) {
     this._notebook = notebook;
-    const update = () => this.stateChanged.emit(void 0);
-    notebook.model.metadata.changed.connect(update);
-    notebook.context.pathChanged.connect(update);
+    notebook.model.metadata.changed.connect(
+      this.onSettingsChange,
+      this
+    );
+    notebook.context.pathChanged.connect(
+      this.onSettingsChange,
+      this
+    );
     this.stateChanged.emit(void 0);
+  }
+
+  get enabled() {
+    return this._fonts.enabled;
+  }
+
+  async setEnabled(enabled: boolean) {
+    if (this.notebook == null) {
+      await this._fonts.settings.set('enabled', enabled);
+      this.stateChanged.emit(void 0);
+    }
+  }
+
+  dispose() {
+    if (this._fonts && this._fonts.settings) {
+      this._fonts.settings.changed.disconnect(this.onSettingsChange, this);
+    }
+    super.dispose();
   }
 }
 
@@ -54,7 +89,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     }
 
     return h('div', null, [
-      this.header(),
+      ...this.header(),
       h('section', {key: 2, title: 'Code'}, [
         h('h2', {key: 1}, 'Code'),
         this.textSelect('font-family', TextKind.code, {key: 2}),
@@ -75,6 +110,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     const m = this.model;
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
       let value = (evt.target as HTMLSelectElement).value;
+      value = value === DUMMY ? null : value;
       m.fonts.setTextStyle(prop, value, {kind, notebook: m.notebook});
     };
 
@@ -86,7 +122,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           className: 'jp-mod-styled',
           title: `${TEXT_LABELS[prop]}`,
           onChange,
-          defaultValue: m.fonts.getTextStyle(prop, {kind, notebook: m.notebook}),
+          value: m.fonts.getTextStyle(prop, {kind, notebook: m.notebook}) || DUMMY,
           key: 2,
         },
         [null, ...TEXT_OPTIONS[prop](m.fonts)].map((value, key) => {
@@ -94,9 +130,10 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
             'option',
             {
               key,
-              value: prop !== 'font-family' ? value : value ? `'${value}'` : '',
+              value:
+                value == null ? DUMMY : prop === 'font-family' ? `'${value}'` : value,
             },
-            value || '-'
+            value || DUMMY
           );
         })
       ),
@@ -111,9 +148,31 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     this.title.label = title;
 
-    return h('h1', {key: 1}, [
+    const h1 = h('h1', {key: 1}, [
       ...(m.notebook ? [h('div', {className: 'jp-NotebookIcon'})] : []),
       `${title} Fonts`,
     ]);
+
+    if (m.notebook != null) {
+      return [h1];
+    }
+
+    const onChange = async (evt: Event) => {
+      await m.setEnabled(!!(evt.currentTarget as HTMLInputElement).checked);
+    };
+
+    return [
+      h1,
+      h(
+        'label',
+        {className: ENABLED_CLASS},
+        'Enabled',
+        h('input', {
+          type: 'checkbox',
+          checked: m.enabled,
+          onChange,
+        })
+      ),
+    ];
   }
 }

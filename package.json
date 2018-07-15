@@ -23,7 +23,7 @@
     "bootstrap:js": "jlpm && jlpm lerna bootstrap && jlpm build",
     "bootstrap:lab": "jlpm lab:link && jlpm lab:build",
     "bootstrap:py": "python -m pip install -e . --no-deps --ignore-installed",
-    "build": "run-s lint clean:lib build:static build:schema build:core build:fonts",
+    "build": "run-s lint:ts clean:lib build:static build:schema build:core build:fonts",
     "build:core": "lerna run build --scope '@deathbeds/jupyterlab-fonts'",
     "build:fonts": "lerna run build --scope '@deathbeds/jupyterlab-font-*'",
     "build:schema": "lerna run build:schema --scope '@deathbeds/jupyterlab-fonts'",
