@@ -14,8 +14,15 @@ ${CMD_PAL_ITEM}    css:.p-CommandPalette-item
 ${TOP}            //div[@id='jp-top-panel']
 ${BAR_ITEM}       //div[@class='p-MenuBar-itemLabel']
 ${CARD}           //div[@class='jp-LauncherCard']
+${DOCK}           //div[@id='jp-main-dock-panel']
 
 *** Keywords ***
+Prepare for testing fonts
+    [Documentation]    Do some normal stuff that might use fonts
+    Start Jupyterlab
+    Open JupyterLab with    ${BROWSER}
+    Make a Hello World    Python 3    Notebook
+
 Wait for Splash Screen
     [Documentation]    Wait for the JupyterLab splash animation to run its course
     Wait Until Page Contains Element    ${SPLASH_ID}
@@ -63,10 +70,12 @@ Execute JupyterLab Command
 
 Reset Application State and Close
     [Documentation]    Try to clean up after doing some things to the JupyterLab state
+    Set Screenshot Directory    ${OUTPUT_DIR}
     Execute JupyterLab Command    Reset Application State
     Close Browser
 
 Clean Up JupyterLab
     [Documentation]    Close all the browsers and stop all processes
+    Set Screenshot Directory    ${OUTPUT_DIR}
     Close All Browsers
     Terminate All Processes    kill=True

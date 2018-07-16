@@ -1,5 +1,6 @@
 *** Settings ***
 Documentation     Test whether the font editor performs as advertised.
+Suite Setup       Prepare for testing fonts
 Suite Teardown    Clean Up JupyterLab
 Test Teardown     Reset Application State and Close
 Library           SeleniumLibrary
@@ -10,48 +11,57 @@ Resource          ../resources/Notebook.robot
 
 *** Variables ***
 ${ED}             css:.jp-FontsEditor
+${TAB}            li[contains(@class, 'p-TabBar-tab')]
+${ICON_FONT}      div[contains(@class, 'jp-FontsIcon')]
+${ICON_CLOSE}     div[contains(@class, 'p-TabBar-tabCloseIcon')]
 
 *** Test Cases ***
 Global Font Editor
-    [Documentation]    Customize Global fonts with the Global Font Editor
-    Start Jupyterlab
-    Open JupyterLab with    ${BROWSER}
-    Make a Hello World    Python 3    Notebook
-    Open the Global Fonts Editor
-    Capture Page Screenshot    global_editor_00.png
-    Use the Global Font Editor to set the Code Font to -
-    Use the Global Font Editor to set the Code Font to Fira Code Light
-    Use the Global Font Editor to set the Code Font to Fira Code Regular
-    Use the Global Font Editor to set the Code Font to Fira Code Medium
-    Use the Global Font Editor to set the Code Font to Fira Code Bold
-    Use the Global Font Editor to set the Code Font to -
-    Use the Global Font Editor to set the Code Line Height to 2
-    Use the Global Font Editor to set the Code Line Height to -
-    Use the Global Font Editor to set the Code Size to 20px
-    Use the Global Font Editor to set the Code Size to -
-    Use the Global Font Editor to set disable custom fonts
-    Use the Global Font Editor to set enable custom fonts
+    [Documentation]    Customize Global fonts with the Font Editor
+    [Setup]    Open the Global Font Editor
+    [Template]    Use the font editor to configure fonts
+    Global    Code    Font    -
+    Global    Code    Font    Fira Code Light
+    Global    Code    Font    Fira Code Regular
+    Global    Code    Font    Fira Code Medium
+    Global    Code    Font    Fira Code Bold
+    Global    Code    Font    -
+    Global    Code    Line Height    -
+    Global    Code    Line Height    2
+    Global    Code    Line Height    -
+    Global    Code    Size    -
+    Global    Code    Size    20px
+    Global    Code    Size    -
+    [Teardown]    Close the Font Editor
 
 Notebook Font Editor
-    [Documentation]    Customize Global fonts with the Notebook Font Editor
-    Start Jupyterlab
-    Open JupyterLab with    ${BROWSER}
-    Make a Hello World    Python 3    Notebook
-    Open the Notebook Font Editor
-    Capture Page Screenshot    notebook_editor_00.png
-    Use the Notebook Font Editor to set the Code Font to -
-    Use the Notebook Font Editor to set the Code Font to Fira Code Light
-    Use the Notebook Font Editor to set the Code Font to Fira Code Regular
-    Use the Notebook Font Editor to set the Code Font to Fira Code Medium
-    Use the Notebook Font Editor to set the Code Font to Fira Code Bold
-    Use the Notebook Font Editor to set the Code Font to -
-    Use the Notebook Font Editor to set the Code Line Height to 2
-    Use the Notebook Font Editor to set the Code Line Height to -
-    Use the Notebook Font Editor to set the Code Size to 20px
-    Use the Notebook Font Editor to set the Code Size to -
+    [Documentation]    Customize Notebook fonts with the Font Editor
+    [Setup]    Open the Notebook Font Editor
+    [Template]    Use the font editor to configure fonts
+    Notebook    Code    Font    -
+    Notebook    Code    Font    Fira Code Light
+    Notebook    Code    Font    Fira Code Regular
+    Notebook    Code    Font    Fira Code Medium
+    Notebook    Code    Font    Fira Code Bold
+    Notebook    Code    Font    -
+    Notebook    Code    Line Height    -
+    Notebook    Code    Line Height    2
+    Notebook    Code    Line Height    -
+    Notebook    Code    Size    -
+    Notebook    Code    Size    20px
+    Notebook    Code    Size    -
+    [Teardown]    Close the Font Editor
+
+Global Enable/Disable
+    [Documentation]    Test enabling and disabling custom fonts
+    [Setup]    Open the Global Font Editor
+    Set Screenshot Directory    ${OUTPUT_DIR}/global_editor/
+    Use the Global Font Editor to disable custom fonts
+    Use the Global Font Editor to enable custom fonts
+    [Teardown]    Close the Font Editor
 
 *** Keywords ***
-Open the Global Fonts Editor
+Open the Global Font Editor
     [Documentation]    Use the JupyterLab Menu to open the global font editor
     Click JupyterLab Menu    Settings
     Click JupyterLab Menu Item    Fonts
@@ -61,15 +71,24 @@ Open the Notebook Font Editor
     [Documentation]    Use the Notebook button bar to open the notebook font editor
     Click Element    css:.jp-Toolbar-item.jp-FontsIcon
 
-Use the ${scope} font editor to Set the ${kind} ${aspect} to ${value}
+Close the Font Editor
+    [Documentation]    Close the Notebook Font Editor by closing the tab
+    Click Element    ${DOCK}//${TAB}/${ICON_FONT}/../${ICON_CLOSE}
+
+Use the font editor to configure fonts
+    [Arguments]    ${scope}    ${kind}    ${aspect}    ${value}
     [Documentation]    Presently, change a dropdown in the font editor
+    Set Screenshot Directory    ${OUTPUT_DIR}/editor/${scope}/${kind}/${aspect}/${value}
     ${sel} =    Set Variable    ${ED} section[title="${kind}"] select[title="${aspect}"]
+    Capture Page Screenshot    00_before.png
     Select From List By Label    ${sel}    ${value}
-    Capture Page Screenshot    ${scope}_editor_${kind}_${aspect}_${value}.png
+    Capture Page Screenshot    01_after.png
 
 Use the Global font editor to ${what} custom fonts
     [Documentation]    Presently, change a checkbox in the font editor
+    Set Screenshot Directory    ${OUTPUT_DIR}/editor/Global/${what}
     ${input} =    Set Variable    ${ED}-enable input
+    Capture Page Screenshot    00_before.png
     Run Keyword If    "${what}"=="enable"    Select Checkbox    ${input}
     Run Keyword If    "${what}"=="disable"    Unselect Checkbox    ${input}
-    Capture Page Screenshot    global_editor_enabled_${what}.png
+    Capture Page Screenshot    01_after.png

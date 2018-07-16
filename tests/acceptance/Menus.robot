@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Test whether the JupyterLab Fonts Menu performs as advertised.
+Suite Setup       Prepare for testing fonts
 Suite Teardown    Clean Up JupyterLab
-Test Teardown     Reset Application State and Close
 Library           SeleniumLibrary
 Library           BuiltIn
 Resource          ../resources/Browser.robot
@@ -11,29 +11,25 @@ Resource          ../resources/Notebook.robot
 *** Test Cases ***
 Customize code font with the JupyterLab Menu
     [Documentation]    Try out some font settings with the menu
-    Start Jupyterlab
-    Open JupyterLab with    ${BROWSER}
-    Make a Hello World    Python 3    Notebook
-    Use the Menu to set the Code Font to Default Code Font
-    Capture Page Screenshot    menus_00_default.png
-    Use the Menu to set the Code Font to Fira Code Light
-    Capture Page Screenshot    menus_01_fira_light.png
-    Use the Menu to set the Code Font to Fira Code Regular
-    Capture Page Screenshot    menus_02_fira_regular.png
-    Use the Menu to set the Code Font to Fira Code Medium
-    Capture Page Screenshot    menus_03_fira_medium.png
-    Use the Menu to set the Code Font to Fira Code Bold
-    Capture Page Screenshot    menus_04_fira_bold.png
+    [Template]    Use the Menu to configure Font
+    Code    Font    Default Code Font
+    Code    Font    Fira Code Light
+    Code    Font    Fira Code Regular
+    Code    Font    Fira Code Medium
+    Code    Font    Fira Code Bold
 
 *** Keywords ***
-Use the Menu to set the ${kind} ${aspect} to ${setting}
+Use the Menu to configure Font
+    [Arguments]    ${kind}    ${aspect}    ${setting}
     [Documentation]    Set a font value in the JupyterLab Fonts Menu
+    Set Screenshot Directory    ${OUTPUT_DIR}/menus/${kind}_${aspect}_${setting}
     Click JupyterLab Menu    Settings
-    Capture Page Screenshot    000_${kind}_${aspect}_${setting}_settings.png
+    Capture Page Screenshot    00_settings.png
     Click JupyterLab Menu Item    Fonts
-    Capture Page Screenshot    001_${kind}_${aspect}_${setting}_fonts.png
+    Capture Page Screenshot    01_fonts.png
     Click JupyterLab Menu Item    ${kind}
-    Capture Page Screenshot    002_${kind}_${aspect}_${setting}_code.png
+    Capture Page Screenshot    02_code.png
     Click JupyterLab Menu Item    ${aspect}
-    Capture Page Screenshot    003_${kind}_${aspect}_${setting}_font.png
+    Capture Page Screenshot    03_font.png
     Click JupyterLab Menu Item    ${setting}
+    Capture Page Screenshot    04_done.png

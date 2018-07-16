@@ -2,7 +2,3 @@
   background-image: url(fonts.svg);
   background-size: contain;
 }
-
-.jp-FontsIcon.jp-fonts-configured {
-  background-image: url(fonts-alt.svg);
-}
