@@ -41,7 +41,7 @@ Click JupyterLab Menu
 Click JupyterLab Menu Item
     [Arguments]    ${item_label}
     [Documentation]    Click a top-level JupyterLab Menu Item (not File, Help, etc.)
-    ${item}    =    //div[@class='p-Menu-itemLabel']
+    ${item} =    Set Variable    //div[@class='p-Menu-itemLabel']
     Wait Until Page Contains Element    ${item}[text() = '${item_label}']
     Mouse Over    ${item}[text() = '${item_label}']
     Click Element    ${item}[text() = '${item_label}']

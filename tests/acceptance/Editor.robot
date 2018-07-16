@@ -8,6 +8,9 @@ Resource          ../resources/Browser.robot
 Resource          ../resources/Lab.robot
 Resource          ../resources/Notebook.robot
 
+*** Variables ***
+${ED}             css:.jp-FontsEditor
+
 *** Test Cases ***
 Global Font Editor
     [Documentation]    Customize Global fonts with the Global Font Editor
@@ -60,13 +63,13 @@ Open the Notebook Font Editor
 
 Use the ${scope} font editor to Set the ${kind} ${aspect} to ${value}
     [Documentation]    Presently, change a dropdown in the font editor
-    ${sel}    = css:.jp-FontsEditor section[title="${kind}"] select[title="${aspect}"]
+    ${sel} =    Set Variable    ${ED} section[title="${kind}"] select[title="${aspect}"]
     Select From List By Label    ${sel}    ${value}
     Capture Page Screenshot    ${scope}_editor_${kind}_${aspect}_${value}.png
 
 Use the Global font editor to ${what} custom fonts
     [Documentation]    Presently, change a checkbox in the font editor
-    ${input}    = css:.jp-FontsEditor-enable input
+    ${input} =    Set Variable    ${ED}-enable input
     Run Keyword If    "${what}"=="enable"    Select Checkbox    ${input}
     Run Keyword If    "${what}"=="disable"    Unselect Checkbox    ${input}
     Capture Page Screenshot    global_editor_enabled_${what}.png
