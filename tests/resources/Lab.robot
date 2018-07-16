@@ -21,6 +21,8 @@ Prepare for testing fonts
     [Documentation]    Do some normal stuff that might use fonts
     Start Jupyterlab
     Open JupyterLab with    ${BROWSER}
+    Execute JupyterLab Command    Reset Application State
+    Wait for Splash Screen
     Make a Hello World    Python 3    Notebook
 
 Wait for Splash Screen
@@ -58,7 +60,7 @@ Open JupyterLab with
     [Documentation]    Start the given browser and wait for the animation
     Open Browser    ${LAB_URL}    ${browser}
     Wait for Splash Screen
-    Sleep    0.1s
+    Sleep    1s
 
 Execute JupyterLab Command
     [Arguments]    ${command}

@@ -2,7 +2,6 @@
 Documentation     Test whether the font editor performs as advertised.
 Suite Setup       Prepare for testing fonts
 Suite Teardown    Clean Up JupyterLab
-Test Teardown     Reset Application State and Close
 Library           SeleniumLibrary
 Library           BuiltIn
 Resource          ../resources/Browser.robot
@@ -25,6 +24,8 @@ Global Font Editor
     Global    Code    Font    Fira Code Regular
     Global    Code    Font    Fira Code Medium
     Global    Code    Font    Fira Code Bold
+    Global    Code    Font    DejaVu Sans Mono
+    Global    Code    Font    DejaVu Sans Mono Bold
     Global    Code    Font    -
     Global    Code    Line Height    -
     Global    Code    Line Height    2
@@ -43,6 +44,8 @@ Notebook Font Editor
     Notebook    Code    Font    Fira Code Regular
     Notebook    Code    Font    Fira Code Medium
     Notebook    Code    Font    Fira Code Bold
+    Notebook    Code    Font    DejaVu Sans Mono
+    Notebook    Code    Font    DejaVu Sans Mono Bold
     Notebook    Code    Font    -
     Notebook    Code    Line Height    -
     Notebook    Code    Line Height    2
