@@ -13,12 +13,14 @@ Customize code font with the JupyterLab Menu
     [Documentation]    Try out some font settings with the menu
     [Template]    Use the Menu to configure Font
     Code    Font    Default Code Font
-    Code    Font    Fira Code Light
-    Code    Font    Fira Code Regular
-    Code    Font    Fira Code Medium
-    Code    Font    Fira Code Bold
+    Code    Font    Anonymous Pro Bold
+    Code    Font    Anonymous Pro Regular
     Code    Font    DejaVu Sans Mono
     Code    Font    DejaVu Sans Mono Bold
+    Code    Font    Fira Code Bold
+    Code    Font    Fira Code Light
+    Code    Font    Fira Code Medium
+    Code    Font    Fira Code Regular
     Code    Font    Default Code Font
     Code    Line Height    Default Code Line Height
     Code    Line Height    2

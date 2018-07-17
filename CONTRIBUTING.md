@@ -2,8 +2,8 @@
 
 We would love to have contributions of
 
-- [ ] additional fonts
-- [ ] additional strategies for making fonts available
+- additional fonts
+- additional strategies for making fonts available
 
 > Note: PRs will be reviewed on a time-permitting basis!
 
@@ -17,8 +17,19 @@ in this monorepo should be:
 - tested
 
 If there is an `npm` upstream for your font, great! However, if it ships every
-possible font format, you should probably vendor it. For an example, see
-[jupyterlab-font-dejavu-sans-mono](./packages/jupyterlab-font-dejavu-sans-mono).
+possible font format and weight, you should probably vendor it. For an example,
+see [jupyterlab-font-dejavu-sans-mono](./packages/jupyterlab-font-dejavu-sans-mono).
+
+## Adding a Strategy
+
+For a number of reasons, this project is not going to go out of its way to
+support using fonts from the wild internet. However, if you were to build an
+extension for Google Fonts, TypeKit, or other sources of fonts, we would accept
+any PRs, pending review, that made this process more sane and secure.
+
+For the nbconvert preprocessor, other strategies, like external files, would be
+nice-to-have.
+
 
 ## Development
 

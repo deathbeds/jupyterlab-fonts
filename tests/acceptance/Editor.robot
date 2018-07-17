@@ -20,12 +20,14 @@ Global Font Editor
     [Setup]    Open the Global Font Editor
     [Template]    Use the font editor to configure fonts
     Global    Code    Font    -
-    Global    Code    Font    Fira Code Light
-    Global    Code    Font    Fira Code Regular
-    Global    Code    Font    Fira Code Medium
-    Global    Code    Font    Fira Code Bold
+    Global    Code    Font    Anonymous Pro Bold
+    Global    Code    Font    Anonymous Pro Regular
     Global    Code    Font    DejaVu Sans Mono
     Global    Code    Font    DejaVu Sans Mono Bold
+    Global    Code    Font    Fira Code Bold
+    Global    Code    Font    Fira Code Light
+    Global    Code    Font    Fira Code Medium
+    Global    Code    Font    Fira Code Regular
     Global    Code    Font    -
     Global    Code    Line Height    -
     Global    Code    Line Height    2
@@ -40,12 +42,14 @@ Notebook Font Editor
     [Setup]    Open the Notebook Font Editor
     [Template]    Use the font editor to configure fonts
     Notebook    Code    Font    -
-    Notebook    Code    Font    Fira Code Light
-    Notebook    Code    Font    Fira Code Regular
-    Notebook    Code    Font    Fira Code Medium
-    Notebook    Code    Font    Fira Code Bold
+    Notebook    Code    Font    Anonymous Pro Bold
+    Notebook    Code    Font    Anonymous Pro Regular
     Notebook    Code    Font    DejaVu Sans Mono
     Notebook    Code    Font    DejaVu Sans Mono Bold
+    Notebook    Code    Font    Fira Code Bold
+    Notebook    Code    Font    Fira Code Light
+    Notebook    Code    Font    Fira Code Medium
+    Notebook    Code    Font    Fira Code Regular
     Notebook    Code    Font    -
     Notebook    Code    Line Height    -
     Notebook    Code    Line Height    2

@@ -30,10 +30,10 @@
 ```bash
 jupyter labextension install \
   @deathbeds/jupyterlab-fonts \
-  @deathbeds/jupyterlab-font-fira-code
+  @deathbeds/jupyterlab-font-anonymous-pro \
+  @deathbeds/jupyterlab-font-dejavu-sans-mono \
+  @deathbeds/jupyterlab-font-fira-code \
 ```
-
-> Yes, there is only one extra font enabled at this time.
 
 # Uninstalling
 
@@ -49,6 +49,8 @@ We're sorry to see you go!
 
 ```bash
 jupyter labextension uninstall @deathbeds/jupyterlab-fonts
+jupyter labextension uninstall @deathbeds/jupyterlab-font-anonymous-pro
+jupyter labextension uninstall @deathbeds/jupyterlab-font-dejavu-sans-mono
 jupyter labextension uninstall @deathbeds/jupyterlab-font-fira-code
 ```
 
