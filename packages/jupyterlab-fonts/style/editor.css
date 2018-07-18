@@ -1,55 +1,60 @@
 .jp-FontsEditor {
   color: var(--jp-ui-font-color0);
-  padding: calc(1.6 * var(--jp-notebook-padding));
+  overflow-y: auto;
 }
 
-.jp-FontsEditor h1 {
-  padding: 0;
+.jp-FontsEditor h2 {
+  padding: calc(1.6 * var(--jp-notebook-padding));
   margin: 0;
+}
+
+.jp-FontsEditor h2 .jp-NotebookIcon {
+  width: var(--jp-ui-font-size2);
+  height: calc(var(--jp-ui-font-size2));
+  display: inline-block;
+  vertical-align: middle;
+  background-repeat: no-repeat;
 }
 
 .jp-FontsEditor-field {
   display: flex;
-  flex-direction: column;
-  flex: 1;
+  margin: calc(1.6 * var(--jp-notebook-padding));
+  margin-bottom: 0;
+  align-items: baseline;
 }
 
-.jp-FontsEditor-field a {
+.jp-FontsEditor-field label {
+  white-space: nowrap;
+  flex: 0;
+  font-size: var(--jp-ui-font-size1);
+}
+
+.jp-FontsEditor-field > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.jp-FontsEditor-field > div * {
   display: block;
   flex: 1;
   text-align: right;
-  font-size: 80%;
+  font-size: var(--jp-ui-font-size1);
 }
 
-.jp-FontsEditor select {
+.jp-FontsEditor-field select {
+  font-weight: bold;
   border: none;
   background: transparent;
   background-image: var(--jp-ui-select-caret);
   background-repeat: no-repeat;
   background-position: 99% center;
+  background-size: 18px;
   text-align: right;
   text-align-last: right;
   margin-left: var(--jp-notebook-padding);
-  padding-right: calc(4 * var(--jp-notebook-padding));
+  padding-right: calc(2 * var(--jp-notebook-padding));
 }
 
 .jp-FontsEditor option {
   text-align: right;
-}
-
-.jp-FontsEditor h3 {
-  display: flex;
-  white-space: nowrap;
-}
-
-.jp-FontsEditor h3 input {
-  flex: 0;
-}
-
-.jp-FontsEditor h1 .jp-NotebookIcon {
-  width: var(--jp-ui-font-size2);
-  height: calc(var(--jp-ui-font-size2) * 0.75);
-  display: inline-block;
-  vertical-align: "middle";
-  background-repeat: no-repeat;
 }

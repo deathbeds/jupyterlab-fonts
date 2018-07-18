@@ -15,6 +15,7 @@ const h = React.createElement;
 const EDITOR_CLASS = 'jp-FontsEditor';
 const ENABLED_CLASS = 'jp-FontsEditor-enable';
 const FIELD_CLASS = 'jp-FontsEditor-field';
+const SECTION_CLASS = 'p-CommandPalette-header';
 const DUMMY = '-';
 
 export class FontEditorModel extends VDomModel {
@@ -92,13 +93,13 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     return h('div', null, [
       ...this.header(),
       h('section', {key: 2, title: 'Code'}, [
-        h('h2', {key: 1}, 'Code'),
+        h('h3', {key: 1, className: SECTION_CLASS}, 'Code'),
         this.textSelect('font-family', TextKind.code, {key: 2}),
         this.textSelect('font-size', TextKind.code, {key: 3}),
         this.textSelect('line-height', TextKind.code, {key: 4}),
       ]),
       h('section', {key: 3, title: 'Content'}, [
-        h('h2', {key: 1}, 'Content'),
+        h('h3', {key: 1, className: SECTION_CLASS}, 'Content'),
         // TODO re-enable in 0.33
         // this.textSelect('font-family', TextKind.content, {key: 2}),
         this.textSelect('font-size', TextKind.content, {key: 3}),
@@ -115,10 +116,10 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     }
     return !font
       ? []
-      : [h('a', {title: font.license.holders.join('\n')}, font.license.name)];
+      : [h('em', {title: font.license.holders.join('\n')}, font.license.name)];
   }
 
-  protected textSelect(prop: TextProperty, kind: TextKind, sectionProps: any) {
+  protected textSelect(prop: TextProperty, kind: TextKind, sectionProps: {}) {
     const m = this.model;
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
       let value = (evt.target as HTMLSelectElement).value;
@@ -128,9 +129,9 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     const value = m.fonts.getTextStyle(prop, {kind, notebook: m.notebook});
     const extra = prop === 'font-family' ? this.fontFaceExtras(m, value) : [];
 
-    return h('h3', sectionProps, [
+    return h('div', {className: FIELD_CLASS, ...sectionProps}, [
       h('label', {key: 1}, TEXT_LABELS[prop]),
-      h('div', {className: FIELD_CLASS}, [
+      h('div', {}, [
         h(
           'select',
           {
@@ -165,13 +166,13 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     this.title.label = title;
 
-    const h1 = h('h1', {key: 1}, [
+    const h2 = h('h2', {key: 1}, [
       ...(m.notebook ? [h('div', {className: 'jp-NotebookIcon'})] : []),
       `${title} Fonts`,
     ]);
 
     if (m.notebook != null) {
-      return [h1];
+      return [h2];
     }
 
     const onChange = async (evt: Event) => {
@@ -179,7 +180,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     };
 
     return [
-      h1,
+      h2,
       h(
         'label',
         {className: ENABLED_CLASS},

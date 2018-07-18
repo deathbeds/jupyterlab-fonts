@@ -78,7 +78,7 @@ export const CSS: ICSSVars = {
   },
   content: {
     'font-family': '--jp-content-font-family',
-    'font-size': '--jp-content-font-size',
+    'font-size': '--jp-content-font-size1',
     'line-height': '--jp-content-line-height',
   },
 };
@@ -91,9 +91,11 @@ export const TEXT_OPTIONS: ICSSTextOptions = {
   'font-size': (m) => Array.from(Array(25).keys()).map((i) => `${i + 8}px`),
   'line-height': (m) => Array.from(Array(8).keys()).map((i) => `${i * 0.25 + 1}`),
   'font-family': (m) => {
-    return Array.from(m.fonts.values()).reduce((m, f) => {
+    let names = Array.from(m.fonts.values()).reduce((m, f) => {
       return m.concat(f.name);
     }, []);
+    names.sort((a, b) => a.localeCompare(b));
+    return names;
   },
 };
 
