@@ -30,7 +30,6 @@ any PRs, pending review, that made this process more sane and secure.
 For the nbconvert preprocessor, other strategies, like external files, would be
 nice-to-have.
 
-
 ## Development
 
 ### Before

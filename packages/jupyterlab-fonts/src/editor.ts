@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import {VDomModel, VDomRenderer} from '@jupyterlab/apputils';
 
-import {TextKind, TEXT_OPTIONS, TEXT_LABELS, TextProperty} from '.';
+import {TextKind, TEXT_OPTIONS, TEXT_LABELS, TextProperty, IFontFaceOptions} from '.';
 
 import {FontManager} from './manager';
 
@@ -14,6 +14,7 @@ const h = React.createElement;
 
 const EDITOR_CLASS = 'jp-FontsEditor';
 const ENABLED_CLASS = 'jp-FontsEditor-enable';
+const FIELD_CLASS = 'jp-FontsEditor-field';
 const DUMMY = '-';
 
 export class FontEditorModel extends VDomModel {
@@ -106,6 +107,17 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     ]);
   }
 
+  protected fontFaceExtras(m: FontEditorModel, fontFamily: {}) {
+    let font: IFontFaceOptions;
+    let unquoted = `${fontFamily}`.slice(1, -1);
+    if (m.fonts.fonts.get(unquoted)) {
+      font = m.fonts.fonts.get(unquoted);
+    }
+    return !font
+      ? []
+      : [h('a', {title: font.license.holders.join('\n')}, font.license.name)];
+  }
+
   protected textSelect(prop: TextProperty, kind: TextKind, sectionProps: any) {
     const m = this.model;
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
@@ -113,30 +125,35 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       value = value === DUMMY ? null : value;
       m.fonts.setTextStyle(prop, value, {kind, notebook: m.notebook});
     };
+    const value = m.fonts.getTextStyle(prop, {kind, notebook: m.notebook});
+    const extra = prop === 'font-family' ? this.fontFaceExtras(m, value) : [];
 
     return h('h3', sectionProps, [
       h('label', {key: 1}, TEXT_LABELS[prop]),
-      h(
-        'select',
-        {
-          className: 'jp-mod-styled',
-          title: `${TEXT_LABELS[prop]}`,
-          onChange,
-          value: m.fonts.getTextStyle(prop, {kind, notebook: m.notebook}) || DUMMY,
-          key: 2,
-        },
-        [null, ...TEXT_OPTIONS[prop](m.fonts)].map((value, key) => {
-          return h(
-            'option',
-            {
-              key,
-              value:
-                value == null ? DUMMY : prop === 'font-family' ? `'${value}'` : value,
-            },
-            value || DUMMY
-          );
-        })
-      ),
+      h('div', {className: FIELD_CLASS}, [
+        h(
+          'select',
+          {
+            className: 'jp-mod-styled',
+            title: `${TEXT_LABELS[prop]}`,
+            onChange,
+            value: value || DUMMY,
+            key: 2,
+          },
+          [null, ...TEXT_OPTIONS[prop](m.fonts)].map((value, key) => {
+            return h(
+              'option',
+              {
+                key,
+                value:
+                  value == null ? DUMMY : prop === 'font-family' ? `'${value}'` : value,
+              },
+              value || DUMMY
+            );
+          })
+        ),
+        ...extra,
+      ]),
     ]);
   }
 
