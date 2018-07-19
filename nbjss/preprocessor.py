@@ -22,14 +22,35 @@ class JSSHeaderPreprocessor(Preprocessor):
         StaticStrategy,
         default_value=StaticStrategy.inline_js,
         config=True,
-        help="A strategy for applying style from JSS.. only `inline_js` supported",
+        help="A strategy for applying style from JSS.. only `inline_js` implemented",
     )
 
-    def preprocess(self, nb, resources):
+    def normalize_jss(self, nb, resources):
         jss = nb.metadata.get(METADATA_KEY)
-
         if jss is None:
             return
+
+        try:
+            if not jss["styles"].get(":root"):
+                jss["styles"].pop(":root", None)
+        except Exception:
+            return False
+
+        for key in list(jss.keys()):
+            if not jss[key]:
+                del jss[key]
+
+        return jss
+
+    def preprocess(self, nb, resources):
+        msg_tmpl = " Adding %s bytes of fonts, style, and scripts%s"
+
+        jss = self.normalize_jss(nb, resources)
+
+        # any falsey value
+        if not jss:
+            self.log.info(msg_tmpl, 0, " (skipping nbjss)")
+            return nb, resources
         inlining = resources.setdefault("inlining", {})
         inlining.setdefault("css", "")
 
@@ -45,6 +66,7 @@ class JSSHeaderPreprocessor(Preprocessor):
             )
 
         if css is not None:
+            self.log.info(msg_tmpl, len(css), " (nbjss).")
             inlining["css"] += [css]
 
         return nb, resources

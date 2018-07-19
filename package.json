@@ -19,8 +19,8 @@
   "name": "@deathbed/fonts",
   "private": true,
   "scripts": {
-    "bootstrap": "run-s bootstrap:py bootstrap:js bootstrap:lab",
-    "bootstrap:js": "jlpm && jlpm lerna bootstrap && jlpm build",
+    "bootstrap": "jlpm && run-s bootstrap:py bootstrap:js bootstrap:lab",
+    "bootstrap:js": "jlpm lerna bootstrap && jlpm build",
     "bootstrap:lab": "jlpm lab:link && jlpm lab:build",
     "bootstrap:py": "python -m pip install -e . --no-deps --ignore-installed",
     "build": "run-s lint:ts clean:lib build:static build:schema build:core build:fonts",
