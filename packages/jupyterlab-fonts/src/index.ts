@@ -1,6 +1,7 @@
 import {Token} from '@phosphor/coreutils';
 import {CommandRegistry} from '@phosphor/commands';
 import {ICommandPalette} from '@jupyterlab/apputils';
+import {ISignal} from '@phosphor/signaling';
 import {INotebookTracker, NotebookPanel} from '@jupyterlab/notebook';
 
 import {Menu} from '@phosphor/widgets';
@@ -137,6 +138,8 @@ export interface IFontManagerConstructor {
 export interface IFontManager {
   ready: Promise<void>;
   registerFontFace(options: IFontFaceOptions): void;
+  licensePaneRequested: ISignal<IFontManager, any>;
+  requestLicensePane(font: any): void;
   fonts: Map<string, IFontFaceOptions>;
   stylesheets: HTMLStyleElement[];
   menu: Menu;

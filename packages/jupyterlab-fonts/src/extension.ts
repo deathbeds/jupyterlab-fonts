@@ -4,12 +4,15 @@ import {ICommandPalette} from '@jupyterlab/apputils';
 import {INotebookTracker} from '@jupyterlab/notebook';
 import {ISettingRegistry} from '@jupyterlab/coreutils';
 
-import {IFontManager, PACKAGE_NAME, ICON_CLASS, CMD} from '.';
+import {IFontManager, PACKAGE_NAME, ICON_CLASS, CMD, IFontFaceOptions} from '.';
 import {FontManager} from './manager';
 import {NotebookFontsButton} from './button';
 import {FontEditor, FontEditorModel} from './editor';
+import {LicenseViewer} from './license';
 
 const PLUGIN_ID = `${PACKAGE_NAME}:fonts`;
+
+let licenseId = 0;
 
 const plugin: JupyterLabPlugin<IFontManager> = {
   id: PLUGIN_ID,
@@ -24,6 +27,18 @@ const plugin: JupyterLabPlugin<IFontManager> = {
     notebooks: INotebookTracker
   ): IFontManager {
     const manager = new FontManager(app.commands, palette, notebooks);
+
+    manager.licensePaneRequested.connect((it, what) => {
+      let license = new LicenseViewer();
+      let model = new LicenseViewer.Model();
+      model.font = what as IFontFaceOptions;
+      license.model = model;
+      license.id = `jp-fonts-license-${licenseId++}`;
+      license.title.label = what.name;
+      license.title.closable = true;
+      app.shell.addToMainArea(license, {mode: 'split-right'});
+      license.activate();
+    });
 
     menu.settingsMenu.addGroup([{type: 'submenu', submenu: manager.menu}]);
 

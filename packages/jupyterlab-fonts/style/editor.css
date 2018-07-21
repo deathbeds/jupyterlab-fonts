@@ -23,6 +23,14 @@
   align-items: baseline;
 }
 
+.jp-FontsEditor-field .jp-Toolbar-item.jp-Toolbar-button {
+  width: auto;
+  height: auto;
+  font-size: 80%;
+  line-height: 1.25;
+  padding: 0 0.5em;
+}
+
 .jp-FontsEditor-field label {
   white-space: nowrap;
   flex: 0;

@@ -116,7 +116,18 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     }
     return !font
       ? []
-      : [h('em', {title: font.license.holders.join('\n')}, font.license.name)];
+      : [
+          h(
+            'em',
+            {title: font.license.holders.join('\n')},
+            h('button', {
+                className: 'jp-mod-styled jp-Toolbar-item jp-Toolbar-button',
+                onClick: () => m.fonts.requestLicensePane(font)
+              },
+              font.license.spdx
+            )
+          ),
+        ];
   }
 
   protected textSelect(prop: TextProperty, kind: TextKind, sectionProps: {}) {

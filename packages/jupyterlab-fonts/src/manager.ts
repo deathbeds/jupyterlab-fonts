@@ -1,4 +1,5 @@
 import {PromiseDelegate} from '@phosphor/coreutils';
+import {ISignal, Signal} from '@phosphor/signaling';
 import {Menu} from '@phosphor/widgets';
 import {CommandRegistry} from '@phosphor/commands';
 import {ICommandPalette} from '@jupyterlab/apputils';
@@ -36,6 +37,7 @@ const PALETTE = {
 
 export class FontManager implements IFontManager {
   protected _stylist: Stylist;
+  readonly licensePaneRequested: ISignal<any, any> = new Signal<any, any>(this);
   private _fontFamilyMenus = new Map<TextKind, Menu>();
   private _fontSizeMenus = new Map<TextKind, Menu>();
   private _lineHeightMenus = new Map<TextKind, Menu>();
@@ -229,7 +231,7 @@ export class FontManager implements IFontManager {
         spdx: registered.license.spdx,
         name: registered.license.name,
         text: await registered.license.text(),
-        holders: registered.license.holders
+        holders: registered.license.holders,
       };
       metadata.fonts = oldFaces;
       metadata.fontLicenses = oldLicenses;
@@ -430,6 +432,10 @@ export class FontManager implements IFontManager {
       this._fontFamilyMenus.get(kind).addItem({command});
       this._palette.addItem({command, category: PALETTE[kind]});
     });
+  }
+
+  requestLicensePane(font: any) {
+    (this.licensePaneRequested as Signal<any, void>).emit(font);
   }
 
   hack() {
