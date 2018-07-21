@@ -9,7 +9,6 @@ import '../style/license.css';
 const WRAPPER_CLASS = 'jp-LicenseViewer-wrapper';
 const LICENSE_CLASS = 'jp-LicenseViewer';
 
-
 export class LicenseViewer extends VDomRenderer<LicenseViewer.Model> {
   protected render(): React.ReactElement<any> {
     this.addClass(WRAPPER_CLASS);
@@ -20,11 +19,13 @@ export class LicenseViewer extends VDomRenderer<LicenseViewer.Model> {
       return;
     }
 
-    return <div className={LICENSE_CLASS}>
-      <h1>{m.font.name}</h1>
-      <h2>{m.font.license.name}</h2>
-      <pre>{m.licenseText || '...'}</pre>
-    </div>;
+    return (
+      <div className={LICENSE_CLASS}>
+        <h1>{m.font.name}</h1>
+        <h2>{m.font.license.name}</h2>
+        <pre>{m.licenseText || '...'}</pre>
+      </div>
+    );
   }
 }
 

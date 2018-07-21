@@ -120,9 +120,11 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           h(
             'em',
             {title: font.license.holders.join('\n')},
-            h('button', {
+            h(
+              'button',
+              {
                 className: 'jp-mod-styled jp-Toolbar-item jp-Toolbar-button',
-                onClick: () => m.fonts.requestLicensePane(font)
+                onClick: () => m.fonts.requestLicensePane(font),
               },
               font.license.spdx
             )
