@@ -3,7 +3,10 @@ from pathlib import Path
 from fontTools.ttLib import TTFont
 
 in_path = Path("../../node_modules/dejavu-fonts-ttf/ttf")
-out_path = Path("style/fonts")
+out_path = Path("style") / "fonts"
+
+out_path.mkdir(exist_ok=True, parents=True)
+
 base = "DejaVuSansMono"
 extension = "ttf"
 variants = ["", "-Bold"]
