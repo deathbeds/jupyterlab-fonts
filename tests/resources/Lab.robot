@@ -10,6 +10,7 @@ ${TOKEN}          hopelesslyinsecure
 ${LAB_CMD}        jupyter-lab --no-browser --NotebookApp.token=${TOKEN} --port 18888
 ${LAB_URL}        http://localhost:18888/lab?token=${TOKEN}
 ${SPLASH_ID}      jupyterlab-splash
+${SPINNER}        css:.jp-Spinner
 ${CMD_PAL_XPATH}    //div[contains(@class, "jp-mod-left")]//li//div[contains(text(), "Commands")]
 ${CMD_PAL_INPUT}    css:.p-CommandPalette-input
 ${CMD_PAL_ITEM}    css:.p-CommandPalette-item
@@ -22,7 +23,7 @@ ${DOCK}           //div[@id='jp-main-dock-panel']
 Prepare for testing fonts
     [Documentation]    Do some normal stuff that might use fonts
     Start Jupyterlab
-    ${browser}=  Get Environment Variable    BROWSER    ${BROWSER}
+    ${browser}=    Get Environment Variable    BROWSER    ${BROWSER}
     Set tags    ${browser}
     Open JupyterLab with    ${browser}
     Execute JupyterLab Command    Reset Application State
@@ -33,12 +34,13 @@ Wait for Splash Screen
     [Documentation]    Wait for the JupyterLab splash animation to run its course
     Wait Until Page Contains Element    ${SPLASH_ID}
     Wait Until Page Does Not Contain Element    ${SPLASH_ID}
-    Sleep   1s
+    Sleep    0.1s
 
 Launch a new
     [Arguments]    ${kernel}    ${category}
     [Documentation]    Use the JupyterLab launcher to launch Notebook or Console
     Click Element    ${CARD}[@title='${kernel}'][@data-category='${category}']
+    Wait Until Page Does Not Contain Element    ${SPINNER}
     Wait Until Page Contains Element    css:${CELL_CSS}
 
 Start JupyterLab
