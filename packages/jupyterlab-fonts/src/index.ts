@@ -37,15 +37,17 @@ export interface IFontCallback {
   (): Promise<SCHEMA.IFontFacePrimitive[]>;
 }
 
+export interface IFontLicense {
+  name: string;
+  spdx: string;
+  text: () => Promise<string>;
+  holders: string[];
+}
+
 export interface IFontFaceOptions {
   name: string;
   faces: IFontCallback;
-  license: {
-    name: string;
-    spdx: string;
-    text: () => Promise<string>;
-    holders: string[];
-  };
+  license: IFontLicense;
 }
 
 export const CMD = {

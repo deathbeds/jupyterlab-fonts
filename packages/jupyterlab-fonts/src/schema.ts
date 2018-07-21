@@ -5,3 +5,4 @@ export interface IStyles extends _.ISettings.Definitions.IStyles {}
 export type ICSSOM = _.ISettings.Definitions.ICSSOM;
 export type IFontFacePrimitive = _.ISettings.Definitions.IFontFacePrimitive;
 export type IFontFaceObject = _.ISettings.Definitions.IFontFaceObject;
+export type IFontLicenseObject = _.ISettings.Definitions.IFontLicenseObject;

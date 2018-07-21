@@ -223,8 +223,16 @@ export class FontManager implements IFontManager {
     try {
       const faces = await registered.faces();
       const oldFaces = (metadata.fonts || {}) as SCHEMA.IFontFaceObject;
+      const oldLicenses = (metadata.fontLicenses || {}) as SCHEMA.IFontLicenseObject;
       oldFaces[unquoted] = faces;
+      oldLicenses[unquoted] = {
+        spdx: registered.license.spdx,
+        name: registered.license.name,
+        text: await registered.license.text(),
+        holders: registered.license.holders
+      };
       metadata.fonts = oldFaces;
+      metadata.fontLicenses = oldLicenses;
     } catch (err) {
       console.warn('error embedding font');
       console.warn(err);

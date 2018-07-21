@@ -89,6 +89,31 @@
         {"$ref": "#/definitions/IFontFacePrimitive"}
       ]
     },
+    "IFontLicenseObject": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "#/definitions/IFontLicensePrimitive"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/IFontLicensePrimitive"
+      }
+    },
+    "IFontLicensePrimitive": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "spdx": {"type": "string"},
+        "text": {"type": "string"},
+        "holders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "IJSS": {
       "type": "object",
       "additionalProperties": {
@@ -149,6 +174,12 @@
       "default": {},
       "title": "Embedded Fonts",
       "$ref": "#/definitions/IFontFaceObject"
+    },
+    "fontLicenses": {
+      "description": "Rights for embedded fonts",
+      "default": {},
+      "title": "Embedded Font Licenses",
+      "$ref": "#/definitions/IFontLicenseObject"
     }
   }
 }
