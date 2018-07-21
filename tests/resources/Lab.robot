@@ -1,6 +1,8 @@
 *** Settings ***
 Library           Process
+Library           BuiltIn
 Library           SeleniumLibrary
+Library           OperatingSystem
 
 *** Variables ***
 ${CELL_CSS}       .jp-Notebook .jp-Cell:last-of-type .jp-InputArea-editor .CodeMirror
@@ -20,7 +22,9 @@ ${DOCK}           //div[@id='jp-main-dock-panel']
 Prepare for testing fonts
     [Documentation]    Do some normal stuff that might use fonts
     Start Jupyterlab
-    Open JupyterLab with    ${BROWSER}
+    ${browser}=  Get Environment Variable    BROWSER    ${BROWSER}
+    Set tags    ${browser}
+    Open JupyterLab with    ${browser}
     Execute JupyterLab Command    Reset Application State
     Wait for Splash Screen
     Make a Hello World    Python 3    Notebook
@@ -29,6 +33,7 @@ Wait for Splash Screen
     [Documentation]    Wait for the JupyterLab splash animation to run its course
     Wait Until Page Contains Element    ${SPLASH_ID}
     Wait Until Page Does Not Contain Element    ${SPLASH_ID}
+    Sleep   1s
 
 Launch a new
     [Arguments]    ${kernel}    ${category}
