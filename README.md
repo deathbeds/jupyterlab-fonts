@@ -11,7 +11,7 @@
 > guarantees that it is good or even works. What we mean by that is covered in
 > the shouty text at the bottom of the BSD 3-Clause [LICENSE](./LICENSE).
 >
-> If something is broken, raise an
+> If something is broken, [become a contributor](./CONTRIBUTING.md) and raise an
 > [issue](https://github.com/deathbeds/jupyterlab-fonts/issues),
 > but we cannot guarantee any kind of response time. Similarly,
 > [PR](https://github.com/deathbeds/jupyterlab-fonts/pulls)s will be reviewed
@@ -69,26 +69,29 @@ Similarly, this can be achieved by making a `jupyter_nbcovert_config.json`
 
 ## JupyterLab Extensions
 
-### Quick Configuration with the Jupyter Menu
+### Quick Configuration with the Jupyter Lab Menu
 
 To change your default fonts, from the main menu, select
-_Settings_ ▶ _Fonts_ ▶ _Code Font_ (or _Content Font_) ▶ _Font Face_
-(or _Size_ or _Line Height_) and the value you'd like.
+_Settings_ ▶ _Fonts_ ▶ _Code_ ▶ _Font_ (or _Size_ or _Line Height_) and the
+value you'd like.
+
+Some features of _Content_, i.e. your rendered Markdown and HTML, are also
+available, and more will hopefully be added over time.
 
 ### Full Configuration with the ![][fonts-icon]**Font Editor**
 
 You can view all available font configurations by selecting _Settings_ ▶
-_Fonts_ ▶ _Global Fonts_. These values will be stored in your JupyterLab
+_Fonts_ ▶ _Global Fonts..._. These values will be stored in your JupyterLab
 settings.
 
 ### Notebook-specific Configuration
 
-When viewing a notebook, you can change just the fonts for that notebook by
-clicking ![][fonts-icon] in the Notebook toolbar. These will be stored
-in the Notebook metadata.
+When viewing a notebook, you can change just the fonts for _that notebook_ by
+clicking ![][fonts-icon] in the Notebook toolbar (right now, next to cell type).
+The font, style changes, and its license information will be stored in the
+Notebook metadata.
 
-> At present, the behavior is to store the **full font** in the notebook. This
-> can rapidly increase the size of your notebook file, and can make it
+> This can rapidly increase the size of your notebook file, and can make it
 > harder to use in collaboration. We're looking into some alterate approaches.
 
 [fonts-icon]: ./packages/jupyterlab-fonts/style/fonts.svg
@@ -122,7 +125,11 @@ Mode.
 }
 ```
 
-> Note the [use of `&`](https://github.com/cssinjs/jss-nested#use--to-reference-selector-of-the-parent-rule), which allows for nesting.
+Note the [use of `&`](nesting), which allows for nesting selectors, similar to
+other CSS preprocessors like [LESS][less-nest].
+
+[less-nest]: http://lesscss.org/features/#extend-feature-extending-nested-selectors
+[nesting]: https://github.com/cssinjs/jss-nested#use--to-reference-selector-of-the-parent-rule
 
 All of the [plugins](http://cssinjs.org/plugins#jss-plugins) included in
 `jss-preset-default` are enabled, with the default settings,

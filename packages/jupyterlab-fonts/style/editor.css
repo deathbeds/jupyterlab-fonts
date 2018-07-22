@@ -12,14 +12,31 @@
   flex: 0;
 }
 
+.jp-FontsEditor .p-CommandPalette-header {
+  margin: 0;
+}
+
+.jp-FontsEditor-enable label {
+  margin: calc(var(--jp-ui-font-size1) / 2) 0 0 var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .jp-FontsEditor-button.jp-mod-styled:focus,
 .jp-FontsEditor-button.jp-mod-styled:hover {
   border-color: var(--jp-border-color1);
 }
 
 .jp-FontsEditor h2 {
-  padding: calc(1.6 * var(--jp-notebook-padding));
+  padding: var(--jp-ui-font-size1);
   margin: 0;
+  display: flex;
+}
+
+.jp-FontsEditor h2 > label {
+  flex: 1;
 }
 
 .jp-FontsEditor-delete-icon:hover,
@@ -46,7 +63,7 @@
 }
 
 .jp-FontsEditor-embed {
-  padding: 0 calc(1.6 * var(--jp-notebook-padding));
+  padding: 0;
   margin: 0;
 }
 
@@ -56,6 +73,7 @@
   list-style: none;
   align-items: baseline;
   justify-content: space-between;
+  margin: 0 var(--jp-ui-font-size1);
 }
 
 .jp-FontsEditor-embed li > * {
@@ -73,8 +91,7 @@
 
 .jp-FontsEditor-field {
   display: flex;
-  margin: var(--jp-notebook-padding);
-  margin-bottom: 0;
+  margin: 0 var(--jp-ui-font-size1);
   align-items: baseline;
 }
 
@@ -82,6 +99,7 @@
   white-space: nowrap;
   flex: 0;
   font-size: var(--jp-ui-font-size1);
+  padding-right: var(--jp-ui-font-size1);
 }
 
 .jp-FontsEditor-field > div {

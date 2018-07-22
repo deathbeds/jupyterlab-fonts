@@ -14,6 +14,7 @@ ${TAB}            li[contains(@class, 'p-TabBar-tab')]
 ${ICON_FONT}      div[contains(@class, 'jp-FontsIcon')]
 ${ICON_LICENSE}    div[contains(@class, 'jp-LicenseIcon')]
 ${ICON_CLOSE}     div[contains(@class, 'p-TabBar-tabCloseIcon')]
+${BUTTON}         .jp-FontsEditor-button
 
 *** Test Cases ***
 Global Font Editor
@@ -68,10 +69,10 @@ Global Enable/Disable
     Use the Global Font Editor to enable custom fonts
     [Teardown]    Close the Font Editor
 
-License Embedding
-    [Documentation]    Ensure Licenses are embedded with the Font Editor
+License Viewing
+    [Documentation]    Ensure Licenses are available in the Font Editor
     [Setup]    Open the Notebook Font Editor
-    [Template]    Check font license is embedded in Notebook
+    [Template]    Check font license is visible in Editor
     Anonymous Pro Bold
     Anonymous Pro Regular
     DejaVu Sans Mono
@@ -110,11 +111,11 @@ Use the font editor to configure fonts
     Select From List By Label    ${sel}    ${value}
     Capture Page Screenshot    01_after.png
 
-Check font license is embedded in Notebook
+Check font license is visible in Editor
     [Arguments]    ${value}
     [Documentation]    Verify that the licenses are loaded
     Use the font editor to configure fonts    Notebook    Code    Font    ${value}
-    Click Element    css:.jp-FontsEditor-field button
+    Click Element    css:.jp-FontsEditor-field ${BUTTON}
     Sleep    1s
     Set Screenshot Directory    ${OUTPUT_DIR}/license/${value}
     Capture Page Screenshot    02_license.png

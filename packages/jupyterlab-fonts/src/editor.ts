@@ -152,6 +152,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       'button',
       {
         className: BUTTON_CLASS,
+        title: font.license.name,
         onClick: () => m.fonts.requestLicensePane(font),
       },
       font.license.spdx
@@ -219,6 +220,23 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     );
   }
 
+  protected enabler(m: FontEditorModel) {
+    const onChange = async (evt: Event) => {
+      await m.setEnabled(!!(evt.currentTarget as HTMLInputElement).checked);
+    };
+
+    return h(
+      'label',
+      {},
+      h('span', null, 'Enabled'),
+      h('input', {
+        type: 'checkbox',
+        checked: m.enabled,
+        onChange,
+      })
+    );
+  }
+
   protected embeddedFont(m: FontEditorModel, fontName: string) {
     const faces = m.notebookMetadata.fonts[fontName];
     const license = m.notebookMetadata.fontLicenses[fontName];
@@ -254,40 +272,32 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     this.title.label = title;
 
     const h2 = h('h2', {key: 1}, [
+      h('label', null, `Fonts » ${title}`),
       ...(m.notebook ? [h('div', {className: 'jp-NotebookIcon'})] : []),
-      `${title} Fonts`,
     ]);
 
     if (m.notebook != null) {
       return [
         h2,
-        h('h3', {className: 'p-CommandPalette-header'}, 'Embedded fonts'),
-        h(
-          'ul',
-          {className: EMBED_CLASS},
-          Object.keys((m.notebookMetadata || {}).fonts || {}).map((fontName) => {
-            return this.embeddedFont(m, fontName);
-          })
-        ),
+        h('section', {key: 2}, [
+          h('h3', {className: SECTION_CLASS}, 'Embedded fonts'),
+          h(
+            'ul',
+            {className: EMBED_CLASS},
+            Object.keys((m.notebookMetadata || {}).fonts || {}).map((fontName) => {
+              return this.embeddedFont(m, fontName);
+            })
+          ),
+        ]),
+      ];
+    } else {
+      return [
+        h2,
+        h('section', {key: 2, className: ENABLED_CLASS}, [
+          h('h3', {className: SECTION_CLASS}, 'Enable/Disable All Fonts'),
+          this.enabler(m),
+        ]),
       ];
     }
-
-    const onChange = async (evt: Event) => {
-      await m.setEnabled(!!(evt.currentTarget as HTMLInputElement).checked);
-    };
-
-    return [
-      h2,
-      h(
-        'label',
-        {className: ENABLED_CLASS},
-        'Enabled',
-        h('input', {
-          type: 'checkbox',
-          checked: m.enabled,
-          onChange,
-        })
-      ),
-    ];
   }
 }
