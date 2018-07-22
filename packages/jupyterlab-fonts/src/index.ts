@@ -120,6 +120,7 @@ export const DEFAULT = {
 
 export const PACKAGE_NAME: string = pkg.name;
 export const ICON_CLASS = 'jp-FontsIcon';
+export const LICENSE_ICON = 'jp-LicenseIcon';
 export const CONFIGURED_CLASS = 'jp-fonts-configured';
 
 // tslint:disable-next-line

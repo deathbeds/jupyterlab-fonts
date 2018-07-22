@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Test whether the font editor performs as advertised.
+Documentation     The font editor performs allows changing fonts in notebooks
 Suite Setup       Prepare for testing fonts
 Suite Teardown    Clean Up JupyterLab
 Library           SeleniumLibrary
@@ -12,6 +12,7 @@ Resource          ../resources/Notebook.robot
 ${ED}             css:.jp-FontsEditor
 ${TAB}            li[contains(@class, 'p-TabBar-tab')]
 ${ICON_FONT}      div[contains(@class, 'jp-FontsIcon')]
+${ICON_LICENSE}    div[contains(@class, 'jp-LicenseIcon')]
 ${ICON_CLOSE}     div[contains(@class, 'p-TabBar-tabCloseIcon')]
 
 *** Test Cases ***
@@ -67,6 +68,20 @@ Global Enable/Disable
     Use the Global Font Editor to enable custom fonts
     [Teardown]    Close the Font Editor
 
+License Embedding
+    [Documentation]    Ensure Licenses are embedded with the Font Editor
+    [Setup]    Open the Notebook Font Editor
+    [Template]    Check font license is embedded in Notebook
+    Anonymous Pro Bold
+    Anonymous Pro Regular
+    DejaVu Sans Mono
+    DejaVu Sans Mono Bold
+    Fira Code Bold
+    Fira Code Light
+    Fira Code Medium
+    Fira Code Regular
+    [Teardown]    Close the Font Editor
+
 *** Keywords ***
 Open the Global Font Editor
     [Documentation]    Use the JupyterLab Menu to open the global font editor
@@ -82,6 +97,10 @@ Close the Font Editor
     [Documentation]    Close the Notebook Font Editor by closing the tab
     Click Element    ${DOCK}//${TAB}/${ICON_FONT}/../${ICON_CLOSE}
 
+Close the License Viewer
+    [Documentation]    Close the Font License Viewer by closing the tab
+    Click Element    ${DOCK}//${TAB}/${ICON_LICENSE}/../${ICON_CLOSE}
+
 Use the font editor to configure fonts
     [Arguments]    ${scope}    ${kind}    ${aspect}    ${value}
     [Documentation]    Presently, change a dropdown in the font editor
@@ -90,6 +109,16 @@ Use the font editor to configure fonts
     Capture Page Screenshot    00_before.png
     Select From List By Label    ${sel}    ${value}
     Capture Page Screenshot    01_after.png
+
+Check font license is embedded in Notebook
+    [Arguments]    ${value}
+    [Documentation]    Verify that the licenses are loaded
+    Use the font editor to configure fonts    Notebook    Code    Font    ${value}
+    Click Element    css:.jp-FontsEditor-field button
+    Sleep    1s
+    Set Screenshot Directory    ${OUTPUT_DIR}/license/${value}
+    Capture Page Screenshot    02_license.png
+    Close the License Viewer
 
 Use the Global font editor to ${what} custom fonts
     [Documentation]    Presently, change a checkbox in the font editor
