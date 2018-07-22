@@ -28,7 +28,8 @@
   height: auto;
   font-size: 80%;
   line-height: 1.25;
-  padding: 0 0.5em;
+  padding: 0.5em 1em;
+  background-color: var(--jp-layout-color2);
 }
 
 .jp-FontsEditor-field label {
