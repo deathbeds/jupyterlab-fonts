@@ -209,6 +209,7 @@ export class FontManager implements IFontManager {
       let pattern = `'${fontFamily}'`;
       if (rawStyle.indexOf(pattern) === -1) {
         delete metadata.fonts[fontFamily];
+        delete metadata.fontLicenses[fontFamily];
       }
     }
   }

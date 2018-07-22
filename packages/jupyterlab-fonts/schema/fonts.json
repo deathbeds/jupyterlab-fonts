@@ -102,6 +102,7 @@
     },
     "IFontLicensePrimitive": {
       "type": "object",
+      "required": ["name", "spdx", "text", "holders"],
       "properties": {
         "name": {"type": "string"},
         "spdx": {"type": "string"},
