@@ -1,0 +1,134 @@
+.jp-FontsEditor {
+  color: var(--jp-ui-font-color0);
+  overflow-y: auto;
+  background-color: var(--jp-layout-color1);
+}
+
+.jp-FontsEditor-button.jp-mod-styled {
+  font-size: var(--jp-ui-font-size1);
+  background-color: var(--jp-layout-color0);
+  border: solid 1px transparent;
+  white-space: nowrap;
+  flex: 0;
+}
+
+.jp-FontsEditor .p-CommandPalette-header {
+  margin: 0;
+}
+
+.jp-FontsEditor-enable label {
+  margin: calc(var(--jp-ui-font-size1) / 2) 0 0 var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.jp-FontsEditor-button.jp-mod-styled:focus,
+.jp-FontsEditor-button.jp-mod-styled:hover {
+  border-color: var(--jp-border-color1);
+}
+
+.jp-FontsEditor h2 {
+  padding: var(--jp-ui-font-size1);
+  margin: 0;
+  display: flex;
+}
+
+.jp-FontsEditor h2 > label {
+  flex: 1;
+}
+
+.jp-FontsEditor-delete-icon:hover,
+.jp-FontsEditor-delete-icon:focus {
+  background-image: url(./icons/delete-forever.svg);
+}
+
+.jp-FontsEditor-delete-icon {
+  background-image: url(./icons/delete-outline.svg);
+}
+
+.jp-FontsEditor-delete-icon.jp-FontsEditor-button.jp-mod-styled {
+  background-repeat: no-repeat;
+  background-position: center;
+  color: transparent;
+}
+
+.jp-FontsEditor h2 .jp-NotebookIcon {
+  width: var(--jp-ui-font-size2);
+  height: calc(var(--jp-ui-font-size2));
+  display: inline-block;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+}
+
+.jp-FontsEditor-embed {
+  padding: 0;
+  margin: 0;
+}
+
+.jp-FontsEditor-embed li {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 var(--jp-ui-font-size1);
+}
+
+.jp-FontsEditor-embed li > * {
+  flex: 1;
+  font-size: var(--jp-ui-font-size1);
+}
+
+.jp-FontsEditor-embed li > .jp-FontsEditor-size {
+  flex: 0;
+  padding: 0 var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size0);
+  color: var(--jp-ui-font-color2);
+  white-space: nowrap;
+}
+
+.jp-FontsEditor-field {
+  display: flex;
+  margin: 0 var(--jp-ui-font-size1);
+  align-items: baseline;
+}
+
+.jp-FontsEditor-field label {
+  white-space: nowrap;
+  flex: 0;
+  font-size: var(--jp-ui-font-size1);
+  padding-right: var(--jp-ui-font-size1);
+}
+
+.jp-FontsEditor-field > div {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: baseline;
+}
+.jp-FontsEditor-field > div * {
+  display: block;
+  flex: 1;
+  text-align: right;
+  font-size: var(--jp-ui-font-size1);
+}
+
+.jp-FontsEditor-field select {
+  font-weight: bold;
+  border: none;
+  background: transparent;
+  background-image: var(--jp-ui-select-caret);
+  background-repeat: no-repeat;
+  background-position: 99% center;
+  background-size: 18px;
+  text-align: right;
+  text-align-last: right;
+  margin-left: var(--jp-notebook-padding);
+  padding-right: calc(2 * var(--jp-notebook-padding));
+}
+
+.jp-FontsEditor option {
+  text-align: right;
+}

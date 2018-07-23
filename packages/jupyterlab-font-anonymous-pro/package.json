@@ -7,13 +7,14 @@
     "@deathbeds/jupyterlab-fonts": "^0.3.0"
   },
   "dependencies": {
-    "firacode": "^1.205.0",
+    "typeface-anonymous-pro": "^0.0.54",
     "@jupyterlab/application": "^0.16.0"
   },
-  "description": "Fira Code Fonts for JupyterLab",
+  "description": "Anonymous Pro Fonts for JupyterLab",
   "files": [
     "{lib,style}/*.{d.ts,js,css}",
-    "{README.md,LICENSE}"
+    "{README.md,LICENSE}",
+    "vendor/anonymous-pro/LICENSE"
   ],
   "jupyterlab": {
     "extension": true
@@ -25,7 +26,7 @@
   ],
   "license": "BSD-3-Clause",
   "main": "lib/index.js",
-  "name": "@deathbeds/jupyterlab-font-fira-code",
+  "name": "@deathbeds/jupyterlab-font-anonymous-pro",
   "repository": {
     "type": "git",
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"

@@ -4,8 +4,16 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "description": "Code Fonts for JupyterLab",
-  "files": ["lib/*.{d.ts,js}", "{LICENSE,README.md}"],
-  "keywords": ["jupyter", "jupyterlab", "fonts"],
+  "files": [
+    "{lib,style,schema}/**/*.{d.ts,js,css,svg,json}",
+    "{LICENSE,README.md}"
+  ],
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "fonts",
+    "jupyterlab-extension"
+  ],
   "license": "BSD-3-Clause",
   "main": "lib/index.js",
   "name": "@deathbeds/jupyterlab-fonts",
@@ -14,15 +22,31 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "dependencies": {
+    "@jupyterlab/application": "^0.16.0",
+    "@jupyterlab/mainmenu": "^0.5.2",
+    "@jupyterlab/notebook": "^0.16.3",
+    "@phosphor/commands": "^1.4.0",
     "@phosphor/coreutils": "^1.3.0",
     "@phosphor/widgets": "^1.5.0",
-    "@phosphor/commands": "^1.4.0",
-    "jss": "^9.8.1",
-    "jss-preset-default": "^4.5.0"
+    "jss-preset-default": "^4.5.0",
+    "jss": "^9.8.1"
+  },
+  "jupyterlab": {
+    "extension": "lib/extension.js",
+    "schemaDir": "schema"
   },
   "devDependencies": {
-    "@types/jss": "^9.5.3"
+    "@types/jss": "^9.5.3",
+    "dtsgenerator": "^1.0.0",
+    "watch": "^1.0.2"
+  },
+  "scripts": {
+    "build:schema": "dtsgen schema/fonts.json | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
+    "build": "jlpm build:schema && tsc && jlpm copy:schema",
+    "copy:schema": "cp src/_schema.d.ts lib/",
+    "watch": "tsc -w",
+    "watch:schema": "watch 'jlpm build:schema' schema"
   }
 }
