@@ -4,13 +4,14 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "peerDependencies": {
-    "@deathbeds/jupyterlab-fonts": "^0.3.0"
+    "@deathbeds/jupyterlab-fonts": "^0.4.0"
   },
   "dependencies": {
-    "@jupyterlab/application": "^0.16.0"
+    "@jupyterlab/application": "^0.17.0"
   },
   "devDependencies": {
-    "dejavu-fonts-ttf": "2.37.3"
+    "dejavu-fonts-ttf": "2.37.3",
+    "@types/webpack-env": "~1.13.6"
   },
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "files": [
@@ -34,7 +35,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "scripts": {
     "build": "python scripts/convert.py && tsc",
     "watch": "tsc -w"

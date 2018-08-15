@@ -1,7 +1,43 @@
+// tslint:disable-next-line
+/// <reference path="../../../node_modules/@types/webpack-env/index.d.ts"/>
+
 import {JupyterLab, JupyterLabPlugin} from '@jupyterlab/application';
 import {IFontManager, FontFormat} from '@deathbeds/jupyterlab-fonts';
 
 const variants = ['', 'Bold'];
+
+const variantPromises: {[key: string]: () => Promise<string>} = {
+  '': () =>
+    new Promise<string>((resolve, reject) => {
+      require.ensure(
+        [`!!file-loader!../style/fonts/DejaVuSansMono.woff2`],
+        (require) =>
+          resolve(
+            require(`!!file-loader!../style/fonts/DejaVuSansMono.woff2`) as string
+          ),
+        (error: any) => {
+          console.error(error);
+          reject();
+        },
+        'dejavu-sans-mono'
+      );
+    }),
+  Bold: () =>
+    new Promise<string>((resolve, reject) => {
+      require.ensure(
+        [`!!file-loader!../style/fonts/DejaVuSansMono-Bold.woff2`],
+        (require) =>
+          resolve(
+            require(`!!file-loader!../style/fonts/DejaVuSansMono-Bold.woff2`) as string
+          ),
+        (error: any) => {
+          console.error(error);
+          reject();
+        },
+        'dejavu-sans-mono'
+      );
+    }),
+};
 
 function register(fonts: IFontManager) {
   variants.forEach((variant) => {
@@ -12,17 +48,27 @@ function register(fonts: IFontManager) {
         spdx: 'OTHER',
         name: 'DejaVu Font License',
         text: async () =>
-          (await import('!!raw-loader!../vendor/dejavu-fonts-ttf/LICENSE')) as string,
+          new Promise<string>((resolve, reject) => {
+            require.ensure(
+              ['!!raw-loader!../vendor/dejavu-fonts-ttf/LICENSE'],
+              (require) =>
+                resolve(
+                  require('!!raw-loader!../vendor/dejavu-fonts-ttf/LICENSE') as string
+                ),
+              (error: any) => {
+                console.error(error);
+                reject();
+              },
+              'dejavu-sans-mono'
+            );
+          }),
         holders: [
           `Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved.`,
           `Copyright (c) 2006 by Tavmjong Bah.`,
         ],
       },
       faces: async () => {
-        const filename = variant
-          ? `DejaVuSansMono-${variant}.woff2`
-          : `DejaVuSansMono.woff2`;
-        const font = (await import(`!!file-loader!../style/fonts/${filename}`)) as string;
+        const font = await variantPromises[variant]();
         const uri = await fonts.dataURISrc(font, FontFormat.woff2);
         return [{fontFamily: `'${fontFamily}'`, src: uri}];
       },
