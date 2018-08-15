@@ -2,8 +2,8 @@
 name: jupyterlab-fonts-dev
 
 channels:
-  - conda-forge
   - defaults
+  - conda-forge
 
 dependencies:
   - black

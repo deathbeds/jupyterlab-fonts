@@ -13,6 +13,6 @@ else
     echo "...and that's fine"
   fi
 fi
-unset DYLD_LIBRARY_PATH
+conda list
 jlpm bootstrap
 jupyter labextension list
