@@ -94,7 +94,7 @@ Notebook metadata.
 > This can rapidly increase the size of your notebook file, and can make it
 > harder to use in collaboration. We're looking into some alterate approaches.
 
-[fonts-icon]: ./packages/jupyterlab-fonts/style/fonts.svg
+[fonts-icon]: ./packages/jupyterlab-fonts/style/icons/fonts.svg
 
 ### Advanced Configuration
 

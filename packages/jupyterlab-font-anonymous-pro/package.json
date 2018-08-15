@@ -10,6 +10,9 @@
     "typeface-anonymous-pro": "^0.0.54",
     "@jupyterlab/application": "^0.17.0"
   },
+  "devDependencies": {
+    "@types/webpack-env": "~1.13.6"
+  },
   "description": "Anonymous Pro Fonts for JupyterLab",
   "files": [
     "{lib,style}/*.{d.ts,js,css}",

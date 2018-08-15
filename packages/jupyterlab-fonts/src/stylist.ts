@@ -75,7 +75,7 @@ export class Stylist {
   ): SCHEMA.IStyles {
     const id = notebook.id;
     let jss: any = {'@font-face': [], '@global': {}};
-    let idStyles: any = (jss['@global'][`#${id}`] = {});
+    let idStyles: any = (jss['@global'][`.jp-NotebookPanel[id='${id}']`] = {});
 
     if (meta.fonts) {
       for (let fontFamily in meta.fonts) {
@@ -153,7 +153,13 @@ export class Stylist {
 
   hack(show = true) {
     if (show) {
-      setTimeout(() => this.stylesheets.map((s) => document.body.appendChild(s)), 0);
+      setTimeout(
+        () =>
+          this.stylesheets.map((s) => {
+            document.body.appendChild(s);
+          }),
+        0
+      );
     } else {
       this.stylesheets.map((el) => el.remove());
     }

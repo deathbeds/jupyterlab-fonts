@@ -10,6 +10,9 @@
     "firacode": "^1.205.0",
     "@jupyterlab/application": "^0.17.0"
   },
+  "devDependencies": {
+    "@types/webpack-env": "~1.13.6"
+  },
   "description": "Fira Code Fonts for JupyterLab",
   "files": [
     "{lib,style}/*.{d.ts,js,css}",

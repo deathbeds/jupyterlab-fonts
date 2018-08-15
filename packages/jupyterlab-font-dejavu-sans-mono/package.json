@@ -10,7 +10,8 @@
     "@jupyterlab/application": "^0.17.0"
   },
   "devDependencies": {
-    "dejavu-fonts-ttf": "2.37.3"
+    "dejavu-fonts-ttf": "2.37.3",
+    "@types/webpack-env": "~1.13.6"
   },
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "files": [
