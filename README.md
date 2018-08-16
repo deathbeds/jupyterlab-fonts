@@ -32,7 +32,7 @@ jupyter labextension install \
   @deathbeds/jupyterlab-fonts \
   @deathbeds/jupyterlab-font-anonymous-pro \
   @deathbeds/jupyterlab-font-dejavu-sans-mono \
-  @deathbeds/jupyterlab-font-fira-code \
+  @deathbeds/jupyterlab-font-fira-code
 ```
 
 # Uninstalling

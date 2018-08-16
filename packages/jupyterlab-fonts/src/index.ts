@@ -20,6 +20,11 @@ export enum TextKind {
   content = 'content',
 }
 
+export const KIND_LABELS: {[key in TextKind]: string} = {
+  code: 'Code',
+  content: 'Content'
+};
+
 export enum FontFormat {
   woff2 = 'woff2',
   woff = 'woff',

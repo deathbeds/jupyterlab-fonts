@@ -37,6 +37,22 @@ Global Font Editor
     Global    Code    Size    -
     Global    Code    Size    20px
     Global    Code    Size    -
+    Global    Content    Font    -
+    Global    Content    Font    Anonymous Pro Bold
+    Global    Content    Font    Anonymous Pro Regular
+    Global    Content    Font    DejaVu Sans Mono
+    Global    Content    Font    DejaVu Sans Mono Bold
+    Global    Content    Font    Fira Code Bold
+    Global    Content    Font    Fira Code Light
+    Global    Content    Font    Fira Code Medium
+    Global    Content    Font    Fira Code Regular
+    Global    Content    Font    -
+    Global    Content    Line Height    -
+    Global    Content    Line Height    2
+    Global    Content    Line Height    -
+    Global    Content    Size    -
+    Global    Content    Size    20px
+    Global    Content    Size    -
     [Teardown]    Close the Font Editor
 
 Notebook Font Editor
@@ -59,6 +75,22 @@ Notebook Font Editor
     Notebook    Code    Size    -
     Notebook    Code    Size    20px
     Notebook    Code    Size    -
+    Notebook    Content    Font    -
+    Notebook    Content    Font    Anonymous Pro Bold
+    Notebook    Content    Font    Anonymous Pro Regular
+    Notebook    Content    Font    DejaVu Sans Mono
+    Notebook    Content    Font    DejaVu Sans Mono Bold
+    Notebook    Content    Font    Fira Code Bold
+    Notebook    Content    Font    Fira Code Light
+    Notebook    Content    Font    Fira Code Medium
+    Notebook    Content    Font    Fira Code Regular
+    Notebook    Content    Font    -
+    Notebook    Content    Line Height    -
+    Notebook    Content    Line Height    2
+    Notebook    Content    Line Height    -
+    Notebook    Content    Size    -
+    Notebook    Content    Size    20px
+    Notebook    Content    Size    -
     [Teardown]    Close the Font Editor
 
 Global Enable/Disable
