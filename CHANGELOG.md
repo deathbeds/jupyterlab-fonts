@@ -1,6 +1,14 @@
 # Changelog
 
-## v0.3.0 (in progress)
+## v0.4.1
+
+- Restore content font family in editor
+
+## v0.4.0
+
+- Support JupyterLab 0.33
+
+## v0.3.0
 
 - store font data in notebooks
   - licenses

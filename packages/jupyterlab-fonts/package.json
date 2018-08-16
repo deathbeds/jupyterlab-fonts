@@ -22,7 +22,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "dependencies": {
     "@jupyterlab/application": "^0.17.0",
     "@jupyterlab/mainmenu": "^0.6.2",
