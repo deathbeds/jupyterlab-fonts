@@ -22,7 +22,7 @@ export enum TextKind {
 
 export const KIND_LABELS: {[key in TextKind]: string} = {
   code: 'Code',
-  content: 'Content'
+  content: 'Content',
 };
 
 export enum FontFormat {

@@ -123,14 +123,14 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     return h('div', {key: 'editor'}, [
       ...this.header(),
-      ...[TextKind.code, TextKind.content].map((kind) =>   h('section',
-        {key: `${kind}-section`, title: KIND_LABELS[kind]}, [
+      ...[TextKind.code, TextKind.content].map((kind) =>
+        h('section', {key: `${kind}-section`, title: KIND_LABELS[kind]}, [
           h('h3', {key: `${kind}-header`, className: SECTION_CLASS}, 'Code'),
-          ...['font-family', 'font-size', 'line-height']
-            .map((prop: TextProperty) => this.textSelect(
-              prop, kind, {key: `${kind}-${prop}`}))
+          ...['font-family', 'font-size', 'line-height'].map((prop: TextProperty) =>
+            this.textSelect(prop, kind, {key: `${kind}-${prop}`})
+          ),
         ])
-      )
+      ),
     ]);
   }
 
@@ -272,7 +272,9 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     const h2 = h('h2', {key: 'scope-head'}, [
       h('label', {key: 'scope-label'}, `Fonts » ${title}`),
-      ...(m.notebook ? [h('div', {className: 'jp-NotebookIcon', key: 'scope-icon'})] : []),
+      ...(m.notebook
+        ? [h('div', {className: 'jp-NotebookIcon', key: 'scope-icon'})]
+        : []),
     ]);
 
     if (m.notebook != null) {
@@ -293,7 +295,11 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       return [
         h2,
         h('section', {key: 'enable-section', className: ENABLED_CLASS}, [
-          h('h3', {className: SECTION_CLASS, key: 'enable-header'}, 'Enable/Disable All Fonts'),
+          h(
+            'h3',
+            {className: SECTION_CLASS, key: 'enable-header'},
+            'Enable/Disable All Fonts'
+          ),
           this.enabler(m),
         ]),
       ];

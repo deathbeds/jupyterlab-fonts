@@ -28,7 +28,7 @@ Customize code font with the JupyterLab Menu
     Code    Size    Default Code Size
     Code    Size    20px
     Code    Size    Default Code Size
-    Content    Font    Default Code Font
+    Content    Font    Default Content Font
     Content    Font    Anonymous Pro Bold
     Content    Font    Anonymous Pro Regular
     Content    Font    DejaVu Sans Mono
