@@ -38,7 +38,7 @@
     "lab:watch": "jupyter lab --no-browser --debug --watch",
     "lint": "run-p lint:**",
     "lint:py": "black nbjss setup.py && flake8 nbjss setup.py",
-    "lint:robot": "python -m robot.tidy --inplace tests/{acceptance,resources}/*.robot && rflint --configure TooManyTestSteps:20 --configure TooFewKeywordSteps:0  tests/**/*.robot",
+    "lint:robot": "python -m robot.tidy --inplace tests/{acceptance,resources}/*.robot && rflint --configure TooManyTestSteps:40 --configure TooFewKeywordSteps:0  tests/**/*.robot",
     "lint:sh": "beautysh -i 2 -f postBuild",
     "lint:ts": "prettier --write *.json *.md && lerna exec -- prettier --write --config=../../.prettierrc ./src/**/*.ts ./src/**/*.tsx ./style/**/*.css ./*.json ./*.md && lerna exec -- tslint -c ../../tslint.json --fix ./src/**/*.ts",
     "test": "run-p test:**",

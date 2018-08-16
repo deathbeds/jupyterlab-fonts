@@ -10,6 +10,7 @@ import {
   TextKind,
   TEXT_OPTIONS,
   TEXT_LABELS,
+  KIND_LABELS,
   TextProperty,
   IFontFaceOptions,
   PACKAGE_NAME,
@@ -117,24 +118,19 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
   protected render(): React.ReactElement<any> {
     const m = this.model;
     if (!m) {
-      return h('div');
+      return h('div', {key: 'empty'});
     }
 
-    return h('div', null, [
+    return h('div', {key: 'editor'}, [
       ...this.header(),
-      h('section', {key: 2, title: 'Code'}, [
-        h('h3', {key: 1, className: SECTION_CLASS}, 'Code'),
-        this.textSelect('font-family', TextKind.code, {key: 2}),
-        this.textSelect('font-size', TextKind.code, {key: 3}),
-        this.textSelect('line-height', TextKind.code, {key: 4}),
-      ]),
-      h('section', {key: 3, title: 'Content'}, [
-        h('h3', {key: 1, className: SECTION_CLASS}, 'Content'),
-        // TODO re-enable in 0.33
-        // this.textSelect('font-family', TextKind.content, {key: 2}),
-        this.textSelect('font-size', TextKind.content, {key: 3}),
-        this.textSelect('line-height', TextKind.content, {key: 4}),
-      ]),
+      ...[TextKind.code, TextKind.content].map((kind) =>
+        h('section', {key: `${kind}-section`, title: KIND_LABELS[kind]}, [
+          h('h3', {key: `${kind}-header`, className: SECTION_CLASS}, 'Code'),
+          ...['font-family', 'font-size', 'line-height'].map((prop: TextProperty) =>
+            this.textSelect(prop, kind, {key: `${kind}-${prop}`})
+          ),
+        ])
+      ),
     ]);
   }
 
@@ -153,6 +149,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       {
         className: BUTTON_CLASS,
         title: font.license.name,
+        key: font.name,
         onClick: () => m.fonts.requestLicensePane(font),
       },
       font.license.spdx
@@ -169,9 +166,9 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     const value = m.fonts.getTextStyle(prop, {kind, notebook: m.notebook});
     const extra = prop === 'font-family' ? this.fontFaceExtras(m, value) : [];
 
-    return h('div', {className: FIELD_CLASS, ...sectionProps}, [
-      h('label', {key: 1}, TEXT_LABELS[prop]),
-      h('div', {}, [
+    return h('div', {className: FIELD_CLASS, key: 'select-field', ...sectionProps}, [
+      h('label', {key: 'select-label'}, TEXT_LABELS[prop]),
+      h('div', {key: 'select-wrap'}, [
         ...extra,
         h(
           'select',
@@ -180,13 +177,13 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
             title: `${TEXT_LABELS[prop]}`,
             onChange,
             value: value || DUMMY,
-            key: 2,
+            key: `select`,
           },
-          [null, ...TEXT_OPTIONS[prop](m.fonts)].map((value, key) => {
+          [null, ...TEXT_OPTIONS[prop](m.fonts)].map((value) => {
             return h(
               'option',
               {
-                key,
+                key: `'${value}'`,
                 value:
                   value == null ? DUMMY : prop === 'font-family' ? `'${value}'` : value,
               },
@@ -204,10 +201,11 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       {
         className: `${BUTTON_CLASS} jp-FontsEditor-delete-icon`,
         title: `Delete Embedded Font`,
+        key: 'delete',
         onClick: async () => {
           const result = await showDialog({
-            title: `Delete Font from Notebook`,
-            body: `If you did not embed ${fontName}, you might not be able to get it back.`,
+            title: `Delete Embedded Font from Notebook`,
+            body: `If you dont have ${fontName} installed, you might not be able to re-embed it`,
             buttons: [Dialog.cancelButton(), Dialog.warnButton({label: 'DELETE'})],
           });
 
@@ -227,9 +225,10 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     return h(
       'label',
-      {},
-      h('span', null, 'Enabled'),
+      {key: 'enable-label'},
+      h('span', {key: 'enable-text'}, 'Enabled'),
       h('input', {
+        key: 'enable-input',
         type: 'checkbox',
         checked: m.enabled,
         onChange,
@@ -247,7 +246,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     const kb = parseInt(`${size / 1024}`, 10);
 
     return h('li', {key: fontName}, [
-      h('label', null, fontName),
+      h('label', {key: 'label'}, fontName),
       this.licenseButton(m, {
         name: fontName,
         license: {
@@ -258,7 +257,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
         },
         faces: async () => faces,
       }),
-      h('span', {className: SIZE_CLASS}, `${kb} kb`),
+      h('span', {className: SIZE_CLASS, key: 'font-kb'}, `${kb} kb`),
       this.deleteButton(m, fontName),
     ]);
   }
@@ -271,19 +270,21 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     this.title.label = title;
 
-    const h2 = h('h2', {key: 1}, [
-      h('label', null, `Fonts » ${title}`),
-      ...(m.notebook ? [h('div', {className: 'jp-NotebookIcon'})] : []),
+    const h2 = h('h2', {key: 'scope-head'}, [
+      h('label', {key: 'scope-label'}, `Fonts » ${title}`),
+      ...(m.notebook
+        ? [h('div', {className: 'jp-NotebookIcon', key: 'scope-icon'})]
+        : []),
     ]);
 
     if (m.notebook != null) {
       return [
         h2,
-        h('section', {key: 2}, [
-          h('h3', {className: SECTION_CLASS}, 'Embedded fonts'),
+        h('section', {key: 'embed-section'}, [
+          h('h3', {className: SECTION_CLASS, key: 'embed-head'}, 'Embedded fonts'),
           h(
             'ul',
-            {className: EMBED_CLASS},
+            {className: EMBED_CLASS, key: 'embeds'},
             Object.keys((m.notebookMetadata || {}).fonts || {}).map((fontName) => {
               return this.embeddedFont(m, fontName);
             })
@@ -293,8 +294,12 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     } else {
       return [
         h2,
-        h('section', {key: 2, className: ENABLED_CLASS}, [
-          h('h3', {className: SECTION_CLASS}, 'Enable/Disable All Fonts'),
+        h('section', {key: 'enable-section', className: ENABLED_CLASS}, [
+          h(
+            'h3',
+            {className: SECTION_CLASS, key: 'enable-header'},
+            'Enable/Disable All Fonts'
+          ),
           this.enabler(m),
         ]),
       ];
