@@ -13,6 +13,6 @@ else
     echo "...and that's fine"
   fi
 fi
-conda list
+
 jlpm bootstrap
 jupyter labextension list
