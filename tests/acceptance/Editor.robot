@@ -124,7 +124,7 @@ Open the Global Font Editor
 
 Open the Notebook Font Editor
     [Documentation]    Use the Notebook button bar to open the notebook font editor
-    Click Element    css:.jp-Toolbar-item.jp-FontsIcon
+    Click Element    css:.jp-Toolbar-item .jp-FontsIcon
 
 Close the Font Editor
     [Documentation]    Close the Notebook Font Editor by closing the tab

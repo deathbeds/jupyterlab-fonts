@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.0
+
+- Support JupyterLab 0.34
+
 ## v0.4.1
 
 - Restore content font family in editor
