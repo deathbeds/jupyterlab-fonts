@@ -11,7 +11,7 @@ ${LAB_CMD}        jupyter-lab --no-browser --NotebookApp.token=${TOKEN} --port 1
 ${LAB_URL}        http://localhost:18888/lab?token=${TOKEN}
 ${SPLASH_ID}      jupyterlab-splash
 ${SPINNER}        css:.jp-Spinner
-${CMD_PAL_XPATH}    //div[contains(@class, "jp-mod-left")]//li[@title = "Command Palette"]//div
+${CMD_PAL_CSS}    css:.jp-mod-left li[title^="Commands"] div
 ${CMD_PAL_INPUT}    css:.p-CommandPalette-input
 ${CMD_PAL_ITEM}    css:.p-CommandPalette-item
 ${TOP}            //div[@id='jp-top-panel']
@@ -39,7 +39,7 @@ Wait for Splash Screen
 Launch a new
     [Arguments]    ${kernel}    ${category}
     [Documentation]    Use the JupyterLab launcher to launch Notebook or Console
-    Click Element    ${CARD}[@title='${kernel}'][@data-category='${category}']
+    Click Element    ${CARD}\[@title='${kernel}'][@data-category='${category}']
     Wait Until Page Does Not Contain Element    ${SPINNER}
     Wait Until Page Contains Element    css:${CELL_CSS}
 
@@ -50,17 +50,17 @@ Start JupyterLab
 Click JupyterLab Menu
     [Arguments]    ${menu_label}
     [Documentation]    Click a top-level JupyterLab Menu bar, e.g. File, Help, etc.
-    Wait Until Page Contains Element    ${TOP}${BAR_ITEM}[text() = '${menu_label}']
-    Mouse Over    ${TOP}${BAR_ITEM}[text() = '${menu_label}']
-    Click Element    ${TOP}${BAR_ITEM}[text() = '${menu_label}']
+    Wait Until Page Contains Element    ${TOP}${BAR_ITEM}\[text() = '${menu_label}']
+    Mouse Over    ${TOP}${BAR_ITEM}\[text() = '${menu_label}']
+    Click Element    ${TOP}${BAR_ITEM}\[text() = '${menu_label}']
 
 Click JupyterLab Menu Item
     [Arguments]    ${item_label}
     [Documentation]    Click a top-level JupyterLab Menu Item (not File, Help, etc.)
     ${item} =    Set Variable    //div[@class='p-Menu-itemLabel']
-    Wait Until Page Contains Element    ${item}[text() = '${item_label}']
-    Mouse Over    ${item}[text() = '${item_label}']
-    Click Element    ${item}[text() = '${item_label}']
+    Wait Until Page Contains Element    ${item}\[text() = '${item_label}']
+    Mouse Over    ${item}\[text() = '${item_label}']
+    Click Element    ${item}\[text() = '${item_label}']
 
 Open JupyterLab with
     [Arguments]    ${browser}
@@ -73,7 +73,7 @@ Execute JupyterLab Command
     [Arguments]    ${command}
     [Documentation]    Use the JupyterLab Command Palette to run a command
     Run Keyword And Ignore Error    Click Element   css:.jp-mod-accept
-    Click Element    ${CMD_PAL_XPATH}
+    Click Element    ${CMD_PAL_CSS}
     Input Text    ${CMD_PAL_INPUT}    ${command}
     Wait Until Page Contains Element    ${CMD_PAL_ITEM}
     Click Element    ${CMD_PAL_ITEM}
