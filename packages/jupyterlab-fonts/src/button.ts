@@ -25,8 +25,9 @@ export class NotebookFontsButton
     panel: NotebookPanel,
     context: DocumentRegistry.IContext<INotebookModel>
   ): IDisposable {
+    console.log('wooo');
     let button = new ToolbarButton({
-      className: ICON_CLASS,
+      iconClassName: ICON_CLASS + ' jp-Icon jp-Icon-16',
       onClick: () => {
         (this.widgetRequested as Signal<any, void>).emit(void 0);
       },
