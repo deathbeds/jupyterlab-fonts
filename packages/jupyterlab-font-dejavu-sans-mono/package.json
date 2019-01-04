@@ -7,7 +7,7 @@
     "@deathbeds/jupyterlab-fonts": "^0.5.0"
   },
   "dependencies": {
-    "@jupyterlab/application": "^0.18.0"
+    "@jupyterlab/application": "^0.19.1"
   },
   "devDependencies": {
     "dejavu-fonts-ttf": "2.37.3",
@@ -35,7 +35,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "scripts": {
     "build": "python scripts/convert.py && tsc",
     "watch": "tsc -w"
