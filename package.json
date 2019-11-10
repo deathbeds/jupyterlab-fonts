@@ -20,7 +20,7 @@
     "bootstrap:js": "jlpm lerna bootstrap && jlpm build",
     "bootstrap:lab": "jlpm lab:link && jlpm lab:build",
     "bootstrap:py": "python -m pip install -e . --no-deps --ignore-installed",
-    "build": "jlpm build:schema && jlpm build:ts",
+    "build": "jlpm build:schema && lerna run prebuild && jlpm build:ts",
     "build:ts": "cd packages && cd _meta && tsc -b",
     "build:schema": "lerna run build:schema",
     "build:static": "jlpm webpack -p",
