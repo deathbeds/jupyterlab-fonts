@@ -5,24 +5,24 @@ const variants = ['Light', 'Regular', 'Medium', 'Bold'];
 
 const variantPromises: { [key: string]: () => Promise<string> } = {
   Light: async () => {
-    return ((await import(
-      `!!file-loader!firacode/distr/woff2/FiraCode-Light.woff2`
-    )) as any) as string;
+    return (
+      await import(`!!file-loader!firacode/distr/woff2/FiraCode-Light.woff2`)
+    ).default;
   },
   Regular: async () => {
-    return ((await import(
-      `!!file-loader!firacode/distr/woff2/FiraCode-Regular.woff2`
-    )) as any) as string;
+    return (
+      await import(`!!file-loader!firacode/distr/woff2/FiraCode-Regular.woff2`)
+    ).default;
   },
   Medium: async () => {
-    return ((await import(
-      `!!file-loader!firacode/distr/woff2/FiraCode-Medium.woff2`
-    )) as any) as string;
+    return (
+      await import(`!!file-loader!firacode/distr/woff2/FiraCode-Medium.woff2`)
+    ).default;
   },
   Bold: async () => {
-    return ((await import(
-      `!!file-loader!firacode/distr/woff2/FiraCode-Bold.woff2`
-    )) as any) as string;
+    return (
+      await import(`!!file-loader!firacode/distr/woff2/FiraCode-Bold.woff2`)
+    ).default;
   }
 };
 

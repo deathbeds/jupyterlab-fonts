@@ -8,14 +8,18 @@ const weights: { [key: string]: string } = {
 
 const facePromises: { [key: string]: () => Promise<string> } = {
   400: async () => {
-    return ((await import(
-      `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-400.woff2`
-    )) as any) as string;
+    return (
+      await import(
+        `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-400.woff2`
+      )
+    ).default;
   },
   700: async () => {
-    return ((await import(
-      `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-700.woff2`
-    )) as any) as string;
+    return (
+      await import(
+        `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-700.woff2`
+      )
+    ).default;
   }
 };
 

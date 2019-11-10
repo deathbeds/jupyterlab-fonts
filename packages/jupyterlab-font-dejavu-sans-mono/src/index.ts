@@ -5,14 +5,13 @@ const variants = ['', 'Bold'];
 
 const variantPromises: { [key: string]: () => Promise<string> } = {
   '': async () => {
-    return ((await import(
-      `!!file-loader!../style/fonts/DejaVuSansMono.woff2`
-    )) as any) as string;
+    return (await import(`!!file-loader!../style/fonts/DejaVuSansMono.woff2`))
+      .default;
   },
   Bold: async () => {
-    return ((await import(
-      `!!file-loader!../style/fonts/DejaVuSansMono-Bold.woff2`
-    )) as any) as string;
+    return (
+      await import(`!!file-loader!../style/fonts/DejaVuSansMono-Bold.woff2`)
+    ).default;
   }
 };
 

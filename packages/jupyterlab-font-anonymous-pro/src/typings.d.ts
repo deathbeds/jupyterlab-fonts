@@ -1,2 +1,5 @@
 declare module '!!raw-loader!*' {}
-declare module '!!file-loader!*' {}
+declare module '*.woff2' {
+  const content: string;
+  export default content;
+}

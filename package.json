@@ -38,9 +38,8 @@
     "lint:tslint": "tslint --fix -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
     "test": "run-p test:**",
     "test:robot": "python -m robot -d _testoutput tests/acceptance",
-    "watch": "run-p watch:** lab:watch",
     "watch:schema": "jlpm lerna run watch:schema --parallel",
-    "watch:ts": "cd packages/_meta && tsc -b -w"
+    "watch": "cd packages/_meta && tsc -b -w"
   },
   "workspaces": [
     "packages/*"
