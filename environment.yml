@@ -8,7 +8,7 @@ dependencies:
   - beautysh
   - black
   - brotlipy
-  - firefox
+  - firefox =68
   - flake8
   - fonttools
   - geckodriver
