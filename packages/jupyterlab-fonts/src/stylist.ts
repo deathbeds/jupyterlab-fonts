@@ -1,10 +1,10 @@
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
-import {Signal} from '@phosphor/signaling';
+import { Signal } from '@phosphor/signaling';
 
-import {NotebookPanel} from '@jupyterlab/notebook';
+import { NotebookPanel } from '@jupyterlab/notebook';
 
-import {ROOT, IFontFaceOptions} from '.';
+import { ROOT, IFontFaceOptions } from '.';
 
 import * as SCHEMA from './schema';
 
@@ -27,10 +27,7 @@ export class Stylist {
   registerNotebook(notebook: NotebookPanel, register: boolean) {
     if (register) {
       this._notebookStyles.set(notebook, document.createElement('style'));
-      notebook.disposed.connect(
-        this._onDisposed,
-        this
-      );
+      notebook.disposed.connect(this._onDisposed, this);
       this.hack();
     } else {
       this._onDisposed(notebook);
@@ -53,8 +50,14 @@ export class Stylist {
     return Array.from(this._notebookStyles.keys());
   }
 
-  stylesheet(meta: SCHEMA.ISettings, notebook: NotebookPanel = null, clear = false) {
-    let sheet = notebook ? this._notebookStyles.get(notebook) : this._globalStyles;
+  stylesheet(
+    meta: SCHEMA.ISettings,
+    notebook: NotebookPanel = null,
+    clear = false
+  ) {
+    let sheet = notebook
+      ? this._notebookStyles.get(notebook)
+      : this._globalStyles;
 
     let style = notebook
       ? this._nbMetaToStyle(meta, notebook)
@@ -74,7 +77,7 @@ export class Stylist {
     notebook: NotebookPanel
   ): SCHEMA.IStyles {
     const id = notebook.id;
-    let jss: any = {'@font-face': [], '@global': {}};
+    let jss: any = { '@font-face': [], '@global': {} };
     let idStyles: any = (jss['@global'][`.jp-NotebookPanel[id='${id}']`] = {});
 
     if (meta.fonts) {
@@ -113,7 +116,7 @@ export class Stylist {
               .get(font)
               .faces()
               .then(
-                (faces) => {
+                faces => {
                   if (this._fontCache.has(font)) {
                     return;
                   }
@@ -131,16 +134,13 @@ export class Stylist {
       }
     }
 
-    let flatFaces = Object.keys(faces).reduce(
-      (m, face) => {
-        return m.concat(faces[face]);
-      },
-      [] as SCHEMA.IFontFacePrimitive[]
-    );
+    let flatFaces = Object.keys(faces).reduce((m, face) => {
+      return m.concat(faces[face]);
+    }, [] as SCHEMA.IFontFacePrimitive[]);
 
     return {
       '@global': styles as any,
-      '@font-face': flatFaces as any,
+      '@font-face': flatFaces as any
     } as SCHEMA.IStyles;
   }
 
@@ -155,13 +155,13 @@ export class Stylist {
     if (show) {
       setTimeout(
         () =>
-          this.stylesheets.map((s) => {
+          this.stylesheets.map(s => {
             document.body.appendChild(s);
           }),
         0
       );
     } else {
-      this.stylesheets.map((el) => el.remove());
+      this.stylesheets.map(el => el.remove());
     }
   }
 }

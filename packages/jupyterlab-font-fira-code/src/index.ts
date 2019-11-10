@@ -1,17 +1,17 @@
 // tslint:disable-next-line
 /// <reference path="../../../node_modules/@types/webpack-env/index.d.ts"/>
 
-import {JupyterLab, JupyterLabPlugin} from '@jupyterlab/application';
-import {IFontManager, FontFormat} from '@deathbeds/jupyterlab-fonts';
+import { JupyterLab, JupyterLabPlugin } from '@jupyterlab/application';
+import { IFontManager, FontFormat } from '@deathbeds/jupyterlab-fonts';
 
 const variants = ['Light', 'Regular', 'Medium', 'Bold'];
 
-const variantPromises: {[key: string]: () => Promise<string>} = {
+const variantPromises: { [key: string]: () => Promise<string> } = {
   Light: () =>
     new Promise<string>((resolve, reject) => {
       require.ensure(
         [`!!file-loader!firacode/distr/woff2/FiraCode-Light.woff2`],
-        (require) =>
+        require =>
           resolve(
             require(`!!file-loader!firacode/distr/woff2/FiraCode-Light.woff2`) as string
           ),
@@ -26,7 +26,7 @@ const variantPromises: {[key: string]: () => Promise<string>} = {
     new Promise<string>((resolve, reject) => {
       require.ensure(
         [`!!file-loader!firacode/distr/woff2/FiraCode-Regular.woff2`],
-        (require) =>
+        require =>
           resolve(
             require(`!!file-loader!firacode/distr/woff2/FiraCode-Regular.woff2`) as string
           ),
@@ -41,7 +41,7 @@ const variantPromises: {[key: string]: () => Promise<string>} = {
     new Promise<string>((resolve, reject) => {
       require.ensure(
         [`!!file-loader!firacode/distr/woff2/FiraCode-Medium.woff2`],
-        (require) =>
+        require =>
           resolve(
             require(`!!file-loader!firacode/distr/woff2/FiraCode-Medium.woff2`) as string
           ),
@@ -56,7 +56,7 @@ const variantPromises: {[key: string]: () => Promise<string>} = {
     new Promise<string>((resolve, reject) => {
       require.ensure(
         [`!!file-loader!firacode/distr/woff2/FiraCode-Bold.woff2`],
-        (require) =>
+        require =>
           resolve(
             require(`!!file-loader!firacode/distr/woff2/FiraCode-Bold.woff2`) as string
           ),
@@ -66,11 +66,11 @@ const variantPromises: {[key: string]: () => Promise<string>} = {
         },
         'fira-code-light'
       );
-    }),
+    })
 };
 
 function register(fonts: IFontManager) {
-  variants.forEach((variant) => {
+  variants.forEach(variant => {
     fonts.registerFontFace({
       name: `Fira Code ${variant}`,
       license: {
@@ -80,7 +80,8 @@ function register(fonts: IFontManager) {
           new Promise<string>((resolve, reject) => {
             require.ensure(
               ['!!raw-loader!firacode/LICENSE'],
-              (require) => resolve(require('!!raw-loader!firacode/LICENSE') as string),
+              require =>
+                resolve(require('!!raw-loader!firacode/LICENSE') as string),
               (error: any) => {
                 console.error(error);
                 reject();
@@ -92,14 +93,14 @@ function register(fonts: IFontManager) {
           `Copyright (c) 2014, Nikita Prokopov http://tonsky.me with Reserved Font Name Fira Code.`,
           `Copyright (c) 2014, Mozilla Foundation https://mozilla.org/ with Reserved Font Name Fira Sans.`,
           `Copyright (c) 2014, Mozilla Foundation https://mozilla.org/ with Reserved Font Name Fira Mono.`,
-          'Copyright (c) 2014, Telefonica S.A.',
-        ],
+          'Copyright (c) 2014, Telefonica S.A.'
+        ]
       },
       faces: async () => {
         const font = await variantPromises[variant]();
         const uri = await fonts.dataURISrc(font, FontFormat.woff2);
-        return [{fontFamily: `'Fira Code ${variant}'`, src: uri}];
-      },
+        return [{ fontFamily: `'Fira Code ${variant}'`, src: uri }];
+      }
     });
   });
 }
@@ -112,7 +113,7 @@ const plugin: JupyterLabPlugin<void> = {
     fonts.ready.then(() => {
       register(fonts);
     });
-  },
+  }
 };
 
 export default plugin;

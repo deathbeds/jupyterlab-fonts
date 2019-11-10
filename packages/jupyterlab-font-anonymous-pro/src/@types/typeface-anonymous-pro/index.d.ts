@@ -1,3 +1,1 @@
-declare module '!!raw-loader!firacode/LICENSE' {
-
-}
+declare module '!!raw-loader!firacode/LICENSE' {}

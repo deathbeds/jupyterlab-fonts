@@ -1,20 +1,22 @@
 // tslint:disable-next-line
 /// <reference path="../../../node_modules/@types/webpack-env/index.d.ts"/>
 
-import {JupyterLab, JupyterLabPlugin} from '@jupyterlab/application';
-import {IFontManager, FontFormat} from '@deathbeds/jupyterlab-fonts';
+import { JupyterLab, JupyterLabPlugin } from '@jupyterlab/application';
+import { IFontManager, FontFormat } from '@deathbeds/jupyterlab-fonts';
 
-const weights: {[key: string]: string} = {
+const weights: { [key: string]: string } = {
   400: 'Regular',
-  700: 'Bold',
+  700: 'Bold'
 };
 
-const facePromises: {[key: string]: () => Promise<string>} = {
+const facePromises: { [key: string]: () => Promise<string> } = {
   400: () =>
     new Promise<string>((resolve, reject) => {
       require.ensure(
-        [`!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-400.woff2`],
-        (require) =>
+        [
+          `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-400.woff2`
+        ],
+        require =>
           resolve(
             require(`!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-400.woff2`) as string
           ),
@@ -28,8 +30,10 @@ const facePromises: {[key: string]: () => Promise<string>} = {
   700: () =>
     new Promise<string>((resolve, reject) => {
       require.ensure(
-        [`!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-700.woff2`],
-        (require) =>
+        [
+          `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-700.woff2`
+        ],
+        require =>
           resolve(
             require(`!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-700.woff2`) as string
           ),
@@ -39,11 +43,11 @@ const facePromises: {[key: string]: () => Promise<string>} = {
         },
         'anonymous-pro-700'
       );
-    }),
+    })
 };
 
 function register(fonts: IFontManager) {
-  Object.keys(weights).forEach((weight) => {
+  Object.keys(weights).forEach(weight => {
     const fontFamily = `Anonymous Pro ${weights[weight]}`;
     fonts.registerFontFace({
       name: fontFamily,
@@ -54,7 +58,7 @@ function register(fonts: IFontManager) {
           new Promise<string>((resolve, reject) => {
             require.ensure(
               ['!!raw-loader!../vendor/anonymous-pro/LICENSE'],
-              (require) =>
+              require =>
                 resolve(
                   require('!!raw-loader!../vendor/anonymous-pro/LICENSE') as string
                 ),
@@ -66,14 +70,14 @@ function register(fonts: IFontManager) {
             );
           }),
         holders: [
-          `Copyright (c) 2009, Mark Simonson (http://www.ms-studio.com, mark@marksimonson.com), with Reserved Font Name Anonymous Pro Minus.`,
-        ],
+          `Copyright (c) 2009, Mark Simonson (http://www.ms-studio.com, mark@marksimonson.com), with Reserved Font Name Anonymous Pro Minus.`
+        ]
       },
       faces: async () => {
         const font = await facePromises[weight]();
         const uri = await fonts.dataURISrc(font, FontFormat.woff2);
-        return [{fontFamily: `'${fontFamily}'`, src: uri}];
-      },
+        return [{ fontFamily: `'${fontFamily}'`, src: uri }];
+      }
     });
   });
 }
@@ -86,7 +90,7 @@ const plugin: JupyterLabPlugin<void> = {
     fonts.ready.then(() => {
       register(fonts);
     });
-  },
+  }
 };
 
 export default plugin;

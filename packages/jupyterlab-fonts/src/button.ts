@@ -1,16 +1,16 @@
-import {IDisposable, DisposableDelegate} from '@phosphor/disposable';
+import { IDisposable, DisposableDelegate } from '@phosphor/disposable';
 
-import {ISignal, Signal} from '@phosphor/signaling';
+import { ISignal, Signal } from '@phosphor/signaling';
 
-import {ToolbarButton} from '@jupyterlab/apputils';
+import { ToolbarButton } from '@jupyterlab/apputils';
 
-import {DocumentRegistry} from '@jupyterlab/docregistry';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
 
-import {IObservableJSON} from '@jupyterlab/observables';
+import { IObservableJSON } from '@jupyterlab/observables';
 
-import {NotebookPanel, INotebookModel} from '@jupyterlab/notebook';
+import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 
-import {ICON_CLASS, PACKAGE_NAME, CONFIGURED_CLASS} from '.';
+import { ICON_CLASS, PACKAGE_NAME, CONFIGURED_CLASS } from '.';
 
 /**
  * A notebook widget extension that adds a button to the toolbar.
@@ -31,7 +31,7 @@ export class NotebookFontsButton
       onClick: () => {
         (this.widgetRequested as Signal<any, void>).emit(void 0);
       },
-      tooltip: 'Customize Notebook Fonts',
+      tooltip: 'Customize Notebook Fonts'
     });
 
     const metaUpdated = (metadata: IObservableJSON) => {
