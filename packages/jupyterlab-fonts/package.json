@@ -45,7 +45,7 @@
   "scripts": {
     "build:schema": "dtsgen schema/fonts.json | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
     "prebuild": "jlpm build:schema && jlpm copy:schema",
-    "copy:schema": "cp src/_schema.d.ts lib/",
+    "copy:schema": "mkdir -p lib && cp src/_schema.d.ts lib/",
     "watch": "tsc -w",
     "watch:schema": "watch 'jlpm build:schema' schema"
   }

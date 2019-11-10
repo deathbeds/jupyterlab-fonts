@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     The font editor performs allows changing fonts in notebooks
+Documentation     The font editor allows changing fonts in notebooks
 Suite Setup       Prepare for testing fonts
 Suite Teardown    Clean Up JupyterLab
 Library           SeleniumLibrary

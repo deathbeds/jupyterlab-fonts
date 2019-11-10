@@ -10,11 +10,11 @@ ${BUSY_PROMPT}    In [*]:
 Add and Run Cell
     [Arguments]    ${code}
     [Documentation]    Add a code cell to the currently active notebook and run it
-    Click Element    css:.jp-NotebookPanel-toolbar .jp-AddIcon
+    Click Element    css:.jp-NotebookPanel-toolbar [data-icon="add"]
     Sleep    0.1s
     Click Element    css:${CELL_CSS}
     Execute JavaScript    document.querySelector("${CELL_CSS}").CodeMirror.setValue(`${code}`)
-    Click Element    css:.jp-RunIcon
+    Click Element    css:.jp-NotebookPanel-toolbar [data-icon="run"]
 
 Make a Hello World
     [Arguments]    ${kernel}    ${category}
