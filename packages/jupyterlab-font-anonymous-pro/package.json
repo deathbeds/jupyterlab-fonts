@@ -4,14 +4,14 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "peerDependencies": {
-    "@deathbeds/jupyterlab-fonts": "^0.5.0"
+    "@deathbeds/jupyterlab-fonts": "^0.7.0",
+    "@jupyterlab/application": "^1.2.0"
   },
   "dependencies": {
-    "typeface-anonymous-pro": "^0.0.54",
-    "@jupyterlab/application": "^0.19.1"
+    "typeface-anonymous-pro": "^0.0.54"
   },
   "devDependencies": {
-    "@types/webpack-env": "~1.13.6"
+    "@jupyterlab/application": "^1.2.0"
   },
   "description": "Anonymous Pro Fonts for JupyterLab",
   "files": [
@@ -35,9 +35,5 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.6.0",
-  "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w"
-  }
+  "version": "0.7.0"
 }

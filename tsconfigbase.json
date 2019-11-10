@@ -1,16 +1,20 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "composite": true,
     "declaration": true,
-    "noImplicitAny": true,
-    "noEmitOnError": true,
-    "noUnusedLocals": true,
     "esModuleInterop": true,
-    "preserveWatchOutput": true,
-    "module": "commonjs",
+    "incremental": true,
+    "jsx": "react",
+    "module": "esnext",
     "moduleResolution": "node",
-    "target": "es2015",
-    "lib": ["dom", "es2015"],
-    "types": ["node", "webpack-env"],
-    "typeRoots": ["../node_modules/@types"]
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "preserveWatchOutput": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "target": "es2017",
+    "types": []
   }
 }
