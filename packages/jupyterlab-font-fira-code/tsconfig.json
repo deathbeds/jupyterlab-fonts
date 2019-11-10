@@ -5,7 +5,7 @@
     "rootDir": "src",
     "tsBuildInfoFile": "lib/.tsbuildinfo"
   },
-  "include": ["src/**/*", "src/@types/**/*"],
+  "include": ["src/**/*"],
   "references": [
     {
       "path": "../jupyterlab-fonts"
