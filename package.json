@@ -29,7 +29,7 @@
     "clean:test": "rimraf _testoutput",
     "lab:build": "jupyter lab build",
     "lab:link": "lerna exec --scope '@deathbeds/jupyterlab-*' -- jupyter labextension install . --no-build",
-    "lint": "jlpm lint:py && jlpm lint:ts && jlpm lint:sh && jlpm lint:robot",
+    "lint": "jlpm lint:py && jlpm lint:ts && jlpm lint:sh",
     "lint:py": "black nbjss setup.py && flake8 nbjss setup.py",
     "lint:robot": "python -m robot.tidy --inplace tests/{acceptance,resources}/*.robot && rflint --configure TooManyTestSteps:40 --configure TooFewKeywordSteps:0  tests/**/*.robot",
     "lint:sh": "beautysh -i 2 postBuild",
