@@ -117,7 +117,11 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       ...this.header(),
       ...[TextKind.code, TextKind.content].map(kind =>
         h('section', { key: `${kind}-section`, title: KIND_LABELS[kind] }, [
-          h('h3', { key: `${kind}-header`, className: SECTION_CLASS }, 'Code'),
+          h(
+            'h3',
+            { key: `${kind}-header`, className: SECTION_CLASS },
+            KIND_LABELS[kind]
+          ),
           ...[
             'font-family',
             'font-size',

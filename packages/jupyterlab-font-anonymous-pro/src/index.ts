@@ -32,9 +32,8 @@ function register(fonts: IFontManager) {
         spdx: 'OFL-1.1',
         name: 'SIL Open Font License 1.1',
         text: async () => {
-          return ((await import(
-            '!!raw-loader!../vendor/anonymous-pro/LICENSE'
-          )) as any) as string;
+          return (await import('!!raw-loader!../vendor/anonymous-pro/LICENSE'))
+            .default;
         },
         holders: [
           `Copyright (c) 2009, Mark Simonson (http://www.ms-studio.com, mark@marksimonson.com), with Reserved Font Name Anonymous Pro Minus.`

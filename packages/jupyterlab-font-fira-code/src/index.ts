@@ -34,9 +34,7 @@ function register(fonts: IFontManager) {
         spdx: 'OFL-1.1',
         name: 'SIL Open Font License 1.1',
         text: async () => {
-          return ((await import(
-            '!!raw-loader!firacode/LICENSE'
-          )) as any) as string;
+          return (await import('!!raw-loader!firacode/LICENSE')).default;
         },
         holders: [
           `Copyright (c) 2014, Nikita Prokopov http://tonsky.me with Reserved Font Name Fira Code.`,

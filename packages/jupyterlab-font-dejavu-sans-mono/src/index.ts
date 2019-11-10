@@ -24,9 +24,9 @@ function register(fonts: IFontManager) {
         spdx: 'OTHER',
         name: 'DejaVu Font License',
         text: async () => {
-          return ((await import(
-            '!!raw-loader!../vendor/dejavu-fonts-ttf/LICENSE'
-          )) as any) as string;
+          return (
+            await import('!!raw-loader!../vendor/dejavu-fonts-ttf/LICENSE')
+          ).default;
         },
         holders: [
           `Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved.`,
