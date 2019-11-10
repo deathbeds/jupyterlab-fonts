@@ -10,9 +10,6 @@ import * as SCHEMA from './schema';
 
 import '../style/index.css';
 
-// tslint:disable-next-line
-const pkg = require('../package.json');
-
 export type Scope = 'global' | 'notebook';
 
 export enum TextKind {
@@ -98,8 +95,8 @@ export type ICSSTextOptions = {
 };
 
 export const TEXT_OPTIONS: ICSSTextOptions = {
-  'font-size': m => Array.from(Array(25).keys()).map(i => `${i + 8}px`),
-  'line-height': m => Array.from(Array(8).keys()).map(i => `${i * 0.25 + 1}`),
+  'font-size': _m => Array.from(Array(25).keys()).map(i => `${i + 8}px`),
+  'line-height': _m => Array.from(Array(8).keys()).map(i => `${i * 0.25 + 1}`),
   'font-family': m => {
     let names = Array.from(m.fonts.values()).reduce((m, f) => {
       return m.concat(f.name);
@@ -125,7 +122,7 @@ export const DEFAULT = {
   }
 };
 
-export const PACKAGE_NAME: string = pkg.name;
+export const PACKAGE_NAME: string = '@deathbeds/jupyterlab-fonts';
 export const ICON_CLASS = 'jp-FontsIcon';
 export const LICENSE_ICON = 'jp-LicenseIcon';
 export const CONFIGURED_CLASS = 'jp-fonts-configured';

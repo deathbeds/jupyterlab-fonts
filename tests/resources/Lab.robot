@@ -72,7 +72,7 @@ Open JupyterLab with
 Execute JupyterLab Command
     [Arguments]    ${command}
     [Documentation]    Use the JupyterLab Command Palette to run a command
-    Run Keyword And Ignore Error    Click Element   css:.jp-mod-accept
+    Run Keyword And Ignore Error    Click Element    css:.jp-mod-accept
     Click Element    ${CMD_PAL_CSS}
     Input Text    ${CMD_PAL_INPUT}    ${command}
     Wait Until Page Contains Element    ${CMD_PAL_ITEM}

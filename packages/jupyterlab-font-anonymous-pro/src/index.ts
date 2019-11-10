@@ -1,7 +1,4 @@
-// tslint:disable-next-line
-/// <reference path="../../../node_modules/@types/webpack-env/index.d.ts"/>
-
-import { JupyterLab, JupyterLabPlugin } from '@jupyterlab/application';
+import { JupyterLab, JupyterFrontEndPlugin } from '@jupyterlab/application';
 import { IFontManager, FontFormat } from '@deathbeds/jupyterlab-fonts';
 
 const weights: { [key: string]: string } = {
@@ -10,40 +7,16 @@ const weights: { [key: string]: string } = {
 };
 
 const facePromises: { [key: string]: () => Promise<string> } = {
-  400: () =>
-    new Promise<string>((resolve, reject) => {
-      require.ensure(
-        [
-          `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-400.woff2`
-        ],
-        require =>
-          resolve(
-            require(`!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-400.woff2`) as string
-          ),
-        (error: any) => {
-          console.error(error);
-          reject();
-        },
-        'anonymous-pro-400'
-      );
-    }),
-  700: () =>
-    new Promise<string>((resolve, reject) => {
-      require.ensure(
-        [
-          `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-700.woff2`
-        ],
-        require =>
-          resolve(
-            require(`!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-700.woff2`) as string
-          ),
-        (error: any) => {
-          console.error(error);
-          reject();
-        },
-        'anonymous-pro-700'
-      );
-    })
+  400: async () => {
+    return ((await import(
+      `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-400.woff2`
+    )) as any) as string;
+  },
+  700: async () => {
+    return ((await import(
+      `!!file-loader!typeface-anonymous-pro/files/anonymous-pro-latin-700.woff2`
+    )) as any) as string;
+  }
 };
 
 function register(fonts: IFontManager) {
@@ -54,21 +27,11 @@ function register(fonts: IFontManager) {
       license: {
         spdx: 'OFL-1.1',
         name: 'SIL Open Font License 1.1',
-        text: async () =>
-          new Promise<string>((resolve, reject) => {
-            require.ensure(
-              ['!!raw-loader!../vendor/anonymous-pro/LICENSE'],
-              require =>
-                resolve(
-                  require('!!raw-loader!../vendor/anonymous-pro/LICENSE') as string
-                ),
-              (error: any) => {
-                console.error(error);
-                reject();
-              },
-              'anonymous-pro'
-            );
-          }),
+        text: async () => {
+          return ((await import(
+            '!!raw-loader!../vendor/anonymous-pro/LICENSE'
+          )) as any) as string;
+        },
         holders: [
           `Copyright (c) 2009, Mark Simonson (http://www.ms-studio.com, mark@marksimonson.com), with Reserved Font Name Anonymous Pro Minus.`
         ]
@@ -82,7 +45,7 @@ function register(fonts: IFontManager) {
   });
 }
 
-const plugin: JupyterLabPlugin<void> = {
+const plugin: JupyterFrontEndPlugin<void> = {
   id: '@deathbeds/jupyterlab-font-anonymous-pro',
   autoStart: true,
   requires: [IFontManager],

@@ -1,42 +1,19 @@
-// tslint:disable-next-line
-/// <reference path="../../../node_modules/@types/webpack-env/index.d.ts"/>
-
-import { JupyterLab, JupyterLabPlugin } from '@jupyterlab/application';
+import { JupyterLab, JupyterFrontEndPlugin } from '@jupyterlab/application';
 import { IFontManager, FontFormat } from '@deathbeds/jupyterlab-fonts';
 
 const variants = ['', 'Bold'];
 
 const variantPromises: { [key: string]: () => Promise<string> } = {
-  '': () =>
-    new Promise<string>((resolve, reject) => {
-      require.ensure(
-        [`!!file-loader!../style/fonts/DejaVuSansMono.woff2`],
-        require =>
-          resolve(
-            require(`!!file-loader!../style/fonts/DejaVuSansMono.woff2`) as string
-          ),
-        (error: any) => {
-          console.error(error);
-          reject();
-        },
-        'dejavu-sans-mono'
-      );
-    }),
-  Bold: () =>
-    new Promise<string>((resolve, reject) => {
-      require.ensure(
-        [`!!file-loader!../style/fonts/DejaVuSansMono-Bold.woff2`],
-        require =>
-          resolve(
-            require(`!!file-loader!../style/fonts/DejaVuSansMono-Bold.woff2`) as string
-          ),
-        (error: any) => {
-          console.error(error);
-          reject();
-        },
-        'dejavu-sans-mono'
-      );
-    })
+  '': async () => {
+    return ((await import(
+      `!!file-loader!../style/fonts/DejaVuSansMono.woff2`
+    )) as any) as string;
+  },
+  Bold: async () => {
+    return ((await import(
+      `!!file-loader!../style/fonts/DejaVuSansMono-Bold.woff2`
+    )) as any) as string;
+  }
 };
 
 function register(fonts: IFontManager) {
@@ -47,21 +24,11 @@ function register(fonts: IFontManager) {
       license: {
         spdx: 'OTHER',
         name: 'DejaVu Font License',
-        text: async () =>
-          new Promise<string>((resolve, reject) => {
-            require.ensure(
-              ['!!raw-loader!../vendor/dejavu-fonts-ttf/LICENSE'],
-              require =>
-                resolve(
-                  require('!!raw-loader!../vendor/dejavu-fonts-ttf/LICENSE') as string
-                ),
-              (error: any) => {
-                console.error(error);
-                reject();
-              },
-              'dejavu-sans-mono'
-            );
-          }),
+        text: async () => {
+          return ((await import(
+            '!!raw-loader!../vendor/dejavu-fonts-ttf/LICENSE'
+          )) as any) as string;
+        },
         holders: [
           `Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved.`,
           `Copyright (c) 2006 by Tavmjong Bah.`
@@ -76,7 +43,7 @@ function register(fonts: IFontManager) {
   });
 }
 
-const plugin: JupyterLabPlugin<void> = {
+const plugin: JupyterFrontEndPlugin<void> = {
   id: '@deathbeds/jupyterlab-font-dejavu-sans-mono',
   autoStart: true,
   requires: [IFontManager],
