@@ -3,6 +3,8 @@
 |      what | Interactive Typography for JupyterLab | Archival HTML Typography from Notebooks           |
 | ecosystem |       [JSS](http://cssinjs.org)       | [nbconvert](https://pypi.org/search/?q=nbconvert) |
 
+[![Build Status](https://travis-ci.org/deathbeds/jupyterlab-fonts.svg?branch=master)](https://travis-ci.org/deathbeds/jupyterlab-fonts) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/deathbeds/jupyterlab-fonts/master?urlpath=lab)
+
 > ## This is **Experimental**, **Open Source** Software
 >
 > Seriously, don't try it in production.
