@@ -16,7 +16,7 @@
   },
   "private": true,
   "scripts": {
-    "bootstrap": "jlpm && jlpm lint && jlpm bootstrap:py && jlpm bootstrap:js && jlpm bootstrap:lab",
+    "bootstrap": "jlpm || jlpm || jlpm && jlpm lint && jlpm bootstrap:py && jlpm bootstrap:js && jlpm bootstrap:lab",
     "bootstrap:js": "jlpm lerna bootstrap && jlpm build",
     "bootstrap:lab": "jlpm lab:link && jlpm lab:build",
     "bootstrap:py": "python -m pip install -e . --no-deps --ignore-installed",
