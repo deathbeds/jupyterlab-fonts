@@ -5,11 +5,11 @@
   },
   "peerDependencies": {
     "@deathbeds/jupyterlab-fonts": "^0.7.0",
-    "@jupyterlab/application": "^1.2.0"
+    "@jupyterlab/application": "1"
   },
   "devDependencies": {
     "dejavu-fonts-ttf": "2.37.3",
-    "@jupyterlab/application": "^1.2.0"
+    "@jupyterlab/application": "1"
   },
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "files": [
