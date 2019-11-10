@@ -1,4 +1,4 @@
-name: jyve-dev
+name: jupyterlab-fonts-dev
 
 commands:
   lab:
@@ -9,7 +9,7 @@ commands:
     unix: ./scripts/build_demo.sh && ./scripts/serve_demo.py
 
 env_specs:
-  jyve-dev:
+  jupyterlab-fonts-dev:
     packages:
       - beautysh
       - black
@@ -23,7 +23,6 @@ env_specs:
       - python >=3.7,<3.8.0a0
       - robotframework-lint
       - robotframework-seleniumlibrary
-      - wget
     channels:
       - conda-forge
       - defaults
