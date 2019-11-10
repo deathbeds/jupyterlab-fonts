@@ -157,7 +157,9 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
       let value = (evt.target as HTMLSelectElement).value;
       value = value === DUMMY ? null : value;
-      m.fonts.setTextStyle(prop, value, { kind, notebook: m.notebook });
+      m.fonts
+        .setTextStyle(prop, value, { kind, notebook: m.notebook })
+        .catch(console.warn);
     };
     const value = m.fonts.getTextStyle(prop, { kind, notebook: m.notebook });
     const extra = prop === 'font-family' ? this.fontFaceExtras(m, value) : [];

@@ -86,10 +86,12 @@ const plugin: JupyterLabPlugin<void> = {
   id: '@deathbeds/jupyterlab-font-anonymous-pro',
   autoStart: true,
   requires: [IFontManager],
-  activate: async function(app: JupyterLab, fonts: IFontManager) {
-    fonts.ready.then(() => {
-      register(fonts);
-    });
+  activate: async function(_app: JupyterLab, fonts: IFontManager) {
+    fonts.ready
+      .then(() => {
+        register(fonts);
+      })
+      .catch(console.warn);
   }
 };
 

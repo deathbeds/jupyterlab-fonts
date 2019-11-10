@@ -72,14 +72,18 @@ const plugin: JupyterLabPlugin<IFontManager> = {
     });
 
     const fontsButton = new NotebookFontsButton();
-    fontsButton.widgetRequested.connect(() => {
-      app.commands.execute(CMD.editFonts);
+    fontsButton.widgetRequested.connect(async () => {
+      try {
+        await app.commands.execute(CMD.editFonts);
+      } catch (err) {
+        console.warn(err);
+      }
     });
 
     app.docRegistry.addWidgetExtension('Notebook', fontsButton);
 
     Promise.all([settingRegistry.load(PLUGIN_ID), app.restored])
-      .then(([settings]) => {
+      .then(async ([settings]) => {
         manager.settings = settings;
         settingRegistry
           .load('@jupyterlab/apputils-extension:themes')
@@ -87,7 +91,8 @@ const plugin: JupyterLabPlugin<IFontManager> = {
             settings.changed.connect(() => {
               setTimeout(() => manager.hack(), 100);
             });
-          });
+          })
+          .catch(console.warn);
       })
       .catch((reason: Error) => {
         console.error(reason);

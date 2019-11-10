@@ -88,7 +88,10 @@ export class FontManager implements IFontManager {
     if (!this.settings) {
       return;
     }
-    this._settings.set('enabled', enabled);
+    this._settings
+      .set('enabled', enabled)
+      .then()
+      .catch(console.warn);
   }
 
   get settings() {
@@ -130,10 +133,7 @@ export class FontManager implements IFontManager {
     return CSS[kind][property];
   }
 
-  getTextStyle(
-    property: TextProperty,
-    { scope, kind, notebook }: ITextStyleOptions
-  ) {
+  getTextStyle(property: TextProperty, { kind, notebook }: ITextStyleOptions) {
     if (!notebook && !this.settings) {
       return null;
     }
@@ -152,7 +152,7 @@ export class FontManager implements IFontManager {
   async setTextStyle(
     property: TextProperty,
     value: SCHEMA.ICSSOM,
-    { scope, kind, notebook }: ITextStyleOptions
+    { kind, notebook }: ITextStyleOptions
   ): Promise<void> {
     if (!notebook && !this.settings) {
       return null;
@@ -195,7 +195,11 @@ export class FontManager implements IFontManager {
       if (!Object.keys(styles[ROOT] || {}).length) {
         delete styles[ROOT];
       }
-      this._settings.set('styles', styles);
+      try {
+        await this._settings.set('styles', styles);
+      } catch (err) {
+        console.warn(err);
+      }
     }
   }
 
@@ -263,7 +267,7 @@ export class FontManager implements IFontManager {
     this._stylist.registerNotebook(notebook, false);
   }
 
-  private _notebookMetaWatcher(notebook: NotebookPanel) {
+  private _notebookMetaWatcher(_notebook: NotebookPanel) {
     return () => {
       this._notebooks.forEach(notebook => {
         if (notebook.id !== notebook.id) {
@@ -293,10 +297,16 @@ export class FontManager implements IFontManager {
         let command = `${CMD[kind].fontSize}:${label.toLowerCase()}`;
         this._commands.addCommand(command, {
           label: `${label} Code Font Size`,
-          execute: () => {
+          execute: async () => {
             let oldSize = this.getTextStyle('font-size', { kind }) as string;
             let cfs = parseInt((oldSize || '0').replace(/px$/, ''), 10) || 13;
-            this.setTextStyle('font-size', `${cfs + (i ? -1 : 1)}px`, { kind });
+            try {
+              await this.setTextStyle('font-size', `${cfs + (i ? -1 : 1)}px`, {
+                kind
+              });
+            } catch (err) {
+              console.warn(err);
+            }
           },
           isVisible: () => this.enabled
         });
@@ -318,7 +328,7 @@ export class FontManager implements IFontManager {
         }
       );
 
-      TEXT_OPTIONS['line-height'](this).map((lineHeight, i) => {
+      TEXT_OPTIONS['line-height'](this).map(lineHeight => {
         const command = `${CMD[kind].lineHeight}:${lineHeight}`;
         this._commands.addCommand(command, {
           label: `${lineHeight}`,
@@ -347,11 +357,15 @@ export class FontManager implements IFontManager {
       this._commands.addCommand(command, {
         label: `${label} Custom Fonts`,
         isVisible: () => this.enabled === !!i,
-        execute: () => {
+        execute: async () => {
           if (!this._settings) {
             return;
           }
-          this._settings.set('enabled', !i);
+          try {
+            await this._settings.set('enabled', !i);
+          } catch (err) {
+            console.warn(err);
+          }
         }
       });
       this._palette.addItem({ command, category: ALL_PALETTE });
@@ -429,8 +443,14 @@ export class FontManager implements IFontManager {
           return `${cff}`.indexOf(`'${options.name}'`) > -1;
         },
         isVisible: () => this.enabled,
-        execute: () => {
-          this.setTextStyle('font-family', `'${options.name}'`, { kind });
+        execute: async () => {
+          try {
+            await this.setTextStyle('font-family', `'${options.name}'`, {
+              kind
+            });
+          } catch (err) {
+            console.warn(err);
+          }
         }
       });
       this._fontFamilyMenus.get(kind).addItem({ command });
