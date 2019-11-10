@@ -55,7 +55,6 @@ jupyter lab build
 pip install git+https://github.com/deathbeds/jupyterlab-fonts.git
 ```
 
-
 # Uninstalling
 
 We're sorry to see you go!
@@ -144,7 +143,6 @@ other CSS preprocessors like [LESS][less-nest].
 All of the [plugins](http://cssinjs.org/plugins#jss-plugins) included in
 `jss-preset-default` are enabled, with the default settings,
 and at present will be wrapped in a `@global` selector.
-
 
 ## nbconvert PreProcessor (experimental)
 
