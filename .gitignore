@@ -4,6 +4,7 @@ _testoutput/
 *.egg-info/
 *.log
 *.woff2
+build/
 envs/
 nbjss/static/nbjss.js
 node_modules/
