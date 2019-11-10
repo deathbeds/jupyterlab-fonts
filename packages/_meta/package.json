@@ -1,5 +1,5 @@
 {
-  "name": "@deathbeds/jupyterlab-meta-fonts",
+  "name": "@deathbeds/META-jupyterlab-fonts",
   "version": "0.7.0",
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "^0.7.0",
