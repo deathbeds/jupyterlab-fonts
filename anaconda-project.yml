@@ -13,6 +13,7 @@ env_specs:
     packages:
       - beautysh
       - black
+      - brotlipy
       - firefox =68
       - flake8
       - fonttools
