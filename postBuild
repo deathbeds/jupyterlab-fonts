@@ -14,5 +14,8 @@ else
   fi
 fi
 
+set -eux
+
+python -m pip install -e . --no-deps --ignore-installed
 jlpm bootstrap
 jupyter labextension list

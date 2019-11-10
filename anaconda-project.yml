@@ -1,0 +1,29 @@
+name: jyve-dev
+
+commands:
+  lab:
+    unix: jupyter lab --no-browser --debug
+  postBuild:
+    unix: bash postBuild
+  demo:
+    unix: ./scripts/build_demo.sh && ./scripts/serve_demo.py
+
+env_specs:
+  jyve-dev:
+    packages:
+      - beautysh
+      - black
+      - brotlipy
+      - firefox
+      - flake8
+      - fonttools
+      - geckodriver
+      - jupyterlab >=1.2.2,<1.3
+      - nodejs
+      - python >=3.7,<3.8.0a0
+      - robotframework-lint
+      - robotframework-seleniumlibrary
+      - wget
+    channels:
+      - conda-forge
+      - defaults

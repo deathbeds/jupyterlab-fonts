@@ -1,11 +1,9 @@
 __pycache__
 _testoutput/
 .ipynb_checkpoints/
-.projectignore
 *.egg-info/
 *.log
 *.woff2
-anaconda-project.yml
 envs/
 nbjss/static/nbjss.js
 node_modules/
