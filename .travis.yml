@@ -2,8 +2,6 @@ language: c
 os: linux
 sudo: false
 dist: trusty
-addons:
-  firefox: latest
 env:
   - MINICONDA_VERSION=4.7.10 CONDA_DIR=$HOME/miniconda3
 before_install:
