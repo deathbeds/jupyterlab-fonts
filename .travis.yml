@@ -5,10 +5,10 @@ dist: trusty
 addons:
   firefox: latest
 env:
-  - MINICONDA_VERSION=4.5.4 CONDA_DIR=$HOME/miniconda3
+  - MINICONDA_VERSION=4.7.10 CONDA_DIR=$HOME/miniconda3
 before_install:
-  - wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh
-  - echo "a946ea1d0c4a642ddf0c3a26a18bb16d *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c -
+  - wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh
+  - echo "1c945f2b3335c7b2b15130b1b2dc5cf4 *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c -
   - bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR
   - $CONDA_DIR/bin/conda install -yn base -c defaults -c conda-forge conda sqlite
   - $CONDA_DIR/bin/conda env update -n base --file environment.yml

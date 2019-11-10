@@ -36,7 +36,7 @@
     "lint:ts": "jlpm lint:prettier && jlpm lint:tslint",
     "lint:prettier": "prettier --write *.json *.md *.yml && prettier --write 'packages/**/*.{ts,tsx,css,json,md}'",
     "lint:tslint": "tslint --fix -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
-    "test": "run-p test:**",
+    "test": "jlpm test:robot",
     "test:robot": "python -m robot -d _testoutput tests/acceptance",
     "watch:schema": "jlpm lerna run watch:schema --parallel",
     "watch": "cd packages/_meta && tsc -b -w"
