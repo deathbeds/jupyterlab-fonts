@@ -32,8 +32,8 @@ Prepare for testing fonts
 
 Wait for Splash Screen
     [Documentation]    Wait for the JupyterLab splash animation to run its course
-    Wait Until Page Contains Element    ${SPLASH_ID}
-    Wait Until Page Does Not Contain Element    ${SPLASH_ID}
+    Wait Until Page Contains Element    ${SPLASH_ID}    timeout=30s
+    Wait Until Page Does Not Contain Element    ${SPLASH_ID}    timeout=30s
     Sleep    0.1s
 
 Launch a new
@@ -46,6 +46,7 @@ Launch a new
 Start JupyterLab
     [Documentation]    Start a Jupyter Notebook Server with JupyterLab
     Start Process    ${LAB_CMD}    shell=true    stderr=STDOUT    stdout=${OUTPUT_DIR}/lab.log
+    Sleep    5s
 
 Click JupyterLab Menu
     [Arguments]    ${menu_label}
@@ -72,7 +73,7 @@ Open JupyterLab with
 Execute JupyterLab Command
     [Arguments]    ${command}
     [Documentation]    Use the JupyterLab Command Palette to run a command
-    Run Keyword And Ignore Error    Click Element   css:.jp-mod-accept
+    Run Keyword And Ignore Error    Click Element    css:.jp-mod-accept
     Click Element    ${CMD_PAL_CSS}
     Input Text    ${CMD_PAL_INPUT}    ${command}
     Wait Until Page Contains Element    ${CMD_PAL_ITEM}

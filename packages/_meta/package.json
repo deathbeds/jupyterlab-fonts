@@ -1,0 +1,10 @@
+{
+  "name": "@deathbeds/META-jupyterlab-fonts",
+  "version": "0.7.0",
+  "dependencies": {
+    "@deathbeds/jupyterlab-fonts": "^0.7.0",
+    "@deathbeds/jupyterlab-font-anonymous-pro": "^0.7.0",
+    "@deathbeds/jupyterlab-font-dejavu-sans-mono": "^0.7.0",
+    "@deathbeds/jupyterlab-font-fira-code": "^0.7.0"
+  }
+}

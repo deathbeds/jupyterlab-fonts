@@ -8,7 +8,16 @@
   "include": ["src/**/*"],
   "references": [
     {
+      "path": "../jupyterlab-font-anonymous-pro"
+    },
+    {
       "path": "../jupyterlab-fonts"
+    },
+    {
+      "path": "../jupyterlab-font-dejavu-sans-mono"
+    },
+    {
+      "path": "../jupyterlab-font-fira-code"
     }
   ]
 }

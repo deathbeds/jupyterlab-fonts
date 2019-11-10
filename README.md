@@ -17,33 +17,47 @@
 > [PR](https://github.com/deathbeds/jupyterlab-fonts/pulls)s will be reviewed
 > on a time-permitting basis.
 
-# Installing
-
-## nbconvert PreProcessor
+# Prerequisites
 
 ```bash
-# pip install nbjss  # TBD
+conda install -c conda-forge jupyterlab=1 nodejs
+# or
+pip install jupyterlab=1  # and get nodejs somehow
 ```
 
-## Jupyterlab Extensions
+# Installing
+
+## JupyterLab Extensions
+
+You need to install at least the core UI `@deathbeds/jupyterlab-fonts`...
 
 ```bash
-jupyter labextension install \
-  @deathbeds/jupyterlab-fonts \
-  @deathbeds/jupyterlab-font-anonymous-pro \
-  @deathbeds/jupyterlab-font-dejavu-sans-mono \
-  @deathbeds/jupyterlab-font-fira-code
+jupyter labextension install @deathbeds/jupyterlab-fonts --no-build
+```
+
+...and then one or more fonts...
+
+```bash
+jupyter labextension install @deathbeds/jupyterlab-font-anonymous-pro --no-build
+jupyter labextension install @deathbeds/jupyterlab-font-dejavu-sans-mono --no-build
+jupyter labextension install @deathbeds/jupyterlab-font-fira-code --no-build
+```
+
+...and then build lab...
+
+```bash
+jupyter lab build
+```
+
+## nbconvert PreProcessor (Experimental)
+
+```bash
+pip install git+https://github.com/deathbeds/jupyterlab-fonts.git
 ```
 
 # Uninstalling
 
 We're sorry to see you go!
-
-## nbconvert PreProcessor
-
-```bash
-# pip uninstall nbjss  # TBD
-```
 
 ## JupyterLab Extensions
 
@@ -54,18 +68,13 @@ jupyter labextension uninstall @deathbeds/jupyterlab-font-dejavu-sans-mono
 jupyter labextension uninstall @deathbeds/jupyterlab-font-fira-code
 ```
 
-# Usage
-
 ## nbconvert PreProcessor
 
-Convert a notebook to HTML with it's embedded fonts from JupyterLab by adding
-it to your `HTMLExporter.preprocessors`.
-
 ```bash
-jupyter nbconvert --HTMLExporter.preprocessors='["nbjss.JSSHeaderPreprocessor"]' Untitled.ipynb
+pip uninstall nbjss  # TBD
 ```
 
-Similarly, this can be achieved by making a `jupyter_nbcovert_config.json`
+# Usage
 
 ## JupyterLab Extensions
 
@@ -134,3 +143,14 @@ other CSS preprocessors like [LESS][less-nest].
 All of the [plugins](http://cssinjs.org/plugins#jss-plugins) included in
 `jss-preset-default` are enabled, with the default settings,
 and at present will be wrapped in a `@global` selector.
+
+## nbconvert PreProcessor (experimental)
+
+Convert a notebook to HTML with its fonts embedded by JupyterLab by adding
+it to your `HTMLExporter.preprocessors`.
+
+```bash
+jupyter nbconvert --HTMLExporter.preprocessors='["nbjss.JSSHeaderPreprocessor"]' Untitled.ipynb
+```
+
+Similarly, this can be achieved by making a `jupyter_nbconvert_config.json`.

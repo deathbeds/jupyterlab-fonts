@@ -14,5 +14,7 @@ else
   fi
 fi
 
+set -eux
+
 jlpm bootstrap
 jupyter labextension list

@@ -1,6 +1,9 @@
 {
+  "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
+    "prettier": [true, {"singleQuote": true}],
     "align": [true, "parameters", "statements"],
+    "await-promise": true,
     "ban": [
       true,
       ["_", "forEach"],
@@ -34,6 +37,7 @@
     "no-duplicate-variable": true,
     "no-empty": true,
     "no-eval": true,
+    "no-floating-promises": true,
     "no-inferrable-types": false,
     "no-internal-module": true,
     "no-invalid-this": [true, "check-function-in-method"],
@@ -44,7 +48,6 @@
     "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
-    "no-unused-expression": true,
     "no-use-before-declare": false,
     "no-var-keyword": true,
     "no-var-requires": true,
@@ -58,9 +61,12 @@
       "check-whitespace"
     ],
     "one-variable-per-declaration": [true, "ignore-for-loop"],
-    "quotemark": [true, "single", "avoid-escape"],
+    "quotemark": {
+      "options": [true, "single", "avoid-escape"],
+      "severity": "off"
+    },
     "radix": true,
-    "semicolon": [true, "always"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
     "switch-default": true,
     "trailing-comma": [
       false,
@@ -90,13 +96,27 @@
     ],
     "use-isnan": true,
     "use-strict": [false],
-    "variable-name": [true, "check-format", "allow-leading-underscore", "ban-keywords"],
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-leading-underscore",
+      "ban-keywords",
+      "allow-pascal-case"
+    ],
     "whitespace": [
       true,
       "check-branch",
       "check-operator",
       "check-separator",
       "check-type"
+    ]
+  },
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**/*.ts",
+      "node_modules/**/*.tsx",
+      "**/*.d.ts",
+      "jupyterlab/**/*.ts"
     ]
   }
 }

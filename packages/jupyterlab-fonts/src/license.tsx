@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import {VDomModel, VDomRenderer} from '@jupyterlab/apputils';
+import { VDomModel, VDomRenderer } from '@jupyterlab/apputils';
 
-import {IFontFaceOptions} from '.';
+import { IFontFaceOptions } from '.';
 
 import '../style/license.css';
 

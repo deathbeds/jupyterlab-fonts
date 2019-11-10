@@ -9,19 +9,20 @@
     "ICSSOM": {
       "oneOf": [
         {"$ref": "#/definitions/ICSSOMPrimitive"},
-        {"type": "array", "items": {"anyOf": [
-          {"$ref": "#/definitions/ICSSOMPrimitive"}
-        ]}},
-        {"type": "object", "patternProperties": {
-          ".*": {"$ref": "#/definitions/ICSSOM"}
-        }}
+        {
+          "type": "array",
+          "items": {"anyOf": [{"$ref": "#/definitions/ICSSOMPrimitive"}]}
+        },
+        {
+          "type": "object",
+          "patternProperties": {
+            ".*": {"$ref": "#/definitions/ICSSOM"}
+          }
+        }
       ]
     },
     "ICSSOMPrimitive": {
-      "oneOf": [
-        {"type": "string"},
-        {"type": "number"}
-      ]
+      "oneOf": [{"type": "string"}, {"type": "number"}]
     },
     "IFontFaceCommon": {
       "type": "object",
@@ -45,18 +46,26 @@
       }
     },
     "IFontFaceCamel": {
-      "allOf" : [
-        {"type": "object", "required": ["fontFamily"], "properties": {
-          "fontFamily": {"type": "string"}
-        }},
+      "allOf": [
+        {
+          "type": "object",
+          "required": ["fontFamily"],
+          "properties": {
+            "fontFamily": {"type": "string"}
+          }
+        },
         {"$ref": "#/definitions/IFontFaceCommon"}
       ]
     },
     "IFontFaceCanonical": {
-      "allOf" : [
-        {"type": "object", "required": ["font-family"], "properties": {
-          "font-family": {"type": "string"}
-        }},
+      "allOf": [
+        {
+          "type": "object",
+          "required": ["font-family"],
+          "properties": {
+            "font-family": {"type": "string"}
+          }
+        },
         {"$ref": "#/definitions/IFontFaceCommon"}
       ]
     },
@@ -77,10 +86,10 @@
         }
       },
       "additionalProperties": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IFontFacePrimitive"
-          }
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/IFontFacePrimitive"
+        }
       }
     },
     "IFontFace": {
@@ -118,19 +127,13 @@
     "IJSS": {
       "type": "object",
       "additionalProperties": {
-        "oneOf": [
-          {"$ref": "#/definitions/IJSS"},
-          {"#ref": "#/definitions/ICSSOM"}
-        ]
+        "oneOf": [{"$ref": "#/definitions/IJSS"}, {"#ref": "#/definitions/ICSSOM"}]
       }
     },
     "IStyles": {
       "type": "object",
       "additionalProperties": {
-        "anyOf": [
-          {"$ref": "#/definitions/ICSSOM"},
-          {"$ref": "#/definitions/IJSS"}
-        ]
+        "anyOf": [{"$ref": "#/definitions/ICSSOM"}, {"$ref": "#/definitions/IJSS"}]
       },
       "properties": {
         "@font-face": {
