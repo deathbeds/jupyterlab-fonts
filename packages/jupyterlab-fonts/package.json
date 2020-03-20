@@ -24,12 +24,12 @@
   "types": "lib/index.d.ts",
   "version": "1.0.0",
   "dependencies": {
-    "@jupyterlab/application": "2",
-    "@jupyterlab/mainmenu": "2",
-    "@jupyterlab/notebook": "2",
-    "@lumino/commands": "1",
-    "@lumino/coreutils": "1",
-    "@lumino/widgets": "1",
+    "@jupyterlab/application": "~2.0.2",
+    "@jupyterlab/mainmenu": "~2.0.2",
+    "@jupyterlab/notebook": "~2.0.2",
+    "@lumino/commands": "^1.10.1",
+    "@lumino/coreutils": "^1.4.2",
+    "@lumino/widgets": "^1.11.1",
     "jss-preset-default": "^4.5.0",
     "jss": "^9.8.7"
   },

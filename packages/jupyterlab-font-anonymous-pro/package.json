@@ -5,13 +5,13 @@
   },
   "peerDependencies": {
     "@deathbeds/jupyterlab-fonts": "^1.0.0",
-    "@jupyterlab/application": "2"
+    "@jupyterlab/application": "~2.0.2"
   },
   "dependencies": {
     "typeface-anonymous-pro": "^0.0.54"
   },
   "devDependencies": {
-    "@jupyterlab/application": "2"
+    "@jupyterlab/application": "~2.0.2"
   },
   "description": "Anonymous Pro Fonts for JupyterLab",
   "files": [
