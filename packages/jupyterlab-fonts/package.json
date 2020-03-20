@@ -5,7 +5,7 @@
   },
   "description": "Code Fonts for JupyterLab",
   "files": [
-    "{lib,style,schema}/**/*.{d.ts,js,css,svg,json}",
+    "{lib,style,schema,src}/**/*.{d.ts,js,css,svg,json,ts,tsx,js.map}",
     "{LICENSE,README.md}"
   ],
   "keywords": [

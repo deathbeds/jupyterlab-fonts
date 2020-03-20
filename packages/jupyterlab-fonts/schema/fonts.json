@@ -8,41 +8,41 @@
   "definitions": {
     "ICSSOM": {
       "oneOf": [
-        {"$ref": "#/definitions/ICSSOMPrimitive"},
+        { "$ref": "#/definitions/ICSSOMPrimitive" },
         {
           "type": "array",
-          "items": {"anyOf": [{"$ref": "#/definitions/ICSSOMPrimitive"}]}
+          "items": { "anyOf": [{ "$ref": "#/definitions/ICSSOMPrimitive" }] }
         },
         {
           "type": "object",
           "patternProperties": {
-            ".*": {"$ref": "#/definitions/ICSSOM"}
+            ".*": { "$ref": "#/definitions/ICSSOM" }
           }
         }
       ]
     },
     "ICSSOMPrimitive": {
-      "oneOf": [{"type": "string"}, {"type": "number"}]
+      "oneOf": [{ "type": "string" }, { "type": "number" }]
     },
     "IFontFaceCommon": {
       "type": "object",
       "required": ["src"],
       "properties": {
-        "src": {"$ref": "#/definitions/ICSSOM"},
-        "unicode-range": {"$ref": "#/definitions/ICSSOM"},
-        "font-variant": {"$ref": "#/definitions/ICSSOM"},
-        "font-feature-settings": {"$ref": "#/definitions/ICSSOM"},
-        "font-variation-settings": {"$ref": "#/definitions/ICSSOM"},
-        "font-stretch": {"$ref": "#/definitions/ICSSOM"},
-        "font-weight": {"$ref": "#/definitions/ICSSOM"},
-        "font-style": {"$ref": "#/definitions/ICSSOM"},
-        "unicodeRange": {"$ref": "#/definitions/ICSSOM"},
-        "fontVariant": {"$ref": "#/definitions/ICSSOM"},
-        "fontFeatureSettings": {"$ref": "#/definitions/ICSSOM"},
-        "fontVariationSettings": {"$ref": "#/definitions/ICSSOM"},
-        "fontStretch": {"$ref": "#/definitions/ICSSOM"},
-        "fontWeight": {"$ref": "#/definitions/ICSSOM"},
-        "fontStyle": {"$ref": "#/definitions/ICSSOM"}
+        "src": { "$ref": "#/definitions/ICSSOM" },
+        "unicode-range": { "$ref": "#/definitions/ICSSOM" },
+        "font-variant": { "$ref": "#/definitions/ICSSOM" },
+        "font-feature-settings": { "$ref": "#/definitions/ICSSOM" },
+        "font-variation-settings": { "$ref": "#/definitions/ICSSOM" },
+        "font-stretch": { "$ref": "#/definitions/ICSSOM" },
+        "font-weight": { "$ref": "#/definitions/ICSSOM" },
+        "font-style": { "$ref": "#/definitions/ICSSOM" },
+        "unicodeRange": { "$ref": "#/definitions/ICSSOM" },
+        "fontVariant": { "$ref": "#/definitions/ICSSOM" },
+        "fontFeatureSettings": { "$ref": "#/definitions/ICSSOM" },
+        "fontVariationSettings": { "$ref": "#/definitions/ICSSOM" },
+        "fontStretch": { "$ref": "#/definitions/ICSSOM" },
+        "fontWeight": { "$ref": "#/definitions/ICSSOM" },
+        "fontStyle": { "$ref": "#/definitions/ICSSOM" }
       }
     },
     "IFontFaceCamel": {
@@ -51,10 +51,10 @@
           "type": "object",
           "required": ["fontFamily"],
           "properties": {
-            "fontFamily": {"type": "string"}
+            "fontFamily": { "type": "string" }
           }
         },
-        {"$ref": "#/definitions/IFontFaceCommon"}
+        { "$ref": "#/definitions/IFontFaceCommon" }
       ]
     },
     "IFontFaceCanonical": {
@@ -63,16 +63,16 @@
           "type": "object",
           "required": ["font-family"],
           "properties": {
-            "font-family": {"type": "string"}
+            "font-family": { "type": "string" }
           }
         },
-        {"$ref": "#/definitions/IFontFaceCommon"}
+        { "$ref": "#/definitions/IFontFaceCommon" }
       ]
     },
     "IFontFacePrimitive": {
       "oneOf": [
-        {"$ref": "#/definitions/IFontFaceCamel"},
-        {"$ref": "#/definitions/IFontFaceCanonical"}
+        { "$ref": "#/definitions/IFontFaceCamel" },
+        { "$ref": "#/definitions/IFontFaceCanonical" }
       ]
     },
     "IFontFaceObject": {
@@ -94,8 +94,8 @@
     },
     "IFontFace": {
       "oneOf": [
-        {"type": "array", "items": {"$ref": "#/definitions/IFontFacePrimitive"}},
-        {"$ref": "#/definitions/IFontFacePrimitive"}
+        { "type": "array", "items": { "$ref": "#/definitions/IFontFacePrimitive" } },
+        { "$ref": "#/definitions/IFontFacePrimitive" }
       ]
     },
     "IFontLicenseObject": {
@@ -113,9 +113,9 @@
       "type": "object",
       "required": ["name", "spdx", "text", "holders"],
       "properties": {
-        "name": {"type": "string"},
-        "spdx": {"type": "string"},
-        "text": {"type": "string"},
+        "name": { "type": "string" },
+        "spdx": { "type": "string" },
+        "text": { "type": "string" },
         "holders": {
           "type": "array",
           "items": {
@@ -127,13 +127,13 @@
     "IJSS": {
       "type": "object",
       "additionalProperties": {
-        "oneOf": [{"$ref": "#/definitions/IJSS"}, {"#ref": "#/definitions/ICSSOM"}]
+        "oneOf": [{ "$ref": "#/definitions/IJSS" }, { "#ref": "#/definitions/ICSSOM" }]
       }
     },
     "IStyles": {
       "type": "object",
       "additionalProperties": {
-        "anyOf": [{"$ref": "#/definitions/ICSSOM"}, {"$ref": "#/definitions/IJSS"}]
+        "anyOf": [{ "$ref": "#/definitions/ICSSOM" }, { "$ref": "#/definitions/IJSS" }]
       },
       "properties": {
         "@font-face": {

@@ -15,7 +15,7 @@
   },
   "description": "Anonymous Pro Fonts for JupyterLab",
   "files": [
-    "{lib,style}/*.{d.ts,js,css}",
+    "{lib,style,src}/**/*.{d.ts,js,css,ts,tsx,js.map}",
     "{README.md,LICENSE}",
     "vendor/anonymous-pro/LICENSE"
   ],

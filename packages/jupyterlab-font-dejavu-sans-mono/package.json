@@ -13,7 +13,7 @@
   },
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "files": [
-    "{lib,style}/**/*.{d.ts,js,css,woff2}",
+    "{lib,style,src}/**/*.{d.ts,js,css,woff2,ts,tsx,js.map}",
     "{README.md,LICENSE}",
     "vendor/dejavu-fonts-ttf/LICENSE"
   ],
