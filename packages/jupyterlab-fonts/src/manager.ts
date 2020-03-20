@@ -1,11 +1,11 @@
-import { PromiseDelegate } from '@phosphor/coreutils';
-import { ISignal, Signal } from '@phosphor/signaling';
-import { Menu } from '@phosphor/widgets';
-import { CommandRegistry } from '@phosphor/commands';
+import { PromiseDelegate } from '@lumino/coreutils';
+import { ISignal, Signal } from '@lumino/signaling';
+import { Menu } from '@lumino/widgets';
+import { CommandRegistry } from '@lumino/commands';
 import { ICommandPalette } from '@jupyterlab/apputils';
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 
-import { ISettingRegistry } from '@jupyterlab/coreutils';
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 import { Stylist } from './stylist';
 

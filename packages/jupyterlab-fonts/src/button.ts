@@ -1,6 +1,6 @@
-import { IDisposable, DisposableDelegate } from '@phosphor/disposable';
+import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 
-import { ISignal, Signal } from '@phosphor/signaling';
+import { ISignal, Signal } from '@lumino/signaling';
 
 import { ToolbarButton } from '@jupyterlab/apputils';
 
@@ -27,7 +27,7 @@ export class NotebookFontsButton
   ): IDisposable {
     console.log('wooo');
     let button = new ToolbarButton({
-      iconClassName: ICON_CLASS + ' jp-Icon jp-Icon-16',
+      iconClass: `jp-Icon jp-Icon-16 ${ICON_CLASS}`,
       onClick: () => {
         (this.widgetRequested as Signal<any, void>).emit(void 0);
       },

@@ -4,15 +4,15 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "peerDependencies": {
-    "@deathbeds/jupyterlab-fonts": "^0.7.0",
-    "@jupyterlab/application": "1"
+    "@deathbeds/jupyterlab-fonts": "^1.0.0",
+    "@jupyterlab/application": "2"
   },
   "dependencies": {
     "firacode": "^2.0.0"
   },
   "devDependencies": {
-    "@deathbeds/jupyterlab-fonts": "^0.7.0",
-    "@jupyterlab/application": "1"
+    "@deathbeds/jupyterlab-fonts": "^1.0.0",
+    "@jupyterlab/application": "2"
   },
   "description": "Fira Code Fonts for JupyterLab",
   "files": [
@@ -35,5 +35,5 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.7.0"
+  "version": "1.0.0"
 }

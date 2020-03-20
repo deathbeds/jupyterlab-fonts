@@ -1,6 +1,6 @@
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
-import { Signal } from '@phosphor/signaling';
+import { Signal } from '@lumino/signaling';
 
 import { NotebookPanel } from '@jupyterlab/notebook';
 

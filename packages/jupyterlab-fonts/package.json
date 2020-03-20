@@ -22,14 +22,14 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "dependencies": {
-    "@jupyterlab/application": "1",
-    "@jupyterlab/mainmenu": "1",
-    "@jupyterlab/notebook": "1",
-    "@phosphor/commands": "1",
-    "@phosphor/coreutils": "1",
-    "@phosphor/widgets": "1",
+    "@jupyterlab/application": "2",
+    "@jupyterlab/mainmenu": "2",
+    "@jupyterlab/notebook": "2",
+    "@lumino/commands": "1",
+    "@lumino/coreutils": "1",
+    "@lumino/widgets": "1",
     "jss-preset-default": "^4.5.0",
     "jss": "^9.8.7"
   },

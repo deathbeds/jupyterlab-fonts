@@ -10,6 +10,9 @@ const WRAPPER_CLASS = 'jp-LicenseViewer-wrapper';
 const LICENSE_CLASS = 'jp-LicenseViewer';
 
 export class LicenseViewer extends VDomRenderer<LicenseViewer.Model> {
+  constructor(options: LicenseViewer.IOptions) {
+    super(new LicenseViewer.Model(options));
+  }
   protected render(): React.ReactElement<any> {
     this.addClass(WRAPPER_CLASS);
     let m = this.model;
@@ -30,10 +33,19 @@ export class LicenseViewer extends VDomRenderer<LicenseViewer.Model> {
 }
 
 export namespace LicenseViewer {
+  export interface IOptions {
+    font: IFontFaceOptions;
+  }
+
   export class Model extends VDomModel {
     private _font: IFontFaceOptions;
     private _licenseText: string;
     private _licenseTextPromise: Promise<string>;
+
+    constructor(options: IOptions) {
+      super();
+      this._font = options.font;
+    }
 
     get font() {
       return this._font;

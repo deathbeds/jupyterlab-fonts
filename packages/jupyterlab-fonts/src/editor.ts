@@ -103,7 +103,7 @@ export class FontEditorModel extends VDomModel {
 
 export class FontEditor extends VDomRenderer<FontEditorModel> {
   constructor() {
-    super();
+    super(new FontEditorModel());
     this.addClass(EDITOR_CLASS);
   }
 

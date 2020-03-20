@@ -1,10 +1,10 @@
-import { Token } from '@phosphor/coreutils';
-import { CommandRegistry } from '@phosphor/commands';
+import { Token } from '@lumino/coreutils';
+import { CommandRegistry } from '@lumino/commands';
 import { ICommandPalette } from '@jupyterlab/apputils';
-import { ISignal } from '@phosphor/signaling';
+import { ISignal } from '@lumino/signaling';
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 
-import { Menu } from '@phosphor/widgets';
+import { Menu } from '@lumino/widgets';
 
 import * as SCHEMA from './schema';
 
