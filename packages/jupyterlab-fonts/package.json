@@ -24,12 +24,6 @@
   "types": "lib/index.d.ts",
   "version": "1.0.0",
   "dependencies": {
-    "@jupyterlab/application": "~2.0.2",
-    "@jupyterlab/mainmenu": "~2.0.2",
-    "@jupyterlab/notebook": "~2.0.2",
-    "@lumino/commands": "^1.10.1",
-    "@lumino/coreutils": "^1.4.2",
-    "@lumino/widgets": "^1.11.1",
     "jss-preset-default": "^4.5.0",
     "jss": "^9.8.7"
   },
@@ -38,9 +32,17 @@
     "schemaDir": "schema"
   },
   "devDependencies": {
+    "@jupyterlab/application": "~2.0.2",
+    "@jupyterlab/mainmenu": "~2.0.2",
+    "@jupyterlab/notebook": "~2.0.2",
     "@types/jss": "^9.5.3",
     "dtsgenerator": "^1.0.0",
     "watch": "^1.0.2"
+  },
+  "peerDependencies": {
+    "@jupyterlab/application": "~2.0.2",
+    "@jupyterlab/mainmenu": "~2.0.2",
+    "@jupyterlab/notebook": "~2.0.2"
   },
   "scripts": {
     "build:schema": "dtsgen schema/fonts.json | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
