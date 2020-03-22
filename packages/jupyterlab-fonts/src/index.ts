@@ -98,9 +98,9 @@ export const TEXT_OPTIONS: ICSSTextOptions = {
   'font-size': _m => Array.from(Array(25).keys()).map(i => `${i + 8}px`),
   'line-height': _m => Array.from(Array(8).keys()).map(i => `${i * 0.25 + 1}`),
   'font-family': m => {
-    let names = Array.from(m.fonts.values()).reduce((m, f) => {
-      return m.concat(f.name);
-    }, []);
+    let names = Array.from(m.fonts.values()).reduce((memo, f) => {
+      return memo.concat(f.name);
+    }, [] as string[]);
     names.sort((a, b) => a.localeCompare(b));
     return names;
   }
@@ -148,14 +148,17 @@ export interface IFontManager {
   fonts: Map<string, IFontFaceOptions>;
   stylesheets: HTMLStyleElement[];
   menu: Menu;
-  getVarName(property: TextProperty, options: ITextStyleOptions): SCHEMA.ICSSOM;
+  getVarName(
+    property: TextProperty,
+    options: ITextStyleOptions
+  ): SCHEMA.ICSSOM | null;
   getTextStyle(
     property: TextProperty,
     options: ITextStyleOptions
-  ): SCHEMA.ICSSOM;
+  ): SCHEMA.ICSSOM | null;
   setTextStyle(
     property: TextProperty,
-    value: SCHEMA.ICSSOM,
+    value: SCHEMA.ICSSOM | null,
     options: ITextStyleOptions
   ): void;
   dataURISrc(url: string, format: FontFormat): Promise<string>;

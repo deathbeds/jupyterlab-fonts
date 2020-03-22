@@ -59,7 +59,11 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
           editor.title.label = 'Global';
           editor.id = 'font-editor-global';
         } else {
-          model.notebook = notebooks.currentWidget;
+          const { currentWidget } = notebooks;
+          if (currentWidget == null) {
+            return;
+          }
+          model.notebook = currentWidget;
           editor.id = `font-editor-${model.notebook.id}`;
           model.notebook.disposed.connect(() => editor.dispose());
         }

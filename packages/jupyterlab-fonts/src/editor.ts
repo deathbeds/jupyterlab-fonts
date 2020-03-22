@@ -34,7 +34,7 @@ const SIZE_CLASS = 'jp-FontsEditor-size';
 const DUMMY = '-';
 
 export class FontEditorModel extends VDomModel {
-  private _notebook: NotebookPanel;
+  private _notebook: NotebookPanel | null;
   private _fonts: FontManager;
 
   get fonts() {
@@ -59,9 +59,24 @@ export class FontEditorModel extends VDomModel {
   }
 
   set notebook(notebook) {
+    if (this._notebook?.model) {
+      this._notebook.model.metadata.changed.disconnect(
+        this.onSettingsChange,
+        this
+      );
+      this._notebook.context.pathChanged.disconnect(
+        this.onSettingsChange,
+        this
+      );
+    }
     this._notebook = notebook;
-    notebook.model.metadata.changed.connect(this.onSettingsChange, this);
-    notebook.context.pathChanged.connect(this.onSettingsChange, this);
+    if (this._notebook?.model) {
+      this._notebook.model.metadata.changed.connect(
+        this.onSettingsChange,
+        this
+      );
+      this._notebook.context.pathChanged.connect(this.onSettingsChange, this);
+    }
     this.stateChanged.emit(void 0);
   }
 
@@ -77,19 +92,27 @@ export class FontEditorModel extends VDomModel {
   }
 
   get notebookMetadata() {
-    if (this.notebook) {
+    if (this.notebook?.model) {
       return this.notebook.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings;
     }
   }
 
   clearNotebookMetadata(fontName?: string) {
     let meta = this.notebookMetadata;
-    delete meta.fonts[fontName];
-    delete meta.fontLicenses[fontName];
-    this.notebook.model.metadata.set(
-      PACKAGE_NAME,
-      JSON.parse(JSON.stringify(meta)) as any
-    );
+    if (fontName) {
+      if (meta?.fonts) {
+        delete meta.fonts[fontName];
+      }
+      if (meta?.fontLicenses) {
+        delete meta.fontLicenses[fontName];
+      }
+    }
+    if (this.notebook?.model) {
+      this.notebook.model.metadata.set(
+        PACKAGE_NAME,
+        JSON.parse(JSON.stringify(meta)) as any
+      );
+    }
     this.stateChanged.emit(void 0);
   }
 
@@ -134,8 +157,8 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     ]);
   }
 
-  protected fontFaceExtras(m: FontEditorModel, fontFamily: {}) {
-    let font: IFontFaceOptions;
+  protected fontFaceExtras(m: FontEditorModel, fontFamily: string) {
+    let font: IFontFaceOptions | undefined;
     let unquoted = `${fontFamily}`.slice(1, -1);
     if (m.fonts.fonts.get(unquoted)) {
       font = m.fonts.fonts.get(unquoted);
@@ -159,14 +182,20 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
   protected textSelect(prop: TextProperty, kind: TextKind, sectionProps: {}) {
     const m = this.model;
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
-      let value = (evt.target as HTMLSelectElement).value;
+      let value: string | null = (evt.target as HTMLSelectElement).value;
       value = value === DUMMY ? null : value;
-      m.fonts
-        .setTextStyle(prop, value, { kind, notebook: m.notebook })
-        .catch(console.warn);
+      if (m.notebook) {
+        m.fonts
+          .setTextStyle(prop, value, { kind, notebook: m.notebook })
+          .catch(console.warn);
+      }
     };
-    const value = m.fonts.getTextStyle(prop, { kind, notebook: m.notebook });
-    const extra = prop === 'font-family' ? this.fontFaceExtras(m, value) : [];
+    const value = m.fonts.getTextStyle(prop, {
+      kind,
+      notebook: m.notebook || void 0
+    });
+    const extra =
+      prop === 'font-family' ? this.fontFaceExtras(m, value as any) : [];
 
     return h(
       'div',
@@ -250,9 +279,15 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
   }
 
   protected embeddedFont(m: FontEditorModel, fontName: string) {
+    if (
+      m.notebookMetadata?.fonts == null ||
+      m.notebookMetadata.fontLicenses == null
+    ) {
+      return null;
+    }
     const faces = m.notebookMetadata.fonts[fontName];
     const license = m.notebookMetadata.fontLicenses[fontName];
-    const size = faces.reduce(
+    const size = (faces || []).reduce(
       (memo, face) => memo + `${face.src}`.length,
       license.text.length
     );
@@ -268,7 +303,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           text: async () => license.text,
           holders: license.holders
         },
-        faces: async () => faces
+        faces: async () => faces || []
       }),
       h('span', { className: SIZE_CLASS, key: 'font-kb' }, `${kb} kb`),
       this.deleteButton(m, fontName)
@@ -278,10 +313,10 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
   protected header() {
     const m = this.model;
     const title = m.notebook
-      ? m.notebook.context.contentsModel.name.replace(/.ipynb$/, '')
+      ? m.notebook.context.contentsModel?.name.replace(/.ipynb$/, '')
       : 'Global';
 
-    this.title.label = title;
+    this.title.label = title || 'Unknown';
 
     const h2 = h('h2', { key: 'scope-head' }, [
       h('label', { key: 'scope-label' }, `Fonts » ${title}`),

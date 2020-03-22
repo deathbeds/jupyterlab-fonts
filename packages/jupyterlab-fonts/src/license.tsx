@@ -19,7 +19,7 @@ export class LicenseViewer extends VDomRenderer<LicenseViewer.Model> {
 
     // Bail if there is no model.
     if (!m) {
-      return;
+      return <></>;
     }
 
     return (

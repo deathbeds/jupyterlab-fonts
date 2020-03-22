@@ -36,7 +36,7 @@ export class Stylist {
 
   private _onDisposed(notebook: NotebookPanel) {
     if (this._notebookStyles.has(notebook)) {
-      this._notebookStyles.get(notebook).remove();
+      this._notebookStyles.get(notebook)?.remove();
       this._notebookStyles.delete(notebook);
       notebook.disposed.disconnect(this._onDisposed, this);
     }
@@ -50,11 +50,7 @@ export class Stylist {
     return Array.from(this._notebookStyles.keys());
   }
 
-  stylesheet(
-    meta: SCHEMA.ISettings,
-    notebook: NotebookPanel = null,
-    clear = false
-  ) {
+  stylesheet(meta: SCHEMA.ISettings, notebook?: NotebookPanel, clear = false) {
     let sheet = notebook
       ? this._notebookStyles.get(notebook)
       : this._globalStyles;
@@ -66,7 +62,7 @@ export class Stylist {
     let jss = this._jss.createStyleSheet(style as any);
     let css = jss.toString();
 
-    if (sheet.textContent !== css) {
+    if (sheet && sheet.textContent !== css) {
       sheet.textContent = css;
     }
     this.hack();
@@ -90,7 +86,10 @@ export class Stylist {
     for (let k in styles) {
       if (k === ROOT) {
         for (let rootK in styles[k]) {
-          idStyles[rootK] = styles[k][rootK];
+          if (styles == null || styles[k] == null) {
+            continue;
+          }
+          idStyles[rootK] = (styles as any)[k][rootK];
         }
       } else if (typeof styles[k] === 'object') {
         idStyles[`& ${k}`] = styles[k];
@@ -107,15 +106,18 @@ export class Stylist {
     let faces = {} as SCHEMA.IFontFaceObject;
     for (let font of Array.from(this.fonts.keys())) {
       if (raw.indexOf(`'${font}'`) > -1 && !faces[font]) {
-        if (this._fontCache.has(font)) {
-          faces[font] = this._fontCache.get(font);
+        const cachedFont = this._fontCache.get(font);
+        if (cachedFont != null) {
+          faces[font] = cachedFont;
         } else {
           // tslint:disable-next-line
           new Promise((resolve, reject) => {
-            this.fonts
-              .get(font)
-              .faces()
-              .then(
+            const options = this.fonts.get(font);
+            if (options == null) {
+              reject();
+              return;
+            } else {
+              options.faces().then(
                 faces => {
                   if (this._fontCache.has(font)) {
                     return;
@@ -129,13 +131,17 @@ export class Stylist {
                   reject();
                 }
               );
+            }
           });
         }
       }
     }
 
     let flatFaces = Object.keys(faces).reduce((m, face) => {
-      return m.concat(faces[face]);
+      const foundFaces = faces[face];
+      if (faces && foundFaces != null) {
+        return m.concat(foundFaces);
+      }
     }, [] as SCHEMA.IFontFacePrimitive[]);
 
     return {

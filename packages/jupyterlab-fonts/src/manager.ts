@@ -130,6 +130,9 @@ export class FontManager implements IFontManager {
   }
 
   getVarName(property: TextProperty, { kind }: Partial<ITextStyleOptions>) {
+    if (kind == null) {
+      return null;
+    }
     return CSS[kind][property];
   }
 
@@ -139,58 +142,71 @@ export class FontManager implements IFontManager {
     }
 
     try {
-      const styles: SCHEMA.IStyles = notebook
+      const styles: SCHEMA.IStyles = notebook?.model
         ? (notebook.model.metadata.get(PACKAGE_NAME) as any).styles
         : (this._settings.get('styles').composite as any);
       let varName = this.getVarName(property, { kind });
-      return styles[ROOT][varName as any];
+      if (styles != null) {
+        const rootStyle = styles[ROOT];
+        if (rootStyle == null) {
+          return null;
+        }
+        return rootStyle[varName as any];
+      }
     } catch (err) {
-      return null;
+      //
     }
+    return null;
   }
 
   async setTextStyle(
     property: TextProperty,
-    value: SCHEMA.ICSSOM,
+    value: SCHEMA.ICSSOM | null,
     { kind, notebook }: ITextStyleOptions
   ): Promise<void> {
     if (!notebook && !this.settings) {
-      return null;
+      return;
     }
-    let oldStyles: SCHEMA.IStyles;
+    let oldStyles: SCHEMA.IStyles = {};
 
-    try {
-      oldStyles = notebook
-        ? (notebook.model.metadata.get(PACKAGE_NAME) as any).styles
-        : (this._settings.get('styles').composite as any);
-    } catch (err) {
-      oldStyles = {};
+    if (notebook?.model) {
+      try {
+        oldStyles = notebook
+          ? (notebook.model.metadata.get(PACKAGE_NAME) as any).styles
+          : (this._settings.get('styles').composite as any);
+      } catch (err) {
+        //
+      }
     }
 
     let styles: SCHEMA.IStyles = JSON.parse(JSON.stringify(oldStyles || {}));
     let root = (styles[ROOT] = styles[ROOT] ? styles[ROOT] : {});
     let varName = this.getVarName(property, { kind });
 
-    if (value == null) {
-      delete root[varName as any];
-    } else {
-      root[varName as any] = value;
+    if (root) {
+      if (value == null) {
+        delete root[varName as any];
+      } else {
+        root[varName as any] = value;
+      }
     }
 
     if (notebook) {
-      let metadata = (notebook.model.metadata.get(PACKAGE_NAME) ||
+      let metadata = (notebook.model?.metadata.get(PACKAGE_NAME) ||
         {}) as SCHEMA.ISettings;
       metadata = JSON.parse(JSON.stringify(metadata));
       metadata.styles = styles;
       switch (property) {
         case 'font-family':
-          await this.embedFont(value, metadata);
+          if (value != null) {
+            await this.embedFont(value, metadata);
+          }
           break;
         default:
           break;
       }
       this.cleanMetadata(metadata);
-      notebook.model.metadata.set(PACKAGE_NAME, metadata as any);
+      notebook.model?.metadata.set(PACKAGE_NAME, metadata as any);
     } else {
       if (!Object.keys(styles[ROOT] || {}).length) {
         delete styles[ROOT];
@@ -209,8 +225,12 @@ export class FontManager implements IFontManager {
     for (let fontFamily of oldFonts) {
       let pattern = `'${fontFamily}'`;
       if (rawStyle.indexOf(pattern) === -1) {
-        delete metadata.fonts[fontFamily];
-        delete metadata.fontLicenses[fontFamily];
+        if (metadata.fonts) {
+          delete metadata.fonts[fontFamily];
+        }
+        if (metadata.fontLicenses) {
+          delete metadata.fontLicenses[fontFamily];
+        }
       }
     }
   }
@@ -257,7 +277,9 @@ export class FontManager implements IFontManager {
   private _registerNotebook(notebook: NotebookPanel) {
     this._stylist.registerNotebook(notebook, true);
     let watcher = this._notebookMetaWatcher(notebook);
-    notebook.model.metadata.changed.connect(watcher);
+    if (notebook?.model) {
+      notebook.model.metadata.changed.connect(watcher);
+    }
     notebook.disposed.connect(this._onNotebookDisposed);
     watcher();
     this.hack();
@@ -270,7 +292,7 @@ export class FontManager implements IFontManager {
   private _notebookMetaWatcher(_notebook: NotebookPanel) {
     return () => {
       this._notebooks.forEach(notebook => {
-        if (notebook.id !== notebook.id) {
+        if (notebook.id !== notebook.id || !notebook.model) {
           return;
         }
         const meta = notebook.model.metadata.get(
@@ -310,7 +332,7 @@ export class FontManager implements IFontManager {
           },
           isVisible: () => this.enabled
         });
-        this._fontSizeMenus.get(kind).addItem({ command });
+        this._fontSizeMenus.get(kind)?.addItem({ command });
         this._palette.addItem({ command, category: PALETTE[kind], rank: 0 });
       });
 
@@ -337,7 +359,7 @@ export class FontManager implements IFontManager {
           isVisible: () => this.enabled,
           execute: () => this.setTextStyle('line-height', lineHeight, { kind })
         });
-        this._lineHeightMenus.get(kind).addItem({ command });
+        this._lineHeightMenus.get(kind)?.addItem({ command });
       });
 
       TEXT_OPTIONS['font-size'](this).map(px => {
@@ -348,7 +370,7 @@ export class FontManager implements IFontManager {
           isVisible: () => this.enabled,
           execute: () => this.setTextStyle('font-size', px, { kind })
         });
-        this._fontSizeMenus.get(kind).addItem({ command });
+        this._fontSizeMenus.get(kind)?.addItem({ command });
       });
     });
 
@@ -426,7 +448,7 @@ export class FontManager implements IFontManager {
       styles: this._settings.get('styles').composite as SCHEMA.IStyles
     };
     if (this.enabled) {
-      this._stylist.stylesheet(meta, null, true);
+      this._stylist.stylesheet(meta, void 0, true);
     } else {
       this._stylist.hack(false);
     }
@@ -453,7 +475,7 @@ export class FontManager implements IFontManager {
           }
         }
       });
-      this._fontFamilyMenus.get(kind).addItem({ command });
+      this._fontFamilyMenus.get(kind)?.addItem({ command });
       this._palette.addItem({ command, category: PALETTE[kind] });
     });
   }

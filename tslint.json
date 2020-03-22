@@ -113,10 +113,13 @@
   },
   "linterOptions": {
     "exclude": [
+      "**/*.d.ts",
+      "**/_schema.d.ts",
       "node_modules/**/*.ts",
       "node_modules/**/*.tsx",
-      "**/*.d.ts",
-      "jupyterlab/**/*.ts"
+      ".idea/",
+      ".history/",
+      ".vscode/"
     ]
   }
 }

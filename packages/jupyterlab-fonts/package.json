@@ -36,7 +36,6 @@
     "@jupyterlab/mainmenu": "~2.0.2",
     "@jupyterlab/notebook": "~2.0.2",
     "@types/jss": "^9.5.3",
-    "dtsgenerator": "^1.0.0",
     "watch": "^1.0.2"
   },
   "peerDependencies": {
@@ -45,7 +44,7 @@
     "@jupyterlab/notebook": "~2.0.2"
   },
   "scripts": {
-    "build:schema": "dtsgen schema/fonts.json | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
+    "build:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
     "prebuild": "jlpm build:schema && jlpm copy:schema",
     "copy:schema": "mkdir -p lib && cp src/_schema.d.ts lib/",
     "watch": "tsc -w",

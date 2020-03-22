@@ -1,5 +1,4 @@
 {
-  "id": "/ISettings",
   "title": "Fonts",
   "description": "Settings for JupyterLab Fonts",
   "type": "object",
@@ -130,25 +129,33 @@
         "oneOf": [{ "$ref": "#/definitions/IJSS" }, { "#ref": "#/definitions/ICSSOM" }]
       }
     },
+    "IJSSRoot": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/ICSSOM"
+      },
+      "patternProperties": {
+        ".*": {
+          "$ref": "#/definitions/ICSSOM"
+        }
+      }
+    },
     "IStyles": {
       "type": "object",
       "additionalProperties": {
-        "anyOf": [{ "$ref": "#/definitions/ICSSOM" }, { "$ref": "#/definitions/IJSS" }]
+        "anyOf": [
+          { "$ref": "#/definitions/ICSSOM" },
+          { "$ref": "#/definitions/IJSS" },
+          { "$ref": "#/definitions/IFontFace" },
+          { "$ref": "#/definitions/IJSSRoot" }
+        ]
       },
       "properties": {
         "@font-face": {
           "$ref": "#/definitions/IFontFace"
         },
         ":root": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/ICSSOM"
-          },
-          "patternProperties": {
-            ".*": {
-              "$ref": "#/definitions/ICSSOM"
-            }
-          }
+          "$ref": "#/definitions/IJSSRoot"
         }
       }
     }

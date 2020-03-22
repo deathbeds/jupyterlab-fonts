@@ -43,8 +43,10 @@ export class NotebookFontsButton
       }
     };
 
-    panel.model.metadata.changed.connect(metaUpdated);
-    metaUpdated(panel.model.metadata);
+    if (panel.model) {
+      panel.model.metadata.changed.connect(metaUpdated);
+      metaUpdated(panel.model.metadata);
+    }
 
     panel.toolbar.insertItem(9, 'fonts', button);
 
