@@ -5,8 +5,10 @@
   },
   "dependencies": {
     "@jupyterlab/application": "~2.0.2",
-    "@deathbeds/jupyterlab-fonts": "1",
     "firacode": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@deathbeds/jupyterlab-fonts": "1"
   },
   "description": "Fira Code Fonts for JupyterLab",
   "files": [
