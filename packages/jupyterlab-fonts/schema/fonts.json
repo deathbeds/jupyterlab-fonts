@@ -93,7 +93,10 @@
     },
     "IFontFace": {
       "oneOf": [
-        { "type": "array", "items": { "$ref": "#/definitions/IFontFacePrimitive" } },
+        {
+          "type": "array",
+          "items": { "$ref": "#/definitions/IFontFacePrimitive" }
+        },
         { "$ref": "#/definitions/IFontFacePrimitive" }
       ]
     },
@@ -126,7 +129,10 @@
     "IJSS": {
       "type": "object",
       "additionalProperties": {
-        "oneOf": [{ "$ref": "#/definitions/IJSS" }, { "#ref": "#/definitions/ICSSOM" }]
+        "oneOf": [
+          { "$ref": "#/definitions/IJSS" },
+          { "#ref": "#/definitions/ICSSOM" }
+        ]
       }
     },
     "IJSSRoot": {

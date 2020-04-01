@@ -3,14 +3,12 @@
   "bugs": {
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
-  "peerDependencies": {
-    "@jupyterlab/application": "~2.0.2"
-  },
   "devDependencies": {
     "dejavu-fonts-ttf": "2.37.3"
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "*"
+    "@jupyterlab/application": "~2.0.2",
+    "@deathbeds/jupyterlab-fonts": "1"
   },
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "files": [

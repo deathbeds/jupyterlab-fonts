@@ -25,23 +25,18 @@
   "version": "1.0.0",
   "dependencies": {
     "jss-preset-default": "^4.5.0",
-    "jss": "^9.8.7"
+    "jss": "^9.8.7",
+    "@jupyterlab/application": "~2.0.2",
+    "@jupyterlab/mainmenu": "~2.0.2",
+    "@jupyterlab/notebook": "~2.0.2"
   },
   "jupyterlab": {
     "extension": "lib/extension.js",
     "schemaDir": "schema"
   },
   "devDependencies": {
-    "@jupyterlab/application": "~2.0.2",
-    "@jupyterlab/mainmenu": "~2.0.2",
-    "@jupyterlab/notebook": "~2.0.2",
     "@types/jss": "^9.5.3",
     "watch": "^1.0.2"
-  },
-  "peerDependencies": {
-    "@jupyterlab/application": "~2.0.2",
-    "@jupyterlab/mainmenu": "~2.0.2",
-    "@jupyterlab/notebook": "~2.0.2"
   },
   "scripts": {
     "build:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",

@@ -1,4 +1,4 @@
 ./packages/jupyterlab-fonts
 ./packages/jupyterlab-font-anonymous-pro
-./packages/jupyterlab-font-fira-coda
+./packages/jupyterlab-font-fira-code
 ./packages/jupyterlab-font-dejavu-sans-mono
