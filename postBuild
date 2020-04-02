@@ -23,5 +23,5 @@ jupyter lab clean --all
 jupyter labextension list
 jupyter labextension install --no-build $(cat labex.txt)
 jupyter labextension list
-jupyter lab build --dev-build=False --minimize=True --debug
+python -m scripts.build
 jupyter labextension list

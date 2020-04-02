@@ -2,13 +2,17 @@ name: jupyterlab-fonts-dev
 
 commands:
   lab:
-    unix: jupyter lab --no-browser --debug
+    unix: python -m scripts.lab
   postBuild:
     unix: bash postBuild
   demo:
     unix: ./scripts/build_demo.sh && ./scripts/serve_demo.py
   lab:clean:
     unix: jupyter lab clean --all
+  lab:watch:
+    unix: python -m scripts.watch
+  lab:build:
+    unix: python -m scripts.build
 
 env_specs:
   jupyterlab-fonts-dev:
