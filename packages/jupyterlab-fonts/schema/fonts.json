@@ -2,7 +2,7 @@
   "title": "Fonts",
   "description": "Settings for JupyterLab Fonts",
   "type": "object",
-  "jupyter.lab.setting-icon-class": "jp-FontsIcon",
+  "jupyter.lab.setting-icon": "fonts:fonts",
   "jupyter.lab.setting-icon-label": "Fonts",
   "definitions": {
     "ICSSOM": {

@@ -8,9 +8,9 @@ import subprocess
 
 
 def build():
-    subprocess.check_call(["jupyter", "lab", "build", "--minimize=False"])
+    subprocess.check_call(["jupyter", "lab", "build", "--minimize=False", "--debug"])
     dedupe()
-    return subprocess.call(["jlpm", "build", "--dev-mode=False", "--minimize=True", "--debug"], cwd=APP_DIR / "staging")
+    return subprocess.call(["jlpm", "build"], cwd=APP_DIR / "staging")
 
 
 if __name__ == "__main__":

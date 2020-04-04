@@ -16,8 +16,6 @@ import {
   PACKAGE_NAME
 } from '.';
 
-import { ICONS } from './icons';
-
 import { FontManager } from './manager';
 
 import * as SCHEMA from './schema';
@@ -259,7 +257,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           }
         }
       },
-      ICONS.deleteForever.react({ tag: 'span' })
+      'Delete'
     );
   }
 
