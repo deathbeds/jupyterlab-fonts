@@ -1,7 +1,5 @@
 *** Settings ***
 Documentation     The font editor allows changing fonts in notebooks
-Suite Setup       Prepare for testing fonts
-Suite Teardown    Clean Up JupyterLab
 Library           SeleniumLibrary
 Library           BuiltIn
 Resource          ../resources/Browser.robot
@@ -10,10 +8,10 @@ Resource          ../resources/Notebook.robot
 
 *** Variables ***
 ${ED}             css:.jp-FontsEditor
-${TAB}            li[contains(@class, 'p-TabBar-tab')]
+${TAB}            li[contains(@class, 'lm-TabBar-tab')]
 ${ICON_FONT}      div[contains(@class, 'jp-FontsIcon')]
 ${ICON_LICENSE}    div[contains(@class, 'jp-LicenseIcon')]
-${ICON_CLOSE}     div[contains(@class, 'p-TabBar-tabCloseIcon')]
+${ICON_CLOSE}     div[contains(@class, 'lm-TabBar-tabCloseIcon')]
 ${BUTTON}         .jp-FontsEditor-button
 
 *** Test Cases ***
@@ -118,6 +116,7 @@ License Viewing
 *** Keywords ***
 Open the Global Font Editor
     [Documentation]    Use the JupyterLab Menu to open the global font editor
+    Open JupyterLab
     Click JupyterLab Menu    Settings
     Click JupyterLab Menu Item    Fonts
     Click JupyterLab Menu Item    Global Fonts...

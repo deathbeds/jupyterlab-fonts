@@ -8,14 +8,14 @@ Library           OperatingSystem
 ${CELL_CSS}       .jp-Notebook .jp-Cell:last-of-type .jp-InputArea-editor .CodeMirror
 ${TOKEN}          hopelesslyinsecure
 ${LAB_CMD}        jupyter-lab --no-browser --NotebookApp.token=${TOKEN} --port 18888
-${LAB_URL}        http://localhost:18888/lab?token=${TOKEN}
+${LAB_URL}        http://localhost:18888/lab?token=${TOKEN}&reset
 ${SPLASH_ID}      jupyterlab-splash
 ${SPINNER}        css:.jp-Spinner
 ${CMD_PAL_CSS}    css:.jp-mod-left li[title^="Commands"] div
-${CMD_PAL_INPUT}    css:.p-CommandPalette-input
-${CMD_PAL_ITEM}    css:.p-CommandPalette-item
+${CMD_PAL_INPUT}    css:.lm-CommandPalette-input
+${CMD_PAL_ITEM}    css:.lm-CommandPalette-item
 ${TOP}            //div[@id='jp-top-panel']
-${BAR_ITEM}       //div[@class='p-MenuBar-itemLabel']
+${BAR_ITEM}       //div[@class='lm-MenuBar-itemLabel']
 ${CARD}           //div[@class='jp-LauncherCard']
 ${DOCK}           //div[@id='jp-main-dock-panel']
 
@@ -24,11 +24,8 @@ Prepare for testing fonts
     [Documentation]    Do some normal stuff that might use fonts
     Start Jupyterlab
     ${browser}=    Get Environment Variable    BROWSER    ${BROWSER}
+    Open Browser    about:blank    ${browser}
     Set tags    ${browser}
-    Open JupyterLab with    ${browser}
-    Execute JupyterLab Command    Reset Application State
-    Wait for Splash Screen
-    Make a Hello World    Python 3    Notebook
 
 Wait for Splash Screen
     [Documentation]    Wait for the JupyterLab splash animation to run its course
@@ -45,7 +42,9 @@ Launch a new
 
 Start JupyterLab
     [Documentation]    Start a Jupyter Notebook Server with JupyterLab
-    Start Process    ${LAB_CMD}    shell=true    stderr=STDOUT    stdout=${OUTPUT_DIR}/lab.log
+    ${home} =  Set Variable       ${OUTPUT_DIR}${/}home
+    Create Directory   ${home}
+    Start Process    ${LAB_CMD}    shell=true    stderr=STDOUT    stdout=${OUTPUT_DIR}${/}lab.log   cwd=${home}
     Sleep    5s
 
 Click JupyterLab Menu
@@ -58,15 +57,14 @@ Click JupyterLab Menu
 Click JupyterLab Menu Item
     [Arguments]    ${item_label}
     [Documentation]    Click a top-level JupyterLab Menu Item (not File, Help, etc.)
-    ${item} =    Set Variable    //div[@class='p-Menu-itemLabel']
+    ${item} =    Set Variable    //div[@class='lm-Menu-itemLabel']
     Wait Until Page Contains Element    ${item}\[text() = '${item_label}']
     Mouse Over    ${item}\[text() = '${item_label}']
     Click Element    ${item}\[text() = '${item_label}']
 
-Open JupyterLab with
-    [Arguments]    ${browser}
+Open JupyterLab
     [Documentation]    Start the given browser and wait for the animation
-    Open Browser    ${LAB_URL}    ${browser}
+    Go To    ${LAB_URL}
     Wait for Splash Screen
     Sleep    1s
 
