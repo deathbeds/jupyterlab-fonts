@@ -1,0 +1,12 @@
+{
+  "LabApp": {
+    "user_settings_dir": ".settings",
+    "workspaces_dir": ".workspaces",
+    "tornado_settings": {
+      "page_config_data": {
+        "buildCheck": false,
+        "buildAvailable": false
+      }
+    }
+  }
+}

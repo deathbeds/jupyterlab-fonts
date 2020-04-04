@@ -12,84 +12,58 @@ ${ED}             css:.jp-FontsEditor
 ${TAB}            li[contains(@class, 'lm-TabBar-tab')]
 ${ICON_FONT}      *[@data-icon = 'fonts:fonts']
 ${ICON_LICENSE}    *[@data-icon = 'fonts:license']
+${ICON_SETTINGS}    *[@data-icon = 'ui-components:settings']
+${ICON_NOTEBOOK}    *[@data-icon = 'ui-components:notebook']
 ${ICON_CLOSE}     div[contains(@class, 'lm-TabBar-tabCloseIcon')]
 ${BUTTON}         .jp-FontsEditor-button
+${SETTING_ITEM}    //div[contains(@class, 'jp-PluginList')]//li
+${SETTINGS_RAW_CM}    .jp-SettingsRawEditor-user .CodeMirror
 
 *** Test Cases ***
 Global Font Editor
     [Documentation]    Customize Global fonts with the Font Editor
     [Setup]    Open the Global Font Editor
     [Template]    Use the font editor to configure fonts
-    Global    Code    Font    -
-    Global    Code    Font    Anonymous Pro Bold
-    Global    Code    Font    Anonymous Pro Regular
-    Global    Code    Font    DejaVu Sans Mono
-    Global    Code    Font    DejaVu Sans Mono Bold
-    Global    Code    Font    Fira Code Bold
-    Global    Code    Font    Fira Code Light
-    Global    Code    Font    Fira Code Medium
-    Global    Code    Font    Fira Code Regular
-    Global    Code    Font    -
-    Global    Code    Line Height    -
-    Global    Code    Line Height    2
-    Global    Code    Line Height    -
-    Global    Code    Size    -
-    Global    Code    Size    20px
-    Global    Code    Size    -
-    Global    Content    Font    -
-    Global    Content    Font    Anonymous Pro Bold
-    Global    Content    Font    Anonymous Pro Regular
-    Global    Content    Font    DejaVu Sans Mono
-    Global    Content    Font    DejaVu Sans Mono Bold
-    Global    Content    Font    Fira Code Bold
-    Global    Content    Font    Fira Code Light
-    Global    Content    Font    Fira Code Medium
-    Global    Content    Font    Fira Code Regular
-    Global    Content    Font    -
-    Global    Content    Line Height    -
-    Global    Content    Line Height    2
-    Global    Content    Line Height    -
-    Global    Content    Size    -
-    Global    Content    Size    20px
-    Global    Content    Size    -
+    Global    Code    Anonymous Pro Bold
+    Global    Code    Anonymous Pro Regular
+    Global    Code    DejaVu Sans Mono
+    Global    Code    DejaVu Sans Mono Bold
+    Global    Code    Fira Code Bold
+    Global    Code    Fira Code Light
+    Global    Code    Fira Code Medium
+    Global    Code    Fira Code Regular
+    Global    Content    Anonymous Pro Bold
+    Global    Content    Anonymous Pro Regular
+    Global    Content    DejaVu Sans Mono
+    Global    Content    DejaVu Sans Mono Bold
+    Global    Content    Fira Code Bold
+    Global    Content    Fira Code Light
+    Global    Content    Fira Code Medium
+    Global    Content    Fira Code Regular
     [Teardown]    Close the Font Editor
 
 Notebook Font Editor
     [Documentation]    Customize Notebook fonts with the Font Editor
     [Setup]    Open the Notebook Font Editor
     [Template]    Use the font editor to configure fonts
-    Notebook    Code    Font    -
-    Notebook    Code    Font    Anonymous Pro Bold
-    Notebook    Code    Font    Anonymous Pro Regular
-    Notebook    Code    Font    DejaVu Sans Mono
-    Notebook    Code    Font    DejaVu Sans Mono Bold
-    Notebook    Code    Font    Fira Code Bold
-    Notebook    Code    Font    Fira Code Light
-    Notebook    Code    Font    Fira Code Medium
-    Notebook    Code    Font    Fira Code Regular
-    Notebook    Code    Font    -
-    Notebook    Code    Line Height    -
-    Notebook    Code    Line Height    2
-    Notebook    Code    Line Height    -
-    Notebook    Code    Size    -
-    Notebook    Code    Size    20px
-    Notebook    Code    Size    -
-    Notebook    Content    Font    -
-    Notebook    Content    Font    Anonymous Pro Bold
-    Notebook    Content    Font    Anonymous Pro Regular
-    Notebook    Content    Font    DejaVu Sans Mono
-    Notebook    Content    Font    DejaVu Sans Mono Bold
-    Notebook    Content    Font    Fira Code Bold
-    Notebook    Content    Font    Fira Code Light
-    Notebook    Content    Font    Fira Code Medium
-    Notebook    Content    Font    Fira Code Regular
-    Notebook    Content    Font    -
-    Notebook    Content    Line Height    -
-    Notebook    Content    Line Height    2
-    Notebook    Content    Line Height    -
-    Notebook    Content    Size    -
-    Notebook    Content    Size    20px
-    Notebook    Content    Size    -
+    Notebook    Code    -
+    Notebook    Code    Anonymous Pro Bold
+    Notebook    Code    Anonymous Pro Regular
+    Notebook    Code    DejaVu Sans Mono
+    Notebook    Code    DejaVu Sans Mono Bold
+    Notebook    Code    Fira Code Bold
+    Notebook    Code    Fira Code Light
+    Notebook    Code    Fira Code Medium
+    Notebook    Code    Fira Code Regular
+    Notebook    Content    -
+    Notebook    Content    Anonymous Pro Bold
+    Notebook    Content    Anonymous Pro Regular
+    Notebook    Content    DejaVu Sans Mono
+    Notebook    Content    DejaVu Sans Mono Bold
+    Notebook    Content    Fira Code Bold
+    Notebook    Content    Fira Code Light
+    Notebook    Content    Fira Code Medium
+    Notebook    Content    Fira Code Regular
     [Teardown]    Close the Font Editor
 
 Global Enable/Disable
@@ -100,34 +74,37 @@ Global Enable/Disable
     Use the Global Font Editor to enable custom fonts
     [Teardown]    Close the Font Editor
 
-License Viewing
-    [Documentation]    Ensure Licenses are available in the Font Editor
-    [Setup]    Open the Notebook Font Editor
-    [Template]    Check font license is visible in Editor
-    Anonymous Pro Bold
-    Anonymous Pro Regular
-    DejaVu Sans Mono
-    DejaVu Sans Mono Bold
-    Fira Code Bold
-    Fira Code Light
-    Fira Code Medium
-    Fira Code Regular
-    [Teardown]    Close the Font Editor
-
 *** Keywords ***
-Open the Global Font Editor
-    [Documentation]    Use the JupyterLab Menu to open the global font editor
+Prepare to test a font editor
+    [Documentation]    Open a notebook and settings
     Open JupyterLab
     Make a Hello World    Python 3    Notebook
+    Maybe Close Sidebar
+
+Open Advanced Settings to Validate Fonts
+    [Documentation]    use advanced settings to validate changes
+    Click JupyterLab Menu    Settings
+    Click JupyterLab Menu Item    Advanced Settings Editor
+    ${settings} =    Set Variable    ${DOCK}//${TAB}//${ICON_SETTINGS}/../..
+    ${fonts} =    Set Variable    ${SETTING_ITEM}//${ICON_FONT}
+    Wait Until Page Contains Element    ${fonts}
+    Click Element    ${fonts}
+    Drag And Drop By Offset    ${settings}    0    700
+    Click Element    css:.jp-Notebook .CodeMirror
+
+Open the Global Font Editor
+    [Documentation]    Use the JupyterLab Menu to open the global font editor
+    Prepare to test a font editor
     Click JupyterLab Menu    Settings
     Click JupyterLab Menu Item    Fonts
     Click JupyterLab Menu Item    Global Fonts...
+    Open Advanced Settings to Validate Fonts
 
 Open the Notebook Font Editor
     [Documentation]    Use the Notebook button bar to open the notebook font editor
-    Open JupyterLab
-    Make a Hello World    Python 3    Notebook
+    Prepare to test a font editor
     Click Element    css:.jp-Toolbar-item [data-icon\='fonts:fonts']
+    Open Advanced Settings to Validate Fonts
 
 Close the Font Editor
     [Documentation]    Close the Notebook Font Editor by closing the tab
@@ -139,22 +116,31 @@ Close the License Viewer
     Click Element    ${DOCK}//${TAB}//${ICON_LICENSE}/../../${ICON_CLOSE}
 
 Use the font editor to configure fonts
-    [Arguments]    ${scope}    ${kind}    ${aspect}    ${value}
+    [Arguments]    ${scope}    ${kind}    ${font}
     [Documentation]    Presently, change a dropdown in the font editor
-    Set Screenshot Directory    ${OUTPUT_DIR}/editor/${scope}/${kind}/${aspect}/${value}
+    Set Screenshot Directory    ${OUTPUT_DIR}/editor/${scope}/${kind}/${font}
+    Change a Font Dropdown    ${scope}    ${kind}    Font    ${font}    0
+    Run Keyword If    "${scope}" == "Global"    Check font license is visible in Editor
+    Change a Font Dropdown    ${scope}    ${kind}    Size    -    0
+    FOR    ${size}    IN RANGE    12    20    4
+        Change a Font Dropdown    ${scope}    ${kind}    Size    ${size}px    ${size}
+        Run Keyword If    "${scope}" == "Global"    Settings Should Contain    ${font}
+    END
+    Change a Font Dropdown    ${scope}    ${kind}    Font    -    99
+
+Change a Font Dropdown
+    [Arguments]    ${scope}    ${kind}    ${aspect}    ${value}    ${idx}=0
+    [Documentation]    Update a particular typography value
     ${sel} =    Set Variable    ${ED} section[title="${kind}"] select[title="${aspect}"]
-    Capture Page Screenshot    00_before.png
     Select From List By Label    ${sel}    ${value}
-    Capture Page Screenshot    01_after.png
+    Capture Page Screenshot    ${aspect}_${idx}.png
+    Run Keyword If    "${scope}" == "Global"    Settings Should Contain    ${value}
 
 Check font license is visible in Editor
-    [Arguments]    ${value}
     [Documentation]    Verify that the licenses are loaded
-    Use the font editor to configure fonts    Notebook    Code    Font    ${value}
     Click Element    css:.jp-FontsEditor-field ${BUTTON}
     Wait Until Page Contains Element    css:.jp-LicenseViewer pre    timeout=20s
-    Set Screenshot Directory    ${OUTPUT_DIR}/license/${value}
-    Capture Page Screenshot    02_license.png
+    Capture Page Screenshot    Font_1_license.png
     Close the License Viewer
 
 Use the Global font editor to ${what} custom fonts
@@ -165,3 +151,16 @@ Use the Global font editor to ${what} custom fonts
     Run Keyword If    "${what}"=="enable"    Select Checkbox    ${input}
     Run Keyword If    "${what}"=="disable"    Unselect Checkbox    ${input}
     Capture Page Screenshot    01_after.png
+
+Settings Should Contain
+    [Arguments]    ${value}
+    [Documentation]    Check the settings for a string
+    ${settings} =    Get Editor Content    ${SETTINGS_RAW_CM}
+    Run Keyword If    "${value}" != '-'    Should Contain    ${settings}    ${value}
+
+Get Editor Content
+    [Arguments]    ${sel}
+    [Documentation]    Get CodeMirror content
+    ${js} =    Set Variable    return document.querySelector(`${sel}`).CodeMirror.getValue()
+    ${content}    Execute JavaScript    ${js}
+    [Return]    ${content}
