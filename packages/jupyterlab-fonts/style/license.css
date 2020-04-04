@@ -14,6 +14,7 @@
   flex-direction: column;
   padding: var(--jp-notebook-padding);
   color: var(--jp-ui-font-color0);
+  height: 100%;
 }
 
 .jp-LicenseViewer h1,

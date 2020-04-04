@@ -118,12 +118,14 @@ License Viewing
 Open the Global Font Editor
     [Documentation]    Use the JupyterLab Menu to open the global font editor
     Open JupyterLab
+    Make a Hello World    Python 3    Notebook
     Click JupyterLab Menu    Settings
     Click JupyterLab Menu Item    Fonts
     Click JupyterLab Menu Item    Global Fonts...
 
 Open the Notebook Font Editor
     [Documentation]    Use the Notebook button bar to open the notebook font editor
+    Open JupyterLab
     Make a Hello World    Python 3    Notebook
     Click Element    css:.jp-Toolbar-item .jp-FontsIcon
 
@@ -150,7 +152,7 @@ Check font license is visible in Editor
     [Documentation]    Verify that the licenses are loaded
     Use the font editor to configure fonts    Notebook    Code    Font    ${value}
     Click Element    css:.jp-FontsEditor-field ${BUTTON}
-    Sleep    1s
+    Wait Until Page Contains Element    css:.jp-LicenseViewer pre    timeout=20s
     Set Screenshot Directory    ${OUTPUT_DIR}/license/${value}
     Capture Page Screenshot    02_license.png
     Close the License Viewer

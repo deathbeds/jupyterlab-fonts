@@ -22,11 +22,13 @@ export class LicenseViewer extends VDomRenderer<LicenseViewer.Model> {
       return <></>;
     }
 
+    const text = m.licenseText ? <pre>{m.licenseText}</pre> : <></>;
+
     return (
       <div className={LICENSE_CLASS}>
         <h1>{m.font.name}</h1>
         <h2>{m.font.license.name}</h2>
-        <pre>{m.licenseText || '...'}</pre>
+        {text}
       </div>
     );
   }
@@ -44,7 +46,8 @@ export namespace LicenseViewer {
 
     constructor(options: IOptions) {
       super();
-      this._font = options.font;
+      this.font = options.font;
+      console.log(this._font);
     }
 
     get font() {
@@ -55,7 +58,9 @@ export namespace LicenseViewer {
       this._font = font;
       this.stateChanged.emit(void 0);
       this._licenseTextPromise = new Promise(async (resolve, reject) => {
+        console.log('awaiting');
         this._licenseText = await this._font.license.text();
+        console.log('resolved');
         this.stateChanged.emit(void 0);
         resolve(this._licenseText);
       });

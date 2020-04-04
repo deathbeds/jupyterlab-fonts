@@ -184,11 +184,12 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
       let value: string | null = (evt.target as HTMLSelectElement).value;
       value = value === DUMMY ? null : value;
-      if (m.notebook) {
-        m.fonts
-          .setTextStyle(prop, value, { kind, notebook: m.notebook })
-          .catch(console.warn);
-      }
+      m.fonts
+        .setTextStyle(prop, value, {
+          kind,
+          ...(m.notebook ? { notebook: m.notebook } : {})
+        })
+        .catch(console.warn);
     };
     const value = m.fonts.getTextStyle(prop, {
       kind,
@@ -210,7 +211,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
               className: 'jp-mod-styled',
               title: `${TEXT_LABELS[prop]}`,
               onChange,
-              value: value || DUMMY,
+              defaultValue: value || DUMMY,
               key: `select`
             },
             [null, ...TEXT_OPTIONS[prop](m.fonts)].map(value => {
