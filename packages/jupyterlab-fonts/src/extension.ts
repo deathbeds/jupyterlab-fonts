@@ -4,14 +4,9 @@ import { ICommandPalette } from '@jupyterlab/apputils';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
-import {
-  IFontManager,
-  PACKAGE_NAME,
-  ICON_CLASS,
-  CMD,
-  IFontFaceOptions,
-  LICENSE_ICON
-} from '.';
+import { IFontManager, PACKAGE_NAME, CMD, IFontFaceOptions } from '.';
+
+import { ICONS } from './icons';
 import { FontManager } from './manager';
 import { NotebookFontsButton } from './button';
 import { FontEditor } from './editor';
@@ -40,7 +35,7 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
       license.id = `jp-fonts-license-${licenseId++}`;
       license.title.label = font.name;
       license.title.closable = true;
-      license.title.icon = LICENSE_ICON;
+      license.title.icon = ICONS.license;
       app.shell.add(license, 'main');
       app.shell.activateById(license.id);
     });
@@ -53,7 +48,7 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
         const editor = new FontEditor();
         const { model } = editor;
         model.fonts = manager;
-        editor.title.icon = ICON_CLASS;
+        editor.title.icon = ICONS.fonts;
         editor.title.closable = true;
         if ((args || {})['global']) {
           editor.title.label = 'Global';

@@ -10,7 +10,9 @@ import { IObservableJSON } from '@jupyterlab/observables';
 
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 
-import { ICON_CLASS, PACKAGE_NAME, CONFIGURED_CLASS } from '.';
+import { PACKAGE_NAME, CONFIGURED_CLASS } from '.';
+
+import { ICONS } from './icons';
 
 /**
  * A notebook widget extension that adds a button to the toolbar.
@@ -26,7 +28,7 @@ export class NotebookFontsButton
     context: DocumentRegistry.IContext<INotebookModel>
   ): IDisposable {
     let button = new ToolbarButton({
-      iconClass: `jp-Icon jp-Icon-16 ${ICON_CLASS}`,
+      icon: ICONS.fonts,
       onClick: () => {
         (this.widgetRequested as Signal<any, void>).emit(void 0);
       },

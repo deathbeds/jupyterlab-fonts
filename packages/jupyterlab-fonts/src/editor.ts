@@ -16,6 +16,8 @@ import {
   PACKAGE_NAME
 } from '.';
 
+import { ICONS } from './icons';
+
 import { FontManager } from './manager';
 
 import * as SCHEMA from './schema';
@@ -239,7 +241,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     return h(
       'button',
       {
-        className: `${BUTTON_CLASS} jp-FontsEditor-delete-icon`,
+        className: BUTTON_CLASS,
         title: `Delete Embedded Font`,
         key: 'delete',
         onClick: async () => {
@@ -257,7 +259,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           }
         }
       },
-      'x'
+      ICONS.deleteForever.react({ tag: 'span' })
     );
   }
 

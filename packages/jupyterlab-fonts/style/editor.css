@@ -39,15 +39,6 @@
   flex: 1;
 }
 
-.jp-FontsEditor-delete-icon:hover,
-.jp-FontsEditor-delete-icon:focus {
-  background-image: url(./icons/delete-forever.svg);
-}
-
-.jp-FontsEditor-delete-icon {
-  background-image: url(./icons/delete-outline.svg);
-}
-
 .jp-FontsEditor-delete-icon.jp-FontsEditor-button.jp-mod-styled {
   background-repeat: no-repeat;
   background-position: center;

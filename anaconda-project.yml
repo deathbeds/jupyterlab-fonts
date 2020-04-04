@@ -5,8 +5,6 @@ commands:
     unix: python -m scripts.lab
   postBuild:
     unix: bash postBuild
-  demo:
-    unix: ./scripts/build_demo.sh && ./scripts/serve_demo.py
   lab:clean:
     unix: jupyter lab clean --all
   lab:watch:
