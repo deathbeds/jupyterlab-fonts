@@ -19,12 +19,15 @@
 > [PR](https://github.com/deathbeds/jupyterlab-fonts/pulls)s will be reviewed
 > on a time-permitting basis.
 
+
 # Prerequisites
 
+> for specific JupyterLab compatibility, see the [changelog](./CHANGELOG.md).
+
 ```bash
-conda install -c conda-forge jupyterlab=1 nodejs
+conda install -c conda-forge jupyterlab nodejs
 # or
-pip install jupyterlab=1  # and get nodejs somehow
+pip install jupyterlab  # and get nodejs somehow
 ```
 
 # Installing

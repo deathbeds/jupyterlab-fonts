@@ -34,7 +34,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "1.0.0-alpha0",
+  "version": "1.0.0",
   "scripts": {
     "prebuild": "python scripts/convert.py"
   }
