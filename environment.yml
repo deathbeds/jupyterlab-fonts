@@ -2,7 +2,7 @@ name: jupyterlab-fonts-dev
 
 channels:
   - conda-forge
-  - defaults
+  - conda-forge/label/jupyterlab_rc
 
 dependencies:
   - beautysh
@@ -14,6 +14,6 @@ dependencies:
   - geckodriver
   - jupyterlab >=2,<2.1.0a0
   - nodejs
-  - python >=3.7,<3.8.0a0
+  - python >=3.8,<3.9.0a0
   - robotframework-lint
   - robotframework-seleniumlibrary

@@ -3,13 +3,20 @@ os: linux
 sudo: false
 dist: trusty
 env:
-  - MINICONDA_VERSION=4.7.10 CONDA_DIR=$HOME/miniconda3
+  global:
+    - MINIFORGE_VERSION=4.8.2-1
+    - CONDA_DIR=$HOME/mcf3
+    - SHA256SUM=4f897e503bd0edfb277524ca5b6a5b14ad818b3198c2f07a36858b7d88c928db
+  jobs:
+    - LAB_SPEC="-c conda-forge jupyterlab"
+    - LAB_SPEC="-c conda-forge/label/jupyterlab_rc jupyterlab=2.1.0rc0"
 before_install:
-  - wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh
-  - echo "1c945f2b3335c7b2b15130b1b2dc5cf4 *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c -
-  - bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR
-  - $CONDA_DIR/bin/conda install -yn base -c conda-forge -c defaults conda sqlite
+  - wget --quiet https://github.com/conda-forge/miniforge/releases/download/$MINIFORGE_VERSION/Miniforge3-$MINIFORGE_VERSION-Linux-x86_64.sh
+  - echo "$SHA256SUM *Miniforge3-$MINIFORGE_VERSION-Linux-x86_64.sh" | sha256sum -c -
+  - bash Miniforge3-$MINIFORGE_VERSION-Linux-x86_64.sh -fbp $CONDA_DIR
+  - $CONDA_DIR/bin/conda install -yn base -c conda-forge conda
   - $CONDA_DIR/bin/conda env update -n base --file environment.yml
+  - $CONDA_DIR/bin/conda install -y $LAB_SPEC
 install:
   - source $CONDA_DIR/bin/activate && bash postBuild
 script:

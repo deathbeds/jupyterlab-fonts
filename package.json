@@ -16,6 +16,9 @@
     "webpack-cli": "^3.3.0"
   },
   "private": true,
+  "resolutions": {
+    "minimist": "^0.2.1"
+  },
   "scripts": {
     "bootstrap": "jlpm || jlpm || jlpm && jlpm lint && jlpm bootstrap:js",
     "bootstrap:js": "jlpm lerna bootstrap && jlpm build",
