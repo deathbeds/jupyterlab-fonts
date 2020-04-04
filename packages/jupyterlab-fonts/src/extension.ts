@@ -99,8 +99,6 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
         console.error(reason);
       });
 
-    console.log(manager);
-
     return manager;
   }
 };
