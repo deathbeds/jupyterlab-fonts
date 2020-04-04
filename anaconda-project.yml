@@ -30,3 +30,8 @@ env_specs:
     channels:
       - conda-forge
       - conda-forge/label/jupyterlab_rc
+  rc:
+    inherit_from:
+      - jupyterlab-fonts-dev
+    packages:
+      - jupyterlab =2.1.0rc0
