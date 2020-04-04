@@ -7,7 +7,7 @@
     "dejavu-fonts-ttf": "2.37.3"
   },
   "dependencies": {
-    "@jupyterlab/application": "~2.0.2"
+    "@jupyterlab/application": "2"
   },
   "peerDependencies": {
     "@deathbeds/jupyterlab-fonts": "1"

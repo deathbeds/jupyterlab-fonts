@@ -4,7 +4,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "dependencies": {
-    "@jupyterlab/application": "~2.0.2",
+    "@jupyterlab/application": "2",
     "firacode": "^2.0.0"
   },
   "peerDependencies": {
