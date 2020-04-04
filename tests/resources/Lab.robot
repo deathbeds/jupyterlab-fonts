@@ -7,7 +7,7 @@ Library           OperatingSystem
 *** Variables ***
 ${CELL_CSS}       .jp-Notebook .jp-Cell:last-of-type .jp-InputArea-editor .CodeMirror
 ${TOKEN}          hopelesslyinsecure
-${LAB_CMD}        jupyter-lab --no-browser --NotebookApp.token=${TOKEN} --port 18888
+${LAB_CMD}        jupyter-lab --no-browser --debug --NotebookApp.token=${TOKEN} --port 18888
 ${LAB_URL}        http://localhost:18888/lab?token=${TOKEN}&reset
 ${SPLASH_ID}      jupyterlab-splash
 ${SPINNER}        css:.jp-Spinner
@@ -25,6 +25,7 @@ Prepare for testing fonts
     Start Jupyterlab
     ${browser}=    Get Environment Variable    BROWSER    ${BROWSER}
     Open Browser    about:blank    ${browser}
+    Set Window Size    1920    1080
     Set tags    ${browser}
 
 Wait for Splash Screen
@@ -46,6 +47,7 @@ Start JupyterLab
     [Documentation]    Start a Jupyter Notebook Server with JupyterLab
     ${home} =    Set Variable    ${OUTPUT_DIR}${/}home
     Create Directory    ${home}
+    Copy File    tests${/}etc${/}jupyter_notebook_config.json    ${home}
     ${log} =    Set Variable    ${OUTPUT_DIR}${/}lab.log
     Start Process    ${LAB_CMD}    shell=true    stderr=STDOUT    stdout=${log}    cwd=${home}
     Sleep    5s
@@ -92,3 +94,9 @@ Clean Up JupyterLab
     Set Screenshot Directory    ${OUTPUT_DIR}
     Close All Browsers
     Terminate All Processes    kill=True
+
+Maybe Close Sidebar
+    [Arguments]    ${side}=left
+    [Documentation]    Clean up some real estate
+    ${els} =    Get WebElements    css:.jp-SideBar.jp-mod-${side.lower()} .lm-mod-current
+    Run Keyword If    ${els.__len__}    Click Element    ${els[0]}
