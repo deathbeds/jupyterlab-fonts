@@ -1,6 +1,6 @@
-import { IDisposable, DisposableDelegate } from '@phosphor/disposable';
+import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 
-import { ISignal, Signal } from '@phosphor/signaling';
+import { ISignal, Signal } from '@lumino/signaling';
 
 import { ToolbarButton } from '@jupyterlab/apputils';
 
@@ -10,7 +10,9 @@ import { IObservableJSON } from '@jupyterlab/observables';
 
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 
-import { ICON_CLASS, PACKAGE_NAME, CONFIGURED_CLASS } from '.';
+import { PACKAGE_NAME, CONFIGURED_CLASS } from '.';
+
+import { ICONS } from './icons';
 
 /**
  * A notebook widget extension that adds a button to the toolbar.
@@ -25,9 +27,8 @@ export class NotebookFontsButton
     panel: NotebookPanel,
     context: DocumentRegistry.IContext<INotebookModel>
   ): IDisposable {
-    console.log('wooo');
     let button = new ToolbarButton({
-      iconClassName: ICON_CLASS + ' jp-Icon jp-Icon-16',
+      icon: ICONS.fonts,
       onClick: () => {
         (this.widgetRequested as Signal<any, void>).emit(void 0);
       },
@@ -43,8 +44,10 @@ export class NotebookFontsButton
       }
     };
 
-    panel.model.metadata.changed.connect(metaUpdated);
-    metaUpdated(panel.model.metadata);
+    if (panel.model) {
+      panel.model.metadata.changed.connect(metaUpdated);
+      metaUpdated(panel.model.metadata);
+    }
 
     panel.toolbar.insertItem(9, 'fonts', button);
 

@@ -12,7 +12,7 @@
   flex: 0;
 }
 
-.jp-FontsEditor .p-CommandPalette-header {
+.jp-FontsEditor .lm-CommandPalette-header {
   margin: 0;
 }
 
@@ -37,15 +37,6 @@
 
 .jp-FontsEditor h2 > label {
   flex: 1;
-}
-
-.jp-FontsEditor-delete-icon:hover,
-.jp-FontsEditor-delete-icon:focus {
-  background-image: url(./icons/delete-forever.svg);
-}
-
-.jp-FontsEditor-delete-icon {
-  background-image: url(./icons/delete-outline.svg);
 }
 
 .jp-FontsEditor-delete-icon.jp-FontsEditor-button.jp-mod-styled {

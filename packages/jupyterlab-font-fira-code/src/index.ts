@@ -56,7 +56,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: '@deathbeds/jupyterlab-font-fira-code',
   autoStart: true,
   requires: [IFontManager],
-  activate: async function(_app: JupyterLab, fonts: IFontManager) {
+  activate: function(_app: JupyterLab, fonts: IFontManager) {
     fonts.ready
       .then(() => {
         register(fonts);

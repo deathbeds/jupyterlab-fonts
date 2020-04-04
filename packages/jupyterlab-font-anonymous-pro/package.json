@@ -3,19 +3,16 @@
   "bugs": {
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
-  "peerDependencies": {
-    "@deathbeds/jupyterlab-fonts": "^0.7.0",
-    "@jupyterlab/application": "1"
-  },
   "dependencies": {
+    "@jupyterlab/application": "~2.0.2",
     "typeface-anonymous-pro": "^0.0.54"
   },
-  "devDependencies": {
-    "@jupyterlab/application": "1"
+  "peerDependencies": {
+    "@deathbeds/jupyterlab-fonts": "1"
   },
   "description": "Anonymous Pro Fonts for JupyterLab",
   "files": [
-    "{lib,style}/*.{d.ts,js,css}",
+    "{lib,style,src}/**/*.{d.ts,js,css,ts,tsx,js.map}",
     "{README.md,LICENSE}",
     "vendor/anonymous-pro/LICENSE"
   ],
@@ -35,5 +32,5 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.7.0"
+  "version": "1.0.0-alpha0"
 }

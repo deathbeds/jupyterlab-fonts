@@ -2,19 +2,14 @@ import { JupyterLab, JupyterFrontEndPlugin } from '@jupyterlab/application';
 import { IMainMenu } from '@jupyterlab/mainmenu';
 import { ICommandPalette } from '@jupyterlab/apputils';
 import { INotebookTracker } from '@jupyterlab/notebook';
-import { ISettingRegistry } from '@jupyterlab/coreutils';
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
-import {
-  IFontManager,
-  PACKAGE_NAME,
-  ICON_CLASS,
-  CMD,
-  IFontFaceOptions,
-  LICENSE_ICON
-} from '.';
+import { IFontManager, PACKAGE_NAME, CMD, IFontFaceOptions } from '.';
+
+import { ICONS } from './icons';
 import { FontManager } from './manager';
 import { NotebookFontsButton } from './button';
-import { FontEditor, FontEditorModel } from './editor';
+import { FontEditor } from './editor';
 import { LicenseViewer } from './license';
 
 const PLUGIN_ID = `${PACKAGE_NAME}:fonts`;
@@ -35,15 +30,12 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
   ): IFontManager {
     const manager = new FontManager(app.commands, palette, notebooks);
 
-    manager.licensePaneRequested.connect((it, what) => {
-      let license = new LicenseViewer();
-      let model = new LicenseViewer.Model();
-      model.font = what as IFontFaceOptions;
-      license.model = model;
+    manager.licensePaneRequested.connect((it, font: IFontFaceOptions) => {
+      let license = new LicenseViewer({ font });
       license.id = `jp-fonts-license-${licenseId++}`;
-      license.title.label = what.name;
+      license.title.label = font.name;
       license.title.closable = true;
-      license.title.icon = LICENSE_ICON;
+      license.title.icon = ICONS.license;
       app.shell.add(license, 'main');
       app.shell.activateById(license.id);
     });
@@ -54,15 +46,19 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
       label: 'Global Fonts...',
       execute: args => {
         const editor = new FontEditor();
-        const model = (editor.model = new FontEditorModel());
+        const { model } = editor;
         model.fonts = manager;
-        editor.title.icon = ICON_CLASS;
+        editor.title.icon = ICONS.fonts;
         editor.title.closable = true;
         if ((args || {})['global']) {
           editor.title.label = 'Global';
           editor.id = 'font-editor-global';
         } else {
-          model.notebook = notebooks.currentWidget;
+          const { currentWidget } = notebooks;
+          if (currentWidget == null) {
+            return;
+          }
+          model.notebook = currentWidget;
           editor.id = `font-editor-${model.notebook.id}`;
           model.notebook.disposed.connect(() => editor.dispose());
         }

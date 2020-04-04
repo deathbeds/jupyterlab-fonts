@@ -1,8 +1,3 @@
-.jp-LicenseIcon {
-  background-image: url(./icons/copyright.svg);
-  background-size: contain;
-}
-
 .jp-LicenseViewer-wrapper {
   display: flex;
   flex-direction: column;
@@ -14,6 +9,7 @@
   flex-direction: column;
   padding: var(--jp-notebook-padding);
   color: var(--jp-ui-font-color0);
+  height: 100%;
 }
 
 .jp-LicenseViewer h1,

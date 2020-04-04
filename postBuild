@@ -16,5 +16,12 @@ fi
 
 set -eux
 
+python -m pip install -e . --no-deps --ignore-installed
+jlpm cache clean
 jlpm bootstrap
+jupyter lab clean --all
+jupyter labextension list
+jupyter labextension install --no-build $(cat labex.txt)
+jupyter labextension list
+python -m scripts.build
 jupyter labextension list

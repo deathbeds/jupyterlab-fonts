@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.0-alpha0
+
+- Support JupyterLab 2.0
+
 ## v0.5.0
 
 - Support JupyterLab 0.34

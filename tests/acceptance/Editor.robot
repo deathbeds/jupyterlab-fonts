@@ -1,19 +1,18 @@
 *** Settings ***
 Documentation     The font editor allows changing fonts in notebooks
-Suite Setup       Prepare for testing fonts
-Suite Teardown    Clean Up JupyterLab
 Library           SeleniumLibrary
 Library           BuiltIn
+Library           OperatingSystem
 Resource          ../resources/Browser.robot
 Resource          ../resources/Lab.robot
 Resource          ../resources/Notebook.robot
 
 *** Variables ***
 ${ED}             css:.jp-FontsEditor
-${TAB}            li[contains(@class, 'p-TabBar-tab')]
-${ICON_FONT}      div[contains(@class, 'jp-FontsIcon')]
-${ICON_LICENSE}    div[contains(@class, 'jp-LicenseIcon')]
-${ICON_CLOSE}     div[contains(@class, 'p-TabBar-tabCloseIcon')]
+${TAB}            li[contains(@class, 'lm-TabBar-tab')]
+${ICON_FONT}      *[@data-icon = 'fonts:fonts']
+${ICON_LICENSE}    *[@data-icon = 'fonts:license']
+${ICON_CLOSE}     div[contains(@class, 'lm-TabBar-tabCloseIcon')]
 ${BUTTON}         .jp-FontsEditor-button
 
 *** Test Cases ***
@@ -118,21 +117,26 @@ License Viewing
 *** Keywords ***
 Open the Global Font Editor
     [Documentation]    Use the JupyterLab Menu to open the global font editor
+    Open JupyterLab
+    Make a Hello World    Python 3    Notebook
     Click JupyterLab Menu    Settings
     Click JupyterLab Menu Item    Fonts
     Click JupyterLab Menu Item    Global Fonts...
 
 Open the Notebook Font Editor
     [Documentation]    Use the Notebook button bar to open the notebook font editor
-    Click Element    css:.jp-Toolbar-item .jp-FontsIcon
+    Open JupyterLab
+    Make a Hello World    Python 3    Notebook
+    Click Element    css:.jp-Toolbar-item [data-icon\='fonts:fonts']
 
 Close the Font Editor
     [Documentation]    Close the Notebook Font Editor by closing the tab
-    Click Element    ${DOCK}//${TAB}/${ICON_FONT}/../${ICON_CLOSE}
+    Click Element    ${DOCK}//${TAB}//${ICON_FONT}/../../${ICON_CLOSE}
+    Remove File    ${OUTPUT DIR}${/}home${/}Untitled.ipynb
 
 Close the License Viewer
     [Documentation]    Close the Font License Viewer by closing the tab
-    Click Element    ${DOCK}//${TAB}/${ICON_LICENSE}/../${ICON_CLOSE}
+    Click Element    ${DOCK}//${TAB}//${ICON_LICENSE}/../../${ICON_CLOSE}
 
 Use the font editor to configure fonts
     [Arguments]    ${scope}    ${kind}    ${aspect}    ${value}
@@ -148,7 +152,7 @@ Check font license is visible in Editor
     [Documentation]    Verify that the licenses are loaded
     Use the font editor to configure fonts    Notebook    Code    Font    ${value}
     Click Element    css:.jp-FontsEditor-field ${BUTTON}
-    Sleep    1s
+    Wait Until Page Contains Element    css:.jp-LicenseViewer pre    timeout=20s
     Set Screenshot Directory    ${OUTPUT_DIR}/license/${value}
     Capture Page Screenshot    02_license.png
     Close the License Viewer

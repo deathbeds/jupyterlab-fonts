@@ -1,10 +1,10 @@
-import { Token } from '@phosphor/coreutils';
-import { CommandRegistry } from '@phosphor/commands';
+import { Token } from '@lumino/coreutils';
+import { CommandRegistry } from '@lumino/commands';
 import { ICommandPalette } from '@jupyterlab/apputils';
-import { ISignal } from '@phosphor/signaling';
+import { ISignal } from '@lumino/signaling';
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 
-import { Menu } from '@phosphor/widgets';
+import { Menu } from '@lumino/widgets';
 
 import * as SCHEMA from './schema';
 
@@ -98,9 +98,9 @@ export const TEXT_OPTIONS: ICSSTextOptions = {
   'font-size': _m => Array.from(Array(25).keys()).map(i => `${i + 8}px`),
   'line-height': _m => Array.from(Array(8).keys()).map(i => `${i * 0.25 + 1}`),
   'font-family': m => {
-    let names = Array.from(m.fonts.values()).reduce((m, f) => {
-      return m.concat(f.name);
-    }, []);
+    let names = Array.from(m.fonts.values()).reduce((memo, f) => {
+      return memo.concat(f.name);
+    }, [] as string[]);
     names.sort((a, b) => a.localeCompare(b));
     return names;
   }
@@ -123,8 +123,6 @@ export const DEFAULT = {
 };
 
 export const PACKAGE_NAME: string = '@deathbeds/jupyterlab-fonts';
-export const ICON_CLASS = 'jp-FontsIcon';
-export const LICENSE_ICON = 'jp-LicenseIcon';
 export const CONFIGURED_CLASS = 'jp-fonts-configured';
 
 // tslint:disable-next-line
@@ -148,14 +146,17 @@ export interface IFontManager {
   fonts: Map<string, IFontFaceOptions>;
   stylesheets: HTMLStyleElement[];
   menu: Menu;
-  getVarName(property: TextProperty, options: ITextStyleOptions): SCHEMA.ICSSOM;
+  getVarName(
+    property: TextProperty,
+    options: ITextStyleOptions
+  ): SCHEMA.ICSSOM | null;
   getTextStyle(
     property: TextProperty,
     options: ITextStyleOptions
-  ): SCHEMA.ICSSOM;
+  ): SCHEMA.ICSSOM | null;
   setTextStyle(
     property: TextProperty,
-    value: SCHEMA.ICSSOM,
+    value: SCHEMA.ICSSOM | null,
     options: ITextStyleOptions
   ): void;
   dataURISrc(url: string, format: FontFormat): Promise<string>;

@@ -1,7 +1,7 @@
 {
   "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
-    "prettier": [true, {"singleQuote": true}],
+    "prettier": [true, { "singleQuote": true }],
     "align": [true, "parameters", "statements"],
     "await-promise": true,
     "ban": [
@@ -113,10 +113,13 @@
   },
   "linterOptions": {
     "exclude": [
+      "**/*.d.ts",
+      "**/_schema.d.ts",
       "node_modules/**/*.ts",
       "node_modules/**/*.tsx",
-      "**/*.d.ts",
-      "jupyterlab/**/*.ts"
+      ".idea/",
+      ".history/",
+      ".vscode/"
     ]
   }
 }

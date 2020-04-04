@@ -5,7 +5,7 @@
   },
   "description": "Code Fonts for JupyterLab",
   "files": [
-    "{lib,style,schema}/**/*.{d.ts,js,css,svg,json}",
+    "{lib,style,schema,src}/**/*.{d.ts,js,css,svg,json,ts,tsx,js.map}",
     "{LICENSE,README.md}"
   ],
   "keywords": [
@@ -22,16 +22,13 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "0.7.0",
+  "version": "1.0.0-alpha0",
   "dependencies": {
-    "@jupyterlab/application": "1",
-    "@jupyterlab/mainmenu": "1",
-    "@jupyterlab/notebook": "1",
-    "@phosphor/commands": "1",
-    "@phosphor/coreutils": "1",
-    "@phosphor/widgets": "1",
     "jss-preset-default": "^4.5.0",
-    "jss": "^9.8.7"
+    "jss": "^9.8.7",
+    "@jupyterlab/application": "~2.0.2",
+    "@jupyterlab/mainmenu": "~2.0.2",
+    "@jupyterlab/notebook": "~2.0.2"
   },
   "jupyterlab": {
     "extension": "lib/extension.js",
@@ -39,11 +36,10 @@
   },
   "devDependencies": {
     "@types/jss": "^9.5.3",
-    "dtsgenerator": "^1.0.0",
     "watch": "^1.0.2"
   },
   "scripts": {
-    "build:schema": "dtsgen schema/fonts.json | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
+    "build:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
     "prebuild": "jlpm build:schema && jlpm copy:schema",
     "copy:schema": "mkdir -p lib && cp src/_schema.d.ts lib/",
     "watch": "tsc -w",
