@@ -36,15 +36,18 @@ Wait for Splash Screen
 Launch a new
     [Arguments]    ${kernel}    ${category}
     [Documentation]    Use the JupyterLab launcher to launch Notebook or Console
-    Click Element    ${CARD}\[@title='${kernel}'][@data-category='${category}']
+    ${sel} =    Set Variable    ${CARD}\[@title='${kernel}'][@data-category='${category}']
+    Wait Until Page Contains Element    ${sel}    timeout=20s
+    Click Element    ${sel}
     Wait Until Page Does Not Contain Element    ${SPINNER}
     Wait Until Page Contains Element    css:${CELL_CSS}
 
 Start JupyterLab
     [Documentation]    Start a Jupyter Notebook Server with JupyterLab
-    ${home} =  Set Variable       ${OUTPUT_DIR}${/}home
-    Create Directory   ${home}
-    Start Process    ${LAB_CMD}    shell=true    stderr=STDOUT    stdout=${OUTPUT_DIR}${/}lab.log   cwd=${home}
+    ${home} =    Set Variable    ${OUTPUT_DIR}${/}home
+    Create Directory    ${home}
+    ${log} =    Set Variable    ${OUTPUT_DIR}${/}lab.log
+    Start Process    ${LAB_CMD}    shell=true    stderr=STDOUT    stdout=${log}    cwd=${home}
     Sleep    5s
 
 Click JupyterLab Menu

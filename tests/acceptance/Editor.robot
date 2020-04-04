@@ -2,6 +2,7 @@
 Documentation     The font editor allows changing fonts in notebooks
 Library           SeleniumLibrary
 Library           BuiltIn
+Library           OperatingSystem
 Resource          ../resources/Browser.robot
 Resource          ../resources/Lab.robot
 Resource          ../resources/Notebook.robot
@@ -123,11 +124,13 @@ Open the Global Font Editor
 
 Open the Notebook Font Editor
     [Documentation]    Use the Notebook button bar to open the notebook font editor
+    Make a Hello World    Python 3    Notebook
     Click Element    css:.jp-Toolbar-item .jp-FontsIcon
 
 Close the Font Editor
     [Documentation]    Close the Notebook Font Editor by closing the tab
     Click Element    ${DOCK}//${TAB}/${ICON_FONT}/../${ICON_CLOSE}
+    Remove File    ${OUTPUT DIR}${/}home${/}Untitled.ipynb
 
 Close the License Viewer
     [Documentation]    Close the Font License Viewer by closing the tab

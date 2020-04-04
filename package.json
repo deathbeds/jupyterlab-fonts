@@ -28,7 +28,7 @@
     "clean:test": "rimraf _testoutput",
     "lint": "jlpm lint:py && jlpm lint:ts && jlpm lint:sh",
     "lint:py": "black nbjss setup.py && flake8 nbjss setup.py",
-    "lint:robot": "python -m robot.tidy --inplace tests/{acceptance,resources}/*.robot && rflint --configure TooManyTestSteps:40 --configure TooFewKeywordSteps:0  tests/**/*.robot",
+    "lint:robot": "python -m robot.tidy --inplace tests/**/*.robot && rflint --configure TooManyTestSteps:40 --configure TooFewKeywordSteps:0  tests/**/*.robot",
     "lint:sh": "beautysh -i 2 postBuild",
     "lint:ts": "jlpm lint:prettier && jlpm lint:tslint",
     "lint:prettier": "prettier --write *.json *.md *.yml && prettier --write 'packages/**/*.{ts,tsx,css,json,md}'",

@@ -1,11 +1,11 @@
 *** Settings ***
 Documentation     Test whether the JupyterLab Fonts Menu performs as advertised.
+Test Setup        Open JupyterLab
 Library           SeleniumLibrary
 Library           BuiltIn
 Resource          ../resources/Browser.robot
 Resource          ../resources/Lab.robot
 Resource          ../resources/Notebook.robot
-Test Setup        Open JupyterLab
 
 *** Test Cases ***
 Customize code font with the JupyterLab Menu
