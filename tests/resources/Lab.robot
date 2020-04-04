@@ -15,8 +15,8 @@ ${CMD_PAL_CSS}    css:.jp-mod-left li[title^="Commands"] div
 ${CMD_PAL_INPUT}    css:.lm-CommandPalette-input
 ${CMD_PAL_ITEM}    css:.lm-CommandPalette-item
 ${TOP}            //div[@id='jp-top-panel']
-${BAR_ITEM}       //div[@class='lm-MenuBar-itemLabel']
-${CARD}           //div[@class='jp-LauncherCard']
+${BAR_ITEM}       //div[contains(@class, 'lm-MenuBar-itemLabel')]
+${CARD}           //div[contains(@class, 'jp-LauncherCard')]
 ${DOCK}           //div[@id='jp-main-dock-panel']
 
 *** Keywords ***
@@ -57,7 +57,7 @@ Click JupyterLab Menu
 Click JupyterLab Menu Item
     [Arguments]    ${item_label}
     [Documentation]    Click a top-level JupyterLab Menu Item (not File, Help, etc.)
-    ${item} =    Set Variable    //div[@class='lm-Menu-itemLabel']
+    ${item} =    Set Variable    //div[contains(@class,'lm-Menu-itemLabel')]
     Wait Until Page Contains Element    ${item}\[text() = '${item_label}']
     Mouse Over    ${item}\[text() = '${item_label}']
     Click Element    ${item}\[text() = '${item_label}']
