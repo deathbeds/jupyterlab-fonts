@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/META-jupyterlab-fonts",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha0",
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "file:../jupyterlab-fonts",
     "@deathbeds/jupyterlab-font-anonymous-pro": "file:../jupyterlab-font-anonymous-pro",
