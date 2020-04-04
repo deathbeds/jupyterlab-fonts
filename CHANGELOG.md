@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.1
+
+- Fixes issue with global setting
+
 ## v1.0.0
 
 - Support JupyterLab 2.0

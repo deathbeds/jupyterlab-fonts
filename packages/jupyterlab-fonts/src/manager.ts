@@ -167,16 +167,18 @@ export class FontManager implements IFontManager {
     if (!notebook && !this.settings) {
       return;
     }
-    let oldStyles: SCHEMA.IStyles = {};
+    let oldStyles: SCHEMA.IStyles;
 
-    if (notebook?.model) {
-      try {
-        oldStyles = notebook
-          ? (notebook.model.metadata.get(PACKAGE_NAME) as any).styles
-          : (this._settings.get('styles').composite as any);
-      } catch (err) {
-        //
+    const model = notebook?.model;
+
+    try {
+      if (model) {
+        oldStyles = (model.metadata.get(PACKAGE_NAME) as any).styles;
+      } else {
+        oldStyles = this._settings.get('styles').user as any;
       }
+    } catch (err) {
+      oldStyles = {};
     }
 
     let styles: SCHEMA.IStyles = JSON.parse(JSON.stringify(oldStyles || {}));

@@ -184,6 +184,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
       let value: string | null = (evt.target as HTMLSelectElement).value;
       value = value === DUMMY ? null : value;
+      console.log(prop, kind, value);
       m.fonts
         .setTextStyle(prop, value, {
           kind,
