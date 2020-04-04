@@ -19,7 +19,6 @@
 > [PR](https://github.com/deathbeds/jupyterlab-fonts/pulls)s will be reviewed
 > on a time-permitting basis.
 
-
 # Prerequisites
 
 > for specific JupyterLab compatibility, see the [changelog](./CHANGELOG.md).
