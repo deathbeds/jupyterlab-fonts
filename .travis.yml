@@ -16,7 +16,7 @@ before_install:
   - bash Miniforge3-$MINIFORGE_VERSION-Linux-x86_64.sh -fbp $CONDA_DIR
   - $CONDA_DIR/bin/conda install -yn base -c conda-forge conda
   - $CONDA_DIR/bin/conda env update -n base --file environment.yml
-  - $CONDA_DIR/bin/conda install $LAB_SPEC
+  - $CONDA_DIR/bin/conda install -y $LAB_SPEC
 install:
   - source $CONDA_DIR/bin/activate && bash postBuild
 script:
