@@ -1,11 +1,14 @@
 __pycache__
 _testoutput/
 .ipynb_checkpoints/
+*.doit*
 *.egg-info/
 *.log
 *.woff2
 build/
+dist/
 envs/
+lib/
 nbjss/static/nbjss.js
 node_modules/
 packages/*/lib
