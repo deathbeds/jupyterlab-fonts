@@ -28,6 +28,25 @@ def task_lint():
         file_dep=[*P.ALL_PY],
     )
 
+    yield dict(
+        name="prettier",
+        actions=[
+            [
+                *C.JLPM,
+                "prettier",
+                "--write",
+                "--list-different",
+                *[p.relative_to(P.ROOT) for p in P.ALL_PRETTIER],
+            ]
+        ],
+        file_dep=[*P.ALL_PRETTIER, P.YARN_INTEGRITY],
+    )
+
+    # TODO
+    # yield dict(
+    #     name="eslint"
+    # )
+
 
 class C:
     """constants"""
@@ -51,6 +70,8 @@ class P:
     NODE_MODULES = ROOT / "node_modules"
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     YARN_LOCK = ROOT / "yarn.lock"
+    ALL_MD = [*ROOT.glob("*.md")]
+    ALL_PRETTIER = [*ALL_PACKAGE_JSONS, *ALL_MD]
 
 
 DOIT_CONFIG = {

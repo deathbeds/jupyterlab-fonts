@@ -1,23 +1,8 @@
 {
-  "devDependencies": {
-    "lerna": "^3.19.0",
-    "prettier": "^2.3.2",
-    "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1",
-    "eslint": "^7.14.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-jest": "^24.1.3",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.21.5",
-    "typescript": "~4.3.2"
-  },
   "private": true,
-  "prettier": {
-    "singleQuote": true,
-    "printWidth": 88,
-    "proseWrap": "always",
-    "semi": true
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "bootstrap": "jlpm || jlpm || jlpm && jlpm lint && jlpm bootstrap:js",
     "bootstrap:js": "jlpm lerna bootstrap && jlpm build",
@@ -40,7 +25,23 @@
     "watch:schema": "jlpm lerna run watch:schema --parallel",
     "watch": "cd packages/_meta && tsc -b -w"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "prettier": {
+    "printWidth": 88,
+    "proseWrap": "always",
+    "semi": true,
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.5",
+    "lerna": "^3.19.0",
+    "prettier": "^2.3.2",
+    "prettier-plugin-packagejson": "^2.2.11",
+    "typescript": "~4.3.2"
+  }
 }
