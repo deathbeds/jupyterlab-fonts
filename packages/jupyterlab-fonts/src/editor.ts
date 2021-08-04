@@ -13,7 +13,7 @@ import {
   KIND_LABELS,
   TextProperty,
   IFontFaceOptions,
-  PACKAGE_NAME
+  PACKAGE_NAME,
 } from '.';
 
 import { FontManager } from './manager';
@@ -60,21 +60,12 @@ export class FontEditorModel extends VDomModel {
 
   set notebook(notebook) {
     if (this._notebook?.model) {
-      this._notebook.model.metadata.changed.disconnect(
-        this.onSettingsChange,
-        this
-      );
-      this._notebook.context.pathChanged.disconnect(
-        this.onSettingsChange,
-        this
-      );
+      this._notebook.model.metadata.changed.disconnect(this.onSettingsChange, this);
+      this._notebook.context.pathChanged.disconnect(this.onSettingsChange, this);
     }
     this._notebook = notebook;
     if (this._notebook?.model) {
-      this._notebook.model.metadata.changed.connect(
-        this.onSettingsChange,
-        this
-      );
+      this._notebook.model.metadata.changed.connect(this.onSettingsChange, this);
       this._notebook.context.pathChanged.connect(this.onSettingsChange, this);
     }
     this.stateChanged.emit(void 0);
@@ -138,22 +129,18 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
 
     return h('div', { key: 'editor' }, [
       ...this.header(),
-      ...[TextKind.code, TextKind.content].map(kind =>
+      ...[TextKind.code, TextKind.content].map((kind) =>
         h('section', { key: `${kind}-section`, title: KIND_LABELS[kind] }, [
           h(
             'h3',
             { key: `${kind}-header`, className: SECTION_CLASS },
             KIND_LABELS[kind]
           ),
-          ...[
-            'font-family',
-            'font-size',
-            'line-height'
-          ].map((prop: TextProperty) =>
+          ...['font-family', 'font-size', 'line-height'].map((prop: TextProperty) =>
             this.textSelect(prop, kind, { key: `${kind}-${prop}` })
-          )
+          ),
         ])
-      )
+      ),
     ]);
   }
 
@@ -173,7 +160,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
         className: BUTTON_CLASS,
         title: font.license.name,
         key: font.name,
-        onClick: () => m.fonts.requestLicensePane(font)
+        onClick: () => m.fonts.requestLicensePane(font),
       },
       font.license.spdx
     );
@@ -188,52 +175,43 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       m.fonts
         .setTextStyle(prop, value, {
           kind,
-          ...(m.notebook ? { notebook: m.notebook } : {})
+          ...(m.notebook ? { notebook: m.notebook } : {}),
         })
         .catch(console.warn);
     };
     const value = m.fonts.getTextStyle(prop, {
       kind,
-      notebook: m.notebook || void 0
+      notebook: m.notebook || void 0,
     });
-    const extra =
-      prop === 'font-family' ? this.fontFaceExtras(m, value as any) : [];
+    const extra = prop === 'font-family' ? this.fontFaceExtras(m, value as any) : [];
 
-    return h(
-      'div',
-      { className: FIELD_CLASS, key: 'select-field', ...sectionProps },
-      [
-        h('label', { key: 'select-label' }, TEXT_LABELS[prop]),
-        h('div', { key: 'select-wrap' }, [
-          ...extra,
-          h(
-            'select',
-            {
-              className: 'jp-mod-styled',
-              title: `${TEXT_LABELS[prop]}`,
-              onChange,
-              defaultValue: value || DUMMY,
-              key: `select`
-            },
-            [null, ...TEXT_OPTIONS[prop](m.fonts)].map(value => {
-              return h(
-                'option',
-                {
-                  key: `'${value}'`,
-                  value:
-                    value == null
-                      ? DUMMY
-                      : prop === 'font-family'
-                      ? `'${value}'`
-                      : value
-                },
-                value || DUMMY
-              );
-            })
-          )
-        ])
-      ]
-    );
+    return h('div', { className: FIELD_CLASS, key: 'select-field', ...sectionProps }, [
+      h('label', { key: 'select-label' }, TEXT_LABELS[prop]),
+      h('div', { key: 'select-wrap' }, [
+        ...extra,
+        h(
+          'select',
+          {
+            className: 'jp-mod-styled',
+            title: `${TEXT_LABELS[prop]}`,
+            onChange,
+            defaultValue: value || DUMMY,
+            key: `select`,
+          },
+          [null, ...TEXT_OPTIONS[prop](m.fonts)].map((value) => {
+            return h(
+              'option',
+              {
+                key: `'${value}'`,
+                value:
+                  value == null ? DUMMY : prop === 'font-family' ? `'${value}'` : value,
+              },
+              value || DUMMY
+            );
+          })
+        ),
+      ]),
+    ]);
   }
 
   protected deleteButton(m: FontEditorModel, fontName: string) {
@@ -247,16 +225,13 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           const result = await showDialog({
             title: `Delete Embedded Font from Notebook`,
             body: `If you dont have ${fontName} installed, you might not be able to re-embed it`,
-            buttons: [
-              Dialog.cancelButton(),
-              Dialog.warnButton({ label: 'DELETE' })
-            ]
+            buttons: [Dialog.cancelButton(), Dialog.warnButton({ label: 'DELETE' })],
           });
 
           if (result.button.accept) {
             m.clearNotebookMetadata(fontName);
           }
-        }
+        },
       },
       'Delete'
     );
@@ -275,16 +250,13 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
         key: 'enable-input',
         type: 'checkbox',
         checked: m.enabled,
-        onChange
+        onChange,
       })
     );
   }
 
   protected embeddedFont(m: FontEditorModel, fontName: string) {
-    if (
-      m.notebookMetadata?.fonts == null ||
-      m.notebookMetadata.fontLicenses == null
-    ) {
+    if (m.notebookMetadata?.fonts == null || m.notebookMetadata.fontLicenses == null) {
       return null;
     }
     const faces = m.notebookMetadata.fonts[fontName];
@@ -303,12 +275,12 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           name: license.name,
           spdx: license.spdx,
           text: async () => license.text,
-          holders: license.holders
+          holders: license.holders,
         },
-        faces: async () => faces || []
+        faces: async () => faces || [],
       }),
       h('span', { className: SIZE_CLASS, key: 'font-kb' }, `${kb} kb`),
-      this.deleteButton(m, fontName)
+      this.deleteButton(m, fontName),
     ]);
   }
 
@@ -324,28 +296,22 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
       h('label', { key: 'scope-label' }, `Fonts » ${title}`),
       ...(m.notebook
         ? [h('div', { className: 'jp-NotebookIcon', key: 'scope-icon' })]
-        : [])
+        : []),
     ]);
 
     if (m.notebook != null) {
       return [
         h2,
         h('section', { key: 'embed-section' }, [
-          h(
-            'h3',
-            { className: SECTION_CLASS, key: 'embed-head' },
-            'Embedded fonts'
-          ),
+          h('h3', { className: SECTION_CLASS, key: 'embed-head' }, 'Embedded fonts'),
           h(
             'ul',
             { className: EMBED_CLASS, key: 'embeds' },
-            Object.keys((m.notebookMetadata || {}).fonts || {}).map(
-              fontName => {
-                return this.embeddedFont(m, fontName);
-              }
-            )
-          )
-        ])
+            Object.keys((m.notebookMetadata || {}).fonts || {}).map((fontName) => {
+              return this.embeddedFont(m, fontName);
+            })
+          ),
+        ]),
       ];
     } else {
       return [
@@ -356,8 +322,8 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
             { className: SECTION_CLASS, key: 'enable-header' },
             'Enable/Disable All Fonts'
           ),
-          this.enabler(m)
-        ])
+          this.enabler(m),
+        ]),
       ];
     }
   }

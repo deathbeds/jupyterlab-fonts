@@ -21,7 +21,7 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
   autoStart: true,
   requires: [IMainMenu, ISettingRegistry, ICommandPalette, INotebookTracker],
   provides: IFontManager,
-  activate: function(
+  activate: function (
     app: JupyterLab,
     menu: IMainMenu,
     settingRegistry: ISettingRegistry,
@@ -44,7 +44,7 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
 
     app.commands.addCommand(CMD.editFonts, {
       label: 'Global Fonts...',
-      execute: args => {
+      execute: (args) => {
         const editor = new FontEditor();
         const { model } = editor;
         model.fonts = manager;
@@ -64,7 +64,7 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
         }
 
         app.shell.add(editor, 'main', { mode: 'split-right' });
-      }
+      },
     });
 
     const fontsButton = new NotebookFontsButton();
@@ -83,7 +83,7 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
         manager.settings = settings;
         settingRegistry
           .load('@jupyterlab/apputils-extension:themes')
-          .then(settings => {
+          .then((settings) => {
             settings.changed.connect(() => {
               setTimeout(() => manager.hack(), 100);
             });
@@ -95,7 +95,7 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
       });
 
     return manager;
-  }
+  },
 };
 
 export default plugin;

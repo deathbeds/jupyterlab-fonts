@@ -18,7 +18,8 @@ import { ICONS } from './icons';
  * A notebook widget extension that adds a button to the toolbar.
  */
 export class NotebookFontsButton
-  implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
+  implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
+{
   readonly widgetRequested: ISignal<any, void> = new Signal<any, void>(this);
   /**
    * Create a new extension object.
@@ -32,7 +33,7 @@ export class NotebookFontsButton
       onClick: () => {
         (this.widgetRequested as Signal<any, void>).emit(void 0);
       },
-      tooltip: 'Customize Notebook Fonts'
+      tooltip: 'Customize Notebook Fonts',
     });
 
     const metaUpdated = (metadata: IObservableJSON) => {

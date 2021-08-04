@@ -70,8 +70,10 @@ class P:
     NODE_MODULES = ROOT / "node_modules"
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     YARN_LOCK = ROOT / "yarn.lock"
+    ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
+    ALL_TS = [*PACKAGES.glob("*/src/**/*.ts"), *PACKAGES.glob("*/src/**/*.tsx")]
     ALL_MD = [*ROOT.glob("*.md")]
-    ALL_PRETTIER = [*ALL_PACKAGE_JSONS, *ALL_MD]
+    ALL_PRETTIER = [*ALL_PACKAGE_JSONS, *ALL_MD, *ALL_TS, *ALL_SCHEMA]
 
 
 DOIT_CONFIG = {
