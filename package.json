@@ -16,8 +16,10 @@
     "webpack-cli": "^3.3.0"
   },
   "private": true,
-  "resolutions": {
-    "minimist": "^0.2.1"
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 88,
+    "proseWrap": "always"
   },
   "scripts": {
     "bootstrap": "jlpm || jlpm || jlpm && jlpm lint && jlpm bootstrap:js",

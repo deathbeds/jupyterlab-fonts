@@ -1,0 +1,22 @@
+name: jupyterlab-fonts-dev
+
+channels:
+  - conda-forge
+
+dependencies:
+  # run
+  - jupyterlab >=3.1.1,<4
+  - python >=3.7,<3.10
+  # build
+  - doit
+  - nodejs >=14,<15
+  - brotlipy
+  - fonttools
+  # qa
+  - black
+  - flake8
+  # atest
+  - geckodriver
+  - robotframework-lint
+  - robotframework-jupyterlibrary
+  - firefox =78
