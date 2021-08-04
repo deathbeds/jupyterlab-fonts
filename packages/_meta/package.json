@@ -1,6 +1,10 @@
 {
+  "name": "@deathbeds/meta-jupyterlab-fonts",
   "version": "2.0.0",
   "private": true,
+  "scripts": {
+    "build": "tsc -b"
+  },
   "dependencies": {
     "@deathbeds/jupyterlab-font-anonymous-pro": "file:../jupyterlab-font-anonymous-pro",
     "@deathbeds/jupyterlab-font-dejavu-sans-mono": "file:../jupyterlab-font-dejavu-sans-mono",

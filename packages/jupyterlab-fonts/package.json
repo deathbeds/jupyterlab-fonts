@@ -24,7 +24,7 @@
     "{LICENSE,README.md}"
   ],
   "scripts": {
-    "build:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --config=../../.prettierrc --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
+    "build:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
     "prebuild": "jlpm build:schema && jlpm copy:schema",
     "copy:schema": "mkdir -p lib && cp src/_schema.d.ts lib/",
     "watch": "tsc -w",

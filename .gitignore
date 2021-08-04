@@ -5,6 +5,7 @@ _testoutput/
 *.doit*
 *.egg-info/
 *.log
+*.tsbuildinfo
 *.woff2
 build/
 dist/

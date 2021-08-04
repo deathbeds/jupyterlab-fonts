@@ -12,6 +12,20 @@ def task_setup():
     )
 
 
+def task_build():
+    yield dict(
+        name="js:pre",
+        actions=[[*C.LERNA, "run", "prebuild"]],
+        file_dep=[P.YARN_INTEGRITY],
+    )
+    yield dict(
+        name="js:tsc",
+        actions=[[*C.LERNA, "run", "build"]],
+        file_dep=[P.YARN_INTEGRITY, *P.ALL_TS],
+        task_dep=["build:js:pre"],
+    )
+
+
 def task_binder():
     """get ready for interactive development"""
     yield dict(name="all", actions=[["echo", "ok"]])
@@ -52,6 +66,7 @@ class C:
     """constants"""
 
     JLPM = ["jlpm"]
+    LERNA = [*JLPM, "lerna"]
     PY = ["python"]
     PYM = [*PY, "-m"]
     PIP = [*PYM, "pip"]
