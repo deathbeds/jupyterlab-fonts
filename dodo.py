@@ -56,10 +56,24 @@ def task_lint():
         file_dep=[*P.ALL_PRETTIER, P.YARN_INTEGRITY],
     )
 
-    # TODO
-    # yield dict(
-    #     name="eslint"
-    # )
+    yield dict(
+        name="eslint",
+        actions=[
+            [
+                *C.JLPM,
+                "eslint",
+                "--cache",
+                "--config",
+                P.ESLINTRC,
+                "--ext",
+                ".js,.jsx,.ts,.tsx",
+                "--fix",
+                "packages",
+            ]
+        ],
+        task_dep=["lint:prettier"],
+        file_dep=[*P.ALL_ESLINT, P.ESLINTRC],
+    )
 
 
 class C:
@@ -85,10 +99,12 @@ class P:
     NODE_MODULES = ROOT / "node_modules"
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     YARN_LOCK = ROOT / "yarn.lock"
+    ESLINTRC = ROOT / ".eslintrc.js"
     ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
     ALL_TS = [*PACKAGES.glob("*/src/**/*.ts"), *PACKAGES.glob("*/src/**/*.tsx")]
     ALL_MD = [*ROOT.glob("*.md")]
     ALL_PRETTIER = [*ALL_PACKAGE_JSONS, *ALL_MD, *ALL_TS, *ALL_SCHEMA]
+    ALL_ESLINT = [*ALL_TS]
 
 
 DOIT_CONFIG = {

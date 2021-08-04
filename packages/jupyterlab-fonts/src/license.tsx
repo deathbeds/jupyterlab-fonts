@@ -47,7 +47,6 @@ export namespace LicenseViewer {
     constructor(options: IOptions) {
       super();
       this.font = options.font;
-      console.log(this._font);
     }
 
     get font() {
@@ -57,12 +56,17 @@ export namespace LicenseViewer {
     set font(font) {
       this._font = font;
       this.stateChanged.emit(void 0);
-      this._licenseTextPromise = new Promise(async (resolve, reject) => {
-        console.log('awaiting');
-        this._licenseText = await this._font.license.text();
-        console.log('resolved');
-        this.stateChanged.emit(void 0);
-        resolve(this._licenseText);
+      this._licenseTextPromise = new Promise((resolve, reject) => {
+        this._font.license
+          .text()
+          .then((licenseText) => {
+            this._licenseText = licenseText;
+            this.stateChanged.emit(void 0);
+            resolve(this._licenseText);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       });
     }
 

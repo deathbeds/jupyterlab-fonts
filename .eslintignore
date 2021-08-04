@@ -1,4 +1,5 @@
 __pycache__
+_*.d.ts
 ./lab/
 .conda-packages/
 .vscode/

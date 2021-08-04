@@ -1,5 +1,7 @@
 import { NotebookPanel } from '@jupyterlab/notebook';
 
+import { ReadonlyJSONObject } from '@lumino/coreutils';
+
 import { Dialog, showDialog } from '@jupyterlab/apputils';
 
 import * as React from 'react';
@@ -166,12 +168,15 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     );
   }
 
-  protected textSelect(prop: TextProperty, kind: TextKind, sectionProps: {}) {
+  protected textSelect(
+    prop: TextProperty,
+    kind: TextKind,
+    sectionProps: ReadonlyJSONObject
+  ) {
     const m = this.model;
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
       let value: string | null = (evt.target as HTMLSelectElement).value;
       value = value === DUMMY ? null : value;
-      console.log(prop, kind, value);
       m.fonts
         .setTextStyle(prop, value, {
           kind,

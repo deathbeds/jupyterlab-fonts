@@ -91,16 +91,16 @@ export class FontManager implements IFontManager {
     this._settings.set('enabled', enabled).then().catch(console.warn);
   }
 
-  get settings() {
-    return this._settings;
-  }
-
   get menu() {
     return this._menu;
   }
 
   get stylesheets() {
     return this._stylist.stylesheets;
+  }
+
+  get settings() {
+    return this._settings;
   }
 
   set settings(settings) {

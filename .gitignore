@@ -1,5 +1,6 @@
 __pycache__
 _testoutput/
+.eslintcache
 .ipynb_checkpoints/
 .yarn-packages/
 *.doit*

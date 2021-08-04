@@ -114,22 +114,19 @@ export class Stylist {
               reject();
               return;
             } else {
-              options.faces().then(
-                (faces) => {
+              options
+                .faces()
+                .then((faces) => {
                   if (this._fontCache.has(font)) {
                     return;
                   }
                   this._fontCache.set(font, faces);
                   this._cacheUpdated.emit(void 0);
                   resolve(void 0);
-                },
-                function (err) {
-                  console.error('rejected!', err);
-                  reject();
-                }
-              );
+                })
+                .catch(reject);
             }
-          });
+          }).catch(console.warn);
         }
       }
     }
