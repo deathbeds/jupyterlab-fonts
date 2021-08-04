@@ -1,9 +1,16 @@
 """project automation for jupyterlab-fonts"""
 from pathlib import Path
 
+
 def task_setup():
     """perform early setup"""
-    yield dict(name="js", commands=[[*C.JLPM, "--prefer-offline", "--ignore-optional"]])
+    yield dict(
+        name="js",
+        actions=[[*C.JLPM, "--prefer-offline", "--ignore-optional"]],
+        targets=[P.YARN_INTEGRITY],
+        file_dep=[P.YARN_LOCK, *P.ALL_PACKAGE_JSONS],
+    )
+
 
 def task_binder():
     """get ready for interactive development"""
@@ -37,6 +44,13 @@ class P:
     DODO = Path(__file__)
     ROOT = DODO.parent
     ALL_PY = [*ROOT.glob("*.py")]
+    PACKAGES = ROOT / "packages"
+    PACKAGE_JSONS = [*PACKAGES.glob("*/package.json")]
+    ROOT_PACKAGE_JSON = ROOT / "package.json"
+    ALL_PACKAGE_JSONS = [ROOT_PACKAGE_JSON, *PACKAGE_JSONS]
+    NODE_MODULES = ROOT / "node_modules"
+    YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
+    YARN_LOCK = ROOT / "yarn.lock"
 
 
 DOIT_CONFIG = {

@@ -1,6 +1,7 @@
 __pycache__
 _testoutput/
 .ipynb_checkpoints/
+.yarn-packages/
 *.doit*
 *.egg-info/
 *.log
