@@ -11,7 +11,6 @@ export function base64Encode(str: string): string {
   let c2: number;
   let c3: number;
 
-  // tslint:disable
   while (i < len) {
     c1 = str.charCodeAt(i++) & 0xff;
     if (i === len) {
@@ -34,7 +33,6 @@ export function base64Encode(str: string): string {
     out += CHARS.charAt(((c2 & 0xf) << 2) | ((c3 & 0xc0) >> 6));
     out += CHARS.charAt(c3 & 0x3f);
   }
-  // tslint:enable
   return out;
 }
 

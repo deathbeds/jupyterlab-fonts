@@ -24,11 +24,8 @@
     "{LICENSE,README.md}"
   ],
   "scripts": {
-    "build:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --stdin --stdin-filepath src/_schema.d.ts > src/_schema.d.ts",
-    "prebuild": "jlpm build:schema && jlpm copy:schema",
-    "copy:schema": "mkdir -p lib && cp src/_schema.d.ts lib/",
-    "watch": "tsc -w",
-    "watch:schema": "watch 'jlpm build:schema' schema"
+    "prebuild": "json2ts schema/fonts.json --strictIndexSignatures > src/_schema.d.ts && cp src/_schema.d.ts lib",
+    "watch": "watch 'jlpm build:schema' schema"
   },
   "dependencies": {
     "@jupyterlab/application": "~3.1",
@@ -38,7 +35,8 @@
     "jss-preset-default": "^10.7.1"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "~3.1"
+    "@jupyterlab/builder": "~3.1",
+    "json-schema-to-typescript": "^10.1.4"
   },
   "jupyterlab": {
     "extension": "lib/plugin.js",

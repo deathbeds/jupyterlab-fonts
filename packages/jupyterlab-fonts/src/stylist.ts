@@ -108,8 +108,7 @@ export class Stylist {
         if (cachedFont != null) {
           faces[font] = cachedFont;
         } else {
-          // tslint:disable-next-line
-          new Promise((resolve, reject) => {
+          new Promise<void>((resolve, reject) => {
             const options = this.fonts.get(font);
             if (options == null) {
               reject();
@@ -122,7 +121,7 @@ export class Stylist {
                   }
                   this._fontCache.set(font, faces);
                   this._cacheUpdated.emit(void 0);
-                  resolve();
+                  resolve(void 0);
                 },
                 function (err) {
                   console.error('rejected!', err);

@@ -1,4 +1,4 @@
-import { PromiseDelegate } from '@lumino/coreutils';
+import { PromiseDelegate, PartialJSONValue } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 import { Menu } from '@lumino/widgets';
 import { CommandRegistry } from '@lumino/commands';
@@ -208,7 +208,7 @@ export class FontManager implements IFontManager {
         delete styles[ROOT];
       }
       try {
-        await this._settings.set('styles', styles);
+        await this._settings.set('styles', styles as PartialJSONValue);
       } catch (err) {
         console.warn(err);
       }

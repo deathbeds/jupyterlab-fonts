@@ -125,7 +125,6 @@ export const DEFAULT = {
 export const PACKAGE_NAME: string = '@deathbeds/jupyterlab-fonts';
 export const CONFIGURED_CLASS = 'jp-fonts-configured';
 
-// tslint:disable-next-line
 export const IFontManager = new Token<IFontManager>(
   '@deathbeds/jupyterlab-fonts:IFontManager'
 );
