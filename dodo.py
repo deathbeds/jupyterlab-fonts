@@ -1,12 +1,17 @@
 """project automation for jupyterlab-fonts"""
 from pathlib import Path
 
+def task_setup():
+    """perform early setup"""
+    yield dict(name="js", commands=[[*C.JLPM, "--prefer-offline", "--ignore-optional"]])
 
 def task_binder():
+    """get ready for interactive development"""
     yield dict(name="all", actions=[["echo", "ok"]])
 
 
 def task_lint():
+    """apply source formatting, check for mistakes"""
     yield dict(name="black", actions=[["black", *P.ALL_PY]], file_dep=[*P.ALL_PY])
 
     yield dict(

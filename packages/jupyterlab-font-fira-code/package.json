@@ -4,11 +4,12 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "dependencies": {
-    "@jupyterlab/application": "2",
-    "firacode": "^2.0.0"
+    "@jupyterlab/application": "~3.1",
+    "firacode": "^5.2.0",
+    "@deathbeds/jupyterlab-fonts": "~2.0"
   },
-  "peerDependencies": {
-    "@deathbeds/jupyterlab-fonts": "1"
+  "devDependencies": {
+    "@jupyterlab/builder": "~3.1"
   },
   "description": "Fira Code Fonts for JupyterLab",
   "files": [
@@ -16,7 +17,14 @@
     "{README.md,LICENSE}"
   ],
   "jupyterlab": {
-    "extension": true
+    "extension": "lib/plugin.js",
+    "outputDir": "../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-fira-code",
+    "sharedPackages": {
+      "@deathbeds/jupyterlab-fonts": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
   },
   "keywords": [
     "jupyter",

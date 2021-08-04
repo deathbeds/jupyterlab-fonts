@@ -4,13 +4,12 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
   },
   "devDependencies": {
-    "dejavu-fonts-ttf": "2.37.3"
+    "dejavu-fonts-ttf": "^2.37.3",
+    "@jupyterlab/builder": "~3.1"
   },
   "dependencies": {
-    "@jupyterlab/application": "2"
-  },
-  "peerDependencies": {
-    "@deathbeds/jupyterlab-fonts": "1"
+    "@jupyterlab/application": "~3.1",
+    "@deathbeds/jupyterlab-fonts": "~2.0"
   },
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "files": [
@@ -19,7 +18,14 @@
     "vendor/dejavu-fonts-ttf/LICENSE"
   ],
   "jupyterlab": {
-    "extension": true
+    "extension": "lib/plugin.js",
+    "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
+    "sharedPackages": {
+      "@deathbeds/jupyterlab-fonts": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
   },
   "keywords": [
     "jupyter",
@@ -34,7 +40,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
   },
   "types": "lib/index.d.ts",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "scripts": {
     "prebuild": "python scripts/convert.py"
   }
