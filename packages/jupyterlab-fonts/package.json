@@ -24,7 +24,7 @@
     "{LICENSE,README.md}"
   ],
   "scripts": {
-    "prebuild": "json2ts schema/fonts.json --strictIndexSignatures > src/_schema.d.ts && cp src/_schema.d.ts lib",
+    "prebuild": "mkdir lib && json2ts schema/fonts.json --strictIndexSignatures > src/_schema.d.ts && cp src/_schema.d.ts lib/",
     "watch": "watch 'jlpm build:schema' schema"
   },
   "dependencies": {

@@ -17,18 +17,27 @@ def task_build():
         name="js:pre",
         actions=[[*C.LERNA, "run", "prebuild"]],
         file_dep=[P.YARN_INTEGRITY],
+        targets=[*B.ALL_CORE_SCHEMA]
     )
     yield dict(
         name="js:tsc",
         actions=[[*C.LERNA, "run", "build"]],
-        file_dep=[P.YARN_INTEGRITY, *P.ALL_TS],
-        task_dep=["build:js:pre"],
+        file_dep=[P.YARN_INTEGRITY, *P.ALL_TS, *B.ALL_CORE_SCHEMA],
+        targets=[B.META_BUILDINFO]
     )
 
 
 def task_binder():
     """get ready for interactive development"""
-    yield dict(name="all", actions=[["echo", "ok"]])
+    yield dict(name="all", task_dep=["build", "setup"], actions=[["echo", "ok"]])
+
+
+def task_lab():
+    yield dict(
+        name="launch",
+        task_dep=["binder"],
+        actions=[["jupyter", "lab", "--no-browser", "--debug"]],
+    )
 
 
 def task_lint():
@@ -84,6 +93,8 @@ class C:
     PY = ["python"]
     PYM = [*PY, "-m"]
     PIP = [*PYM, "pip"]
+    SCHEMA_DTS = "_schema.d.ts"
+    TSBUILDINFO = "tsconfig.tsbuildinfo"
 
 
 class P:
@@ -93,6 +104,10 @@ class P:
     ROOT = DODO.parent
     ALL_PY = [*ROOT.glob("*.py")]
     PACKAGES = ROOT / "packages"
+    CORE = PACKAGES / "jupyterlab-fonts"
+    CORE_SRC = CORE / "src"
+    CORE_LIB = CORE / "lib"
+    META = PACKAGES / "_meta"
     PACKAGE_JSONS = [*PACKAGES.glob("*/package.json")]
     ROOT_PACKAGE_JSON = ROOT / "package.json"
     ALL_PACKAGE_JSONS = [ROOT_PACKAGE_JSON, *PACKAGE_JSONS]
@@ -106,6 +121,13 @@ class P:
     ALL_PRETTIER = [*ALL_PACKAGE_JSONS, *ALL_MD, *ALL_TS, *ALL_SCHEMA]
     ALL_ESLINT = [*ALL_TS]
 
+
+class B:
+    """built things"""
+    CORE_SCHEMA_SRC = P.CORE_SRC / C.SCHEMA_DTS
+    CORE_SCHEMA_LIB = P.CORE_LIB / C.SCHEMA_DTS
+    ALL_CORE_SCHEMA = [CORE_SCHEMA_SRC, CORE_SCHEMA_LIB]
+    META_BUILDINFO = P.META / C.TSBUILDINFO
 
 DOIT_CONFIG = {
     "backend": "sqlite3",
