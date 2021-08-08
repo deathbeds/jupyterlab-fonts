@@ -5,7 +5,7 @@ channels:
 
 dependencies:
   # run
-  - jupyterlab >=3.1.1,<4
+  - jupyterlab >=3.1.4,<4
   - python >=3.7,<3.10
   # build
   - doit
