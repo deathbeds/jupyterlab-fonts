@@ -35,7 +35,7 @@
     "dejavu-fonts-ttf": "^2.37.3"
   },
   "jupyterlab": {
-    "extension": "lib/plugin.js",
+    "extension": true,
     "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {

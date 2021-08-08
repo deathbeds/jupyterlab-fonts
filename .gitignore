@@ -15,4 +15,5 @@ lib/
 nbjss/static/nbjss.js
 node_modules/
 packages/*/lib
+src/jupyterlab_fonts/labextensions
 Untitled*.ipynb

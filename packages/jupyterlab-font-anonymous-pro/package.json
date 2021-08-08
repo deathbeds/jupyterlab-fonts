@@ -32,7 +32,7 @@
     "@jupyterlab/builder": "~3.1"
   },
   "jupyterlab": {
-    "extension": "lib/plugin.js",
+    "extension": true,
     "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-anonymous-pro",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {

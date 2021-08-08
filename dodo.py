@@ -1,5 +1,6 @@
 """project automation for jupyterlab-fonts"""
 from pathlib import Path
+import json
 
 
 def task_setup():
@@ -17,14 +18,47 @@ def task_build():
         name="js:pre",
         actions=[[*C.LERNA, "run", "prebuild"]],
         file_dep=[P.YARN_INTEGRITY],
-        targets=[*B.ALL_CORE_SCHEMA]
+        targets=[*B.ALL_CORE_SCHEMA],
     )
+
     yield dict(
         name="js:tsc",
         actions=[[*C.LERNA, "run", "build"]],
         file_dep=[P.YARN_INTEGRITY, *P.ALL_TS, *B.ALL_CORE_SCHEMA],
-        targets=[B.META_BUILDINFO]
+        targets=[B.META_BUILDINFO],
     )
+
+    for pkg_json, pkg in D.PKG_JSON_DATA.items():
+        if "jupyterlab" not in pkg:
+            continue
+        name = pkg["name"]
+        pkg_dir = pkg_json.parent
+        style = pkg_dir / "style"
+        schema = pkg_dir / "schema"
+        lib = pkg_dir / "lib"
+        yield dict(
+            name=f"ext:{name}",
+            file_dep=[
+                B.META_BUILDINFO,
+                pkg_json,
+                *style.rglob("*.*"),
+                *lib.rglob("*.*"),
+                *schema.glob("*.*"),
+            ],
+            actions=[
+                [
+                    *C.LERNA,
+                    "exec",
+                    "--scope",
+                    name,
+                    "jupyter",
+                    "labextension",
+                    "build",
+                    ".",
+                ]
+            ],
+            targets=[B.LABEXT / name / "package.json"],
+        )
 
 
 def task_binder():
@@ -95,6 +129,7 @@ class C:
     PIP = [*PYM, "pip"]
     SCHEMA_DTS = "_schema.d.ts"
     TSBUILDINFO = "tsconfig.tsbuildinfo"
+    ENC = dict(encoding="utf-8")
 
 
 class P:
@@ -108,6 +143,7 @@ class P:
     CORE_SRC = CORE / "src"
     CORE_LIB = CORE / "lib"
     META = PACKAGES / "_meta"
+    PY_SRC = ROOT / "src/jupyterlab_fonts"
     PACKAGE_JSONS = [*PACKAGES.glob("*/package.json")]
     ROOT_PACKAGE_JSON = ROOT / "package.json"
     ALL_PACKAGE_JSONS = [ROOT_PACKAGE_JSON, *PACKAGE_JSONS]
@@ -122,12 +158,22 @@ class P:
     ALL_ESLINT = [*ALL_TS]
 
 
+class D:
+    PKG_JSON_DATA = {
+        pkg_json: json.loads(pkg_json.read_text(**C.ENC))
+        for pkg_json in P.PACKAGE_JSONS
+    }
+
+
 class B:
     """built things"""
+
     CORE_SCHEMA_SRC = P.CORE_SRC / C.SCHEMA_DTS
     CORE_SCHEMA_LIB = P.CORE_LIB / C.SCHEMA_DTS
     ALL_CORE_SCHEMA = [CORE_SCHEMA_SRC, CORE_SCHEMA_LIB]
     META_BUILDINFO = P.META / C.TSBUILDINFO
+    LABEXT = P.PY_SRC / "labextensions"
+
 
 DOIT_CONFIG = {
     "backend": "sqlite3",
