@@ -197,6 +197,7 @@ class P:
 
     DODO = Path(__file__)
     ROOT = DODO.parent
+    GH = ROOT / ".github"
     LICENSE = ROOT / "LICENSE"
     README = ROOT / "README.md"
     BINDER = ROOT / ".binder"
@@ -219,7 +220,7 @@ class P:
     YARN_LOCK = ROOT / "yarn.lock"
     ESLINTRC = ROOT / ".eslintrc.js"
     ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
-    ALL_YAML = [*BINDER.glob("*.yml")]
+    ALL_YAML = [*BINDER.glob("*.yml"), *GH.rglob("*.yml")]
     ALL_TS = [*PACKAGES.glob("*/src/**/*.ts"), *PACKAGES.glob("*/src/**/*.tsx")]
     ALL_MD = [*ROOT.glob("*.md")]
     ALL_JSON = [*ALL_PACKAGE_JSONS, *BINDER.glob("*.json"), *ALL_SCHEMA]
