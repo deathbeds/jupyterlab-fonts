@@ -51,9 +51,7 @@ export class Stylist {
   }
 
   stylesheet(meta: SCHEMA.ISettings, notebook?: NotebookPanel, clear = false) {
-    let sheet = notebook
-      ? this._notebookStyles.get(notebook)
-      : this._globalStyles;
+    let sheet = notebook ? this._notebookStyles.get(notebook) : this._globalStyles;
 
     let style = notebook
       ? this._nbMetaToStyle(meta, notebook)
@@ -110,29 +108,25 @@ export class Stylist {
         if (cachedFont != null) {
           faces[font] = cachedFont;
         } else {
-          // tslint:disable-next-line
-          new Promise((resolve, reject) => {
+          new Promise<void>((resolve, reject) => {
             const options = this.fonts.get(font);
             if (options == null) {
               reject();
               return;
             } else {
-              options.faces().then(
-                faces => {
+              options
+                .faces()
+                .then((faces) => {
                   if (this._fontCache.has(font)) {
                     return;
                   }
                   this._fontCache.set(font, faces);
                   this._cacheUpdated.emit(void 0);
-                  resolve();
-                },
-                function(err) {
-                  console.error('rejected!', err);
-                  reject();
-                }
-              );
+                  resolve(void 0);
+                })
+                .catch(reject);
             }
-          });
+          }).catch(console.warn);
         }
       }
     }
@@ -146,7 +140,7 @@ export class Stylist {
 
     return {
       '@global': styles as any,
-      '@font-face': flatFaces as any
+      '@font-face': flatFaces as any,
     } as SCHEMA.IStyles;
   }
 
@@ -161,13 +155,13 @@ export class Stylist {
     if (show) {
       setTimeout(
         () =>
-          this.stylesheets.map(s => {
+          this.stylesheets.map((s) => {
             document.body.appendChild(s);
           }),
         0
       );
     } else {
-      this.stylesheets.map(el => el.remove());
+      this.stylesheets.map((el) => el.remove());
     }
   }
 }

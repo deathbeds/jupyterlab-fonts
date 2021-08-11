@@ -1,35 +1,46 @@
 {
-  "author": "Dead Pixels Collective",
-  "bugs": {
-    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
-  },
-  "dependencies": {
-    "@jupyterlab/application": "2",
-    "firacode": "^2.0.0"
-  },
-  "peerDependencies": {
-    "@deathbeds/jupyterlab-fonts": "1"
-  },
+  "name": "@deathbeds/jupyterlab-font-fira-code",
+  "version": "1.0.0",
   "description": "Fira Code Fonts for JupyterLab",
-  "files": [
-    "{lib,style,src}/*.{d.ts,js,css,ts,tsx,js.map}",
-    "{README.md,LICENSE}"
-  ],
-  "jupyterlab": {
-    "extension": true
-  },
   "keywords": [
     "jupyter",
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "license": "BSD-3-Clause",
-  "main": "lib/index.js",
-  "name": "@deathbeds/jupyterlab-font-fira-code",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/deathbeds/jupyterlab-fonts.git"
+    "url": "https://github.com/deathbeds/jupyterlab-fonts"
   },
+  "license": "BSD-3-Clause",
+  "author": "Dead Pixels Collective",
+  "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "version": "1.0.0"
+  "files": [
+    "{lib,style,src}/*.{d.ts,js,css,ts,tsx,js.map}",
+    "{README.md,LICENSE}"
+  ],
+  "scripts": {
+    "watch": "jupyter labextension watch --debug ."
+  },
+  "dependencies": {
+    "@deathbeds/jupyterlab-fonts": "~2.0",
+    "@jupyterlab/application": "~3.1",
+    "firacode": "^5.2.0"
+  },
+  "devDependencies": {
+    "@jupyterlab/builder": "~3.1"
+  },
+  "jupyterlab": {
+    "extension": true,
+    "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-fira-code",
+    "sharedPackages": {
+      "@deathbeds/jupyterlab-fonts": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
+  }
 }

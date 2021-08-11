@@ -6,8 +6,13 @@ on:
     branches:
       - master
 
+env:
+  CONDARC: .github/.condarc
+  CACHE_EPOCH: 0
+
 jobs:
   build:
+    name: build ${{ matrix.os }} ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
@@ -16,3 +21,60 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
+      - name: cache (conda)
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml', '.github/.condarc') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
+
+      - name: install (conda)
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          condarc-file: .github/.condarc
+          miniforge-variant: Mambaforge
+          python-version: ${{ matrix.python-version }}
+          environment-file: .binder/environment.yml
+          use-only-tar-bz2: true
+          use-mamba: true
+
+      - name: cache (node)
+        uses: actions/cache@v2
+        id: cache-node-modules
+        with:
+          path: '**/node_modules'
+          key: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-node-build-${{ hashFiles('yarn.lock') }}
+
+      - name: cache (yarn)
+        uses: actions/cache@v2
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        id: cache-yarn-packages
+        with:
+          path: .yarn-packages
+          key: |
+            ${{ env.CACHE_EPOCH }}-yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-yarn-${{ runner.os }}-
+            ${{ env.CACHE_EPOCH }}-yarn-
+
+      - name: lint
+        shell: bash -l {0}
+        run: doit lint
+
+      - name: build
+        shell: bash -l {0}
+        run: doit build
+
+      - name: dist
+        shell: bash -l {0}
+        run: doit dist
+
+      - name: upload (dist)
+        uses: actions/upload-artifact@v2
+        with:
+          name: jupyterlab-fonts ${{ github.run_number }} dist
+          path: ./dist

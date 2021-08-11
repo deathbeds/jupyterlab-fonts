@@ -15,8 +15,7 @@ nbjss_jss = os.path.join(static, "nbjss.jss.json")
 
 
 class JSSHeaderPreprocessor(Preprocessor):
-    """ Adds a bunch of nasty CSS and JavaScript to make fonts pretty.
-    """
+    """Adds a bunch of nasty CSS and JavaScript to make fonts pretty."""
 
     static_strategy = UseEnum(
         StaticStrategy,
@@ -82,8 +81,7 @@ class JSSHeaderPreprocessor(Preprocessor):
             return fp.read()
 
     def strategy_inline_js(self, jss, resources):
-        """ Embed
-        """
+        """Embed"""
         css = """</style>
         <script>%s</script>
         <script>

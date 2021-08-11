@@ -1,26 +1,46 @@
-import os
-from setuptools import setup
+import json
+from pathlib import Path
 
-name = "nbjss"
-__version__ = None
+HERE = Path(__file__).parent
+NAME = "jupyterlab-fonts"
+EXT = HERE / "src/jupyterlab_fonts/labextensions/@deathbeds"
+CORE = EXT / NAME
 
+__js__ = json.loads((CORE / "package.json").read_text(encoding="utf-8"))
 
-with open(os.path.join(name, "_version.py")) as fp:
-    exec(fp.read())
+SHARE = "share/jupyter/labextensions"
+FILES = []
 
+for package_json in EXT.glob("*/package.json"):
+    pkg = json.loads(package_json.read_text(encoding="utf-8"))
 
-setup_args = dict(
-    name="nbjss",
-    version=__version__,
-    description="Define notebook JSS styles in metadata for nbconvert",
-    url="http://github.com/deathbeds/jyve",
-    author="Dead Pixel Collective",
-    license="BSD-3-Clause",
-    packages=[name],
-    setup_requires=["nbconvert"],
-    zip_safe=False,
-    include_package_data=True,
-)
+    for path in package_json.parent.rglob("*"):
+        if path.is_dir():
+            continue
+
+        parent = path.parent.relative_to(package_json.parent).as_posix()
+        parent = "" if parent == "." else f"/{parent}"
+        FILES += [
+            (
+                f"""{SHARE}/{pkg["name"]}{parent}""",
+                [str(path.relative_to(HERE).as_posix())],
+            )
+        ]
+
 
 if __name__ == "__main__":
-    setup(**setup_args)
+    import setuptools
+
+    setuptools.setup(
+        name=NAME,
+        version=__js__["version"],
+        data_files=FILES,
+        description=__js__["description"],
+        url=__js__["repository"]["url"],
+        author=__js__["author"],
+        license=__js__["license"],
+        project_urls={
+            "Bug Tracker": __js__["bugs"]["url"],
+            "Source Code": __js__["repository"]["url"],
+        },
+    )

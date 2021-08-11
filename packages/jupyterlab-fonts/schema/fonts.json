@@ -129,10 +129,7 @@
     "IJSS": {
       "type": "object",
       "additionalProperties": {
-        "oneOf": [
-          { "$ref": "#/definitions/IJSS" },
-          { "#ref": "#/definitions/ICSSOM" }
-        ]
+        "oneOf": [{ "$ref": "#/definitions/IJSS" }, { "#ref": "#/definitions/ICSSOM" }]
       }
     },
     "IJSSRoot": {
