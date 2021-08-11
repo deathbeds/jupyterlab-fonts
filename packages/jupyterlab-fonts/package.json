@@ -25,7 +25,7 @@
   ],
   "scripts": {
     "prebuild": "mkdir lib && json2ts schema/fonts.json --strictIndexSignatures > src/_schema.d.ts && cp src/_schema.d.ts lib/",
-    "watch": "watch 'jlpm build:schema' schema"
+    "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
     "@jupyterlab/application": "~3.1",

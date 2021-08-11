@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" baseProfile="tiny" width="24" height="24" viewBox="0 0 24 24">
-  <rect fill="#000" stroke="#fff" x="1" y="1" width="22" height="22" rx="2" ry="2"/>
-  <text text-anchor="middle" x="12px" font-family="sans-serif" alignment-baseline="middle" y="17px" fill="#fff">Aa</text>
+  <g class="jp-icon3" fill="#616161">
+    <rect x="1" y="1" width="22" height="22" rx="2" ry="2"/>
+  </g>
+  <g class="jp-icon-accent0 jp-icon-selectable" fill="#fff">
+    <text text-anchor="middle" x="12px" font-family="sans-serif" alignment-baseline="middle" y="17px">Aa</text>
+  </g>
 </svg>

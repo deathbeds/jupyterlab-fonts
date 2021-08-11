@@ -23,6 +23,9 @@
     "{README.md,LICENSE}",
     "vendor/anonymous-pro/LICENSE"
   ],
+  "scripts": {
+    "watch": "jupyter labextension watch --debug ."
+  },
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "~2.0",
     "@jupyterlab/application": "~3.1",

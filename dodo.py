@@ -21,7 +21,13 @@ def task_setup():
     yield dict(
         name="ext",
         actions=[
-            [*C.PY, P.ROOT / "scripts/_labextension.py", "develop", "--overwrite", "jupyterlab_fonts"]
+            [
+                *C.PY,
+                P.ROOT / "scripts/_labextension.py",
+                "develop",
+                "--overwrite",
+                "jupyterlab_fonts",
+            ]
         ],
         file_dep=[*B.ALL_PY_DIST],
         task_dep=["setup:pip"],
@@ -97,6 +103,14 @@ def task_lab():
         name="launch",
         task_dep=["binder"],
         actions=[["jupyter", "lab", "--no-browser", "--debug"]],
+    )
+
+
+def task_watch():
+    yield dict(
+        name="ts",
+        task_dep=["setup"],
+        actions=[[*C.LERNA, "run", "--stream", "--parallel", "watch"]],
     )
 
 

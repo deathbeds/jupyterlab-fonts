@@ -22,6 +22,9 @@
     "{lib,style,src}/*.{d.ts,js,css,ts,tsx,js.map}",
     "{README.md,LICENSE}"
   ],
+  "scripts": {
+    "watch": "jupyter labextension watch --debug ."
+  },
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "~2.0",
     "@jupyterlab/application": "~3.1",

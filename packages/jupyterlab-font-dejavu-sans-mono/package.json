@@ -24,7 +24,8 @@
     "vendor/dejavu-fonts-ttf/LICENSE"
   ],
   "scripts": {
-    "prebuild": "python scripts/convert.py"
+    "prebuild": "python scripts/convert.py",
+    "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "~2.0",
