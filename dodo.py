@@ -80,7 +80,7 @@ def task_build():
 
     yield dict(
         name="py",
-        file_dep=[*ext_pkg_jsons, *P.ALL_PY_SRC],
+        file_dep=[*ext_pkg_jsons, *P.ALL_PY_SRC, P.LICENSE, P.README],
         actions=[[*C.PY, "setup.py", "sdist", "bdist_wheel"]],
         targets=[*B.ALL_PY_DIST],
     )
@@ -197,6 +197,8 @@ class P:
 
     DODO = Path(__file__)
     ROOT = DODO.parent
+    LICENSE = ROOT / "LICENSE"
+    README = ROOT / "README.md"
     BINDER = ROOT / ".binder"
     DIST = ROOT / "dist"
     PACKAGES = ROOT / "packages"
@@ -217,10 +219,10 @@ class P:
     YARN_LOCK = ROOT / "yarn.lock"
     ESLINTRC = ROOT / ".eslintrc.js"
     ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
-    ALL_YAML = [BINDER.glob("*.yml")]
+    ALL_YAML = [*BINDER.glob("*.yml")]
     ALL_TS = [*PACKAGES.glob("*/src/**/*.ts"), *PACKAGES.glob("*/src/**/*.tsx")]
     ALL_MD = [*ROOT.glob("*.md")]
-    ALL_JSON = [*ALL_PACKAGE_JSONS, BINDER.glob("*.json"), *ALL_SCHEMA]
+    ALL_JSON = [*ALL_PACKAGE_JSONS, *BINDER.glob("*.json"), *ALL_SCHEMA]
     ALL_PRETTIER = [*ALL_JSON, *ALL_MD, *ALL_TS, *ALL_YAML]
     ALL_ESLINT = [*ALL_TS]
     ALL_PY = [*ROOT.glob("*.py"), *ALL_PY_SRC]
@@ -266,12 +268,15 @@ class U:
         style = pkg_dir / "style"
         schema = pkg_dir / "schema"
         lib = pkg_dir / "lib"
-        return [
-            pkg_json,
-            *style.rglob("*.*"),
-            *lib.rglob("*.*"),
-            *schema.glob("*.*"),
-        ]
+        return [*style.rglob("*.*"), *lib.rglob("*.*"), *schema.glob("*.*")] + (
+            [
+                pkg_json,
+                pkg_dir / "LICENSE",
+                pkg_dir / "README.md",
+            ]
+            if pkg_json.parent != P.META
+            else []
+        )
 
     @staticmethod
     def make_hashfile(shasums, inputs):
