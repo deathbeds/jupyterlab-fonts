@@ -28,6 +28,8 @@ def task_build():
         targets=[B.META_BUILDINFO],
     )
 
+    ext_pkg_jsons = []
+
     for pkg_json, pkg in D.PKG_JSON_DATA.items():
         if "jupyterlab" not in pkg:
             continue
@@ -36,6 +38,8 @@ def task_build():
         style = pkg_dir / "style"
         schema = pkg_dir / "schema"
         lib = pkg_dir / "lib"
+        ext_pkg_json = B.LABEXT / name / "package.json"
+        ext_pkg_jsons += [ext_pkg_json]
         yield dict(
             name=f"ext:{name}",
             file_dep=[
@@ -57,8 +61,14 @@ def task_build():
                     ".",
                 ]
             ],
-            targets=[B.LABEXT / name / "package.json"],
+            targets=[ext_pkg_json],
         )
+
+    yield dict(
+        name="py",
+        file_dep=[*ext_pkg_jsons, *P.ALL_PY_SRC],
+        actions=[[*C.PY, "setup.py", "sdist", "bdist_wheel"]],
+    )
 
 
 def task_binder():
@@ -137,13 +147,15 @@ class P:
 
     DODO = Path(__file__)
     ROOT = DODO.parent
-    ALL_PY = [*ROOT.glob("*.py")]
     PACKAGES = ROOT / "packages"
     CORE = PACKAGES / "jupyterlab-fonts"
     CORE_SRC = CORE / "src"
     CORE_LIB = CORE / "lib"
     META = PACKAGES / "_meta"
+
     PY_SRC = ROOT / "src/jupyterlab_fonts"
+    ALL_PY_SRC = PY_SRC.rglob("*.py")
+
     PACKAGE_JSONS = [*PACKAGES.glob("*/package.json")]
     ROOT_PACKAGE_JSON = ROOT / "package.json"
     ALL_PACKAGE_JSONS = [ROOT_PACKAGE_JSON, *PACKAGE_JSONS]
@@ -156,6 +168,7 @@ class P:
     ALL_MD = [*ROOT.glob("*.md")]
     ALL_PRETTIER = [*ALL_PACKAGE_JSONS, *ALL_MD, *ALL_TS, *ALL_SCHEMA]
     ALL_ESLINT = [*ALL_TS]
+    ALL_PY = [*ROOT.glob("*.py"), *ALL_PY_SRC]
 
 
 class D:

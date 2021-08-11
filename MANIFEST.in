@@ -1,2 +1,2 @@
 include LICENSE README.md
-recursive-include nbjss/static *.json *.js
+recursive-include src/jupyterlab_fonts/labextennsions *.*

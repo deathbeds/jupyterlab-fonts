@@ -57,7 +57,7 @@ jupyter lab build
 ## nbconvert PreProcessor (Experimental)
 
 ```bash
-pip install git+https://github.com/deathbeds/jupyterlab-fonts.git
+pip install git+https://github.com/deathbeds/jupyterlab-fonts
 ```
 
 # Uninstalling
