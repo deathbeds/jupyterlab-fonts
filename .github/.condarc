@@ -4,6 +4,7 @@ always_yes: True
 auto_update_conda: False
 local_repodata_ttl: 99999
 notify_outdated_conda: False
+quiet: True
 remote_connect_timeout_secs: 600.0
 remote_max_retries: 10
 remote_read_timeout_secs: 600.0

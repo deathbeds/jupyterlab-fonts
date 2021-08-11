@@ -4,6 +4,7 @@ import json
 import re
 import doit.action
 import hashlib
+import sys
 
 
 def task_setup():
@@ -182,7 +183,7 @@ class C:
 
     JLPM = ["jlpm"]
     LERNA = [*JLPM, "lerna"]
-    PY = ["python"]
+    PY = [sys.executable]
     PYM = [*PY, "-m"]
     PIP = [*PYM, "pip"]
     JPY = [*PYM, "jupyter"]

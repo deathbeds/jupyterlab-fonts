@@ -8,10 +8,13 @@ dependencies:
   - jupyterlab >=3.1.4,<4
   - python >=3.7,<3.10
   # build
-  - doit
-  - nodejs >=14,<15
   - brotlipy
+  - doit
   - fonttools
+  - nodejs >=14,<15
+  - pip
+  - twine
+  - wheel
   # qa
   - black
   - flake8
