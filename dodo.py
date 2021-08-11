@@ -1,6 +1,9 @@
 """project automation for jupyterlab-fonts"""
 from pathlib import Path
 import json
+import re
+import doit.action
+import hashlib
 
 
 def task_setup():
@@ -55,21 +58,11 @@ def task_build():
         if "jupyterlab" not in pkg:
             continue
         name = pkg["name"]
-        pkg_dir = pkg_json.parent
-        style = pkg_dir / "style"
-        schema = pkg_dir / "schema"
-        lib = pkg_dir / "lib"
         ext_pkg_json = B.LABEXT / name / "package.json"
         ext_pkg_jsons += [ext_pkg_json]
         yield dict(
             name=f"ext:{name}",
-            file_dep=[
-                B.META_BUILDINFO,
-                pkg_json,
-                *style.rglob("*.*"),
-                *lib.rglob("*.*"),
-                *schema.glob("*.*"),
-            ],
+            file_dep=[B.META_BUILDINFO, *U.js_deps(pkg_json)],
             actions=[
                 [
                     *C.LERNA,
@@ -95,7 +88,12 @@ def task_build():
 
 def task_binder():
     """get ready for interactive development"""
-    yield dict(name="all", task_dep=["build", "setup"], actions=[["echo", "ok"]])
+    yield dict(
+        name="labextensions",
+        task_dep=["setup"],
+        actions=[[*C.JPY, "labextension", "list"]],
+    )
+    yield dict(name="all", task_dep=["binder:labextensions"], actions=[["echo", "ok"]])
 
 
 def task_lab():
@@ -103,6 +101,26 @@ def task_lab():
         name="launch",
         task_dep=["binder"],
         actions=[["jupyter", "lab", "--no-browser", "--debug"]],
+    )
+
+
+def task_dist():
+    for pkg_json, tgz in B.JS_TARBALL.items():
+        yield dict(
+            name=f"js:{tgz.name}",
+            actions=[
+                doit.action.CmdAction(
+                    ["npm", "pack", pkg_json.parent], shell=False, cwd=P.DIST
+                )
+            ],
+            file_dep=[B.META_BUILDINFO, *U.js_deps(pkg_json)],
+            targets=[tgz],
+        )
+    yield dict(
+        name="shasums",
+        actions=[(U.make_hashfile, [B.SHA256SUMS, B.ALL_HASH_DEPS])],
+        targets=[B.SHA256SUMS],
+        file_dep=[*B.ALL_HASH_DEPS],
     )
 
 
@@ -179,6 +197,8 @@ class P:
 
     DODO = Path(__file__)
     ROOT = DODO.parent
+
+    DIST = ROOT / "dist"
     PACKAGES = ROOT / "packages"
     CORE = PACKAGES / "jupyterlab-fonts"
     CORE_PKG_JSON = CORE / "package.json"
@@ -213,18 +233,80 @@ class D:
     CORE_PKG_VERSION = CORE_PKG_DATA["version"]
 
 
+class U:
+    @staticmethod
+    def npm_tgz_name(pkg_json):
+        name = pkg_json["name"].replace("@", "").replace("/", "-")
+        version = U.norm_js_version(pkg_json)
+        return f"""{name}-{version}.tgz"""
+
+    @staticmethod
+    def norm_js_version(pkg):
+        """undo some package weirdness"""
+        v = pkg["version"]
+        final = ""
+        # alphas, beta use dashes
+        for dashed in v.split("-"):
+            if final:
+                final += "-"
+            for dotted in dashed.split("."):
+                if final:
+                    final += "."
+                if re.findall(r"^\d+$", dotted):
+                    final += str(int(dotted))
+                else:
+                    final += dotted
+        return final
+
+    @staticmethod
+    def js_deps(pkg_json):
+        pkg_dir = pkg_json.parent
+        style = pkg_dir / "style"
+        schema = pkg_dir / "schema"
+        lib = pkg_dir / "lib"
+        return [
+            pkg_json,
+            *style.rglob("*.*"),
+            *lib.rglob("*.*"),
+            *schema.glob("*.*"),
+        ]
+
+    @staticmethod
+    def make_hashfile(shasums, inputs):
+        if shasums.exists():
+            shasums.unlink()
+
+        if not shasums.parent.exists():
+            shasums.parent.mkdir(parents=True)
+
+        lines = []
+
+        for p in inputs:
+            lines += ["  ".join([hashlib.sha256(p.read_bytes()).hexdigest(), p.name])]
+
+        output = "\n".join(lines)
+        print(output)
+        shasums.write_text(output)
+
+
 class B:
     """built things"""
 
-    DIST = P.ROOT / "dist"
     CORE_SCHEMA_SRC = P.CORE_SRC / C.SCHEMA_DTS
     CORE_SCHEMA_LIB = P.CORE_LIB / C.SCHEMA_DTS
     ALL_CORE_SCHEMA = [CORE_SCHEMA_SRC, CORE_SCHEMA_LIB]
     META_BUILDINFO = P.META / C.TSBUILDINFO
     LABEXT = P.PY_SRC / "labextensions"
-    WHEEL = DIST / f"""jupyterlab_fonts-{D.CORE_PKG_VERSION}-py3-none-any.whl"""
-    SDIST = DIST / f"""jupyterlab-fonts-{D.CORE_PKG_VERSION}.tar.gz"""
+    WHEEL = P.DIST / f"""jupyterlab_fonts-{D.CORE_PKG_VERSION}-py3-none-any.whl"""
+    SDIST = P.DIST / f"""jupyterlab-fonts-{D.CORE_PKG_VERSION}.tar.gz"""
+    JS_TARBALL = {
+        k: P.DIST / U.npm_tgz_name(v)
+        for k, v in D.PKG_JSON_DATA.items()
+        if k.parent.name != P.META
+    }
     ALL_PY_DIST = [WHEEL, SDIST]
+    ALL_HASH_DEPS = [*ALL_PY_DIST, *JS_TARBALL.values()]
+    SHA256SUMS = P.DIST / "SHA256SUMS"
 
 
 DOIT_CONFIG = {
