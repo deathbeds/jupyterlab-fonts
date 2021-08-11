@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 HERE = Path(__file__).parent
-PKG_JSON = HERE / "labextensions/@deathebds/jupyterlab-fonts/package.json"
+PKG_JSON = HERE / "labextensions/@deathbeds/jupyterlab-fonts/package.json"
 
 __js__ = json.loads(PKG_JSON.read_text(encoding="utf-8"))
 

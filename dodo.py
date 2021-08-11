@@ -12,6 +12,21 @@ def task_setup():
         file_dep=[P.YARN_LOCK, *P.ALL_PACKAGE_JSONS],
     )
 
+    yield dict(
+        name="pip",
+        actions=[[*C.PIP, "install", "--no-deps", "--ignore-installed", "-e", "."]],
+        file_dep=[*B.ALL_PY_DIST],
+    )
+
+    yield dict(
+        name="ext",
+        actions=[
+            [*C.PY, P.ROOT / "scripts/_labextension.py", "develop", "--overwrite", "jupyterlab_fonts"]
+        ],
+        file_dep=[*B.ALL_PY_DIST],
+        task_dep=["setup:pip"],
+    )
+
 
 def task_build():
     yield dict(
@@ -68,6 +83,7 @@ def task_build():
         name="py",
         file_dep=[*ext_pkg_jsons, *P.ALL_PY_SRC],
         actions=[[*C.PY, "setup.py", "sdist", "bdist_wheel"]],
+        targets=[*B.ALL_PY_DIST],
     )
 
 
@@ -137,9 +153,11 @@ class C:
     PY = ["python"]
     PYM = [*PY, "-m"]
     PIP = [*PYM, "pip"]
+    JPY = [*PYM, "jupyter"]
     SCHEMA_DTS = "_schema.d.ts"
     TSBUILDINFO = "tsconfig.tsbuildinfo"
     ENC = dict(encoding="utf-8")
+    CORE_EXT = "@deathbeds/"
 
 
 class P:
@@ -149,6 +167,7 @@ class P:
     ROOT = DODO.parent
     PACKAGES = ROOT / "packages"
     CORE = PACKAGES / "jupyterlab-fonts"
+    CORE_PKG_JSON = CORE / "package.json"
     CORE_SRC = CORE / "src"
     CORE_LIB = CORE / "lib"
     META = PACKAGES / "_meta"
@@ -176,16 +195,22 @@ class D:
         pkg_json: json.loads(pkg_json.read_text(**C.ENC))
         for pkg_json in P.PACKAGE_JSONS
     }
+    CORE_PKG_DATA = PKG_JSON_DATA[P.CORE_PKG_JSON]
+    CORE_PKG_VERSION = CORE_PKG_DATA["version"]
 
 
 class B:
     """built things"""
 
+    DIST = P.ROOT / "dist"
     CORE_SCHEMA_SRC = P.CORE_SRC / C.SCHEMA_DTS
     CORE_SCHEMA_LIB = P.CORE_LIB / C.SCHEMA_DTS
     ALL_CORE_SCHEMA = [CORE_SCHEMA_SRC, CORE_SCHEMA_LIB]
     META_BUILDINFO = P.META / C.TSBUILDINFO
     LABEXT = P.PY_SRC / "labextensions"
+    WHEEL = DIST / f"""jupyterlab_fonts-{D.CORE_PKG_VERSION}-py3-none-any.whl"""
+    SDIST = DIST / f"""jupyterlab-fonts-{D.CORE_PKG_VERSION}.tar.gz"""
+    ALL_PY_DIST = [WHEEL, SDIST]
 
 
 DOIT_CONFIG = {
