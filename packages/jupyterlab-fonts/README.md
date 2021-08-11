@@ -1,5 +1,14 @@
 # jupyterlab-fonts
 
-Interactive font manager for JupyterLab.
+Data-driven Style and Typography for JupyterLab.
 
-Used by [@deathbeds/jupyterlab-fonts-extension](../jupyterlab-fonts-extension/).
+Install this (and all the fonts) with:
+
+```bash
+pip install jupyterlab-fonts
+# or
+conda install -c conda-forge jupyterlab-fonts
+```
+
+For more information, see the
+[contribution guide](https://github.com/deathbeds/jupyterlab-fonts/blob/master/CONTRIBUTING.md).

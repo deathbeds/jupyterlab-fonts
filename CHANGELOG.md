@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.0
+
+- Support JupyterLab 3
+- Installs as a prebuilt extension, no `nodejs` required
+
 ## v1.0.1
 
 - Fixes issue with global setting
