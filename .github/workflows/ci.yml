@@ -9,6 +9,7 @@ on:
 env:
   CONDARC: .github/.condarc
   CACHE_EPOCH: 0
+  MAMBA_NO_BANNER: 1
 
 jobs:
   build:
