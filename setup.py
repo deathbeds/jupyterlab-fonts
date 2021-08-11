@@ -42,5 +42,6 @@ if __name__ == "__main__":
         project_urls={
             "Bug Tracker": __js__["bugs"]["url"],
             "Source Code": __js__["repository"]["url"],
+            "Changelog": f"""{__js__["repository"]["url"]}/blob/master/CHANGELOG.md""",
         },
     )

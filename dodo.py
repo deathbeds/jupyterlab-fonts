@@ -1,10 +1,12 @@
 """project automation for jupyterlab-fonts"""
-from pathlib import Path
+import hashlib
 import json
 import re
-import doit.action
-import hashlib
 import sys
+from pathlib import Path
+
+import doit.action
+import doit.tools
 
 
 def task_setup():
@@ -81,7 +83,7 @@ def task_build():
 
     yield dict(
         name="py",
-        file_dep=[*ext_pkg_jsons, *P.ALL_PY_SRC, P.LICENSE, P.README],
+        file_dep=[*ext_pkg_jsons, *P.ALL_PY_SRC, P.LICENSE, P.README, *P.PY_SETUP],
         actions=[[*C.PY, "setup.py", "sdist", "bdist_wheel"]],
         targets=[*B.ALL_PY_DIST],
     )
@@ -110,9 +112,10 @@ def task_dist():
         yield dict(
             name=f"js:{tgz.name}",
             actions=[
+                (doit.tools.create_folder, [P.DIST]),
                 doit.action.CmdAction(
                     ["npm", "pack", pkg_json.parent], shell=False, cwd=P.DIST
-                )
+                ),
             ],
             file_dep=[B.META_BUILDINFO, *U.js_deps(pkg_json)],
             targets=[tgz],
@@ -135,7 +138,11 @@ def task_watch():
 
 def task_lint():
     """apply source formatting, check for mistakes"""
-    yield dict(name="black", actions=[["black", *P.ALL_PY]], file_dep=[*P.ALL_PY])
+    yield dict(
+        name="black",
+        actions=[["isort", *P.ALL_PY], ["black", *P.ALL_PY]],
+        file_dep=[*P.ALL_PY],
+    )
 
     yield dict(
         name="flake8",
@@ -211,7 +218,8 @@ class P:
     META = PACKAGES / "_meta"
 
     PY_SRC = ROOT / "src/jupyterlab_fonts"
-    ALL_PY_SRC = PY_SRC.rglob("*.py")
+    PY_SETUP = [ROOT / "setup.cfg", ROOT / "setup.py"]
+    ALL_PY_SRC = [*PY_SRC.rglob("*.py")]
 
     PACKAGE_JSONS = [*PACKAGES.glob("*/package.json")]
     ROOT_PACKAGE_JSON = ROOT / "package.json"
@@ -223,7 +231,7 @@ class P:
     ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
     ALL_YAML = [*BINDER.glob("*.yml"), *GH.rglob("*.yml")]
     ALL_TS = [*PACKAGES.glob("*/src/**/*.ts"), *PACKAGES.glob("*/src/**/*.tsx")]
-    ALL_MD = [*ROOT.glob("*.md")]
+    ALL_MD = [*ROOT.glob("*.md"), *PACKAGES.glob("*/*.md")]
     ALL_JSON = [*ALL_PACKAGE_JSONS, *BINDER.glob("*.json"), *ALL_SCHEMA]
     ALL_PRETTIER = [*ALL_JSON, *ALL_MD, *ALL_TS, *ALL_YAML]
     ALL_ESLINT = [*ALL_TS]

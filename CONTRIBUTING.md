@@ -1,6 +1,6 @@
 # Contributing
 
-We would love to have contributions of
+We would love to have contributions of:
 
 - additional fonts
 - additional strategies for making fonts available
@@ -9,43 +9,57 @@ We would love to have contributions of
 
 ### Before
 
-Install:
-
-- [conda](https://conda.io/docs/user-guide/install/download.html)
+- Install [mambaforge](https://github.com/conda-forge/miniforge/releases/)
 
 ### Setup
 
 ```bash
-conda env update
+conda env update --file .binder/environment.yml
 conda activate jupyterlab-fonts-dev
-jlpm bootstrap  # this takes a while
-jupyter lab --no-browser --debug
+doit setup
 ```
 
 ## Build Once
 
 ```bash
-jlpm build
+doit build
+```
+
+## Lab
+
+```bash
+doit lab
 ```
 
 ## Always Be Building
 
 ```bash
-jlpm watch
+doit watch
 ```
 
-Starts:
+This starts:
 
-- a JSON schema to typescript process
-- a typescript build process
-- jupyterlab in build mode
+- a TypeScript build process
+- JupyterLab extension builders
 
 ## Thinking about Committing
 
 ```bash
-jlpm lint
-jlpm test
+doit lint
+# doit test
 ```
+
+## Releasing
+
+- make a release issue
+- ensure the CHANGELOG is updated
+- wait for CI
+- download the dist
+- make a GitHub release off `master`
+- upload the assets
+- upload to PyPI, npm
+- handle conda-forge chores
+- post-mortem
 
 ## Design Principles
 
@@ -74,7 +88,7 @@ would accept any PRs, pending review, that made this process more sane and secur
 For the nbconvert preprocessor, other strategies, like external files, would be
 nice-to-have.
 
-## Changing the schema
+## Changing the Schema
 
 Aside from being difficult to develop, schema changes need to be addressed very
 gingerly: ideally, we would have a pattern for upgrading and downgrading font metadata
