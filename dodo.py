@@ -197,7 +197,7 @@ class P:
 
     DODO = Path(__file__)
     ROOT = DODO.parent
-
+    BINDER = ROOT / ".binder"
     DIST = ROOT / "dist"
     PACKAGES = ROOT / "packages"
     CORE = PACKAGES / "jupyterlab-fonts"
@@ -217,9 +217,11 @@ class P:
     YARN_LOCK = ROOT / "yarn.lock"
     ESLINTRC = ROOT / ".eslintrc.js"
     ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
+    ALL_YAML = [BINDER.glob("*.yml")]
     ALL_TS = [*PACKAGES.glob("*/src/**/*.ts"), *PACKAGES.glob("*/src/**/*.tsx")]
     ALL_MD = [*ROOT.glob("*.md")]
-    ALL_PRETTIER = [*ALL_PACKAGE_JSONS, *ALL_MD, *ALL_TS, *ALL_SCHEMA]
+    ALL_JSON = [*ALL_PACKAGE_JSONS, BINDER.glob("*.json"), *ALL_SCHEMA]
+    ALL_PRETTIER = [*ALL_JSON, *ALL_MD, *ALL_TS, *ALL_YAML]
     ALL_ESLINT = [*ALL_TS]
     ALL_PY = [*ROOT.glob("*.py"), *ALL_PY_SRC]
 
