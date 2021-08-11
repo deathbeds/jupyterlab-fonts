@@ -1,2 +1,2 @@
-include LICENSE README.md
-recursive-include src/jupyterlab_fonts/labextennsions *.*
+include LICENSE README.md src/jupyterlab_fonts/install.json
+recursive-include src/jupyterlab_fonts/labextensions *.*

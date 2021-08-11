@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-fira-code",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Fira Code Fonts for JupyterLab",
   "keywords": [
     "jupyter",

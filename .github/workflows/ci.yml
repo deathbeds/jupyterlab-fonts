@@ -79,3 +79,57 @@ jobs:
         with:
           name: jupyterlab-fonts ${{ github.run_number }} dist
           path: ./dist
+
+  smoke-test:
+    needs: [build]
+    name: smoke-test ${{ matrix.os }} ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu', 'macos', 'windows']
+        python-version: ['3.7', '3.9']
+        include:
+          - python-version: '3.7'
+            clean-artifacts: 'whl'
+          - python-version: '3.9'
+            clean-artifacts: 'tar.gz'
+
+    steps:
+      - name: configure line endings
+        run: |
+          git config --global core.autocrlf false
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup (python)
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: setup (pip)
+        run: |
+          python3 -m pip install -U pip wheel setuptools
+          pip freeze
+
+      - name: download (dist)
+        uses: actions/download-artifact@v2
+        with:
+          name: jupyterlab-fonts ${{ github.run_number }} dist
+          path: ./dist
+
+      - name: clean
+        shell: bash -l {0}
+        run: rm dist/*.${{ matrix.clean-artifacts }}
+
+      - name: install
+        shell: bash -l {0}
+        run: python3 -m pip install --find-links=dist jupyterlab-fonts
+
+      - name: check
+        shell: bash -l {0}
+        run: |
+          python -m pip install .
+          jupyter labextension list
+          jupyter labextension list 2>&1 | grep -ie "@deathbeds/jupyterlab-font.*enabled.*ok.*python.*jupyterlab-fonts" -

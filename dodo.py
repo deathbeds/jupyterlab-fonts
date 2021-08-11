@@ -218,7 +218,7 @@ class P:
     META = PACKAGES / "_meta"
 
     PY_SRC = ROOT / "src/jupyterlab_fonts"
-    PY_SETUP = [ROOT / "setup.cfg", ROOT / "setup.py"]
+    PY_SETUP = [ROOT / "setup.cfg", ROOT / "setup.py", ROOT / "MANIFEST.in"]
     ALL_PY_SRC = [*PY_SRC.rglob("*.py")]
 
     PACKAGE_JSONS = [*PACKAGES.glob("*/package.json")]
