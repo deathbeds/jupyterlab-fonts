@@ -152,9 +152,9 @@ jobs:
         run: doit test || doit test || doit test
 
       - name: upload (atest)
+        if: always()
         uses: actions/upload-artifact@v2
         with:
-          name:
-            jupyterlab-fonts ${{ github.run_number }} atest ${{ runner.os }} ${{
-            matrix.python-version }}
+          name: |
+            jupyterlab-fonts ${{ github.run_number }} atest ${{ runner.os }} ${{ matrix.python-version }}
           path: ./build/atest
