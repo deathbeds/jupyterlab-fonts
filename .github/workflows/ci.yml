@@ -161,7 +161,7 @@ jobs:
       - name: install
         shell: bash -l {0}
         run: |
-          python3 -m pip install -vv --no-index --no-deps --ignore-installed --find-links=dist jupyterlab-fonts
+          python -m pip install -vv --no-index --no-deps --ignore-installed --find-links=dist jupyterlab-fonts
 
       - name: check (ext)
         shell: bash -l {0}
