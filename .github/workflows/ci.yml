@@ -10,8 +10,12 @@ on:
 
 env:
   CONDARC: .github/.condarc
-  CACHE_EPOCH: 0
+  PIP_DISABLE_PIP_VERSION_CHECK: 1
+  PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: 1
   MAMBA_NO_BANNER: 1
+  # ours
+  CACHE_EPOCH: 0
 
 jobs:
   build:
@@ -157,7 +161,7 @@ jobs:
       - name: install
         shell: bash -l {0}
         run: |
-          python3 -m pip install -vv --find-links=dist --no-deps --ignore-installed jupyterlab-fonts
+          python3 -m pip install -vv --no-index --no-deps --ignore-installed --find-links=dist jupyterlab-fonts
 
       - name: check (ext)
         shell: bash -l {0}
