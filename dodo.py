@@ -207,7 +207,14 @@ def task_test():
         actions=[
             (doit.tools.create_folder, [B.ROBOT_OUT]),
             doit.action.CmdAction(
-                [*C.PYM, "robot", *C.ROBOT_ARGS, P.TESTS], shell=False, cwd=B.ROBOT_OUT
+                [
+                    *C.PYM,
+                    "robot",
+                    *C.ROBOT_ARGS,
+                    P.TESTS,
+                ],
+                shell=False,
+                cwd=B.ROBOT_OUT,
             ),
         ],
         file_dep=[*P.ALL_ROBOT],

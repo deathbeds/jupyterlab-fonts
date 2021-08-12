@@ -2,7 +2,7 @@
 Documentation     Test interactive typography in JupyterLab
 Library           JupyterLibrary
 Suite Setup       Prepare for testing fonts
-Suite Teardown    Terminate All Jupyter Servers
+Suite Teardown    Clean up after testing fonts
 
 *** Keywords ***
 Prepare for testing fonts
@@ -10,3 +10,7 @@ Prepare for testing fonts
     Open JupyterLab
     Set Window Size    1920    1080
     Disable JupyterLab Modal Command Palette
+
+Clean up after testing fonts
+    Terminate All Jupyter Servers
+    Close All Browsers

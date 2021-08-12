@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation     Test whether the JupyterLab Fonts Menu performs as advertised.
-Test Setup        Execute JupyterLab Command    Reset Application State
+Suite Setup       Prepare Menu Test
 Library           JupyterLibrary
 Library           BuiltIn
 
@@ -42,17 +42,13 @@ Customize code font with the JupyterLab Menu
     Content    Size    Default Content Size
 
 *** Keywords ***
+Prepare Menu Test
+    Set Screenshot Directory    ${OUTPUT_DIR}${/}menus
+    Execute JupyterLab Command    Reset Application State
+
 Use the Menu to configure Font
     [Arguments]    ${kind}    ${aspect}    ${setting}
     [Documentation]    Set a font value in the JupyterLab Fonts Menu
-    Set Screenshot Directory    ${OUTPUT_DIR}/menus/${kind}_${aspect}_${setting}
-    Click JupyterLab Menu    Settings
-    Capture Page Screenshot    00_settings.png
-    Click JupyterLab Menu Item    Fonts
-    Capture Page Screenshot    01_fonts.png
-    Click JupyterLab Menu Item    ${kind}
-    Capture Page Screenshot    02_code.png
-    Click JupyterLab Menu Item    ${aspect}
-    Capture Page Screenshot    03_font.png
-    Click JupyterLab Menu Item    ${setting}
-    Capture Page Screenshot    04_done.png
+    Wait Until Keyword Succeeds    5x    0.25s
+    ...    Open With JupyterLab Menu    Settings    Fonts    ${kind}    ${aspect}    ${setting}
+    Capture Page Screenshot    ${kind}-${aspect}-${setting}.png

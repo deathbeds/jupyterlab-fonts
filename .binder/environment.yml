@@ -20,9 +20,9 @@ dependencies:
   - flake8
   - isort
   # atest
-  - geckodriver
-  - robotframework-lint
-  - robotframework-jupyterlibrary
   - firefox =78
+  - geckodriver
+  - robotframework-jupyterlibrary
+  - robotframework-lint
   # demo toys
   - jupyterlab-link-share
