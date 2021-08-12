@@ -1,11 +1,11 @@
-# jupyterlab-fonts
+# ![fonts-icon] jupyterlab-fonts
 
 > Data-driven Style and Typography for [JupyterLab] powered by [JSS].
 
 [jupyterlab]: https://github.com/jupyterlab/jupyterlab
 [jss]: http://cssinjs.org
 
-[![ci-badge]][ci] [![demo-badge]][dmeo]
+[![ci-badge]][ci] [![demo-badge]][demo]
 
 [ci]:
   https://github.com/deathbeds/jupyterlab-fonts/actions?query=branch%3Amaster
@@ -90,19 +90,20 @@ _Global Fonts..._. These values will be stored in your JupyterLab settings.
 ### Notebook-specific Configuration
 
 When viewing a notebook, you can change just the fonts for _that notebook_ by clicking
-![][fonts-icon] in the Notebook toolbar (right now, next to cell type). The font, style
+![fonts-icon] in the Notebook toolbar (right now, next to cell type). The font, style
 changes, and its license information will be stored in the Notebook metadata.
 
 > This can rapidly increase the size of your notebook file, and can make it harder to
 > use in collaboration. We're looking into some alterate approaches.
 
-[fonts-icon]: ./packages/jupyterlab-fonts/style/icons/fonts.svg
+[fonts-icon]:
+  https://raw.githubusercontent.com/deathbeds/jupyterlab-fonts/master/packages/jupyterlab-fonts/style/icons/fonts.svg
 
 ### Advanced Configuration
 
-You can pretty much do anything you want from the _Fonts_ section of _Advanced
-Settings_... even things entirely unrelated to fonts. There's no guarantee that
-super-customized styles will work nicely with the _Font Editor_!
+You can pretty much do anything you want from the _![fonts-icon] Fonts_ section of
+_Advanced Settings_... even things entirely unrelated to fonts. There's no guarantee
+that super-customized styles will work nicely with the _Font Editor_!
 
 Here's an example of changing how the Notebook looks when in _Presentation Mode_.
 
@@ -128,10 +129,41 @@ Here's an example of changing how the Notebook looks when in _Presentation Mode_
 Note the [use of `&`][nesting], which allows for nesting selectors, similar to other CSS
 preprocessors like [LESS].
 
-All of the [plugins] included in `jss-preset-default` are enabled, with the default
-settings, and at present will be wrapped in a `@global` selector.
+All JSON-compatible features of the [plugins][jss-plugins] included in
+`jss-preset-default` are enabled, with the default settings, and at present will be
+wrapped in a `@global` selector.
 
-[plugins]: http://cssinjs.org/plugins#jss-plugins 'JSS plugins'
+#### Use in `overrides.json`
+
+`overrides.json` allows for simple, declarative configuration of JupyterLab core and
+third-party extensions, even after the lab server has been started.
+
+```yaml
+{ '@deathbeds/jupyterlab-fonts:fonts': {} }
+# that stuff up there
+```
+
+In [binder], one might deploy this with a `postBuild` script:
+
+```bash
+#!/usr/bin/env bash
+cp overrides.json $NB_PYTHON_PREFIX/share/jupyter/lab/settings
+```
+
+Similarly, this is a well-known file to [JupyterLite][lite-well-known], making it
+straightforward to do light customization without needing to build and distribute a
+theme [plugin][jupyterlab-plugins].
+
+[jupyterlab-plugins]:
+  https://jupyterlab.readthedocs.io/en/stable/extension/extension_dev.html#plugins
+[lite-well-known]:
+  https://jupyterlite.readthedocs.io/en/latest/cli.html#well-known-files
+  'JupyterLite well known files'
+[binder]: https://mybinder.org
+[overrides-json]:
+  https://jupyterlab.readthedocs.io/en/stable/user/directories.html#overrides-json
+  'JupyterLab settings overrides'
+[jss-plugins]: http://cssinjs.org/plugins#jss-plugins 'JSS plugins'
 [less]: http://lesscss.org/features/#extend-feature-extending-nested-selectors
 [nesting]:
   https://github.com/cssinjs/jss-nested#use--to-reference-selector-of-the-parent-rule
