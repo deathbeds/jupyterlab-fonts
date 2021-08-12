@@ -82,6 +82,16 @@ jobs:
           name: jupyterlab-fonts ${{ github.run_number }} dist
           path: ./dist
 
+      - name: test
+        shell: bash -l {0}
+        run: doit test || doit test || doit test
+
+      - name: upload (robot)
+        uses: actions/upload-artifact@v2
+        with:
+          name: jupyterlab-fonts ${{ github.run_number }} robot
+          path: ./build/robot
+
   smoke-test:
     needs: [build]
     name: smoke-test ${{ matrix.os }} ${{ matrix.python-version }}
