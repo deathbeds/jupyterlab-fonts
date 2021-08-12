@@ -1,14 +1,12 @@
 *** Settings ***
 Documentation     The font editor allows changing fonts in notebooks
-Library           SeleniumLibrary
+Library           JupyterLibrary
 Library           BuiltIn
 Library           OperatingSystem
-Resource          ../resources/Browser.robot
-Resource          ../resources/Lab.robot
-Resource          ../resources/Notebook.robot
 
 *** Variables ***
 ${ED}             css:.jp-FontsEditor
+${DOCK}           //div[@id='jp-main-dock-panel']
 ${TAB}            li[contains(@class, 'lm-TabBar-tab')]
 ${ICON_FONT}      *[@data-icon = 'fonts:fonts']
 ${ICON_LICENSE}    *[@data-icon = 'fonts:license']
@@ -40,7 +38,7 @@ Global Font Editor
     Global    Content    Fira Code Light
     Global    Content    Fira Code Medium
     Global    Content    Fira Code Regular
-    [Teardown]    Close the Font Editor
+    [Teardown]    Close the Font Editor    Global
 
 Notebook Font Editor
     [Documentation]    Customize Notebook fonts with the Font Editor
@@ -64,7 +62,7 @@ Notebook Font Editor
     Notebook    Content    Fira Code Light
     Notebook    Content    Fira Code Medium
     Notebook    Content    Fira Code Regular
-    [Teardown]    Close the Font Editor
+    [Teardown]    Close the Font Editor    Untitled
 
 Global Enable/Disable
     [Documentation]    Test enabling and disabling custom fonts
@@ -72,19 +70,19 @@ Global Enable/Disable
     Set Screenshot Directory    ${OUTPUT_DIR}/global_editor/
     Use the Global Font Editor to disable custom fonts
     Use the Global Font Editor to enable custom fonts
-    [Teardown]    Close the Font Editor
+    [Teardown]    Close the Font Editor    Global
 
 *** Keywords ***
 Prepare to test a font editor
     [Documentation]    Open a notebook and settings
-    Open JupyterLab
-    Make a Hello World    Python 3    Notebook
-    Maybe Close Sidebar
+    Execute JupyterLab Command    Reset Application State
+    Run Keyword and Ignore Error    Wait for JupyterLab Splash Screen
+    Launch a new JupyterLab Document    Python 3 (ipykernel)
+    Maybe Close JupyterLab Sidebar
 
 Open Advanced Settings to Validate Fonts
     [Documentation]    use advanced settings to validate changes
-    Click JupyterLab Menu    Settings
-    Click JupyterLab Menu Item    Advanced Settings Editor
+    Open With JupyterLab Menu    Settings    Advanced Settings Editor
     ${settings} =    Set Variable    ${DOCK}//${TAB}//${ICON_SETTINGS}/../..
     ${fonts} =    Set Variable    ${SETTING_ITEM}//${ICON_FONT}
     Wait Until Page Contains Element    ${fonts}
@@ -95,9 +93,7 @@ Open Advanced Settings to Validate Fonts
 Open the Global Font Editor
     [Documentation]    Use the JupyterLab Menu to open the global font editor
     Prepare to test a font editor
-    Click JupyterLab Menu    Settings
-    Click JupyterLab Menu Item    Fonts
-    Click JupyterLab Menu Item    Global Fonts...
+    Open With JupyterLab Menu    Settings    Fonts    Global Fonts...
     Open Advanced Settings to Validate Fonts
 
 Open the Notebook Font Editor
@@ -107,9 +103,12 @@ Open the Notebook Font Editor
     Open Advanced Settings to Validate Fonts
 
 Close the Font Editor
+    [Arguments]    ${kind}=Global
     [Documentation]    Close the Notebook Font Editor by closing the tab
-    Click Element    ${DOCK}//${TAB}//${ICON_FONT}/../../${ICON_CLOSE}
-    Remove File    ${OUTPUT DIR}${/}home${/}Untitled.ipynb
+    Close JupyterLab Dock Panel Tab    ${kind}
+    Execute JupyterLab Command    Close All Tabs
+    ${dir} =    Get Jupyter Directory
+    Remove File    ${dir}${/}Untitled.ipynb
 
 Close the License Viewer
     [Documentation]    Close the Font License Viewer by closing the tab

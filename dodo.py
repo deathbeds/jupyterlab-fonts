@@ -155,6 +155,12 @@ def task_lint():
     )
 
     yield dict(
+        name="robot",
+        actions=[[*C.PYM, "robot.tidy", "--inplace", *P.ALL_ROBOT]],
+        file_dep=P.ALL_ROBOT,
+    )
+
+    yield dict(
         name="flake8",
         actions=[["flake8", *P.ALL_PY]],
         task_dep=["lint:black"],
@@ -195,6 +201,19 @@ def task_lint():
     )
 
 
+def task_test():
+    yield dict(
+        name="robot",
+        actions=[
+            (doit.tools.create_folder, [B.ROBOT_OUT]),
+            doit.action.CmdAction(
+                [*C.PYM, "robot", *C.ROBOT_ARGS, P.TESTS], shell=False, cwd=B.ROBOT_OUT
+            ),
+        ],
+        file_dep=[*P.ALL_ROBOT],
+    )
+
+
 class C:
     """constants"""
 
@@ -209,6 +228,7 @@ class C:
     ENC = dict(encoding="utf-8")
     CORE_EXT = "@deathbeds/"
     CI = bool(json.loads(os.environ.get("CI", "0")))
+    ROBOT_ARGS = json.loads(os.environ.get("ROBOT_ARGS", "[]"))
 
 
 class P:
@@ -222,6 +242,7 @@ class P:
     BINDER = ROOT / ".binder"
     DIST = ROOT / "dist"
     PACKAGES = ROOT / "packages"
+    TESTS = ROOT / "tests"
     CORE = PACKAGES / "jupyterlab-fonts"
     CORE_PKG_JSON = CORE / "package.json"
     CORE_SRC = CORE / "src"
@@ -239,6 +260,9 @@ class P:
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     YARN_LOCK = ROOT / "yarn.lock"
     ESLINTRC = ROOT / ".eslintrc.js"
+
+    ALL_ROBOT = [*TESTS.rglob("*.robot")]
+
     ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
     ALL_YAML = [*BINDER.glob("*.yml"), *GH.rglob("*.yml")]
     ALL_TS = [*PACKAGES.glob("*/src/**/*.ts"), *PACKAGES.glob("*/src/**/*.tsx")]
@@ -320,10 +344,12 @@ class U:
 class B:
     """built things"""
 
+    BUILD = P.ROOT / "build"
     CORE_SCHEMA_SRC = P.CORE_SRC / C.SCHEMA_DTS
     CORE_SCHEMA_LIB = P.CORE_LIB / C.SCHEMA_DTS
     ALL_CORE_SCHEMA = [CORE_SCHEMA_SRC, CORE_SCHEMA_LIB]
     META_BUILDINFO = P.META / C.TSBUILDINFO
+    ROBOT_OUT = BUILD / "robot"
     LABEXT = P.PY_SRC / "labextensions"
     WHEEL = P.DIST / f"""jupyterlab_fonts-{D.CORE_PKG_VERSION}-py3-none-any.whl"""
     SDIST = P.DIST / f"""jupyterlab-fonts-{D.CORE_PKG_VERSION}.tar.gz"""
