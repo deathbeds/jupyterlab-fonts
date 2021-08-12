@@ -8,7 +8,7 @@ Suite Teardown    Clean up after testing fonts
 Prepare for testing fonts
     Wait for New Jupyter Server to be Ready
     Open JupyterLab
-    Set Window Size    1920    1080
+    Set Window Size    1366    768
     Disable JupyterLab Modal Command Palette
 
 Clean up after testing fonts

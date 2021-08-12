@@ -3,6 +3,7 @@ Documentation     The font editor allows changing fonts in notebooks
 Library           JupyterLibrary
 Library           BuiltIn
 Library           OperatingSystem
+Resource          ./_keywords.robot
 
 *** Variables ***
 ${ED}             css:.jp-FontsEditor
@@ -75,13 +76,8 @@ Global Enable/Disable
 *** Keywords ***
 Prepare to test a font editor
     [Documentation]    Open a notebook and settings
-    Execute JupyterLab Command    Reset Application State
-    Run Keyword and Ignore Error    Wait for JupyterLab Splash Screen
-    Launch a new JupyterLab Document    Python 3 (ipykernel)
-    Add and Run JupyterLab Code Cell
-    ...    from IPython.display import Markdown
-    ...    Markdown("# Hello world")
-    Maybe Close JupyterLab Sidebar
+    Execute JupyterLab Command    Close All Tabs
+    Make a Font Test Notebook
 
 Open Advanced Settings to Validate Fonts
     [Documentation]    use advanced settings to validate changes
@@ -90,7 +86,7 @@ Open Advanced Settings to Validate Fonts
     ${fonts} =    Set Variable    ${SETTING_ITEM}//${ICON_FONT}
     Wait Until Page Contains Element    ${fonts}
     Click Element    ${fonts}
-    Drag And Drop By Offset    ${settings}    0    700
+    Drag And Drop By Offset    ${settings}    0    600
     Click Element    css:.jp-Notebook .CodeMirror
 
 Open the Global Font Editor

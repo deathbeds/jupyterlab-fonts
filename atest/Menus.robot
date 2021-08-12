@@ -3,6 +3,7 @@ Documentation     Test whether the JupyterLab Fonts Menu performs as advertised.
 Suite Setup       Prepare Menu Test
 Library           JupyterLibrary
 Library           BuiltIn
+Resource          ./_keywords.robot
 
 *** Test Cases ***
 Customize code font with the JupyterLab Menu
@@ -44,7 +45,8 @@ Customize code font with the JupyterLab Menu
 *** Keywords ***
 Prepare Menu Test
     Set Screenshot Directory    ${OUTPUT_DIR}${/}menus
-    Execute JupyterLab Command    Reset Application State
+    Execute JupyterLab Command    Close All Tabs
+    Make a Font Test Notebook
 
 Use the Menu to configure Font
     [Arguments]    ${kind}    ${aspect}    ${setting}
