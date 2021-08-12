@@ -12,12 +12,21 @@ import doit.tools
 
 def task_setup():
     """perform early setup"""
-    yield dict(
-        name="js",
-        actions=[[*C.JLPM, "--prefer-offline", "--ignore-optional"]],
-        targets=[P.YARN_INTEGRITY],
-        file_dep=[P.YARN_LOCK, *P.ALL_PACKAGE_JSONS],
-    )
+    # trust the cache
+    if not (C.CI and P.YARN_INTEGRITY.exists()):
+        yield dict(
+            name="js",
+            actions=[
+                [
+                    *C.JLPM,
+                    "--prefer-offline",
+                    "--ignore-optional",
+                    *(["--frozen-lockfile"] if C.CI else []),
+                ]
+            ],
+            targets=[P.YARN_INTEGRITY],
+            file_dep=[P.YARN_LOCK, *P.ALL_PACKAGE_JSONS],
+        )
 
     yield dict(
         name="pip",
