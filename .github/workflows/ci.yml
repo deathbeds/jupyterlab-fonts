@@ -124,6 +124,20 @@ jobs:
           use-only-tar-bz2: true
           use-mamba: true
 
+      - name: lock (conda)
+        shell: bash -l {0}
+        run: |
+          mkdir ./build
+          conda list --explicit | tee ./build/${{ matrix.os }}-${{ matrix.python-version }}.conda.lock
+
+      - name: upload (lock)
+        uses: actions/upload-artifact@v2
+        with:
+          name:
+            jupyterlab-fonts ${{ github.run_number }} lock ${{ matrix.os }} ${{
+            matrix.python-version }}
+          path: ./build/${{ matrix.os }}-${{ matrix.python-version }}.conda.lock
+
       - name: uninstall node
         shell: bash -l {0}
         run: |
