@@ -11,7 +11,7 @@ Prepare for testing fonts
     Set Global Variable    ${PY}    ${py}
     Set Global Variable    ${PLATFORM}    ${platform}
     Set Tags    py:${PY}    os:${platform}
-    Wait for New Jupyter Server to be Ready
+    Wait for New Jupyter Server to be Ready    stdout=${OUTPUT DIR}${/}lab.log
     Open JupyterLab
     Set Window Size    1366    768
     Disable JupyterLab Modal Command Palette
