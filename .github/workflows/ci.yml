@@ -21,6 +21,7 @@ jobs:
       matrix:
         os: ['ubuntu']
         python-version: ['3.9']
+
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -82,21 +83,7 @@ jobs:
           name: jupyterlab-fonts ${{ github.run_number }} dist
           path: ./dist
 
-      - name: setup
-        shell: bash -l {0}
-        run: doit setup
-
-      - name: test
-        shell: bash -l {0}
-        run: doit test || doit test || doit test
-
-      - name: upload (robot)
-        uses: actions/upload-artifact@v2
-        with:
-          name: jupyterlab-fonts ${{ github.run_number }} robot
-          path: ./build/robot
-
-  smoke-test:
+  test:
     needs: [build]
     name: smoke-test ${{ matrix.os }} ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
@@ -119,15 +106,24 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: setup (python)
-        uses: actions/setup-python@v2
+      - name: cache (conda)
+        uses: actions/cache@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          path: ~/conda_pkgs_dir
+          key: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml', '.github/.condarc') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
 
-      - name: setup (pip)
-        run: |
-          python3 -m pip install -U pip wheel setuptools
-          pip freeze
+      - name: install (conda)
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          condarc-file: .github/.condarc
+          miniforge-variant: Mambaforge
+          python-version: ${{ matrix.python-version }}
+          environment-file: .binder/environment.yml
+          use-only-tar-bz2: true
+          use-mamba: true
 
       - name: download (dist)
         uses: actions/download-artifact@v2
@@ -141,15 +137,24 @@ jobs:
           rm dist/*.${{ matrix.clean-artifacts }}
 
       - name: install
+        shell: bash -l {0}
         run: |
           python3 -m pip install --find-links=dist jupyterlab-fonts
-
-      - name: check (import)
-        run: |
-          python3 -c "import jupyterlab_fonts; print(jupyterlab_fonts.__version__)" || exit 1
 
       - name: check (ext)
         shell: bash -l {0}
         run: |
           jupyter labextension list
           jupyter labextension list 2>&1 | grep -ie "@deathbeds/jupyterlab-font.*enabled.*ok.*python.*jupyterlab-fonts" -
+
+      - name: test
+        shell: bash -l {0}
+        run: doit test || doit test || doit test
+
+      - name: upload (atest)
+        uses: actions/upload-artifact@v2
+        with:
+          name:
+            jupyterlab-fonts ${{ github.run_number }} atest ${{ runner.os }} ${{
+            matrix.python-version }}
+          path: ./build/atest

@@ -78,6 +78,9 @@ Prepare to test a font editor
     Execute JupyterLab Command    Reset Application State
     Run Keyword and Ignore Error    Wait for JupyterLab Splash Screen
     Launch a new JupyterLab Document    Python 3 (ipykernel)
+    Add and Run JupyterLab Code Cell
+    ...    from IPython.display import Markdown
+    ...    Markdown("# Hello world")
     Maybe Close JupyterLab Sidebar
 
 Open Advanced Settings to Validate Fonts
