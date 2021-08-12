@@ -124,6 +124,11 @@ jobs:
           use-only-tar-bz2: true
           use-mamba: true
 
+      - name: uninstall node
+        shell: bash -l {0}
+        run: |
+          mamba uninstall -y nodejs
+
       - name: download (dist)
         uses: actions/download-artifact@v2
         with:
