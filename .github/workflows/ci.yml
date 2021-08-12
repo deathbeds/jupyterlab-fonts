@@ -85,7 +85,7 @@ jobs:
 
   test:
     needs: [build]
-    name: smoke-test ${{ matrix.os }} ${{ matrix.python-version }}
+    name: test ${{ matrix.os }} ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
@@ -139,7 +139,7 @@ jobs:
       - name: install
         shell: bash -l {0}
         run: |
-          python3 -m pip install --find-links=dist jupyterlab-fonts
+          python3 -m pip install -vv --find-links=dist --no-deps --ignore-installed jupyterlab-fonts
 
       - name: check (ext)
         shell: bash -l {0}

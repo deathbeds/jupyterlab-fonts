@@ -68,7 +68,7 @@ Notebook Font Editor
 Global Enable/Disable
     [Documentation]    Test enabling and disabling custom fonts
     [Setup]    Open the Global Font Editor
-    Set Screenshot Directory    ${OUTPUT_DIR}/global_editor/
+    Set Screenshot Directory    ${OUTPUT_DIR}${/}global_editor
     Use the Global Font Editor to disable custom fonts
     Use the Global Font Editor to enable custom fonts
     [Teardown]    Close the Font Editor    Global
@@ -116,7 +116,7 @@ Close the License Viewer
 Use the font editor to configure fonts
     [Arguments]    ${scope}    ${kind}    ${font}
     [Documentation]    Presently, change a dropdown in the font editor
-    Set Screenshot Directory    ${OUTPUT_DIR}/editor/${scope}/${kind}/${font}
+    Set Screenshot Directory    ${OUTPUT_DIR}${/}editor${/}${scope}${/}${kind}${/}${font}
     Change a Font Dropdown    ${scope}    ${kind}    Font    ${font}    0
     Run Keyword If    "${scope}" == "Global"    Check font license is visible in Editor
     Change a Font Dropdown    ${scope}    ${kind}    Size    -    0
@@ -143,7 +143,7 @@ Check font license is visible in Editor
 
 Use the Global font editor to ${what} custom fonts
     [Documentation]    Presently, change a checkbox in the font editor
-    Set Screenshot Directory    ${OUTPUT_DIR}/editor/Global/${what}
+    Set Screenshot Directory    ${OUTPUT_DIR}${/}editor${/}Global${/}${what}
     ${input} =    Set Variable    ${ED}-enable input
     Capture Page Screenshot    00_before.png
     Run Keyword If    "${what}"=="enable"    Select Checkbox    ${input}
