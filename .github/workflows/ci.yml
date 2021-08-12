@@ -82,6 +82,10 @@ jobs:
           name: jupyterlab-fonts ${{ github.run_number }} dist
           path: ./dist
 
+      - name: setup
+        shell: bash -l {0}
+        run: doit setup
+
       - name: test
         shell: bash -l {0}
         run: doit test || doit test || doit test
