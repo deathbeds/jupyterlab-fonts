@@ -1,6 +1,7 @@
 """project automation for jupyterlab-fonts"""
 import hashlib
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -198,6 +199,7 @@ class C:
     TSBUILDINFO = "tsconfig.tsbuildinfo"
     ENC = dict(encoding="utf-8")
     CORE_EXT = "@deathbeds/"
+    CI = bool(json.loads(os.environ.get("CI", "0")))
 
 
 class P:

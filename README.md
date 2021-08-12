@@ -1,31 +1,54 @@
 # jupyterlab-fonts
 
-> Data-driven Style and Typography for JupyterLab powered by [JSS](http://cssinjs.org).
+> Data-driven Style and Typography for [JupyterLab] powered by [JSS].
 
-[![GitHub Workflows][ci-badge]](https://github.com/deathbeds/jupyterlab-fonts/actions?query=branch%3Amaster)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/deathbeds/jupyterlab-fonts/master?urlpath=lab)
+[jupyterlab]: https://github.com/jupyterlab/jupyterlab
+[jss]: http://cssinjs.org
 
+[![ci-badge]][ci] [![demo-badge]][dmeo]
+
+[ci]:
+  https://github.com/deathbeds/jupyterlab-fonts/actions?query=branch%3Amaster
+  'current build status of jupyterlab-fonts'
 [ci-badge]:
   https://github.com/deathbeds/jupyterlab-fonts/actions/workflows/ci.yml/badge.svg
+[demo]:
+  https://mybinder.org/v2/gh/deathbeds/jupyterlab-fonts/master?urlpath=lab
+  'an interactive demo of jupyterlab-fonts'
+[demo-badge]: https://mybinder.org/badge_logo.svg
 
 > ## This is **Free** Software
 >
 > We're trying some things out here, and invite you test it out, but make no guarantees
 > that it is good or even works. What we mean by that is covered in the shouty text at
-> the bottom of the BSD-3-Clause [LICENSE](./LICENSE).
+> the bottom of the [LICENSE].
 >
-> If something is broken, [become a contributor](./CONTRIBUTING.md) and raise an
-> [issue](https://github.com/deathbeds/jupyterlab-fonts/issues), but we cannot guarantee
-> any kind of response time. Similarly,
-> [PR](https://github.com/deathbeds/jupyterlab-fonts/pulls)s will be reviewed on a
+> If something is broken, [become a contributor][contributing] and raise an [issue], but
+> we cannot guarantee any kind of response time. Similarly, [PR]s will be reviewed on a
 > time-permitting basis.
+
+[license]:
+  https://github.com/deathbeds/jupyterlab-fonts/blob/master/LICENSE
+  'BSD-3-Clause'
+[contributing]:
+  https://github.com/deathbeds/jupyterlab-fonts/blob/master/CONTRIBUTING.md
+  'contribute to jupyterlab-fonts'
+[changelog]:
+  https://github.com/deathbeds/jupyterlab-fonts/blob/master/CHANGELOG.md
+  'the history of jupyterlab-fonts'
+[pr]:
+  https://github.com/deathbeds/jupyterlab-fonts/pulls
+  'open pull requests to jupyterlab-fonts'
+[issue]:
+  https://github.com/deathbeds/jupyterlab-fonts/issues
+  'open issues for jupyterlab-fonts'
 
 # Prerequisites
 
 - JupyterLab >=3
 - Python >=3.7
 
-> for specific JupyterLab compatibility, see the [changelog](./CHANGELOG.md).
+> for specific JupyterLab compatibility, see the [changelog].
 
 # Installing
 
@@ -102,13 +125,14 @@ Here's an example of changing how the Notebook looks when in _Presentation Mode_
 }
 ```
 
-Note the [use of `&`](nesting), which allows for nesting selectors, similar to other CSS
-preprocessors like [LESS][less-nest].
+Note the [use of `&`][nesting], which allows for nesting selectors, similar to other CSS
+preprocessors like [LESS].
 
-[less-nest]: http://lesscss.org/features/#extend-feature-extending-nested-selectors
+All of the [plugins] included in `jss-preset-default` are enabled, with the default
+settings, and at present will be wrapped in a `@global` selector.
+
+[plugins]: http://cssinjs.org/plugins#jss-plugins 'JSS plugins'
+[less]: http://lesscss.org/features/#extend-feature-extending-nested-selectors
 [nesting]:
   https://github.com/cssinjs/jss-nested#use--to-reference-selector-of-the-parent-rule
-
-All of the [plugins](http://cssinjs.org/plugins#jss-plugins) included in
-`jss-preset-default` are enabled, with the default settings, and at present will be
-wrapped in a `@global` selector.
+  'using nested selectors'

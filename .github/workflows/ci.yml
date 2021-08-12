@@ -1,3 +1,5 @@
+name: CI
+
 on:
   push:
     branches:
@@ -125,23 +127,15 @@ jobs:
           rm dist/*.${{ matrix.clean-artifacts }}
 
       - name: install
-        shell: bash -l {0}
         run: |
           python3 -m pip install --find-links=dist jupyterlab-fonts
 
-      - name: list (ext)
-        shell: bash -l {0}
+      - name: check (import)
         run: |
-          sys_prefix=$(python3 -c "print(__import__('sys').prefix)")
-          find $sys_prefix/share/jupyter/labextensions
+          python3 -c "import jupyterlab_fonts; print(jupyterlab_fonts.__version__)" || exit 1
 
       - name: check (ext)
         shell: bash -l {0}
         run: |
           jupyter labextension list
           jupyter labextension list 2>&1 | grep -ie "@deathbeds/jupyterlab-font.*enabled.*ok.*python.*jupyterlab-fonts" -
-
-      - name: check (import)
-        shell: bash -l {0}
-        run: |
-          python3 -c "import jupyterlab_fonts; print(jupyterlab_fonts.__version__)" || exit 1
