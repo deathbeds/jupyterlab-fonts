@@ -1,3 +1,5 @@
+name: CI
+
 on:
   push:
     branches:
@@ -8,8 +10,12 @@ on:
 
 env:
   CONDARC: .github/.condarc
-  CACHE_EPOCH: 0
+  PIP_DISABLE_PIP_VERSION_CHECK: 1
+  PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: 1
   MAMBA_NO_BANNER: 1
+  # ours
+  CACHE_EPOCH: 0
 
 jobs:
   build:
@@ -19,6 +25,7 @@ jobs:
       matrix:
         os: ['ubuntu']
         python-version: ['3.9']
+
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -64,18 +71,113 @@ jobs:
 
       - name: lint
         shell: bash -l {0}
-        run: doit lint
+        run: doit -n4 lint || doit lint
 
       - name: build
         shell: bash -l {0}
-        run: doit build
+        run: doit -n4 build || doit build
 
       - name: dist
         shell: bash -l {0}
-        run: doit dist
+        run: doit -n4 dist || doit dist
 
       - name: upload (dist)
         uses: actions/upload-artifact@v2
         with:
           name: jupyterlab-fonts ${{ github.run_number }} dist
           path: ./dist
+
+  test:
+    needs: [build]
+    name: test ${{ matrix.os }} ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu', 'macos', 'windows']
+        python-version: ['3.7', '3.9']
+        include:
+          - python-version: '3.7'
+            clean-artifacts: 'whl'
+          - python-version: '3.9'
+            clean-artifacts: 'tar.gz'
+
+    steps:
+      - name: configure line endings
+        run: |
+          git config --global core.autocrlf false
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: cache (conda)
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml', '.github/.condarc') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
+
+      - name: install (conda)
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          condarc-file: .github/.condarc
+          miniforge-variant: Mambaforge
+          python-version: ${{ matrix.python-version }}
+          environment-file: .binder/environment.yml
+          use-only-tar-bz2: true
+          use-mamba: true
+
+      - name: lock (conda)
+        shell: bash -l {0}
+        run: |
+          mkdir ./build
+          conda list --explicit | tee ./build/${{ matrix.os }}-${{ matrix.python-version }}.conda.lock
+
+      - name: upload (lock)
+        uses: actions/upload-artifact@v2
+        with:
+          name:
+            jupyterlab-fonts ${{ github.run_number }} lock ${{ matrix.os }} ${{
+            matrix.python-version }}
+          path: ./build/${{ matrix.os }}-${{ matrix.python-version }}.conda.lock
+
+      - name: uninstall node
+        shell: bash -l {0}
+        run: |
+          mamba uninstall -y nodejs
+
+      - name: download (dist)
+        uses: actions/download-artifact@v2
+        with:
+          name: jupyterlab-fonts ${{ github.run_number }} dist
+          path: ./dist
+
+      - name: clean
+        shell: bash -l {0}
+        run: |
+          rm dist/*.${{ matrix.clean-artifacts }}
+
+      - name: install
+        shell: bash -l {0}
+        run: |
+          python -m pip install -vv --no-index --no-deps --ignore-installed --find-links=dist jupyterlab-fonts
+
+      - name: check (ext)
+        shell: bash -l {0}
+        run: |
+          jupyter labextension list
+          jupyter labextension list 2>&1 | grep -ie "@deathbeds/jupyterlab-font.*enabled.*ok.*python.*jupyterlab-fonts" -
+
+      - name: test
+        shell: bash -l {0}
+        run: doit test || doit test || doit test
+
+      - name: upload (atest)
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: |
+            jupyterlab-fonts ${{ github.run_number }} atest ${{ runner.os }} ${{ matrix.python-version }}
+          path: ./build/atest

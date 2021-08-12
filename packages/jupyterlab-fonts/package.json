@@ -1,12 +1,13 @@
 {
   "name": "@deathbeds/jupyterlab-fonts",
   "version": "2.0.0",
-  "description": "Code Fonts for JupyterLab",
+  "description": "Interactive Typography and Style for JupyterLab",
   "keywords": [
-    "jupyter",
-    "jupyterlab",
     "fonts",
-    "jupyterlab-extension"
+    "jss",
+    "jupyter",
+    "jupyterlab-extension",
+    "jupyterlab"
   ],
   "bugs": {
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
@@ -24,7 +25,10 @@
     "{LICENSE,README.md}"
   ],
   "scripts": {
-    "prebuild": "mkdir -p lib && json2ts schema/fonts.json --strictIndexSignatures > src/_schema.d.ts && cp src/_schema.d.ts lib/",
+    "prebuild": "jlpm prebuild:prep && jlpm prebuild:schema && jlpm prebuild:copy",
+    "prebuild:prep": "mkdirp lib",
+    "prebuild:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
+    "prebuild:copy": "prettier src/_schema.d.ts > lib/_schema.d.ts",
     "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
@@ -36,7 +40,8 @@
   },
   "devDependencies": {
     "@jupyterlab/builder": "~3.1",
-    "json-schema-to-typescript": "^10.1.4"
+    "json-schema-to-typescript": "^10.1.4",
+    "mkdirp": "^1.0.4"
   },
   "jupyterlab": {
     "extension": "lib/plugin.js",

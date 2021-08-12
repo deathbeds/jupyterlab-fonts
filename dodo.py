@@ -1,6 +1,7 @@
 """project automation for jupyterlab-fonts"""
 import hashlib
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -11,12 +12,21 @@ import doit.tools
 
 def task_setup():
     """perform early setup"""
-    yield dict(
-        name="js",
-        actions=[[*C.JLPM, "--prefer-offline", "--ignore-optional"]],
-        targets=[P.YARN_INTEGRITY],
-        file_dep=[P.YARN_LOCK, *P.ALL_PACKAGE_JSONS],
-    )
+    # trust the cache
+    if not (C.CI and P.YARN_INTEGRITY.exists()):
+        yield dict(
+            name="js",
+            actions=[
+                [
+                    *C.JLPM,
+                    "--prefer-offline",
+                    "--ignore-optional",
+                    *(["--frozen-lockfile"] if C.CI else []),
+                ]
+            ],
+            targets=[P.YARN_INTEGRITY],
+            file_dep=[P.YARN_LOCK, *P.ALL_PACKAGE_JSONS],
+        )
 
     yield dict(
         name="pip",
@@ -145,6 +155,12 @@ def task_lint():
     )
 
     yield dict(
+        name="robot",
+        actions=[[*C.PYM, "robot.tidy", "--inplace", *P.ALL_ROBOT]],
+        file_dep=P.ALL_ROBOT,
+    )
+
+    yield dict(
         name="flake8",
         actions=[["flake8", *P.ALL_PY]],
         task_dep=["lint:black"],
@@ -185,6 +201,38 @@ def task_lint():
     )
 
 
+def task_test():
+    file_dep = [*P.ALL_ROBOT]
+    task_dep = []
+
+    if not C.CI:
+        file_dep += [
+            B.LABEXT / pkg_data["name"] / "package.json"
+            for pkg_json, pkg_data in D.PKG_JSON_DATA.items()
+            if pkg_json != P.META_PKG_JSON
+        ]
+        task_dep += ["setup"]
+
+    yield dict(
+        name="robot",
+        actions=[
+            (doit.tools.create_folder, [B.ATEST_OUT]),
+            doit.action.CmdAction(
+                [
+                    *C.PYM,
+                    "robot",
+                    *C.ATEST_ARGS,
+                    P.ATEST,
+                ],
+                shell=False,
+                cwd=B.ATEST_OUT,
+            ),
+        ],
+        file_dep=file_dep,
+        task_dep=task_dep,
+    )
+
+
 class C:
     """constants"""
 
@@ -198,6 +246,8 @@ class C:
     TSBUILDINFO = "tsconfig.tsbuildinfo"
     ENC = dict(encoding="utf-8")
     CORE_EXT = "@deathbeds/"
+    CI = bool(json.loads(os.environ.get("CI", "0")))
+    ATEST_ARGS = json.loads(os.environ.get("ATEST_ARGS", "[]"))
 
 
 class P:
@@ -211,14 +261,17 @@ class P:
     BINDER = ROOT / ".binder"
     DIST = ROOT / "dist"
     PACKAGES = ROOT / "packages"
+    ATEST = ROOT / "atest"
     CORE = PACKAGES / "jupyterlab-fonts"
     CORE_PKG_JSON = CORE / "package.json"
     CORE_SRC = CORE / "src"
     CORE_LIB = CORE / "lib"
+
     META = PACKAGES / "_meta"
+    META_PKG_JSON = META / "package.json"
 
     PY_SRC = ROOT / "src/jupyterlab_fonts"
-    PY_SETUP = [ROOT / "setup.cfg", ROOT / "setup.py"]
+    PY_SETUP = [ROOT / "setup.cfg", ROOT / "setup.py", ROOT / "MANIFEST.in"]
     ALL_PY_SRC = [*PY_SRC.rglob("*.py")]
 
     PACKAGE_JSONS = [*PACKAGES.glob("*/package.json")]
@@ -228,6 +281,9 @@ class P:
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     YARN_LOCK = ROOT / "yarn.lock"
     ESLINTRC = ROOT / ".eslintrc.js"
+
+    ALL_ROBOT = [*ATEST.rglob("*.robot")]
+
     ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
     ALL_YAML = [*BINDER.glob("*.yml"), *GH.rglob("*.yml")]
     ALL_TS = [*PACKAGES.glob("*/src/**/*.ts"), *PACKAGES.glob("*/src/**/*.tsx")]
@@ -284,7 +340,7 @@ class U:
                 pkg_dir / "LICENSE",
                 pkg_dir / "README.md",
             ]
-            if pkg_json.parent != P.META
+            if pkg_json != P.META_PKG_JSON
             else []
         )
 
@@ -309,17 +365,19 @@ class U:
 class B:
     """built things"""
 
+    BUILD = P.ROOT / "build"
     CORE_SCHEMA_SRC = P.CORE_SRC / C.SCHEMA_DTS
     CORE_SCHEMA_LIB = P.CORE_LIB / C.SCHEMA_DTS
     ALL_CORE_SCHEMA = [CORE_SCHEMA_SRC, CORE_SCHEMA_LIB]
     META_BUILDINFO = P.META / C.TSBUILDINFO
+    ATEST_OUT = BUILD / "atest"
     LABEXT = P.PY_SRC / "labextensions"
     WHEEL = P.DIST / f"""jupyterlab_fonts-{D.CORE_PKG_VERSION}-py3-none-any.whl"""
     SDIST = P.DIST / f"""jupyterlab-fonts-{D.CORE_PKG_VERSION}.tar.gz"""
     JS_TARBALL = {
         k: P.DIST / U.npm_tgz_name(v)
         for k, v in D.PKG_JSON_DATA.items()
-        if k.parent.name != P.META
+        if k != P.META_PKG_JSON
     }
     ALL_PY_DIST = [WHEEL, SDIST]
     ALL_HASH_DEPS = [*ALL_PY_DIST, *JS_TARBALL.values()]

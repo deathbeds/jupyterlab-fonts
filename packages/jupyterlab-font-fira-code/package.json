@@ -1,11 +1,13 @@
 {
   "name": "@deathbeds/jupyterlab-font-fira-code",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Fira Code Fonts for JupyterLab",
   "keywords": [
+    "fonts",
+    "jss",
     "jupyter",
-    "jupyterlab",
-    "jupyterlab-extension"
+    "jupyterlab-extension",
+    "jupyterlab"
   ],
   "bugs": {
     "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"

@@ -1,14 +1,13 @@
 *** Settings ***
 Documentation     The font editor allows changing fonts in notebooks
-Library           SeleniumLibrary
+Library           JupyterLibrary
 Library           BuiltIn
 Library           OperatingSystem
-Resource          ../resources/Browser.robot
-Resource          ../resources/Lab.robot
-Resource          ../resources/Notebook.robot
+Resource          ./_keywords.robot
 
 *** Variables ***
 ${ED}             css:.jp-FontsEditor
+${DOCK}           //div[@id='jp-main-dock-panel']
 ${TAB}            li[contains(@class, 'lm-TabBar-tab')]
 ${ICON_FONT}      *[@data-icon = 'fonts:fonts']
 ${ICON_LICENSE}    *[@data-icon = 'fonts:license']
@@ -40,7 +39,7 @@ Global Font Editor
     Global    Content    Fira Code Light
     Global    Content    Fira Code Medium
     Global    Content    Fira Code Regular
-    [Teardown]    Close the Font Editor
+    [Teardown]    Close the Font Editor    Global
 
 Notebook Font Editor
     [Documentation]    Customize Notebook fonts with the Font Editor
@@ -64,40 +63,36 @@ Notebook Font Editor
     Notebook    Content    Fira Code Light
     Notebook    Content    Fira Code Medium
     Notebook    Content    Fira Code Regular
-    [Teardown]    Close the Font Editor
+    [Teardown]    Close the Font Editor    Untitled
 
 Global Enable/Disable
     [Documentation]    Test enabling and disabling custom fonts
     [Setup]    Open the Global Font Editor
-    Set Screenshot Directory    ${OUTPUT_DIR}/global_editor/
+    Set Screenshot Directory    ${OUTPUT_DIR}${/}global_editor
     Use the Global Font Editor to disable custom fonts
     Use the Global Font Editor to enable custom fonts
-    [Teardown]    Close the Font Editor
+    [Teardown]    Close the Font Editor    Global
 
 *** Keywords ***
 Prepare to test a font editor
     [Documentation]    Open a notebook and settings
-    Open JupyterLab
-    Make a Hello World    Python 3    Notebook
-    Maybe Close Sidebar
+    Execute JupyterLab Command    Close All Tabs
+    Make a Font Test Notebook
 
 Open Advanced Settings to Validate Fonts
     [Documentation]    use advanced settings to validate changes
-    Click JupyterLab Menu    Settings
-    Click JupyterLab Menu Item    Advanced Settings Editor
+    Open With JupyterLab Menu    Settings    Advanced Settings Editor
     ${settings} =    Set Variable    ${DOCK}//${TAB}//${ICON_SETTINGS}/../..
     ${fonts} =    Set Variable    ${SETTING_ITEM}//${ICON_FONT}
     Wait Until Page Contains Element    ${fonts}
     Click Element    ${fonts}
-    Drag And Drop By Offset    ${settings}    0    700
+    Drag And Drop By Offset    ${settings}    0    600
     Click Element    css:.jp-Notebook .CodeMirror
 
 Open the Global Font Editor
     [Documentation]    Use the JupyterLab Menu to open the global font editor
     Prepare to test a font editor
-    Click JupyterLab Menu    Settings
-    Click JupyterLab Menu Item    Fonts
-    Click JupyterLab Menu Item    Global Fonts...
+    Open With JupyterLab Menu    Settings    Fonts    Global Fonts...
     Open Advanced Settings to Validate Fonts
 
 Open the Notebook Font Editor
@@ -107,9 +102,12 @@ Open the Notebook Font Editor
     Open Advanced Settings to Validate Fonts
 
 Close the Font Editor
+    [Arguments]    ${kind}=Global
     [Documentation]    Close the Notebook Font Editor by closing the tab
-    Click Element    ${DOCK}//${TAB}//${ICON_FONT}/../../${ICON_CLOSE}
-    Remove File    ${OUTPUT DIR}${/}home${/}Untitled.ipynb
+    Close JupyterLab Dock Panel Tab    ${kind}
+    Execute JupyterLab Command    Close All Tabs
+    ${dir} =    Get Jupyter Directory
+    Remove File    ${dir}${/}Untitled.ipynb
 
 Close the License Viewer
     [Documentation]    Close the Font License Viewer by closing the tab
@@ -118,7 +116,7 @@ Close the License Viewer
 Use the font editor to configure fonts
     [Arguments]    ${scope}    ${kind}    ${font}
     [Documentation]    Presently, change a dropdown in the font editor
-    Set Screenshot Directory    ${OUTPUT_DIR}/editor/${scope}/${kind}/${font}
+    Set Screenshot Directory    ${OUTPUT_DIR}${/}editor${/}${scope}${/}${kind}${/}${font}
     Change a Font Dropdown    ${scope}    ${kind}    Font    ${font}    0
     Run Keyword If    "${scope}" == "Global"    Check font license is visible in Editor
     Change a Font Dropdown    ${scope}    ${kind}    Size    -    0
@@ -145,7 +143,7 @@ Check font license is visible in Editor
 
 Use the Global font editor to ${what} custom fonts
     [Documentation]    Presently, change a checkbox in the font editor
-    Set Screenshot Directory    ${OUTPUT_DIR}/editor/Global/${what}
+    Set Screenshot Directory    ${OUTPUT_DIR}${/}editor${/}Global${/}${what}
     ${input} =    Set Variable    ${ED}-enable input
     Capture Page Screenshot    00_before.png
     Run Keyword If    "${what}"=="enable"    Select Checkbox    ${input}
