@@ -88,7 +88,6 @@ jobs:
     name: test ${{ matrix.os }} ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
-      fail-fast: false
       matrix:
         os: ['ubuntu', 'macos', 'windows']
         python-version: ['3.7', '3.9']
