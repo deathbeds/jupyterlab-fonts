@@ -22,10 +22,14 @@ def task_setup():
                     "--prefer-offline",
                     "--ignore-optional",
                     *(["--frozen-lockfile"] if C.CI else []),
-                ]
+                ],
+                [*C.JLPM, "yarn-deduplicate", "-s", "fewer", "--fail"],
             ],
             targets=[P.YARN_INTEGRITY],
-            file_dep=[P.YARN_LOCK, *P.ALL_PACKAGE_JSONS],
+            file_dep=[
+                *P.ALL_PACKAGE_JSONS,
+                *([P.YARN_LOCK] if P.YARN_LOCK.exists() else []),
+            ],
         )
 
     yield dict(
@@ -156,7 +160,7 @@ def task_lint():
 
     yield dict(
         name="robot",
-        actions=[[*C.PYM, "robot.tidy", "--inplace", *P.ALL_ROBOT]],
+        actions=[[*C.PYM, "robotidy", *P.ALL_ROBOT]],
         file_dep=P.ALL_ROBOT,
     )
 

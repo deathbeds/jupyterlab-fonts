@@ -30,11 +30,11 @@
   },
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "~2.0",
-    "@jupyterlab/application": "~3.1",
+    "@jupyterlab/application": "3",
     "typeface-anonymous-pro": "^1.1.13"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "~3.1"
+    "@jupyterlab/builder": "^3.4"
   },
   "jupyterlab": {
     "extension": true,

@@ -29,11 +29,11 @@
   },
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "~2.0",
-    "@jupyterlab/application": "~3.1",
-    "firacode": "^5.2.0"
+    "@jupyterlab/application": "3",
+    "firacode": "^6.2.0"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "~3.1"
+    "@jupyterlab/builder": "^3.4"
   },
   "jupyterlab": {
     "extension": true,
