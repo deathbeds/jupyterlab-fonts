@@ -154,7 +154,7 @@ def task_lint():
     """apply source formatting, check for mistakes"""
     yield dict(
         name="black",
-        actions=[["isort", *P.ALL_PY], ["black", *P.ALL_PY]],
+        actions=[["isort", *P.ALL_PY], ["ssort", *P.ALL_PY], ["black", *P.ALL_PY]],
         file_dep=[*P.ALL_PY],
     )
 

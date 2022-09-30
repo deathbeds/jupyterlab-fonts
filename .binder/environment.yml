@@ -19,6 +19,7 @@ dependencies:
   - black
   - flake8
   - isort
+  - ssort
   # atest
   - firefox =102
   - geckodriver
