@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-fira-code",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Fira Code Fonts for JupyterLab",
   "keywords": [
     "fonts",
@@ -30,7 +30,7 @@
     "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~2.1",
+    "@deathbeds/jupyterlab-fonts": "~2.1.1",
     "@jupyterlab/application": "3",
     "firacode": "^6.2.0"
   },

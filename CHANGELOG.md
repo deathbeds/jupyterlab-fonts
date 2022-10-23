@@ -1,6 +1,10 @@
 # Changelog
 
-## v2.1.0 (unreleased)
+## v2.1.1 (unreleased)
+
+> TBD
+
+## v2.1.0
 
 - Improve notebook-level `@import`, `@font-face`, etc.
 - adds `data-jpf-cell-id` and `data-jpf-cell-tags` to notebook cell elements
