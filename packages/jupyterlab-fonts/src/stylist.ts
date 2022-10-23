@@ -31,11 +31,19 @@ export class Stylist {
       this._notebookStyles.set(notebook, sheet);
       sheet.classList.add(DOM.sheet);
       sheet.classList.add(DOM.modNotebook);
+      notebook.content.modelContentChanged.connect(
+        this._onNotebookModelContentChanged,
+        this
+      );
       notebook.disposed.connect(this._onDisposed, this);
       this.hack();
     } else {
       this._onDisposed(notebook);
     }
+  }
+
+  private _onNotebookModelContentChanged(arg: any, arg1: any) {
+    console.warn('_onNotebookModelContentChanged', arg, arg1);
   }
 
   private _onDisposed(notebook: NotebookPanel) {

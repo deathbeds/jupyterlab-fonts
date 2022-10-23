@@ -17,7 +17,7 @@ ${ICON_SETTINGS}        *[@data-icon = 'ui-components:settings']
 ${ICON_NOTEBOOK}        *[@data-icon = 'ui-components:notebook']
 ${ICON_CLOSE}           div[contains(@class, 'lm-TabBar-tabCloseIcon')]
 ${BUTTON}               .jp-FontsEditor-button
-${SETTING_ITEM}         //div[contains(@class, 'jp-PluginList')]//li
+${SETTING_ITEM}         //div[contains(@class, 'jp-PluginList')]//div
 ${SETTINGS_RAW_CM}      .jp-SettingsRawEditor-user .CodeMirror
 
 
@@ -85,7 +85,7 @@ Prepare to test a font editor
 
 Open Advanced Settings to Validate Fonts
     [Documentation]    use advanced settings to validate changes
-    Open With JupyterLab Menu    Settings    Advanced JSON Settings Editor
+    Execute JupyterLab Command    Advanced JSON Settings Editor
     ${settings} =    Set Variable    ${DOCK}//${TAB}//${ICON_SETTINGS}/../..
     ${fonts} =    Set Variable    ${SETTING_ITEM}//${ICON_FONT}
     Wait Until Page Contains Element    ${fonts}

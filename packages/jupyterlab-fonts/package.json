@@ -46,6 +46,7 @@
   "jupyterlab": {
     "extension": "lib/plugin.js",
     "schemaDir": "schema",
-    "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-fonts"
+    "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-fonts",
+    "webpackConfig": "./webpack.config.js"
   }
 }

@@ -38,6 +38,7 @@
   "jupyterlab": {
     "extension": true,
     "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-fira-code",
+    "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {
         "bundled": false,
