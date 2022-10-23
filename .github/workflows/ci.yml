@@ -150,7 +150,7 @@ jobs:
       - name: download (dist)
         uses: actions/download-artifact@v3
         with:
-          name: jupyterlab-fonts ${{ github.run_number }} dist
+          name: jupyterlab-fonts-${{ github.run_number }}-dist
           path: ./dist
 
       - name: clean
