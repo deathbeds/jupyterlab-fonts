@@ -256,34 +256,25 @@
 "@deathbeds/jupyterlab-font-anonymous-pro@file:packages/jupyterlab-font-anonymous-pro":
   version "2.1.0"
   dependencies:
-    "@deathbeds/jupyterlab-fonts" "~2.0"
+    "@deathbeds/jupyterlab-fonts" "~2.1"
     "@jupyterlab/application" "3"
     typeface-anonymous-pro "^1.1.13"
 
 "@deathbeds/jupyterlab-font-dejavu-sans-mono@file:packages/jupyterlab-font-dejavu-sans-mono":
   version "2.1.0"
   dependencies:
-    "@deathbeds/jupyterlab-fonts" "~2.0"
+    "@deathbeds/jupyterlab-fonts" "~2.1"
     "@jupyterlab/application" "3"
 
 "@deathbeds/jupyterlab-font-fira-code@file:packages/jupyterlab-font-fira-code":
   version "2.1.0"
   dependencies:
-    "@deathbeds/jupyterlab-fonts" "~2.0"
+    "@deathbeds/jupyterlab-fonts" "~2.1"
     "@jupyterlab/application" "3"
     firacode "^6.2.0"
 
 "@deathbeds/jupyterlab-fonts@file:packages/jupyterlab-fonts":
   version "2.1.0"
-  dependencies:
-    "@jupyterlab/application" "3"
-    "@jupyterlab/mainmenu" "3"
-    "@jupyterlab/notebook" "3"
-    jss "^10.9.2"
-    jss-preset-default "^10.9.2"
-
-"@deathbeds/jupyterlab-fonts@~2.0":
-  version "2.0.0"
   dependencies:
     "@jupyterlab/application" "3"
     "@jupyterlab/mainmenu" "3"

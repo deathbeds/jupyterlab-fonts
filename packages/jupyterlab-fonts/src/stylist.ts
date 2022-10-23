@@ -116,7 +116,8 @@ export class Stylist {
         css = `${css}\n\n${jss.toString()}`;
       }
       for (const cell of panel.content.widgets) {
-        let cellMeta = cell.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings || {};
+        let cellMeta =
+          (cell.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings) || {};
         style = this._nbMetaToStyle(cellMeta, panel, cell);
         jss = this._jss.createStyleSheet(style as any);
         css = `${css}\n\n${jss.toString()}`;
