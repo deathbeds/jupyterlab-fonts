@@ -1,16 +1,16 @@
 import { JupyterLab, JupyterFrontEndPlugin } from '@jupyterlab/application';
-import { IMainMenu } from '@jupyterlab/mainmenu';
 import { ICommandPalette } from '@jupyterlab/apputils';
+import { IMainMenu } from '@jupyterlab/mainmenu';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
-import { IFontManager, PACKAGE_NAME, CMD, IFontFaceOptions } from '.';
-
-import { ICONS } from './icons';
-import { FontManager } from './manager';
 import { NotebookFontsButton } from './button';
 import { FontEditor } from './editor';
+import { ICONS } from './icons';
 import { LicenseViewer } from './license';
+import { FontManager } from './manager';
+
+import { IFontManager, PACKAGE_NAME, CMD, IFontFaceOptions } from '.';
 
 const PLUGIN_ID = `${PACKAGE_NAME}:fonts`;
 

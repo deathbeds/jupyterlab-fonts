@@ -1,9 +1,8 @@
-import { Token } from '@lumino/coreutils';
-import { CommandRegistry } from '@lumino/commands';
 import { ICommandPalette } from '@jupyterlab/apputils';
-import { ISignal } from '@lumino/signaling';
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
-
+import { CommandRegistry } from '@lumino/commands';
+import { Token } from '@lumino/coreutils';
+import { ISignal } from '@lumino/signaling';
 import { Menu } from '@lumino/widgets';
 
 import * as SCHEMA from './schema';

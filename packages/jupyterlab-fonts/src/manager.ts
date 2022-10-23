@@ -1,13 +1,14 @@
+import { ICommandPalette } from '@jupyterlab/apputils';
+import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
+import { CommandRegistry } from '@lumino/commands';
 import { PromiseDelegate, PartialJSONValue } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 import { Menu } from '@lumino/widgets';
-import { CommandRegistry } from '@lumino/commands';
-import { ICommandPalette } from '@jupyterlab/apputils';
-import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 
-import { ISettingRegistry } from '@jupyterlab/settingregistry';
-
+import * as SCHEMA from './schema';
 import { Stylist } from './stylist';
+import { dataURISrc } from './util';
 
 import {
   IFontManager,
@@ -23,10 +24,6 @@ import {
   FontFormat,
   IFontFaceOptions,
 } from '.';
-
-import { dataURISrc } from './util';
-
-import * as SCHEMA from './schema';
 
 const ALL_PALETTE = 'Fonts';
 

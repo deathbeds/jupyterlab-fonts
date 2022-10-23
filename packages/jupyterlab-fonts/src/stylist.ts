@@ -1,12 +1,11 @@
+import { NotebookPanel } from '@jupyterlab/notebook';
+import { Signal } from '@lumino/signaling';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
-import { Signal } from '@lumino/signaling';
-
-import { NotebookPanel } from '@jupyterlab/notebook';
-
-import { ROOT, IFontFaceOptions } from '.';
 
 import * as SCHEMA from './schema';
+
+import { ROOT, IFontFaceOptions } from '.';
 
 export class Stylist {
   fonts = new Map<string, IFontFaceOptions>();

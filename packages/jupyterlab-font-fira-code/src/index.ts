@@ -1,5 +1,5 @@
-import { JupyterLab, JupyterFrontEndPlugin } from '@jupyterlab/application';
 import { IFontManager, FontFormat } from '@deathbeds/jupyterlab-fonts';
+import { JupyterLab, JupyterFrontEndPlugin } from '@jupyterlab/application';
 
 const variants = ['Light', 'Regular', 'Medium', 'Bold'];
 

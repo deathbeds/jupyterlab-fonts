@@ -1,18 +1,13 @@
+import { ToolbarButton } from '@jupyterlab/apputils';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
+import { IObservableJSON } from '@jupyterlab/observables';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
-
 import { ISignal, Signal } from '@lumino/signaling';
 
-import { ToolbarButton } from '@jupyterlab/apputils';
-
-import { DocumentRegistry } from '@jupyterlab/docregistry';
-
-import { IObservableJSON } from '@jupyterlab/observables';
-
-import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
+import { ICONS } from './icons';
 
 import { PACKAGE_NAME, CONFIGURED_CLASS } from '.';
-
-import { ICONS } from './icons';
 
 /**
  * A notebook widget extension that adds a button to the toolbar.
