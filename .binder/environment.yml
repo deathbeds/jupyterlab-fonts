@@ -19,7 +19,6 @@ dependencies:
   - black
   - flake8
   - isort
-  - ssort
   # utest
   - pytest-cov
   - pytest-html

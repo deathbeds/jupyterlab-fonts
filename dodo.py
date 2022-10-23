@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -305,7 +306,11 @@ def task_lint():
     """apply source formatting, check for mistakes"""
     yield dict(
         name="black",
-        actions=[["isort", *P.ALL_PY], ["ssort", *P.ALL_PY], ["black", *P.ALL_PY]],
+        actions=[
+            ["isort", *P.ALL_PY],
+            *([["ssort", *P.ALL_PY]] if shutil.which("ssort") else []),
+            ["black", *P.ALL_PY],
+        ],
         file_dep=[*P.ALL_PY],
     )
 
