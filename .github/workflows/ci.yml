@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu']
-        python-version: ['3.9']
+        python-version: ['3.10']
 
     steps:
       - name: checkout
@@ -94,11 +94,11 @@ jobs:
       fail-fast: false
       matrix:
         os: ['ubuntu', 'macos', 'windows']
-        python-version: ['3.7', '3.9']
+        python-version: ['3.7', '3.10']
         include:
           - python-version: '3.7'
             clean-artifacts: 'whl'
-          - python-version: '3.9'
+          - python-version: '3.10'
             clean-artifacts: 'tar.gz'
 
     steps:
