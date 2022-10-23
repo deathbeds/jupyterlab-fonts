@@ -83,7 +83,7 @@ jobs:
       - name: upload (dist)
         uses: actions/upload-artifact@v3
         with:
-          name: jupyterlab-fonts ${{ github.run_number }} dist
+          name: jupyterlab-fonts-${{ github.run_number }}-dist
           path: ./dist
 
   test:
@@ -173,10 +173,10 @@ jobs:
         shell: bash -l {0}
         run: doit test || doit test || doit test
 
-      - name: upload (atest)
+      - name: upload (reports)
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: |
-            jupyterlab-fonts ${{ github.run_number }} atest ${{ runner.os }} ${{ matrix.python-version }}
-          path: ./build/atest
+            jupyterlab-fonts-${{ github.run_number }}-reports-${{ runner.os }}-f${{ matrix.python-version }}
+          path: ./build/reports
