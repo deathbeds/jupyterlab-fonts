@@ -150,13 +150,18 @@ class B:
     """built things"""
 
     BUILD = P.ROOT / "build"
+    REPORTS = BUILD / "reports"
     CORE_SCHEMA_SRC = P.CORE_SRC / C.SCHEMA_DTS
     CORE_SCHEMA_LIB = P.CORE_LIB / C.SCHEMA_DTS
     ALL_CORE_SCHEMA = [CORE_SCHEMA_SRC, CORE_SCHEMA_LIB]
     META_BUILDINFO = P.META / C.TSBUILDINFO
-    ATEST_OUT = BUILD / "atest"
+    REPORTS_COV_XML = REPORTS / "coverage-xml"
+    PYTEST_HTML = REPORTS / "pytest.html"
+    PYTEST_COV_XML = REPORTS_COV_XML / "pytest.coverage.xml"
+    HTMLCOV_HTML = REPORTS / "htmlcov/index.html"
+    ATEST_OUT = REPORTS / "atest"
     ROBOCOV = BUILD / "__robocov__"
-    REPORTS_NYC = BUILD / "nyc"
+    REPORTS_NYC = REPORTS / "nyc"
     REPORTS_NYC_LCOV = REPORTS_NYC / "lcov.info"
     LABEXT = P.PY_SRC / "labextensions"
     WHEEL = P.DIST / f"""jupyterlab_fonts-{D.CORE_PKG_VERSION}-py3-none-any.whl"""
@@ -412,6 +417,28 @@ def task_test():
         targets=targets,
         file_dep=file_dep,
         task_dep=task_dep,
+    )
+
+    yield dict(
+        name="pytest",
+        file_dep=[*P.ALL_PY_SRC],
+        actions=[
+            [
+                "pytest",
+                "--pyargs",
+                P.PY_SRC.name,
+                f"--cov={P.PY_SRC.name}",
+                "--cov-branch",
+                "--no-cov-on-fail",
+                "--cov-fail-under=100",
+                "--cov-report=term-missing:skip-covered",
+                f"--cov-report=html:{B.HTMLCOV_HTML.parent}",
+                f"--html={B.PYTEST_HTML}",
+                "--self-contained-html",
+                f"--cov-report=xml:{B.PYTEST_COV_XML}",
+            ]
+        ],
+        targets=[B.PYTEST_HTML, B.HTMLCOV_HTML, B.PYTEST_COV_XML],
     )
 
 
