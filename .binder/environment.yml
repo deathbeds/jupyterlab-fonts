@@ -5,11 +5,11 @@ channels:
 
 dependencies:
   # run
-  - jupyterlab >=3.4.7,<4
+  - jupyterlab >=3.4.8,<4
   - python >=3.7,<3.11
   # build
   - brotlipy
-  - doit
+  - doit-with-toml
   - fonttools
   - nodejs >=18,<19
   - pip
@@ -20,11 +20,16 @@ dependencies:
   - flake8
   - isort
   - ssort
+  # utest
+  - pytest-cov
+  - pytest-html
   # atest
   - firefox =102
   - geckodriver
-  - robotframework-jupyterlibrary
-  - robotframework-robocop
-  - robotframework-tidy
+  - robotframework >=6
+  - robotframework-jupyterlibrary >=0.4.1
+  - robotframework-robocop >=2.6.0
+  - robotframework-tidy >=3.3.1
   # demo toys
   - jupyterlab-link-share
+  - ipywidgets
