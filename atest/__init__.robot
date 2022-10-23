@@ -1,8 +1,11 @@
 *** Settings ***
-Documentation     Test interactive typography in JupyterLab
-Library           JupyterLibrary
-Suite Setup       Prepare for testing fonts
-Suite Teardown    Clean up after testing fonts
+Documentation       Test interactive typography in JupyterLab
+
+Library             JupyterLibrary
+
+Suite Setup         Prepare for testing fonts
+Suite Teardown      Clean up after testing fonts
+
 
 *** Keywords ***
 Prepare for testing fonts

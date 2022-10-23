@@ -1,44 +1,73 @@
+import { Cell, ICellModel } from '@jupyterlab/cells';
+import { Notebook, NotebookPanel } from '@jupyterlab/notebook';
+import { JSONExt } from '@lumino/coreutils';
+import { Signal } from '@lumino/signaling';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
-import { Signal } from '@lumino/signaling';
-
-import { NotebookPanel } from '@jupyterlab/notebook';
-
-import { ROOT, IFontFaceOptions } from '.';
 
 import * as SCHEMA from './schema';
+
+import { ROOT, IFontFaceOptions, DOM, PACKAGE_NAME } from '.';
 
 export class Stylist {
   fonts = new Map<string, IFontFaceOptions>();
 
   private _globalStyles: HTMLStyleElement;
   private _notebookStyles = new Map<NotebookPanel, HTMLStyleElement>();
+  private _transientNotebookStyles = new Map<NotebookPanel, SCHEMA.ISettings>();
   private _jss = JSS.create(jssPresetDefault());
   private _fontCache = new Map<string, SCHEMA.IFontFacePrimitive[]>();
   private _cacheUpdated = new Signal<this, void>(this);
 
   constructor() {
     this._globalStyles = document.createElement('style');
+    this._globalStyles.classList.add(DOM.sheet);
+    this._globalStyles.classList.add(DOM.modGlobal);
   }
   get cacheUpdated() {
     return this._cacheUpdated;
   }
 
-  registerNotebook(notebook: NotebookPanel, register: boolean) {
+  registerNotebook(panel: NotebookPanel, register: boolean) {
     if (register) {
-      this._notebookStyles.set(notebook, document.createElement('style'));
-      notebook.disposed.connect(this._onDisposed, this);
+      const sheet = document.createElement('style');
+      this._notebookStyles.set(panel, sheet);
+      sheet.classList.add(DOM.sheet);
+      sheet.classList.add(DOM.modNotebook);
+      panel.content.modelContentChanged.connect(
+        this._onNotebookModelContentChanged,
+        this
+      );
+      panel.disposed.connect(this._onDisposed, this);
+      this._onNotebookModelContentChanged(panel.content);
       this.hack();
     } else {
-      this._onDisposed(notebook);
+      this._onDisposed(panel);
     }
   }
 
-  private _onDisposed(notebook: NotebookPanel) {
-    if (this._notebookStyles.has(notebook)) {
-      this._notebookStyles.get(notebook)?.remove();
-      this._notebookStyles.delete(notebook);
-      notebook.disposed.disconnect(this._onDisposed, this);
+  /** hoist cell metadata to data attributes */
+  private _onNotebookModelContentChanged(notebook: Notebook) {
+    for (const cell of notebook.widgets) {
+      cell.node.dataset.jpfCellId = cell.model.id;
+      let tags = [...((cell.model.metadata.get('tags') || []) as string[])].join(',');
+      if (tags) {
+        cell.node.dataset.jpfCellTags = `,${tags},`;
+      } else {
+        delete cell.node.dataset.jpfCellTags;
+      }
+    }
+  }
+
+  private _onDisposed(panel: NotebookPanel) {
+    if (this._notebookStyles.has(panel)) {
+      this._notebookStyles.get(panel)?.remove();
+      this._notebookStyles.delete(panel);
+      panel.disposed.disconnect(this._onDisposed, this);
+      panel.content.modelContentChanged.disconnect(
+        this._onNotebookModelContentChanged,
+        this
+      );
     }
   }
 
@@ -50,29 +79,72 @@ export class Stylist {
     return Array.from(this._notebookStyles.keys());
   }
 
-  stylesheet(meta: SCHEMA.ISettings, notebook?: NotebookPanel, clear = false) {
-    let sheet = notebook ? this._notebookStyles.get(notebook) : this._globalStyles;
+  setTransientNotebookStyle(
+    panel: NotebookPanel,
+    style: SCHEMA.ISettings | null
+  ): void {
+    if (style == null) {
+      this._transientNotebookStyles.delete(panel);
+    } else {
+      this._transientNotebookStyles.set(panel, style);
+    }
+    const meta = panel.model?.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings;
+    this.stylesheet(meta, panel);
+  }
 
-    let style = notebook
-      ? this._nbMetaToStyle(meta, notebook)
-      : this._settingsToStyle(meta);
+  getTransientNotebookStyle(panel: NotebookPanel): SCHEMA.ISettings | null {
+    return this._transientNotebookStyles.get(panel) || null;
+  }
 
-    let jss = this._jss.createStyleSheet(style as any);
-    let css = jss.toString();
+  stylesheet(meta: SCHEMA.ISettings | null, panel?: NotebookPanel, clear = false) {
+    let sheet = panel ? this._notebookStyles.get(panel) : this._globalStyles;
+
+    let style: SCHEMA.IStyles | null = null;
+    let jss: JSS.StyleSheet | null = null;
+    let css: string = '';
+
+    if (meta) {
+      style = panel ? this._nbMetaToStyle(meta, panel) : this._settingsToStyle(meta);
+      jss = this._jss.createStyleSheet(style as any);
+      css = jss.toString();
+    }
+
+    if (panel) {
+      let transientMeta = this.getTransientNotebookStyle(panel);
+      if (transientMeta) {
+        style = this._nbMetaToStyle(transientMeta, panel);
+        jss = this._jss.createStyleSheet(style as any);
+        css = `${css}\n\n${jss.toString()}`;
+      }
+      for (const cell of panel.content.widgets) {
+        let cellMeta =
+          (cell.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings) ||
+          JSONExt.emptyObject;
+        style = this._nbMetaToStyle(cellMeta, panel, cell);
+        jss = this._jss.createStyleSheet(style as any);
+        css = `${css}\n\n${jss.toString()}`;
+      }
+    }
 
     if (sheet && sheet.textContent !== css) {
       sheet.textContent = css;
     }
+
     this.hack();
   }
 
   private _nbMetaToStyle(
     meta: SCHEMA.ISettings,
-    notebook: NotebookPanel
+    panel: NotebookPanel,
+    cell: Cell<ICellModel> | null = null
   ): SCHEMA.IStyles {
-    const id = notebook.id;
-    let jss: any = { '@font-face': [], '@global': {} };
-    let idStyles: any = (jss['@global'][`.jp-NotebookPanel[id='${id}']`] = {});
+    let jss: any = { '@font-face': [], '@global': {}, '@import': [] };
+    let selector = `.${DOM.notebookPanel}[id='${panel.id}']`;
+    if (cell) {
+      selector = `${selector} .${DOM.cell}[data-jpf-cell-id="${cell.model.id}"]`;
+    }
+
+    let idStyles: any = (jss['@global'][selector] = {});
 
     if (meta.fonts) {
       for (let fontFamily in meta.fonts) {
@@ -80,19 +152,28 @@ export class Stylist {
       }
     }
 
-    let styles = meta.styles || {};
-    for (let k in styles) {
-      if (k === ROOT) {
-        for (let rootK in styles[k]) {
-          if (styles == null || styles[k] == null) {
-            continue;
+    let styles = meta.styles || JSONExt.emptyObject;
+    for (let kv of Object.entries(styles)) {
+      let [k, v] = kv;
+      switch (k) {
+        case '@import':
+        case '@font-face':
+          jss[k].push(...(Array.isArray(v) ? v : [v]));
+          break;
+        default:
+          if (k === ROOT) {
+            for (let rootK in v as any[]) {
+              if (styles == null || v == null) {
+                continue;
+              }
+              idStyles[rootK] = (v as any)[rootK];
+            }
+          } else if (typeof v === 'object') {
+            idStyles[`& ${k}`] = v;
+          } else {
+            idStyles[k] = v;
           }
-          idStyles[rootK] = (styles as any)[k][rootK];
-        }
-      } else if (typeof styles[k] === 'object') {
-        idStyles[`& ${k}`] = styles[k];
-      } else {
-        idStyles[k] = styles[k];
+          break;
       }
     }
     return jss as SCHEMA.IStyles;
@@ -102,6 +183,7 @@ export class Stylist {
     let raw = JSON.stringify(meta.styles);
     let styles = JSON.parse(raw) as SCHEMA.ISettings;
     let faces = {} as SCHEMA.IFontFaceObject;
+    let imports: string[] = [];
     for (let font of Array.from(this.fonts.keys())) {
       if (raw.indexOf(`'${font}'`) > -1 && !faces[font]) {
         const cachedFont = this._fontCache.get(font);
@@ -138,9 +220,29 @@ export class Stylist {
       }
     }, [] as SCHEMA.IFontFacePrimitive[]);
 
+    let styleFaces: any[] = [];
+
+    let globalStyles: SCHEMA.ISettings = {};
+
+    for (let kv of Object.entries(styles)) {
+      let [k, v] = kv;
+      switch (k) {
+        case '@import':
+          imports.push(...(Array.isArray(v) ? v : [v]));
+          break;
+        case '@font-face':
+          styleFaces.push(...(Array.isArray(v) ? v : [v]));
+          break;
+        default:
+          globalStyles[k] = v;
+          break;
+      }
+    }
+
     return {
-      '@global': styles as any,
-      '@font-face': flatFaces as any,
+      '@global': globalStyles as any,
+      '@font-face': [flatFaces as any, ...styleFaces],
+      '@import': imports as any,
     } as SCHEMA.IStyles;
   }
 

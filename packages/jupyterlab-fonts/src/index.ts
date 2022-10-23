@@ -1,9 +1,8 @@
-import { Token } from '@lumino/coreutils';
-import { CommandRegistry } from '@lumino/commands';
 import { ICommandPalette } from '@jupyterlab/apputils';
-import { ISignal } from '@lumino/signaling';
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
-
+import { CommandRegistry } from '@lumino/commands';
+import { Token } from '@lumino/coreutils';
+import { ISignal } from '@lumino/signaling';
 import { Menu } from '@lumino/widgets';
 
 import * as SCHEMA from './schema';
@@ -90,6 +89,14 @@ export const CSS: ICSSVars = {
   },
 };
 
+export namespace DOM {
+  export const sheet = 'jp-Fonts-Sheet';
+  export const modGlobal = 'jp-fonts-mod-global';
+  export const modNotebook = 'jp-fonts-mod-notebook';
+  export const notebookPanel = 'jp-NotebookPanel';
+  export const cell = 'jp-Cell';
+}
+
 export type ICSSTextOptions = {
   [key in TextProperty]: (manager: IFontManager) => SCHEMA.ICSSOM[];
 };
@@ -156,6 +163,8 @@ export interface IFontManager {
     options: ITextStyleOptions
   ): void;
   dataURISrc(url: string, format: FontFormat): Promise<string>;
+  setTransientNotebookStyle(panel: NotebookPanel, style: SCHEMA.ISettings | null): void;
+  getTransientNotebookStyle(panel: NotebookPanel): SCHEMA.ISettings | null;
 }
 
 export interface ITextStyleOptions {

@@ -9,7 +9,6 @@ on:
       - master
 
 env:
-  CONDARC: .github/.condarc
   PIP_DISABLE_PIP_VERSION_CHECK: 1
   PYTHONIOENCODING: utf-8
   PYTHONUNBUFFERED: 1
@@ -24,33 +23,33 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu']
-        python-version: ['3.9']
+        python-version: ['3.10']
 
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: cache (conda)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/conda_pkgs_dir
           key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml', '.github/.condarc') }}
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml') }}
           restore-keys: |
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
 
       - name: install (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
-          condarc-file: .github/.condarc
           miniforge-variant: Mambaforge
+          miniforge-version: 4.13.0-1
           python-version: ${{ matrix.python-version }}
           environment-file: .binder/environment.yml
           use-only-tar-bz2: true
           use-mamba: true
 
       - name: cache (node)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-node-modules
         with:
           path: '**/node_modules'
@@ -58,7 +57,7 @@ jobs:
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-node-build-${{ hashFiles('yarn.lock') }}
 
       - name: cache (yarn)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         id: cache-yarn-packages
         with:
@@ -82,7 +81,7 @@ jobs:
         run: doit -n4 dist || doit dist
 
       - name: upload (dist)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: jupyterlab-fonts ${{ github.run_number }} dist
           path: ./dist
@@ -95,11 +94,11 @@ jobs:
       fail-fast: false
       matrix:
         os: ['ubuntu', 'macos', 'windows']
-        python-version: ['3.7', '3.9']
+        python-version: ['3.7', '3.10']
         include:
           - python-version: '3.7'
             clean-artifacts: 'whl'
-          - python-version: '3.9'
+          - python-version: '3.10'
             clean-artifacts: 'tar.gz'
 
     steps:
@@ -108,22 +107,22 @@ jobs:
           git config --global core.autocrlf false
 
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: cache (conda)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/conda_pkgs_dir
           key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml', '.github/.condarc') }}
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml') }}
           restore-keys: |
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
 
       - name: install (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
-          condarc-file: .github/.condarc
           miniforge-variant: Mambaforge
+          miniforge-version: 4.13.0-1
           python-version: ${{ matrix.python-version }}
           environment-file: .binder/environment.yml
           use-only-tar-bz2: true
@@ -136,7 +135,7 @@ jobs:
           conda list --explicit | tee ./build/${{ matrix.os }}-${{ matrix.python-version }}.conda.lock
 
       - name: upload (lock)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name:
             jupyterlab-fonts ${{ github.run_number }} lock ${{ matrix.os }} ${{
@@ -149,7 +148,7 @@ jobs:
           mamba uninstall -y nodejs
 
       - name: download (dist)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: jupyterlab-fonts ${{ github.run_number }} dist
           path: ./dist
@@ -176,7 +175,7 @@ jobs:
 
       - name: upload (atest)
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: |
             jupyterlab-fonts ${{ github.run_number }} atest ${{ runner.os }} ${{ matrix.python-version }}

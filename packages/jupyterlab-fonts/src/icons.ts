@@ -1,7 +1,7 @@
 import { LabIcon } from '@jupyterlab/ui-components';
 
-import fonts from '!!raw-loader!../style/icons/fonts.svg';
 import license from '!!raw-loader!../style/icons/copyright.svg';
+import fonts from '!!raw-loader!../style/icons/fonts.svg';
 
 export const ICONS = {
   fonts: new LabIcon({

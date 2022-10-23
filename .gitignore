@@ -1,5 +1,6 @@
 __pycache__
 _testoutput/
+.coverage
 .eslintcache
 .ipynb_checkpoints/
 .yarn-packages/

@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.1.0 (unreleased)
+
+- Improve notebook-level `@import`, `@font-face`, etc.
+- adds `data-jpf-cell-id` and `data-jpf-cell-tags` to notebook cell elements
+  - this allows notebook cells to carry their own style
+- `IFontManager` supports `setTransientNotebookStyle` for dynamic styling
+
 ## v2.0.0
 
 - Support JupyterLab 3

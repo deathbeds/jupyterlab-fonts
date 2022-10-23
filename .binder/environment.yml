@@ -5,13 +5,13 @@ channels:
 
 dependencies:
   # run
-  - jupyterlab >=3.1.4,<4
-  - python >=3.7,<3.10
+  - jupyterlab >=3.4.8,<4
+  - python >=3.7,<3.11
   # build
   - brotlipy
-  - doit
+  - doit-with-toml
   - fonttools
-  - nodejs >=14,<15
+  - nodejs >=18,<19
   - pip
   - twine
   - wheel
@@ -19,10 +19,17 @@ dependencies:
   - black
   - flake8
   - isort
+  # - ssort # only works on py3.8+
+  # utest
+  - pytest-cov
+  - pytest-html
   # atest
-  - firefox =78
+  - firefox =102
   - geckodriver
-  - robotframework-jupyterlibrary
-  - robotframework-lint
+  - robotframework >=6
+  - robotframework-jupyterlibrary >=0.4.1
+  - robotframework-robocop >=2.6.0
+  - robotframework-tidy >=3.3.1
   # demo toys
   - jupyterlab-link-share
+  - ipywidgets

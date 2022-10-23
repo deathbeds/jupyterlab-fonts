@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-dejavu-sans-mono",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "keywords": [
     "fonts",
@@ -26,20 +26,23 @@
     "vendor/dejavu-fonts-ttf/LICENSE"
   ],
   "scripts": {
+    "labextension:build": "jupyter labextension build .",
+    "labextension:build:cov": "tsc -b tsconfig.cov.json && jupyter labextension build .",
     "prebuild": "python scripts/convert.py",
     "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~2.0",
-    "@jupyterlab/application": "~3.1"
+    "@deathbeds/jupyterlab-fonts": "~2.1",
+    "@jupyterlab/application": "3"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "~3.1",
+    "@jupyterlab/builder": "^3.4",
     "dejavu-fonts-ttf": "^2.37.3"
   },
   "jupyterlab": {
     "extension": true,
     "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
+    "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {
         "bundled": false,

@@ -1,12 +1,10 @@
+import { Dialog, showDialog, VDomModel, VDomRenderer } from '@jupyterlab/apputils';
 import { NotebookPanel } from '@jupyterlab/notebook';
-
 import { ReadonlyJSONObject } from '@lumino/coreutils';
-
-import { Dialog, showDialog } from '@jupyterlab/apputils';
-
 import * as React from 'react';
 
-import { VDomModel, VDomRenderer } from '@jupyterlab/apputils';
+import { FontManager } from './manager';
+import * as SCHEMA from './schema';
 
 import {
   TextKind,
@@ -17,10 +15,6 @@ import {
   IFontFaceOptions,
   PACKAGE_NAME,
 } from '.';
-
-import { FontManager } from './manager';
-
-import * as SCHEMA from './schema';
 
 import '../style/editor.css';
 

@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-anonymous-pro",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Anonymous Pro Fonts for JupyterLab",
   "keywords": [
     "fonts",
@@ -26,19 +26,22 @@
     "vendor/anonymous-pro/LICENSE"
   ],
   "scripts": {
+    "labextension:build": "jupyter labextension build .",
+    "labextension:build:cov": "tsc -b tsconfig.cov.json && jupyter labextension build .",
     "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~2.0",
-    "@jupyterlab/application": "~3.1",
+    "@deathbeds/jupyterlab-fonts": "~2.1",
+    "@jupyterlab/application": "3",
     "typeface-anonymous-pro": "^1.1.13"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "~3.1"
+    "@jupyterlab/builder": "^3.4"
   },
   "jupyterlab": {
     "extension": true,
     "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-anonymous-pro",
+    "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {
         "bundled": false,
