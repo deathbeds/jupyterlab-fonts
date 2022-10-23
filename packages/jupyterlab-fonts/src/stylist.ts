@@ -1,4 +1,4 @@
-import { NotebookPanel } from '@jupyterlab/notebook';
+import { Notebook, NotebookPanel, NotebookPanel as panel } from '@jupyterlab/notebook';
 import { Signal } from '@lumino/signaling';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
@@ -11,7 +11,7 @@ export class Stylist {
   fonts = new Map<string, IFontFaceOptions>();
 
   private _globalStyles: HTMLStyleElement;
-  private _notebookStyles = new Map<NotebookPanel, HTMLStyleElement>();
+  private _notebookStyles = new Map<panel, HTMLStyleElement>();
   private _jss = JSS.create(jssPresetDefault());
   private _fontCache = new Map<string, SCHEMA.IFontFacePrimitive[]>();
   private _cacheUpdated = new Signal<this, void>(this);
@@ -25,32 +25,46 @@ export class Stylist {
     return this._cacheUpdated;
   }
 
-  registerNotebook(notebook: NotebookPanel, register: boolean) {
+  registerNotebook(panel: NotebookPanel, register: boolean) {
     if (register) {
       const sheet = document.createElement('style');
-      this._notebookStyles.set(notebook, sheet);
+      this._notebookStyles.set(panel, sheet);
       sheet.classList.add(DOM.sheet);
       sheet.classList.add(DOM.modNotebook);
-      notebook.content.modelContentChanged.connect(
+      panel.content.modelContentChanged.connect(
         this._onNotebookModelContentChanged,
         this
       );
-      notebook.disposed.connect(this._onDisposed, this);
+      panel.disposed.connect(this._onDisposed, this);
+      this._onNotebookModelContentChanged(panel.content);
       this.hack();
     } else {
-      this._onDisposed(notebook);
+      this._onDisposed(panel);
     }
   }
 
-  private _onNotebookModelContentChanged(arg: any, arg1: any) {
-    console.warn('_onNotebookModelContentChanged', arg, arg1);
+  /** hoist cell metadata to data attributes */
+  private _onNotebookModelContentChanged(notebook: Notebook) {
+    for (const cell of notebook.widgets) {
+      cell.node.dataset.jpfCellId = cell.model.id;
+      let tags = [...((cell.model.metadata.get('tags') || []) as string[])].join(',');
+      if (tags) {
+        cell.node.dataset.jpfCellTags = `,${tags},`;
+      } else {
+        delete cell.node.dataset.jpfCellTags;
+      }
+    }
   }
 
-  private _onDisposed(notebook: NotebookPanel) {
-    if (this._notebookStyles.has(notebook)) {
-      this._notebookStyles.get(notebook)?.remove();
-      this._notebookStyles.delete(notebook);
-      notebook.disposed.disconnect(this._onDisposed, this);
+  private _onDisposed(panel: NotebookPanel) {
+    if (this._notebookStyles.has(panel)) {
+      this._notebookStyles.get(panel)?.remove();
+      this._notebookStyles.delete(panel);
+      panel.disposed.disconnect(this._onDisposed, this);
+      panel.content.modelContentChanged.disconnect(
+        this._onNotebookModelContentChanged,
+        this
+      );
     }
   }
 
@@ -62,12 +76,10 @@ export class Stylist {
     return Array.from(this._notebookStyles.keys());
   }
 
-  stylesheet(meta: SCHEMA.ISettings, notebook?: NotebookPanel, clear = false) {
-    let sheet = notebook ? this._notebookStyles.get(notebook) : this._globalStyles;
+  stylesheet(meta: SCHEMA.ISettings, panel?: NotebookPanel, clear = false) {
+    let sheet = panel ? this._notebookStyles.get(panel) : this._globalStyles;
 
-    let style = notebook
-      ? this._nbMetaToStyle(meta, notebook)
-      : this._settingsToStyle(meta);
+    let style = panel ? this._nbMetaToStyle(meta, panel) : this._settingsToStyle(meta);
 
     let jss = this._jss.createStyleSheet(style as any);
     let css = jss.toString();
@@ -85,7 +97,7 @@ export class Stylist {
   ): SCHEMA.IStyles {
     const id = notebook.id;
     let jss: any = { '@font-face': [], '@global': {}, '@import': [] };
-    let idStyles: any = (jss['@global'][`.jp-NotebookPanel[id='${id}']`] = {});
+    let idStyles: any = (jss['@global'][`.${DOM.notebookPanel}[id='${id}']`] = {});
 
     if (meta.fonts) {
       for (let fontFamily in meta.fonts) {
