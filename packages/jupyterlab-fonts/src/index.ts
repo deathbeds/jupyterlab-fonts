@@ -89,6 +89,12 @@ export const CSS: ICSSVars = {
   },
 };
 
+export namespace DOM {
+  export const sheet = 'jp-Fonts-Sheet';
+  export const modGlobal = 'jp-fonts-mod-global';
+  export const modNotebook = 'jp-fonts-mod-notebook';
+}
+
 export type ICSSTextOptions = {
   [key in TextProperty]: (manager: IFontManager) => SCHEMA.ICSSOM[];
 };

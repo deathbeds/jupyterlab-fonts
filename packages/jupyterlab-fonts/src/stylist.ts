@@ -5,7 +5,7 @@ import jssPresetDefault from 'jss-preset-default';
 
 import * as SCHEMA from './schema';
 
-import { ROOT, IFontFaceOptions } from '.';
+import { ROOT, IFontFaceOptions, DOM } from '.';
 
 export class Stylist {
   fonts = new Map<string, IFontFaceOptions>();
@@ -18,6 +18,8 @@ export class Stylist {
 
   constructor() {
     this._globalStyles = document.createElement('style');
+    this._globalStyles.classList.add(DOM.sheet);
+    this._globalStyles.classList.add(DOM.modGlobal);
   }
   get cacheUpdated() {
     return this._cacheUpdated;
@@ -25,7 +27,10 @@ export class Stylist {
 
   registerNotebook(notebook: NotebookPanel, register: boolean) {
     if (register) {
-      this._notebookStyles.set(notebook, document.createElement('style'));
+      const sheet = document.createElement('style');
+      this._notebookStyles.set(notebook, sheet);
+      sheet.classList.add(DOM.sheet);
+      sheet.classList.add(DOM.modNotebook);
       notebook.disposed.connect(this._onDisposed, this);
       this.hack();
     } else {
@@ -62,6 +67,7 @@ export class Stylist {
     if (sheet && sheet.textContent !== css) {
       sheet.textContent = css;
     }
+
     this.hack();
   }
 
@@ -70,7 +76,7 @@ export class Stylist {
     notebook: NotebookPanel
   ): SCHEMA.IStyles {
     const id = notebook.id;
-    let jss: any = { '@font-face': [], '@global': {} };
+    let jss: any = { '@font-face': [], '@global': {}, '@import': [] };
     let idStyles: any = (jss['@global'][`.jp-NotebookPanel[id='${id}']`] = {});
 
     if (meta.fonts) {
@@ -80,18 +86,27 @@ export class Stylist {
     }
 
     let styles = meta.styles || {};
-    for (let k in styles) {
-      if (k === ROOT) {
-        for (let rootK in styles[k]) {
-          if (styles == null || styles[k] == null) {
-            continue;
+    for (let kv of Object.entries(styles)) {
+      let [k, v] = kv;
+      switch (k) {
+        case '@import':
+        case '@font-face':
+          jss[k].push(...(Array.isArray(v) ? v : [v]));
+          break;
+        default:
+          if (k === ROOT) {
+            for (let rootK in v as any[]) {
+              if (styles == null || v == null) {
+                continue;
+              }
+              idStyles[rootK] = (v as any)[rootK];
+            }
+          } else if (typeof v === 'object') {
+            idStyles[`& ${k}`] = v;
+          } else {
+            idStyles[k] = v;
           }
-          idStyles[rootK] = (styles as any)[k][rootK];
-        }
-      } else if (typeof styles[k] === 'object') {
-        idStyles[`& ${k}`] = styles[k];
-      } else {
-        idStyles[k] = styles[k];
+          break;
       }
     }
     return jss as SCHEMA.IStyles;
@@ -101,6 +116,7 @@ export class Stylist {
     let raw = JSON.stringify(meta.styles);
     let styles = JSON.parse(raw) as SCHEMA.ISettings;
     let faces = {} as SCHEMA.IFontFaceObject;
+    let imports: string[] = [];
     for (let font of Array.from(this.fonts.keys())) {
       if (raw.indexOf(`'${font}'`) > -1 && !faces[font]) {
         const cachedFont = this._fontCache.get(font);
@@ -137,9 +153,29 @@ export class Stylist {
       }
     }, [] as SCHEMA.IFontFacePrimitive[]);
 
+    let styleFaces: any[] = [];
+
+    let globalStyles: SCHEMA.ISettings = {};
+
+    for (let kv of Object.entries(styles)) {
+      let [k, v] = kv;
+      switch (k) {
+        case '@import':
+          imports.push(...(Array.isArray(v) ? v : [v]));
+          break;
+        case '@font-face':
+          styleFaces.push(...(Array.isArray(v) ? v : [v]));
+          break;
+        default:
+          globalStyles[k] = v;
+          break;
+      }
+    }
+
     return {
-      '@global': styles as any,
-      '@font-face': flatFaces as any,
+      '@global': globalStyles as any,
+      '@font-face': [flatFaces as any, ...styleFaces],
+      '@import': imports as any,
     } as SCHEMA.IStyles;
   }
 
