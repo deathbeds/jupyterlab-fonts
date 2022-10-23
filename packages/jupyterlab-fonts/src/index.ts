@@ -94,6 +94,7 @@ export namespace DOM {
   export const modGlobal = 'jp-fonts-mod-global';
   export const modNotebook = 'jp-fonts-mod-notebook';
   export const notebookPanel = 'jp-NotebookPanel';
+  export const cell = 'jp-Cell';
 }
 
 export type ICSSTextOptions = {

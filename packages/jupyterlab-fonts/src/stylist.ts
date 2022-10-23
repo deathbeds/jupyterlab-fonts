@@ -1,3 +1,4 @@
+import { Cell, ICellModel } from '@jupyterlab/cells';
 import { Notebook, NotebookPanel } from '@jupyterlab/notebook';
 import { Signal } from '@lumino/signaling';
 import * as JSS from 'jss';
@@ -112,7 +113,13 @@ export class Stylist {
       if (transientMeta) {
         style = this._nbMetaToStyle(transientMeta, panel);
         jss = this._jss.createStyleSheet(style as any);
-        css = `${css}\n${jss.toString()}`;
+        css = `${css}\n\n${jss.toString()}`;
+      }
+      for (const cell of panel.content.widgets) {
+        let cellMeta = cell.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings || {};
+        style = this._nbMetaToStyle(cellMeta, panel, cell);
+        jss = this._jss.createStyleSheet(style as any);
+        css = `${css}\n\n${jss.toString()}`;
       }
     }
 
@@ -125,11 +132,16 @@ export class Stylist {
 
   private _nbMetaToStyle(
     meta: SCHEMA.ISettings,
-    notebook: NotebookPanel
+    panel: NotebookPanel,
+    cell: Cell<ICellModel> | null = null
   ): SCHEMA.IStyles {
     let jss: any = { '@font-face': [], '@global': {}, '@import': [] };
-    const id = notebook.id;
-    let idStyles: any = (jss['@global'][`.${DOM.notebookPanel}[id='${id}']`] = {});
+    let selector = `.${DOM.notebookPanel}[id='${panel.id}']`;
+    if (cell) {
+      selector = `${selector} .${DOM.cell}[data-jpf-cell-id="${cell.model.id}"]`;
+    }
+
+    let idStyles: any = (jss['@global'][selector] = {});
 
     if (meta.fonts) {
       for (let fontFamily in meta.fonts) {

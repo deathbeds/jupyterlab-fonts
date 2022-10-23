@@ -32,7 +32,7 @@
     "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~2.0",
+    "@deathbeds/jupyterlab-fonts": "~2.1",
     "@jupyterlab/application": "3"
   },
   "devDependencies": {
