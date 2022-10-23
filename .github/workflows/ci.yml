@@ -44,6 +44,7 @@ jobs:
         with:
           condarc-file: .github/.condarc
           miniforge-variant: Mambaforge
+          miniforge-version: 4.13.0-1
           python-version: ${{ matrix.python-version }}
           environment-file: .binder/environment.yml
           use-only-tar-bz2: true
@@ -124,6 +125,7 @@ jobs:
         with:
           condarc-file: .github/.condarc
           miniforge-variant: Mambaforge
+          miniforge-version: 4.13.0-1
           python-version: ${{ matrix.python-version }}
           environment-file: .binder/environment.yml
           use-only-tar-bz2: true
