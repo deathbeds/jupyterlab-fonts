@@ -26,6 +26,8 @@
     "vendor/anonymous-pro/LICENSE"
   ],
   "scripts": {
+    "labextension:build": "jupyter labextension build .",
+    "labextension:build:cov": "tsc -b tsconfig.cov.json && jupyter labextension build .",
     "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {

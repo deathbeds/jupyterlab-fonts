@@ -111,6 +111,17 @@ export class FontManager implements IFontManager {
     this.settingsUpdate();
   }
 
+  setTransientNotebookStyle(
+    panel: NotebookPanel,
+    style: SCHEMA.ISettings | null
+  ): void {
+    this._stylist.setTransientNotebookStyle(panel, style);
+  }
+
+  getTransientNotebookStyle(panel: NotebookPanel): SCHEMA.ISettings | null {
+    return this._stylist.getTransientNotebookStyle(panel);
+  }
+
   public async dataURISrc(url: string, format = FontFormat.woff2): Promise<string> {
     return await dataURISrc(url, format);
   }

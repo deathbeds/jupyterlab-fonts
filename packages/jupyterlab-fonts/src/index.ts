@@ -162,6 +162,8 @@ export interface IFontManager {
     options: ITextStyleOptions
   ): void;
   dataURISrc(url: string, format: FontFormat): Promise<string>;
+  setTransientNotebookStyle(panel: NotebookPanel, style: SCHEMA.ISettings | null): void;
+  getTransientNotebookStyle(panel: NotebookPanel): SCHEMA.ISettings | null;
 }
 
 export interface ITextStyleOptions {

@@ -26,6 +26,7 @@ class C:
     CORE_EXT = "@deathbeds/"
     CI = bool(json.loads(os.environ.get("CI", "0")))
     ATEST_ARGS = json.loads(os.environ.get("ATEST_ARGS", "[]"))
+    WITH_JS_COV = bool(json.loads(os.environ.get("WITH_JS_COV", "0")))
 
 
 class P:
@@ -222,6 +223,10 @@ def task_build():
     )
 
     ext_pkg_jsons = []
+    if C.WITH_JS_COV:
+        file_dep = [P.YARN_INTEGRITY]
+    else:
+        file_dep = [B.META_BUILDINFO]
 
     for pkg_json, pkg in D.PKG_JSON_DATA.items():
         if "jupyterlab" not in pkg:
@@ -229,21 +234,16 @@ def task_build():
         name = pkg["name"]
         ext_pkg_json = B.LABEXT / name / "package.json"
         ext_pkg_jsons += [ext_pkg_json]
+        scope_args = [*C.LERNA, "run", "--scope", name]
+        if C.WITH_JS_COV:
+            actions = [[*scope_args, "labextension:build:cov"]]
+        else:
+            actions += [[*scope_args, "labextension:build"]]
         yield dict(
             name=f"ext:{name}",
-            file_dep=[B.META_BUILDINFO, *U.js_deps(pkg_json)],
-            actions=[
-                [
-                    *C.LERNA,
-                    "exec",
-                    "--scope",
-                    name,
-                    "jupyter",
-                    "labextension",
-                    "build",
-                    ".",
-                ]
-            ],
+            uptodate=[doit.tools.config_changed(dict(cov=C.WITH_JS_COV))],
+            file_dep=[*file_dep, *U.js_deps(pkg_json)],
+            actions=actions,
             targets=[ext_pkg_json],
         )
 

@@ -4,6 +4,7 @@
 
 - Improve notebook-level `@import`, `@font-face`, etc.
 - adds `data-jpf-cell-id` and `data-jpf-cell-tags` to notebook cell elements
+- `IFontManager` supports `setTransientNotebookStyle` for dynamic values
 
 ## v2.0.0
 
