@@ -9,7 +9,6 @@ on:
       - master
 
 env:
-  CONDARC: .github/.condarc
   PIP_DISABLE_PIP_VERSION_CHECK: 1
   PYTHONIOENCODING: utf-8
   PYTHONUNBUFFERED: 1
@@ -35,14 +34,13 @@ jobs:
         with:
           path: ~/conda_pkgs_dir
           key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml', '.github/.condarc') }}
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml') }}
           restore-keys: |
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
 
       - name: install (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
-          condarc-file: .github/.condarc
           miniforge-variant: Mambaforge
           miniforge-version: 4.13.0-1
           python-version: ${{ matrix.python-version }}
@@ -116,14 +114,13 @@ jobs:
         with:
           path: ~/conda_pkgs_dir
           key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml', '.github/.condarc') }}
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml') }}
           restore-keys: |
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
 
       - name: install (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
-          condarc-file: .github/.condarc
           miniforge-variant: Mambaforge
           miniforge-version: 4.13.0-1
           python-version: ${{ matrix.python-version }}
