@@ -4,7 +4,8 @@ Documentation       The font editor allows changing fonts in notebooks
 Library             JupyterLibrary
 Library             BuiltIn
 Library             OperatingSystem
-Resource            ./_keywords.robot
+Resource            ./_keywords.resource
+Resource            ./_coverage.resource
 
 
 *** Variables ***
@@ -112,6 +113,7 @@ Close the Font Editor
     Execute JupyterLab Command    Close All Tabs
     ${dir} =    Get Jupyter Directory
     Remove File    ${dir}${/}Untitled.ipynb
+    Capture Page Coverage
 
 Close the License Viewer
     [Documentation]    Close the Font License Viewer by closing the tab

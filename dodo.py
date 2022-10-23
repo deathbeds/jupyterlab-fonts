@@ -27,6 +27,7 @@ class C:
     CI = bool(json.loads(os.environ.get("CI", "0")))
     ATEST_ARGS = json.loads(os.environ.get("ATEST_ARGS", "[]"))
     WITH_JS_COV = bool(json.loads(os.environ.get("WITH_JS_COV", "0")))
+    NYC = [*JLPM, "nyc", "report"]
 
 
 class P:
@@ -83,13 +84,11 @@ class D:
 
 
 class U:
-    @staticmethod
     def npm_tgz_name(pkg_json):
         name = pkg_json["name"].replace("@", "").replace("/", "-")
         version = U.norm_js_version(pkg_json)
         return f"""{name}-{version}.tgz"""
 
-    @staticmethod
     def norm_js_version(pkg):
         """undo some package weirdness"""
         v = pkg["version"]
@@ -107,7 +106,6 @@ class U:
                     final += dotted
         return final
 
-    @staticmethod
     def js_deps(pkg_json):
         pkg_dir = pkg_json.parent
         style = pkg_dir / "style"
@@ -123,7 +121,6 @@ class U:
             else []
         )
 
-    @staticmethod
     def make_hashfile(shasums, inputs):
         if shasums.exists():
             shasums.unlink()
@@ -140,6 +137,14 @@ class U:
         print(output)
         shasums.write_text(output)
 
+    def clean_some(*paths):
+
+        for path in paths:
+            if path.is_dir():
+                shutil.rmtree(path)
+            elif path.exists():
+                path.unlink()
+
 
 class B:
     """built things"""
@@ -150,6 +155,9 @@ class B:
     ALL_CORE_SCHEMA = [CORE_SCHEMA_SRC, CORE_SCHEMA_LIB]
     META_BUILDINFO = P.META / C.TSBUILDINFO
     ATEST_OUT = BUILD / "atest"
+    ROBOCOV = BUILD / "__robocov__"
+    REPORTS_NYC = BUILD / "nyc"
+    REPORTS_NYC_LCOV = REPORTS_NYC / "lcov.info"
     LABEXT = P.PY_SRC / "labextensions"
     WHEEL = P.DIST / f"""jupyterlab_fonts-{D.CORE_PKG_VERSION}-py3-none-any.whl"""
     SDIST = P.DIST / f"""jupyterlab-fonts-{D.CORE_PKG_VERSION}.tar.gz"""
@@ -238,7 +246,7 @@ def task_build():
         if C.WITH_JS_COV:
             actions = [[*scope_args, "labextension:build:cov"]]
         else:
-            actions += [[*scope_args, "labextension:build"]]
+            actions = [[*scope_args, "labextension:build"]]
         yield dict(
             name=f"ext:{name}",
             uptodate=[doit.tools.config_changed(dict(cov=C.WITH_JS_COV))],
@@ -373,21 +381,35 @@ def task_test():
         ]
         task_dep += ["setup"]
 
+    targets = [B.ATEST_OUT / "log.html"]
+    actions = [
+        (doit.tools.create_folder, [B.ATEST_OUT]),
+        doit.action.CmdAction(
+            [
+                *C.PYM,
+                "robot",
+                *(["--variable", f"ROBOCOV:{B.ROBOCOV}"]),
+                *C.ATEST_ARGS,
+                P.ATEST,
+            ],
+            shell=False,
+            cwd=B.ATEST_OUT,
+        ),
+    ]
+
+    if C.WITH_JS_COV:
+        targets += [B.REPORTS_NYC_LCOV]
+        actions = [
+            (U.clean_some, [B.ROBOCOV, B.REPORTS_NYC]),
+            (doit.tools.create_folder, [B.ROBOCOV]),
+            *actions,
+            [*C.NYC, f"--report-dir={B.REPORTS_NYC}", f"--temp-dir={B.ROBOCOV}"],
+        ]
+
     yield dict(
         name="robot",
-        actions=[
-            (doit.tools.create_folder, [B.ATEST_OUT]),
-            doit.action.CmdAction(
-                [
-                    *C.PYM,
-                    "robot",
-                    *C.ATEST_ARGS,
-                    P.ATEST,
-                ],
-                shell=False,
-                cwd=B.ATEST_OUT,
-            ),
-        ],
+        actions=actions,
+        targets=targets,
         file_dep=file_dep,
         task_dep=task_dep,
     )

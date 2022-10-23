@@ -3,7 +3,8 @@ Documentation       Test whether the JupyterLab Fonts Menu performs as advertise
 
 Library             JupyterLibrary
 Library             BuiltIn
-Resource            ./_keywords.robot
+Resource            ./_keywords.resource
+Resource            ./_coverage.resource
 
 Suite Setup         Prepare Menu Test
 
@@ -58,3 +59,4 @@ Use the Menu to configure Font
     Wait Until Keyword Succeeds    5x    0.25s
     ...    Open With JupyterLab Menu    Settings    Fonts    ${kind}    ${aspect}    ${setting}
     Capture Page Screenshot    ${kind}-${aspect}-${setting}.png
+    Capture Page Coverage
