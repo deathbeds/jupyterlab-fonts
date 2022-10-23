@@ -1,5 +1,6 @@
 import { Cell, ICellModel } from '@jupyterlab/cells';
 import { Notebook, NotebookPanel } from '@jupyterlab/notebook';
+import { JSONExt } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
@@ -117,7 +118,8 @@ export class Stylist {
       }
       for (const cell of panel.content.widgets) {
         let cellMeta =
-          (cell.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings) || {};
+          (cell.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings) ||
+          JSONExt.emptyObject;
         style = this._nbMetaToStyle(cellMeta, panel, cell);
         jss = this._jss.createStyleSheet(style as any);
         css = `${css}\n\n${jss.toString()}`;
@@ -150,7 +152,7 @@ export class Stylist {
       }
     }
 
-    let styles = meta.styles || {};
+    let styles = meta.styles || JSONExt.emptyObject;
     for (let kv of Object.entries(styles)) {
       let [k, v] = kv;
       switch (k) {
