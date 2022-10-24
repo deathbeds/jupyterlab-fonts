@@ -4,6 +4,7 @@
 
 - fix some errors when disposing notebooks
 - normalize generated CSS
+- allow for dereferencing local asset `url()`s for `@import`, etc.
 
 ## v2.1.0
 
