@@ -2,7 +2,8 @@
 
 ## v2.1.1 (unreleased)
 
-> TBD
+- fix some errors when disposing notebooks
+- normalize generated CSS
 
 ## v2.1.0
 

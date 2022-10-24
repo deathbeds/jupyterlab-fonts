@@ -17,6 +17,7 @@ export class Stylist {
   private _jss = JSS.create(jssPresetDefault());
   private _fontCache = new Map<string, SCHEMA.IFontFacePrimitive[]>();
   private _cacheUpdated = new Signal<this, void>(this);
+  private _cellStyleCache = new Map<string, string>();
 
   constructor() {
     this._globalStyles = document.createElement('style');
@@ -47,6 +48,7 @@ export class Stylist {
 
   /** hoist cell metadata to data attributes */
   private _onNotebookModelContentChanged(notebook: Notebook) {
+    let needsUpdate = false;
     for (const cell of notebook.widgets) {
       cell.node.dataset.jpfCellId = cell.model.id;
       let tags = [...((cell.model.metadata.get('tags') || []) as string[])].join(',');
@@ -55,6 +57,25 @@ export class Stylist {
       } else {
         delete cell.node.dataset.jpfCellTags;
       }
+
+      if (!needsUpdate) {
+        const meta = (
+          cell.model.metadata.get(PACKAGE_NAME) || JSONExt.emptyObject
+        ).toString();
+        let cached = (
+          this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject
+        ).toString();
+        if (meta !== cached) {
+          needsUpdate = true;
+        }
+        this._cellStyleCache.set(cell.model.id, meta);
+      }
+    }
+    if (needsUpdate) {
+      this.stylesheet(
+        notebook.model?.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings,
+        notebook.parent as NotebookPanel
+      );
     }
   }
 
