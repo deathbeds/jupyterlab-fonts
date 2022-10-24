@@ -5,7 +5,6 @@ import * as React from 'react';
 
 import { FontManager } from './manager';
 import * as SCHEMA from './schema';
-
 import {
   TextKind,
   TEXT_OPTIONS,
@@ -14,7 +13,7 @@ import {
   TextProperty,
   IFontFaceOptions,
   PACKAGE_NAME,
-} from '.';
+} from './tokens';
 
 import '../style/editor.css';
 

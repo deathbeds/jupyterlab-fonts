@@ -9,7 +9,6 @@ labels: maintenance
 - [ ] ensure the CHANGELOG is up-to-date
   - [ ] move the new release to the top of the stack
 - [ ] validate on binder
-- [ ] validate on ReadTheDocs
 - [ ] wait for a successful build of `main`
 - [ ] download the `dist` archive and unpack somewhere (maybe a fresh `dist`)
 - [ ] create a new release through the GitHub UI
@@ -20,7 +19,7 @@ labels: maintenance
   cd dist
   twine upload *.tar.gz *.whl
   npm login
-  for tarball in deathbeds-jupyterlab-fonts-*.tar.gz; do
+  for tarball in deathbeds-jupyterlab-font*.tar.gz; do
     npm publish .tgz
   done
   npm logout

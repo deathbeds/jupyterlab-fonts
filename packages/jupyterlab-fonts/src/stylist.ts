@@ -1,13 +1,17 @@
 import { Cell, ICellModel } from '@jupyterlab/cells';
+import { PathExt, PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { Notebook, NotebookPanel } from '@jupyterlab/notebook';
 import { JSONExt } from '@lumino/coreutils';
+import { Debouncer } from '@lumino/polling';
 import { Signal } from '@lumino/signaling';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
 
 import * as SCHEMA from './schema';
+import { ROOT, IFontFaceOptions, DOM, PACKAGE_NAME } from './tokens';
 
-import { ROOT, IFontFaceOptions, DOM, PACKAGE_NAME } from '.';
+const RE_CSS_IMPORT = /^@import(.*$)/;
+const RE_CSS_REL_URL = /url\(\s*['"]?(\.[^\)'"]+)['"]?\s*\)/g;
 
 export class Stylist {
   fonts = new Map<string, IFontFaceOptions>();
@@ -18,11 +22,17 @@ export class Stylist {
   private _jss = JSS.create(jssPresetDefault());
   private _fontCache = new Map<string, SCHEMA.IFontFacePrimitive[]>();
   private _cacheUpdated = new Signal<this, void>(this);
+  private _cellStyleCache = new Map<string, any>();
+  private _notebookContentDebouncer: Debouncer;
+  private _notebookCellCount = new Map<Notebook, number>();
 
   constructor() {
     this._globalStyles = document.createElement('style');
     this._globalStyles.classList.add(DOM.sheet);
     this._globalStyles.classList.add(DOM.modGlobal);
+    this._notebookContentDebouncer = new Debouncer((notebook: Notebook) => {
+      this._onNotebookModelContentChanged(notebook);
+    }, 100);
   }
   get cacheUpdated() {
     return this._cacheUpdated;
@@ -35,7 +45,7 @@ export class Stylist {
       sheet.classList.add(DOM.sheet);
       sheet.classList.add(DOM.modNotebook);
       panel.content.modelContentChanged.connect(
-        this._onNotebookModelContentChanged,
+        this._debouncedNotebookContentChanged,
         this
       );
       panel.disposed.connect(this._onDisposed, this);
@@ -46,8 +56,16 @@ export class Stylist {
     }
   }
 
+  private _debouncedNotebookContentChanged(notebook: Notebook) {
+    this._notebookContentDebouncer.invoke(notebook).catch(console.warn);
+  }
+
   /** hoist cell metadata to data attributes */
   private _onNotebookModelContentChanged(notebook: Notebook) {
+    const newCellCount = notebook.widgets.length;
+    const oldCellCount = this._notebookCellCount.get(notebook) || -1;
+
+    let needsUpdate = newCellCount !== oldCellCount;
     for (const cell of notebook.widgets) {
       cell.node.dataset.jpfCellId = cell.model.id;
       let tags = [...((cell.model.metadata.get('tags') || []) as string[])].join(',');
@@ -56,6 +74,23 @@ export class Stylist {
       } else {
         delete cell.node.dataset.jpfCellTags;
       }
+
+      if (!needsUpdate) {
+        const meta = cell.model.metadata.get(PACKAGE_NAME) || JSONExt.emptyObject;
+        let cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
+        if (!JSONExt.deepEqual(meta, cached)) {
+          needsUpdate = true;
+        }
+        this._cellStyleCache.set(cell.model.id, meta);
+      }
+    }
+
+    if (needsUpdate) {
+      this.stylesheet(
+        notebook.model?.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings,
+        notebook.parent as NotebookPanel
+      );
+      this._notebookCellCount.set(notebook, newCellCount);
     }
   }
 
@@ -65,9 +100,12 @@ export class Stylist {
       this._notebookStyles.delete(panel);
       panel.disposed.disconnect(this._onDisposed, this);
       panel.content.modelContentChanged.disconnect(
-        this._onNotebookModelContentChanged,
+        this._debouncedNotebookContentChanged,
         this
       );
+    }
+    if (this._notebookCellCount.has(panel.content)) {
+      this._notebookCellCount.delete(panel.content);
     }
   }
 
@@ -114,7 +152,7 @@ export class Stylist {
       if (transientMeta) {
         style = this._nbMetaToStyle(transientMeta, panel);
         jss = this._jss.createStyleSheet(style as any);
-        css = `${css}\n\n${jss.toString()}`;
+        css = `${css.trim()}\n${jss.toString()}`;
       }
       for (const cell of panel.content.widgets) {
         let cellMeta =
@@ -122,15 +160,45 @@ export class Stylist {
           JSONExt.emptyObject;
         style = this._nbMetaToStyle(cellMeta, panel, cell);
         jss = this._jss.createStyleSheet(style as any);
-        css = `${css}\n\n${jss.toString()}`;
+        css = `${css.trim()}\n${jss.toString()}`;
       }
     }
+
+    css = this._normalizeCSS(css, panel);
 
     if (sheet && sheet.textContent !== css) {
       sheet.textContent = css;
     }
 
     this.hack();
+  }
+
+  private _normalizeCSS(css: string, panel?: NotebookPanel) {
+    const lines = css.split('\n');
+    const finalLines: string[] = [];
+    const imports: string[] = [];
+    let localPath = panel?.context.localPath || null;
+    if (localPath) {
+      localPath = URLExt.join(
+        PageConfig.getBaseUrl(),
+        'files',
+        PathExt.dirname(localPath)
+      );
+    }
+    let line: string;
+    for (line of lines) {
+      if (localPath != null) {
+        line = line.replace(RE_CSS_REL_URL, `url('${localPath}/$1')`);
+      }
+
+      let importMatch = line.match(RE_CSS_IMPORT);
+      if (importMatch) {
+        imports.push(line);
+      } else {
+        finalLines.push(line);
+      }
+    }
+    return [...imports, ...finalLines].join('\n');
   }
 
   private _nbMetaToStyle(

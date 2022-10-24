@@ -8,8 +8,6 @@ import { Menu } from '@lumino/widgets';
 
 import * as SCHEMA from './schema';
 import { Stylist } from './stylist';
-import { dataURISrc } from './util';
-
 import {
   IFontManager,
   PACKAGE_NAME,
@@ -23,7 +21,8 @@ import {
   TEXT_OPTIONS,
   FontFormat,
   IFontFaceOptions,
-} from '.';
+} from './tokens';
+import { dataURISrc } from './util';
 
 const ALL_PALETTE = 'Fonts';
 
@@ -277,25 +276,25 @@ export class FontManager implements IFontManager {
     });
   }
 
-  private _registerNotebook(notebook: NotebookPanel) {
-    this._stylist.registerNotebook(notebook, true);
-    let watcher = this._notebookMetaWatcher(notebook);
-    if (notebook?.model) {
-      notebook.model.metadata.changed.connect(watcher);
+  private _registerNotebook(panel: NotebookPanel) {
+    this._stylist.registerNotebook(panel, true);
+    let watcher = this._notebookMetaWatcher(panel);
+    if (panel?.model) {
+      panel.model.metadata.changed.connect(watcher);
     }
-    notebook.disposed.connect(this._onNotebookDisposed);
+    panel.disposed.connect(this._onNotebookDisposed, this);
     watcher();
     this.hack();
   }
 
-  private _onNotebookDisposed(notebook: NotebookPanel) {
-    this._stylist.registerNotebook(notebook, false);
+  private _onNotebookDisposed(panel: NotebookPanel) {
+    this._stylist.registerNotebook(panel, false);
   }
 
-  private _notebookMetaWatcher(_notebook: NotebookPanel) {
+  private _notebookMetaWatcher(panel: NotebookPanel) {
     return () => {
       this._notebooks.forEach((notebook) => {
-        if (notebook.id !== notebook.id || !notebook.model) {
+        if (notebook.id !== panel.id || !notebook.model) {
           return;
         }
         const meta = notebook.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings;

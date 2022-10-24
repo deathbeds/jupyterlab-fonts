@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-anonymous-pro",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Anonymous Pro Fonts for JupyterLab",
   "keywords": [
     "fonts",
@@ -31,7 +31,7 @@
     "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~2.1",
+    "@deathbeds/jupyterlab-fonts": "~2.1.1",
     "@jupyterlab/application": "3",
     "typeface-anonymous-pro": "^1.1.13"
   },

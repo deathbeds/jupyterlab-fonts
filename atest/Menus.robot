@@ -1,10 +1,7 @@
 *** Settings ***
 Documentation       Test whether the JupyterLab Fonts Menu performs as advertised.
 
-Library             JupyterLibrary
-Library             BuiltIn
 Resource            ./_keywords.resource
-Resource            ./_coverage.resource
 
 Suite Setup         Prepare Menu Test
 
@@ -45,18 +42,3 @@ Customize code font with the JupyterLab Menu
     Content    Size    Default Content Size
     Content    Size    20px
     Content    Size    Default Content Size
-
-
-*** Keywords ***
-Prepare Menu Test
-    Set Screenshot Directory    ${OUTPUT_DIR}${/}menus
-    Execute JupyterLab Command    Close All Tabs
-    Make a Font Test Notebook
-
-Use the Menu to configure Font
-    [Documentation]    Set a font value in the JupyterLab Fonts Menu
-    [Arguments]    ${kind}    ${aspect}    ${setting}
-    Wait Until Keyword Succeeds    5x    0.25s
-    ...    Open With JupyterLab Menu    Settings    Fonts    ${kind}    ${aspect}    ${setting}
-    Capture Page Screenshot    ${kind}-${aspect}-${setting}.png
-    Capture Page Coverage

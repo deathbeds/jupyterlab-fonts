@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-fonts",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Interactive Typography and Style for JupyterLab",
   "keywords": [
     "fonts",

@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import platform
 import re
 import shutil
 import sys
@@ -28,6 +29,13 @@ class C:
     ATEST_ARGS = json.loads(os.environ.get("ATEST_ARGS", "[]"))
     WITH_JS_COV = bool(json.loads(os.environ.get("WITH_JS_COV", "0")))
     NYC = [*JLPM, "nyc", "report"]
+    PABOT_DEFAULTS = [
+        "--artifactsinsubfolders",
+        "--artifacts",
+        "png,log,txt,svg,ipynb,json",
+    ]
+    PLATFORM = platform.system()
+    PY_VERSION = "{}.{}".format(sys.version_info[0], sys.version_info[1])
 
 
 class P:
@@ -62,7 +70,7 @@ class P:
     YARN_LOCK = ROOT / "yarn.lock"
     ESLINTRC = ROOT / ".eslintrc.js"
 
-    ALL_ROBOT = [*ATEST.rglob("*.robot")]
+    ALL_ROBOT = [*ATEST.rglob("*.robot"), *ATEST.rglob("*.resource")]
 
     ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
     ALL_YAML = [*BINDER.glob("*.yml"), *GH.rglob("*.yml")]
@@ -237,7 +245,7 @@ def task_build():
 
     ext_pkg_jsons = []
     if C.WITH_JS_COV:
-        file_dep = [P.YARN_INTEGRITY]
+        file_dep = [P.YARN_INTEGRITY, *B.ALL_CORE_SCHEMA]
     else:
         file_dep = [B.META_BUILDINFO]
 
@@ -249,7 +257,9 @@ def task_build():
         ext_pkg_jsons += [ext_pkg_json]
         scope_args = [*C.LERNA, "run", "--scope", name]
         if C.WITH_JS_COV:
-            actions = [[*scope_args, "labextension:build:cov"]]
+            actions = [
+                [*scope_args, "labextension:build:cov"],
+            ]
         else:
             actions = [[*scope_args, "labextension:build"]]
         yield dict(
@@ -391,9 +401,14 @@ def task_test():
         (doit.tools.create_folder, [B.ATEST_OUT]),
         doit.action.CmdAction(
             [
-                *C.PYM,
-                "robot",
+                "pabot",
+                *C.PABOT_DEFAULTS,
+                *(["--name", "🇦"]),
+                *(["--variable", f"ATTEMPT:{1}"]),
+                *(["--variable", f"OS:{C.PLATFORM}"]),
+                *(["--variable", f"PY:{C.PY_VERSION}"]),
                 *(["--variable", f"ROBOCOV:{B.ROBOCOV}"]),
+                *(["--variable", f"ROOT:{P.ROOT}"]),
                 *C.ATEST_ARGS,
                 P.ATEST,
             ],
@@ -421,6 +436,7 @@ def task_test():
 
     yield dict(
         name="pytest",
+        task_dep=["setup:ext"],
         file_dep=[*P.ALL_PY_SRC],
         actions=[
             [
