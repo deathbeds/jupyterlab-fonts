@@ -20,6 +20,7 @@ export class Stylist {
   private _cacheUpdated = new Signal<this, void>(this);
   private _cellStyleCache = new Map<string, any>();
   private _notebookContentDebouncer: Debouncer;
+  private _notebookCellCount = new Map<Notebook, number>();
 
   constructor() {
     this._globalStyles = document.createElement('style');
@@ -57,7 +58,10 @@ export class Stylist {
 
   /** hoist cell metadata to data attributes */
   private _onNotebookModelContentChanged(notebook: Notebook) {
-    let needsUpdate = false;
+    const newCellCount = notebook.widgets.length;
+    const oldCellCount = this._notebookCellCount.get(notebook) || -1;
+
+    let needsUpdate = newCellCount !== oldCellCount;
     for (const cell of notebook.widgets) {
       cell.node.dataset.jpfCellId = cell.model.id;
       let tags = [...((cell.model.metadata.get('tags') || []) as string[])].join(',');
@@ -82,6 +86,7 @@ export class Stylist {
         notebook.model?.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings,
         notebook.parent as NotebookPanel
       );
+      this._notebookCellCount.set(notebook, newCellCount);
     }
   }
 
@@ -94,6 +99,9 @@ export class Stylist {
         this._debouncedNotebookContentChanged,
         this
       );
+    }
+    if (this._notebookCellCount.has(panel.content)) {
+      this._notebookCellCount.delete(panel.content);
     }
   }
 
