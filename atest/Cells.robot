@@ -6,6 +6,7 @@ Resource            ./_keywords.resource
 
 Suite Setup         Set Attempt Screenshot Directory    cells
 Suite Teardown      Reset JupyterLab And Close With Coverage
+Test Teardown       Clean Up After Cell Test
 
 
 *** Variables ***
@@ -38,6 +39,13 @@ Importing
     Create File    ${nbdir}${/}style.css    body { background-color: green; }
     Launch A New JupyterLab Document
     Wait Until JupyterLab Kernel Is Idle
-    Set Cell Metadata    ${META_IMPORT}    1    10-red.png
-    Stylesheet Should Contain    @import url('${nburl}/files/./style.css')
+    Set Cell Metadata    ${META_IMPORT}    1    10-green.png
+    Stylesheet Should Contain    @import url('${nburl}files/./style.css')
     Capture Page Screenshot    11-end.png
+
+
+*** Keywords ***
+Clean Up After Cell Test
+    Execute JupyterLab Command    Close All Tabs
+    ${nbdir} =    Get Jupyter Directory
+    Remove File    ${nbdir}${/}Untitled.ipynb
