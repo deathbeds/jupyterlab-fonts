@@ -36,6 +36,7 @@ class C:
     ]
     PLATFORM = platform.system()
     PY_VERSION = "{}.{}".format(sys.version_info[0], sys.version_info[1])
+    TESTING_IN_CI = json.loads(os.environ.get("TESTING_IN_CI", "[]"))
 
 
 class P:
@@ -187,6 +188,9 @@ class B:
 def task_setup():
     """perform early setup"""
     # trust the cache
+    if C.TESTING_IN_CI:
+        return
+
     if not (C.CI and P.YARN_INTEGRITY.exists()):
         yield dict(
             name="js",
@@ -436,7 +440,7 @@ def task_test():
 
     yield dict(
         name="pytest",
-        task_dep=["setup:ext"],
+        task_dep=[] if C.TESTING_IN_CI else ["setup:ext"],
         file_dep=[*P.ALL_PY_SRC],
         actions=[
             [

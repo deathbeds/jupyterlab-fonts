@@ -4,5 +4,6 @@ source activate $NB_PYTHON_PREFIX
 
 doit binder
 
-cp .binder/jupyter_config.json .
+mkdir -p ~/.jupyter
+cp .binder/jupyter_config.json ~/.jupyter/
 cp .binder/overrides.json $NB_PYTHON_PREFIX/share/jupyter/lab/settings

@@ -1,6 +1,10 @@
 # Changelog
 
-## v2.1.1 (unreleased)
+## v2.1.2 (unreleased)
+
+> TBD
+
+## v2.1.1
 
 - fix some errors when disposing notebooks
 - normalize generated CSS
