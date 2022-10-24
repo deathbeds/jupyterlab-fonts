@@ -90,6 +90,8 @@ jobs:
     needs: [build]
     name: test ${{ matrix.os }} ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
+    env:
+      TESTING_IN_CI: '1'
     strategy:
       fail-fast: false
       matrix:
@@ -128,20 +130,6 @@ jobs:
           use-only-tar-bz2: true
           use-mamba: true
 
-      - name: lock (conda)
-        shell: bash -l {0}
-        run: |
-          mkdir ./build
-          conda list --explicit | tee ./build/${{ matrix.os }}-${{ matrix.python-version }}.conda.lock
-
-      - name: upload (lock)
-        uses: actions/upload-artifact@v3
-        with:
-          name:
-            jupyterlab-fonts ${{ github.run_number }} lock ${{ matrix.os }} ${{
-            matrix.python-version }}
-          path: ./build/${{ matrix.os }}-${{ matrix.python-version }}.conda.lock
-
       - name: download (dist)
         uses: actions/download-artifact@v3
         with:
@@ -164,7 +152,11 @@ jobs:
           jupyter labextension list
           jupyter labextension list 2>&1 | grep -ie "@deathbeds/jupyterlab-font.*enabled.*ok.*python.*jupyterlab-fonts" -
 
-      - name: test
+      - name: test (pytest)
+        shell: bash -l {0}
+        run: doit test:pytest
+
+      - name: test (robot)
         shell: bash -l {0}
         run: doit test || doit test || doit test
 
