@@ -12,6 +12,7 @@ Suite Teardown      Reset JupyterLab And Close With Coverage
 ${NS}               @deathbeds/jupyterlab-fonts
 ${META_EMPTY}       {}
 ${META_RED}         {"tags":["red"], "${NS}": {"styles": {"background-color": "red"}}}
+${META_IMPORT}      {"${NS}": {"styles": {"@import": "url('./style.css')"}}}
 ${RED_TAG}          css:[${DATA_TAGS}=",red,"]
 ${ID_TAG}           css:[${DATA_CELL_ID}]
 
@@ -30,3 +31,13 @@ Cell Styling
     Wait Until Page Does Not Contain Element    ${RED_TAG}
     Stylesheet Should Not Contain    background-color: red
     Capture Page Screenshot    02-end.png
+
+Importing
+    ${nbdir} =    Get Jupyter Directory
+    ${nburl} =    Get Jupyter Server URL
+    Create File    ${nbdir}${/}style.css    body { background-color: green; }
+    Launch A New JupyterLab Document
+    Wait Until JupyterLab Kernel Is Idle
+    Set Cell Metadata    ${META_IMPORT}    1    10-red.png
+    Stylesheet Should Contain    @import url('${nburl}/files/./style.css')
+    Capture Page Screenshot    11-end.png

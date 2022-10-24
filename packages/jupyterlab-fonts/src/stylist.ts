@@ -1,4 +1,5 @@
 import { Cell, ICellModel } from '@jupyterlab/cells';
+import { PathExt, PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { Notebook, NotebookPanel } from '@jupyterlab/notebook';
 import { JSONExt } from '@lumino/coreutils';
 import { Debouncer } from '@lumino/polling';
@@ -8,6 +9,9 @@ import jssPresetDefault from 'jss-preset-default';
 
 import * as SCHEMA from './schema';
 import { ROOT, IFontFaceOptions, DOM, PACKAGE_NAME } from './tokens';
+
+const RE_CSS_IMPORT = /^@import(.*$)/;
+const RE_CSS_REL_URL = /url\(\s*['"]?(\.[^\)'"]+)['"]?\s*\)/g;
 
 export class Stylist {
   fonts = new Map<string, IFontFaceOptions>();
@@ -160,11 +164,41 @@ export class Stylist {
       }
     }
 
+    css = this._normalizeCSS(css, panel);
+
     if (sheet && sheet.textContent !== css) {
       sheet.textContent = css;
     }
 
     this.hack();
+  }
+
+  private _normalizeCSS(css: string, panel?: NotebookPanel) {
+    const lines = css.split('\n');
+    const finalLines: string[] = [];
+    const imports: string[] = [];
+    let localPath = panel?.context.localPath || null;
+    if (localPath) {
+      localPath = URLExt.join(
+        PageConfig.getBaseUrl(),
+        'files',
+        PathExt.dirname(localPath)
+      );
+    }
+    let line: string;
+    for (line of lines) {
+      if (localPath != null) {
+        line = line.replace(RE_CSS_REL_URL, `url('${localPath}/$1')`);
+      }
+
+      let importMatch = line.match(RE_CSS_IMPORT);
+      if (importMatch) {
+        imports.push(line);
+      } else {
+        finalLines.push(line);
+      }
+    }
+    return [...imports, ...finalLines].join('\n');
   }
 
   private _nbMetaToStyle(
