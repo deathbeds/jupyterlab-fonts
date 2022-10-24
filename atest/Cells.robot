@@ -5,6 +5,7 @@ Library             JupyterLibrary
 Resource            ./_keywords.resource
 
 Suite Setup         Set Attempt Screenshot Directory    cells
+Suite Teardown      Reset JupyterLab And Close With Coverage
 
 
 *** Variables ***
