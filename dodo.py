@@ -403,6 +403,7 @@ def task_test():
             [
                 "pabot",
                 *C.PABOT_DEFAULTS,
+                *(["--name", "🇦"]),
                 *(["--variable", f"ATTEMPT:{1}"]),
                 *(["--variable", f"OS:{C.PLATFORM}"]),
                 *(["--variable", f"PY:{C.PY_VERSION}"]),
