@@ -421,6 +421,7 @@ def task_test():
 
     yield dict(
         name="pytest",
+        task_dep=["setup:ext"],
         file_dep=[*P.ALL_PY_SRC],
         actions=[
             [

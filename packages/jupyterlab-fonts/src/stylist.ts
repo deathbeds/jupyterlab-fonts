@@ -17,7 +17,7 @@ export class Stylist {
   private _jss = JSS.create(jssPresetDefault());
   private _fontCache = new Map<string, SCHEMA.IFontFacePrimitive[]>();
   private _cacheUpdated = new Signal<this, void>(this);
-  private _cellStyleCache = new Map<string, string>();
+  private _cellStyleCache = new Map<string, any>();
 
   constructor() {
     this._globalStyles = document.createElement('style');
@@ -59,13 +59,9 @@ export class Stylist {
       }
 
       if (!needsUpdate) {
-        const meta = (
-          cell.model.metadata.get(PACKAGE_NAME) || JSONExt.emptyObject
-        ).toString();
-        let cached = (
-          this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject
-        ).toString();
-        if (meta !== cached) {
+        const meta = cell.model.metadata.get(PACKAGE_NAME) || JSONExt.emptyObject;
+        let cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
+        if (!JSONExt.deepEqual(meta, cached)) {
           needsUpdate = true;
         }
         this._cellStyleCache.set(cell.model.id, meta);
