@@ -396,7 +396,6 @@ def task_test():
         (doit.tools.create_folder, [B.ATEST_OUT]),
         doit.action.CmdAction(
             [
-                *C.PYM,
                 "pabot",
                 *C.PABOT_DEFAULTS,
                 *(["--variable", f"ROBOCOV:{B.ROBOCOV}"]),
