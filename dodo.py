@@ -242,7 +242,7 @@ def task_build():
 
     ext_pkg_jsons = []
     if C.WITH_JS_COV:
-        file_dep = [P.YARN_INTEGRITY]
+        file_dep = [P.YARN_INTEGRITY, *B.ALL_CORE_SCHEMA]
     else:
         file_dep = [B.META_BUILDINFO]
 
@@ -254,7 +254,9 @@ def task_build():
         ext_pkg_jsons += [ext_pkg_json]
         scope_args = [*C.LERNA, "run", "--scope", name]
         if C.WITH_JS_COV:
-            actions = [[*scope_args, "labextension:build:cov"]]
+            actions = [
+                [*scope_args, "labextension:build:cov"],
+            ]
         else:
             actions = [[*scope_args, "labextension:build"]]
         yield dict(
