@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-dejavu-sans-mono",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "keywords": [
     "fonts",
@@ -32,7 +32,7 @@
     "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~2.1.1",
+    "@deathbeds/jupyterlab-fonts": "~2.1.2",
     "@jupyterlab/application": "3"
   },
   "devDependencies": {
