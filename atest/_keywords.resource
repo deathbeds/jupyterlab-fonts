@@ -1,10 +1,12 @@
 *** Settings ***
-Documentation  Keywords for testing jupyterlab-fonts
-Resource  ./_variables.resource
+Documentation       Keywords for testing jupyterlab-fonts
+
+Resource            ./_variables.resource
 Library             uuid
 Library             BuiltIn
 Library             OperatingSystem
 Library             JupyterLibrary
+
 
 *** Keywords ***
 Make a Font Test Notebook
@@ -27,7 +29,6 @@ Close the Font Editor
 Close the License Viewer
     [Documentation]    Close the Font License Viewer by closing the tab
     Click Element    ${DOCK}//${TAB}//${ICON_LICENSE}/../../${ICON_CLOSE}
-
 
 Use the font editor to configure fonts
     [Documentation]    Presently, change a dropdown in the font editor
@@ -79,7 +80,6 @@ Get Editor Content
     ${content} =    Execute JavaScript    ${js}
     RETURN    ${content}
 
-
 Prepare to test a font editor
     [Documentation]    Open a notebook and settings
     Execute JupyterLab Command    Close All Tabs
@@ -94,7 +94,6 @@ Open Advanced Settings to Validate Fonts
     Click Element    ${fonts}
     Drag And Drop By Offset    ${settings}    0    600
     Click Element    css:.jp-Notebook .CodeMirror
-
 
 Open the Notebook Font Editor
     [Documentation]    Use the Notebook button bar to open the notebook font editor

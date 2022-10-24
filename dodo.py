@@ -67,7 +67,7 @@ class P:
     YARN_LOCK = ROOT / "yarn.lock"
     ESLINTRC = ROOT / ".eslintrc.js"
 
-    ALL_ROBOT = [*ATEST.rglob("*.robot")]
+    ALL_ROBOT = [*ATEST.rglob("*.robot"), *ATEST.rglob("*.resource")]
 
     ALL_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
     ALL_YAML = [*BINDER.glob("*.yml"), *GH.rglob("*.yml")]

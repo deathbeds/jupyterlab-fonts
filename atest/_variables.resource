@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation       Variables for testing jupyterlab-fonts
 
+
 *** Variables ***
 ${ED}                   css:.jp-FontsEditor
 ${DOCK}                 //div[@id='jp-main-dock-panel']
