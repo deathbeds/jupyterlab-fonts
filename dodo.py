@@ -28,6 +28,11 @@ class C:
     ATEST_ARGS = json.loads(os.environ.get("ATEST_ARGS", "[]"))
     WITH_JS_COV = bool(json.loads(os.environ.get("WITH_JS_COV", "0")))
     NYC = [*JLPM, "nyc", "report"]
+    PABOT_DEFAULTS = [
+        "--artifactsinsubfolders",
+        "--artifacts",
+        "png,log,txt,svg,ipynb,json",
+    ]
 
 
 class P:
@@ -392,7 +397,8 @@ def task_test():
         doit.action.CmdAction(
             [
                 *C.PYM,
-                "robot",
+                "pabot",
+                *C.PABOT_DEFAULTS,
                 *(["--variable", f"ROBOCOV:{B.ROBOCOV}"]),
                 *C.ATEST_ARGS,
                 P.ATEST,
