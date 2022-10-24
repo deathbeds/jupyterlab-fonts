@@ -39,14 +39,19 @@ export class NotebookFontsButton
       }
     };
 
-    if (panel.model) {
-      panel.model.metadata.changed.connect(metaUpdated);
-      metaUpdated(panel.model.metadata);
+    const panelModel = panel.model;
+
+    if (panelModel) {
+      panelModel.metadata.changed.connect(metaUpdated);
+      metaUpdated(panelModel.metadata);
     }
 
     panel.toolbar.insertItem(9, 'fonts', button);
 
     return new DisposableDelegate(() => {
+      if (panelModel) {
+        panelModel.metadata.changed.disconnect(metaUpdated);
+      }
       button.dispose();
     });
   }
