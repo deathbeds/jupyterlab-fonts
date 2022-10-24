@@ -1,6 +1,7 @@
 import { Cell, ICellModel } from '@jupyterlab/cells';
 import { Notebook, NotebookPanel } from '@jupyterlab/notebook';
 import { JSONExt } from '@lumino/coreutils';
+import { Debouncer } from '@lumino/polling';
 import { Signal } from '@lumino/signaling';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
@@ -18,11 +19,15 @@ export class Stylist {
   private _fontCache = new Map<string, SCHEMA.IFontFacePrimitive[]>();
   private _cacheUpdated = new Signal<this, void>(this);
   private _cellStyleCache = new Map<string, any>();
+  private _notebookContentDebouncer: Debouncer;
 
   constructor() {
     this._globalStyles = document.createElement('style');
     this._globalStyles.classList.add(DOM.sheet);
     this._globalStyles.classList.add(DOM.modGlobal);
+    this._notebookContentDebouncer = new Debouncer((notebook: Notebook) => {
+      this._onNotebookModelContentChanged(notebook);
+    }, 100);
   }
   get cacheUpdated() {
     return this._cacheUpdated;
@@ -35,7 +40,7 @@ export class Stylist {
       sheet.classList.add(DOM.sheet);
       sheet.classList.add(DOM.modNotebook);
       panel.content.modelContentChanged.connect(
-        this._onNotebookModelContentChanged,
+        this._debouncedNotebookContentChanged,
         this
       );
       panel.disposed.connect(this._onDisposed, this);
@@ -44,6 +49,10 @@ export class Stylist {
     } else {
       this._onDisposed(panel);
     }
+  }
+
+  private _debouncedNotebookContentChanged(notebook: Notebook) {
+    this._notebookContentDebouncer.invoke(notebook).catch(console.warn);
   }
 
   /** hoist cell metadata to data attributes */
@@ -82,7 +91,7 @@ export class Stylist {
       this._notebookStyles.delete(panel);
       panel.disposed.disconnect(this._onDisposed, this);
       panel.content.modelContentChanged.disconnect(
-        this._onNotebookModelContentChanged,
+        this._debouncedNotebookContentChanged,
         this
       );
     }
