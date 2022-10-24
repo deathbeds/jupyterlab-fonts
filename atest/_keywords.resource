@@ -147,3 +147,40 @@ Set Attempt Screenshot Directory
     [Arguments]    ${path}
     Set Screenshot Directory
     ...    ${OUTPUT_DIR}${/}screenshots${/}${OS.lower()[:2]}_${ATTEMPT}${/}${path}
+
+Set Cell Metadata
+    [Documentation]    Use the Property Inspector to update the cell metadata
+    [Arguments]    ${metadata}    ${idx}=1    ${screenshot}=${EMPTY}
+    Maybe Open JupyterLab Sidebar    Property Inspector
+    Maybe Open Cell Metadata JSON
+    ${sel} =    Set Variable    css:${JLAB CSS ACTIVE DOC CELLS}:nth-child(${idx})
+    Click Element    css:${JLAB CSS ACTIVE DOC CELLS}:nth-child(${idx})
+    Set CodeMirror Value    ${CSS_LAB_CELL_META_TOOL} .CodeMirror    ${metadata}
+    ${commit} =    Set Variable    css:${CSS_LAB_CELL_META_TOOL} ${CSS_LAB_META_COMMIT}
+    Wait Until Page Contains Element    ${commit}
+    Click Element    ${commit}
+    IF    ${screenshot.__len__()}    Capture Page Screenshot    ${screenshot}
+
+Maybe Open Cell Metadata JSON
+    [Documentation]    Ensure the Cell Metadata viewer is open.
+    ${el} =    Get WebElements    css:${CSS_LAB_CELL_META_JSON_CM_HIDDEN}
+
+    IF    not ${el.__len__()}    RETURN
+
+    Click Element    css:${CSS_LAB_ADVANCED_COLLAPSE}
+    Wait Until Page Does Not Contain Element    css:${CSS_LAB_CELL_META_JSON_CM_HIDDEN}
+
+Stylesheet Should Contain
+    [Documentation]    Check whether style "stuck",
+    [Arguments]    ${text}    ${mod}=${MOD_NOTEBOOK}    ${inverse}=${FALSE}
+    ${css} =    Get Element Attribute    css:${SHEET}${mod}    innerHTML
+    IF    ${inverse}
+        Should Not Contain    ${css}    ${text}
+    ELSE
+        Should Contain    ${css}    ${text}
+    END
+
+Stylesheet Should Not Contain
+    [Documentation]    Check whether style "stuck",
+    [Arguments]    ${text}    ${mod}=${MOD_NOTEBOOK}
+    Stylesheet Should Contain    ${text}    ${mod}    inverse=${TRUE}

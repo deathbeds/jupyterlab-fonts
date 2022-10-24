@@ -67,6 +67,7 @@ export class Stylist {
         this._cellStyleCache.set(cell.model.id, meta);
       }
     }
+
     if (needsUpdate) {
       this.stylesheet(
         notebook.model?.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings,
