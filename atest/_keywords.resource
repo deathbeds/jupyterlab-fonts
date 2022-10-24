@@ -33,7 +33,7 @@ Close the License Viewer
 Use the font editor to configure fonts
     [Documentation]    Presently, change a dropdown in the font editor
     [Arguments]    ${scope}    ${kind}    ${font}
-    Set Screenshot Directory    ${OUTPUT_DIR}${/}editor${/}${scope}${/}${kind}${/}${font}
+    Set Attempt Screenshot Directory    editor${/}${scope}${/}${kind}${/}${font}
     Change a Font Dropdown    ${scope}    ${kind}    Font    ${font}    0
     IF    "${scope}" == "Global"    Check font license is visible in Editor
     Change a Font Dropdown    ${scope}    ${kind}    Size    -    0
@@ -60,7 +60,7 @@ Check font license is visible in Editor
 
 Use the Global font editor to ${what} custom fonts
     [Documentation]    Presently, change a checkbox in the font editor
-    Set Screenshot Directory    ${OUTPUT_DIR}${/}editor${/}Global${/}${what}
+    Set Attempt Screenshot Directory    editor${/}Global${/}${what}
     ${input} =    Set Variable    ${ED}-enable input
     Capture Page Screenshot    00_before.png
     IF    "${what}"=="enable"    Select Checkbox    ${input}
@@ -130,7 +130,7 @@ Reset JupyterLab And Close With Coverage
     Reset JupyterLab And Close
 
 Prepare Menu Test
-    Set Screenshot Directory    ${OUTPUT_DIR}${/}menus
+    Set Attempt Screenshot Directory    menus
     Execute JupyterLab Command    Close All Tabs
     Make a Font Test Notebook
 
@@ -141,3 +141,9 @@ Use the Menu to configure Font
     ...    Open With JupyterLab Menu    Settings    Fonts    ${kind}    ${aspect}    ${setting}
     Capture Page Screenshot    ${kind}-${aspect}-${setting}.png
     Capture Page Coverage
+
+Set Attempt Screenshot Directory
+    [Documentation]    Set a screenshot directory that includes the attempt
+    [Arguments]    ${path}
+    Set Screenshot Directory
+    ...    ${OUTPUT_DIR}${/}screenshots${/}${OS.lower()[:2]}_${ATTEMPT}${/}${path}

@@ -142,11 +142,6 @@ jobs:
             matrix.python-version }}
           path: ./build/${{ matrix.os }}-${{ matrix.python-version }}.conda.lock
 
-      - name: uninstall node
-        shell: bash -l {0}
-        run: |
-          mamba uninstall -y nodejs
-
       - name: download (dist)
         uses: actions/download-artifact@v3
         with:

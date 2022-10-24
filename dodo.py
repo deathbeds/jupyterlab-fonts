@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import platform
 import re
 import shutil
 import sys
@@ -33,6 +34,8 @@ class C:
         "--artifacts",
         "png,log,txt,svg,ipynb,json",
     ]
+    PLATFORM = platform.system()
+    PY_VERSION = "{}.{}".format(sys.version_info[0], sys.version_info[1])
 
 
 class P:
@@ -400,7 +403,11 @@ def task_test():
             [
                 "pabot",
                 *C.PABOT_DEFAULTS,
+                *(["--variable", f"ATTEMPT:{1}"]),
+                *(["--variable", f"OS:{C.PLATFORM}"]),
+                *(["--variable", f"PY:{C.PY_VERSION}"]),
                 *(["--variable", f"ROBOCOV:{B.ROBOCOV}"]),
+                *(["--variable", f"ROOT:{P.ROOT}"]),
                 *C.ATEST_ARGS,
                 P.ATEST,
             ],
