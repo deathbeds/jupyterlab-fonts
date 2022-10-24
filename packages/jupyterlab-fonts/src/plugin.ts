@@ -9,8 +9,9 @@ import { FontEditor } from './editor';
 import { ICONS } from './icons';
 import { LicenseViewer } from './license';
 import { FontManager } from './manager';
+import { IFontManager, PACKAGE_NAME, CMD, IFontFaceOptions } from './tokens';
 
-import { IFontManager, PACKAGE_NAME, CMD, IFontFaceOptions } from '.';
+import '../style/index.css';
 
 const PLUGIN_ID = `${PACKAGE_NAME}:fonts`;
 

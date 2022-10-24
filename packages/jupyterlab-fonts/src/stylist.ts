@@ -6,8 +6,7 @@ import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
 
 import * as SCHEMA from './schema';
-
-import { ROOT, IFontFaceOptions, DOM, PACKAGE_NAME } from '.';
+import { ROOT, IFontFaceOptions, DOM, PACKAGE_NAME } from './tokens';
 
 export class Stylist {
   fonts = new Map<string, IFontFaceOptions>();
@@ -114,7 +113,7 @@ export class Stylist {
       if (transientMeta) {
         style = this._nbMetaToStyle(transientMeta, panel);
         jss = this._jss.createStyleSheet(style as any);
-        css = `${css}\n\n${jss.toString()}`;
+        css = `${css.trim()}\n${jss.toString()}`;
       }
       for (const cell of panel.content.widgets) {
         let cellMeta =
@@ -122,7 +121,7 @@ export class Stylist {
           JSONExt.emptyObject;
         style = this._nbMetaToStyle(cellMeta, panel, cell);
         jss = this._jss.createStyleSheet(style as any);
-        css = `${css}\n\n${jss.toString()}`;
+        css = `${css.trim()}\n${jss.toString()}`;
       }
     }
 

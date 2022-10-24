@@ -1,4 +1,4 @@
-import { FONT_FORMATS, FontFormat } from '.';
+import { FONT_FORMATS, FontFormat } from './tokens';
 
 /* below from https://gist.github.com/viljamis/c4016ff88745a0846b94 */
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
