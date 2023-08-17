@@ -55,7 +55,7 @@ doit lint
 - ensure the CHANGELOG is updated
 - wait for CI
 - download the dist
-- make a GitHub release off `master`
+- make a GitHub release off `main`
 - upload the assets
 - upload to PyPI, npm
 - handle conda-forge chores

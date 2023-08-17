@@ -8,12 +8,12 @@
 [![ci-badge]][ci] [![demo-badge]][demo]
 
 [ci]:
-  https://github.com/deathbeds/jupyterlab-fonts/actions?query=branch%3Amaster
+  https://github.com/deathbeds/jupyterlab-fonts/actions?query=branch%3Amain
   'current build status of jupyterlab-fonts'
 [ci-badge]:
   https://github.com/deathbeds/jupyterlab-fonts/actions/workflows/ci.yml/badge.svg
 [demo]:
-  https://mybinder.org/v2/gh/deathbeds/jupyterlab-fonts/master?urlpath=lab
+  https://mybinder.org/v2/gh/deathbeds/jupyterlab-fonts/main?urlpath=lab
   'an interactive demo of jupyterlab-fonts'
 [demo-badge]: https://mybinder.org/badge_logo.svg
 
@@ -28,13 +28,13 @@
 > time-permitting basis.
 
 [license]:
-  https://github.com/deathbeds/jupyterlab-fonts/blob/master/LICENSE
+  https://github.com/deathbeds/jupyterlab-fonts/blob/main/LICENSE
   'BSD-3-Clause'
 [contributing]:
-  https://github.com/deathbeds/jupyterlab-fonts/blob/master/CONTRIBUTING.md
+  https://github.com/deathbeds/jupyterlab-fonts/blob/main/CONTRIBUTING.md
   'contribute to jupyterlab-fonts'
 [changelog]:
-  https://github.com/deathbeds/jupyterlab-fonts/blob/master/CHANGELOG.md
+  https://github.com/deathbeds/jupyterlab-fonts/blob/main/CHANGELOG.md
   'the history of jupyterlab-fonts'
 [pr]:
   https://github.com/deathbeds/jupyterlab-fonts/pulls
@@ -97,7 +97,7 @@ changes, and its license information will be stored in the Notebook metadata.
 > use in collaboration. We're looking into some alterate approaches.
 
 [fonts-icon]:
-  https://raw.githubusercontent.com/deathbeds/jupyterlab-fonts/master/packages/jupyterlab-fonts/style/icons/fonts.svg
+  https://raw.githubusercontent.com/deathbeds/jupyterlab-fonts/main/packages/jupyterlab-fonts/style/icons/fonts.svg
 
 ### Advanced Configuration
 
