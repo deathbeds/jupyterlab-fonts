@@ -11,4 +11,4 @@ conda install -c conda-forge jupyterlab-fonts
 ```
 
 For more information, see the
-[contribution guide](https://github.com/deathbeds/jupyterlab-fonts/blob/master/CONTRIBUTING.md).
+[contribution guide](https://github.com/deathbeds/jupyterlab-fonts/blob/main/CONTRIBUTING.md).
