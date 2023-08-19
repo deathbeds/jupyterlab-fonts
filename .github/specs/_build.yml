@@ -1,0 +1,5 @@
+dependencies:
+  - brotlipy
+  - flit >=3.9.0,<4
+  - fonttools
+  - twine >=3.7.1

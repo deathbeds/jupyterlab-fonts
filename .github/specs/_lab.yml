@@ -1,0 +1,4 @@
+_inherit_from:
+  - _lab/lab4.0.yml
+
+dependencies: []

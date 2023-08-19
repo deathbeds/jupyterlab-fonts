@@ -14,9 +14,9 @@ We would love to have contributions of:
 ### Setup
 
 ```bash
-conda env update --file .binder/environment.yml
-conda activate jupyterlab-fonts-dev
-doit setup
+mamba create --file .github/locks/lock_linux-64.conda.lock --prefix ./.envs/lock
+source ./.envs/lock/bin/activate
+doit list
 ```
 
 ## Build Once
@@ -48,6 +48,12 @@ This starts:
 doit lint
 # doit test
 ```
+
+## Updating environmentsss
+
+- change the files in `.github/specs`
+- run `doit lock:solve:*`
+- commit `.github/locks`
 
 ## Releasing
 
@@ -85,7 +91,7 @@ fonts requiring your users to download fonts from the wild internet. However, if
 were to build an extension for Google Fonts, TypeKit, or other sources of fonts, we
 would accept any PRs, pending review, that made this process more sane and secure.
 
-For the nbconvert preprocessor, other strategies, like external files, would be
+For the `nbconvert` preprocessor, other strategies, like external files, would be
 nice-to-have.
 
 ## Changing the Schema

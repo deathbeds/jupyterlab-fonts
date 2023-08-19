@@ -1,0 +1,7 @@
+# tests the packages in the browser
+
+_inherit_from:
+  - _base.yml
+  - _atest.yml
+
+dependencies: []

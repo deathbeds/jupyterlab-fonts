@@ -1,6 +1,7 @@
 __pycache__
 _testoutput/
 .coverage
+.envs/
 .eslintcache
 .ipynb_checkpoints/
 .yarn-packages/
@@ -11,7 +12,6 @@ _testoutput/
 *.woff2
 build/
 dist/
-envs/
 lib/
 nbjss/static/nbjss.js
 node_modules/

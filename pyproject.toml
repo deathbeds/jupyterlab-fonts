@@ -1,0 +1,84 @@
+[tool.doit]
+backend = "sqlite3"
+par_type = "thread"
+verbosity = 2
+
+[tool.doit.commands.list]
+status = true
+subtasks = true
+
+[tool.doitoml]
+config_paths = [":get::toml::.github/specs/__lock__.toml::"]
+prefix = "dt"
+validate = true
+
+[tool.doitoml.env]
+# other people's stuff
+CI = 0
+CONDARC = ".github/.condarc"
+JUPYTER_PLATFORM_DIRS = 1
+MAMBA_NO_BANNER = 1
+PYTHONIOENCODING = "utf-8"
+PYTHONUNBUFFERED = 1
+READTHEDOCS = 0
+# our stuff
+# locks
+DEFAULT_PY = "3.11"
+THIS_PY = "3.11"
+THIS_SUBDIR = "linux-64"
+
+[tool.doitoml.paths]
+all_lock_py = [":glob::.github/specs::*.py"]
+all_py = ["::dodo", "::all_scripts", "::all_py_src", "::all_lock_py"]
+all_py_src = [":rglob::src::*.py"]
+all_scripts = [":glob::scripts::*.py"]
+all_toml = ["::ppt"]
+dodo = ["dodo.py"]
+env_build_history = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}/conda-meta/history"]
+env_build_prefix = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}"]
+env_lock_dir = [".github/locks"]
+lock_build = ["build/locks"]
+lock_files = [":glob::build/locks::*.txt::/s/::build/locks::.github/locks::/s/::.txt::.conda.lock"]
+lock_headers = [":glob::build/locks::*.txt"]
+lock_preflight_yml = ["build/locks/_preflight.yml"]
+ppt = ["pyproject.toml"]
+
+[tool.doitoml.tokens]
+conda_run = ["conda", "run", "--no-capture-output"]
+conda_run_build = ["::conda_run_prefix", "::env_build_prefix"]
+conda_run_prefix = ["::conda_run", "--prefix"]
+taplo_opts = [
+  "--option=array_auto_collapse=true",
+  "--option=compact_inline_tables=true",
+  "--option=column_width=100",
+  "--option=reorder_keys=true",
+]
+
+[tool.doitoml.tasks.fix.toml]
+actions = [["::conda_run_build", "taplo", "fmt", "::taplo_opts", "::all_toml"]]
+doc = "Format toml with taplo"
+file_dep = ["::all_toml", '::env_build_history']
+
+[tool.doitoml.tasks.fix.ssort]
+actions = [["::conda_run_build", "ssort", "::all_py"]]
+doc = "Predictably order python source with `ssort`"
+file_dep = ["::ppt", "::all_py", '::env_build_history']
+
+[tool.doitoml.tasks.fix.black]
+actions = [
+  [
+    "::conda_run_build",
+    "ruff",
+    "--fix-only",
+    "--quiet",
+    "::all_py",
+  ],
+  [
+    "::conda_run_build",
+    "black",
+    "::all_py",
+  ],
+]
+doc = "Format python source with `ruff` and `black`"
+file_dep = ["::ppt", "::all_py", '::env_build_history']
+task_dep = ["dt:fix:ssort"]
