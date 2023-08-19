@@ -85,6 +85,9 @@ lock_headers = [":glob::build/locks::*.txt"]
 lock_preflight_yml = ["build/locks/_preflight.yml"]
 pip_freeze = ["build/pip/lab_${THIS_SUBDIR}_${DEFAULT_LAB}.txt"]
 ppt = ["pyproject.toml"]
+pytest_html_cov = ["build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/htmlcov/index.html"]
+pytest_html_cov_index = ["build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/htmlcov"]
+pytest_html_report = ["build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/index.html"]
 readme = ["README.md"]
 sdist = ["dist/${PY_NAME}-${PY_VERSION}.tar.gz"]
 wheel = ["dist/${PY_NAME}-${PY_VERSION}-py3-none-any.whl"]
@@ -174,6 +177,30 @@ task_dep = ["dt:dev:pip:install"]
 [tool.doitoml.tasks.dev.ext]
 actions = [["::conda_run_lab", "jupyter", "labextension", "develop", "--overwrite", "."]]
 file_dep = ["::pip_freeze"]
+
+[tool.doitoml.tasks.test.pytest]
+actions = [
+  [
+    "::conda_run_lab",
+    "pytest",
+    "--pyargs",
+    "${PY_NAME}",
+    "--cov",
+    "${PY_NAME}",
+    "--cov-branch",
+    "--no-cov-on-fail",
+    "--cov-fail-under=100",
+    "--cov-report=term-missing:skip-covered",
+    "--cov-report=html:build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/htmlcov",
+    "--html",
+    "::pytest_html_report",
+    "--self-contained-html",
+  ],
+]
+file_dep = ["::ppt", "::all_py_src", "::pip_freeze"]
+meta = {doitoml = {env = {COVERAGE_FILE = "build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/.coverage"}}}
+targets = ["::pytest_html_cov"]
+
 
 [tool.ruff]
 cache-dir = "build/.cache/ruff"
