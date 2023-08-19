@@ -9,6 +9,7 @@ import jssPresetDefault from 'jss-preset-default';
 
 import * as SCHEMA from './schema';
 import { ROOT, IFontFaceOptions, DOM, PACKAGE_NAME } from './tokens';
+import * as compat from './labcompat';
 
 const RE_CSS_IMPORT = /^@import(.*$)/;
 const RE_CSS_REL_URL = /url\(\s*['"]?(\.[^\)'"]+)['"]?\s*\)/g;
@@ -68,7 +69,9 @@ export class Stylist {
     let needsUpdate = newCellCount !== oldCellCount;
     for (const cell of notebook.widgets) {
       cell.node.dataset.jpfCellId = cell.model.id;
-      let tags = [...((cell.model.metadata.get('tags') || []) as string[])].join(',');
+      let tags = [
+        ...((compat.getCellMetadata(cell.model, 'tags') || []) as string[]),
+      ].join(',');
       if (tags) {
         cell.node.dataset.jpfCellTags = `,${tags},`;
       } else {
@@ -76,7 +79,8 @@ export class Stylist {
       }
 
       if (!needsUpdate) {
-        const meta = cell.model.metadata.get(PACKAGE_NAME) || JSONExt.emptyObject;
+        const meta =
+          compat.getCellMetadata(cell.model, PACKAGE_NAME) || JSONExt.emptyObject;
         let cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
         if (!JSONExt.deepEqual(meta, cached)) {
           needsUpdate = true;
@@ -87,7 +91,9 @@ export class Stylist {
 
     if (needsUpdate) {
       this.stylesheet(
-        notebook.model?.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings,
+        notebook.model
+          ? (compat.getPanelMetadata(notebook.model, PACKAGE_NAME) as SCHEMA.ISettings)
+          : null,
         notebook.parent as NotebookPanel
       );
       this._notebookCellCount.set(notebook, newCellCount);
@@ -126,7 +132,9 @@ export class Stylist {
     } else {
       this._transientNotebookStyles.set(panel, style);
     }
-    const meta = panel.model?.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings;
+    const meta = panel.model
+      ? (compat.getPanelMetadata(panel.model, PACKAGE_NAME) as SCHEMA.ISettings)
+      : null;
     this.stylesheet(meta, panel);
   }
 
@@ -156,7 +164,7 @@ export class Stylist {
       }
       for (const cell of panel.content.widgets) {
         let cellMeta =
-          (cell.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings) ||
+          (compat.getCellMetadata(cell.model, PACKAGE_NAME) as SCHEMA.ISettings) ||
           JSONExt.emptyObject;
         style = this._nbMetaToStyle(cellMeta, panel, cell);
         jss = this._jss.createStyleSheet(style as any);

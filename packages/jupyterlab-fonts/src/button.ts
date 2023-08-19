@@ -1,12 +1,12 @@
 import { ToolbarButton } from '@jupyterlab/apputils';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
-import { IObservableJSON } from '@jupyterlab/observables';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { ISignal, Signal } from '@lumino/signaling';
 
 import { ICONS } from './icons';
 import { PACKAGE_NAME, CONFIGURED_CLASS } from './tokens';
+import * as compat from './labcompat';
 
 /**
  * A notebook widget extension that adds a button to the toolbar.
@@ -30,9 +30,11 @@ export class NotebookFontsButton
       tooltip: 'Customize Notebook Fonts',
     });
 
-    const metaUpdated = (metadata: IObservableJSON) => {
-      const hasMeta = !!metadata.get(PACKAGE_NAME);
-      if (hasMeta) {
+    const metaUpdated = () => {
+      const metadata = panel.model
+        ? compat.getPanelMetadata(panel.model, PACKAGE_NAME)
+        : null;
+      if (metadata) {
         button.addClass(CONFIGURED_CLASS);
       } else {
         button.removeClass(CONFIGURED_CLASS);
@@ -42,15 +44,15 @@ export class NotebookFontsButton
     const panelModel = panel.model;
 
     if (panelModel) {
-      panelModel.metadata.changed.connect(metaUpdated);
-      metaUpdated(panelModel.metadata);
+      compat.metadataSignal(panelModel).connect(metaUpdated);
+      metaUpdated();
     }
 
     panel.toolbar.insertItem(9, 'fonts', button);
 
     return new DisposableDelegate(() => {
       if (panelModel) {
-        panelModel.metadata.changed.disconnect(metaUpdated);
+        compat.metadataSignal(panelModel).disconnect(metaUpdated);
       }
       button.dispose();
     });

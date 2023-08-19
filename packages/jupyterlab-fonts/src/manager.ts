@@ -23,6 +23,7 @@ import {
   IFontFaceOptions,
 } from './tokens';
 import { dataURISrc } from './util';
+import * as compat from './labcompat';
 
 const ALL_PALETTE = 'Fonts';
 
@@ -144,7 +145,7 @@ export class FontManager implements IFontManager {
 
     try {
       const styles: SCHEMA.IStyles = notebook?.model
-        ? (notebook.model.metadata.get(PACKAGE_NAME) as any).styles
+        ? (compat.getPanelMetadata(notebook.model, PACKAGE_NAME) as any).styles
         : (this._settings.get('styles').composite as any);
       let varName = this.getVarName(property, { kind });
       if (styles != null) {
@@ -174,7 +175,7 @@ export class FontManager implements IFontManager {
 
     try {
       if (model) {
-        oldStyles = (model.metadata.get(PACKAGE_NAME) as any).styles;
+        oldStyles = (compat.getPanelMetadata(model, PACKAGE_NAME) as any).styles;
       } else {
         oldStyles = this._settings.get('styles').user as any;
       }
@@ -195,8 +196,11 @@ export class FontManager implements IFontManager {
     }
 
     if (notebook) {
-      let metadata = (notebook.model?.metadata.get(PACKAGE_NAME) ||
-        {}) as SCHEMA.ISettings;
+      let metadata = (
+        notebook.model
+          ? compat.getPanelMetadata(notebook.model, PACKAGE_NAME) || {}
+          : {}
+      ) as SCHEMA.ISettings;
       metadata = JSON.parse(JSON.stringify(metadata));
       metadata.styles = styles;
       switch (property) {
@@ -209,7 +213,9 @@ export class FontManager implements IFontManager {
           break;
       }
       this.cleanMetadata(metadata);
-      notebook.model?.metadata.set(PACKAGE_NAME, metadata as any);
+      if (notebook.model) {
+        compat.setPanelMetadata(notebook.model, PACKAGE_NAME, metadata as any);
+      }
     } else {
       if (!Object.keys(styles[ROOT] || {}).length) {
         delete styles[ROOT];
@@ -280,7 +286,7 @@ export class FontManager implements IFontManager {
     this._stylist.registerNotebook(panel, true);
     let watcher = this._notebookMetaWatcher(panel);
     if (panel?.model) {
-      panel.model.metadata.changed.connect(watcher);
+      compat.metadataSignal(panel.model).connect(watcher);
     }
     panel.disposed.connect(this._onNotebookDisposed, this);
     watcher();
@@ -297,7 +303,10 @@ export class FontManager implements IFontManager {
         if (notebook.id !== panel.id || !notebook.model) {
           return;
         }
-        const meta = notebook.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings;
+        const meta = compat.getPanelMetadata(
+          notebook.model,
+          PACKAGE_NAME
+        ) as SCHEMA.ISettings;
         if (meta) {
           this._stylist.stylesheet(meta, notebook);
         }

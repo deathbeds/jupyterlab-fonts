@@ -36,6 +36,7 @@
     "typeface-anonymous-pro": "^1.1.13"
   },
   "devDependencies": {
+    "@deathbeds/jupyterlab-fonts": "file:./jupyterlab-fonts",
     "@jupyterlab/builder": "^4.0.0"
   },
   "jupyterlab": {

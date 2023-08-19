@@ -16,7 +16,7 @@
     "clean:lib": "lerna exec --parallel -- rimraf lib",
     "clean:test": "rimraf _testoutput",
     "lint": "jlpm lint:py && jlpm lint:ts && jlpm lint:sh",
-    "lint:prettier": "prettier --write \"./*{json,md,yml}\" \"{packages,.github,.binder}/**/*.{ts,tsx,css,json,md}\"",
+    "lint:prettier": "prettier --list-different --write \"./*{json,md,yml}\" \"{packages,.github,.binder}/**/*.{ts,tsx,css,json,md}\"",
     "lint:py": "black nbjss setup.py && flake8 nbjss setup.py",
     "lint:robot": "python -m robot.tidy --inplace tests/**/*.robot && rflint --configure TooManyTestSteps:40 --configure TooFewKeywordSteps:0  tests/**/*.robot",
     "lint:sh": "beautysh -i 2 postBuild",
@@ -54,6 +54,12 @@
     ],
     "skip-full": true
   },
+  "resolutions": {
+    "@deathbeds/jupyterlab-font-anonymous-pro": "file:./packages/jupyterlab-font-anonymous-pro",
+    "@deathbeds/jupyterlab-font-dejavu-sans-mono": "file:./packages/jupyterlab-font-dejavu-sans-mono",
+    "@deathbeds/jupyterlab-font-fira-code": "file:./packages/jupyterlab-font-fira-code",
+    "@deathbeds/jupyterlab-fonts": "file:./packages/jupyterlab-fonts"
+  },
   "devDependencies": {
     "@ephesoft/webpack.istanbul.loader": "^2.1.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
@@ -64,7 +70,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.8",
-    "lerna": "^6.0.1",
+    "lerna": "^7.1.5",
     "nyc": "^15.1.0",
     "prettier": "^2.7.1",
     "prettier-plugin-packagejson": "^2.2.11",
@@ -78,6 +84,10 @@
     "paths": {
       "pj": [
         "package.json"
+      ],
+      "all_pj": [
+        "::pj",
+        ":glob::packages::*/package.json"
       ],
       "yarn_history": [
         ".yarn/install-state.gz"
@@ -99,6 +109,23 @@
       ],
       "all_css": [
         ":glob::packages::*/style/**/*.css"
+      ],
+      "schema_deps": [
+        "packages/jupyterlab-fonts/schema/fonts.json"
+      ],
+      "schema_targets": [
+        "packages/jupyterlab-fonts/src/_schema.d.ts",
+        "packages/jupyterlab-fonts/lib/_schema.d.ts"
+      ],
+      "prebuild_deps": [
+        "packages/jupyterlab-font-dejavu-sans-mono/scripts/convert.py"
+      ],
+      "tsbuildinfo": [
+        "packages/_meta/tsconfig.tsbuildinfo"
+      ],
+      "all_tsconfig": [
+        ":glob::.::tsconfig*.json",
+        ":glob::packages::*/tsconfig*.json"
       ]
     },
     "env": {
@@ -108,13 +135,19 @@
       "jlpm": [
         "::dt::conda_run_build",
         "jlpm"
+      ],
+      "lerna": [
+        "::jlpm",
+        "lerna",
+        "run"
       ]
     },
     "tasks": {
       "setup": {
         "file_dep": [
           "::pj",
-          "::dt::env_build_history"
+          "::dt::env_build_history",
+          "::all_pj"
         ],
         "targets": [
           "::yarn_history"
@@ -131,6 +164,60 @@
             "--fail"
           ]
         ]
+      },
+      "build": {
+        "pre": {
+          "actions": [
+            [
+              "::lerna",
+              "prebuild"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::prebuild_deps",
+            "::schema_deps"
+          ],
+          "targets": [
+            "::schema_targets"
+          ]
+        },
+        "ts": {
+          "actions": [
+            [
+              "::lerna",
+              "build"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::all_tsconfig",
+            "::schema_targets"
+          ],
+          "targets": [
+            "::tsbuildinfo"
+          ]
+        }
+      },
+      "watch": {
+        "ts": {
+          "uptodate": [
+            false
+          ],
+          "actions": [
+            [
+              "::lerna",
+              "--scope=@deathbeds/meta-jupyterlab-fonts",
+              "watch"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::schema_targets"
+          ]
+        }
       },
       "fix": {
         "prettier": {
@@ -150,11 +237,5 @@
         }
       }
     }
-  },
-  "resolutions": {
-    "@deathbeds/jupyterlab-font-anonymous-pro": "file:./packages/jupyterlab-font-anonymous-pro",
-    "@deathbeds/jupyterlab-font-dejavu-sans-mono": "file:./packages/jupyterlab-font-dejavu-sans-mono",
-    "@deathbeds/jupyterlab-font-fira-code": "file:./packages/jupyterlab-font-fira-code",
-    "@deathbeds/jupyterlab-fonts": "file:./packages/jupyterlab-fonts"
   }
 }

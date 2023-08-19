@@ -14,6 +14,7 @@ import {
   IFontFaceOptions,
   PACKAGE_NAME,
 } from './tokens';
+import * as compat from './labcompat';
 
 import '../style/editor.css';
 
@@ -55,12 +56,14 @@ export class FontEditorModel extends VDomModel {
 
   set notebook(notebook) {
     if (this._notebook?.model) {
-      this._notebook.model.metadata.changed.disconnect(this.onSettingsChange, this);
+      compat
+        .metadataSignal(this._notebook.model)
+        .disconnect(this.onSettingsChange, this);
       this._notebook.context.pathChanged.disconnect(this.onSettingsChange, this);
     }
     this._notebook = notebook;
     if (this._notebook?.model) {
-      this._notebook.model.metadata.changed.connect(this.onSettingsChange, this);
+      compat.metadataSignal(this._notebook.model).connect(this.onSettingsChange, this);
       this._notebook.context.pathChanged.connect(this.onSettingsChange, this);
     }
     this.stateChanged.emit(void 0);
@@ -79,7 +82,10 @@ export class FontEditorModel extends VDomModel {
 
   get notebookMetadata() {
     if (this.notebook?.model) {
-      return this.notebook.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings;
+      return compat.getPanelMetadata(
+        this.notebook.model,
+        PACKAGE_NAME
+      ) as SCHEMA.ISettings;
     }
   }
 
@@ -94,7 +100,8 @@ export class FontEditorModel extends VDomModel {
       }
     }
     if (this.notebook?.model) {
-      this.notebook.model.metadata.set(
+      compat.setPanelMetadata(
+        this.notebook.model,
         PACKAGE_NAME,
         JSON.parse(JSON.stringify(meta)) as any
       );
@@ -204,7 +211,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
                 value:
                   value == null ? DUMMY : prop === 'font-family' ? `'${value}'` : value,
               },
-              value || DUMMY
+              `${value || DUMMY}`
             );
           })
         ),
