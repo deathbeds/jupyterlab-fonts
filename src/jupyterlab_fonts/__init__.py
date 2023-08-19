@@ -1,4 +1,4 @@
-""""main importable for jupyterlab-fonts"""
+""""main importable for jupyterlab-fonts."""
 
 import json
 from pathlib import Path
@@ -12,10 +12,10 @@ def _jupyter_labextension_paths():
     exts = []
     for pkg in here.glob("labextensions/*/*/package.json"):
         exts += [
-            dict(
-                src=str(pkg.parent.relative_to(here).as_posix()),
-                dest=json.loads(pkg.read_text(encoding="utf-8"))["name"],
-            )
+            {
+                "src": str(pkg.parent.relative_to(here).as_posix()),
+                "dest": json.loads(pkg.read_text(encoding="utf-8"))["name"],
+            },
         ]
     return exts
 

@@ -1,4 +1,4 @@
-"""source of truth for jupyterlab-fonts version and metadata"""
+"""source of truth for jupyterlab-fonts version and metadata."""
 import json
 from pathlib import Path
 

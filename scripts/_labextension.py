@@ -3,8 +3,8 @@ import importlib
 import sys
 from pathlib import Path
 
-from jupyterlab.labextensions import LabExtensionApp
 from jupyterlab import federated_labextensions
+from jupyterlab.labextensions import LabExtensionApp
 
 HERE = Path(__file__).parent
 ROOT = HERE.parent

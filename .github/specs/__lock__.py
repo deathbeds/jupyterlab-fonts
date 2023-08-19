@@ -137,6 +137,7 @@ def lock_one(platform: str, lockfile: Path, stack: List[Path]) -> bool:
 
         print(f"    !!! FAIL {lockfile}")
         return False
+    return None
 
 
 def lock_stem(subdir, stack: List[Path]) -> str:

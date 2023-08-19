@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-fonts",
-  "version": "2.1.2",
+  "version": "3.0.0.alpha0",
   "description": "Interactive Typography and Style for JupyterLab",
   "keywords": [
     "fonts",
@@ -34,16 +34,16 @@
     "watch": "jupyter labextension watch --debug ."
   },
   "dependencies": {
-    "@jupyterlab/application": "3",
-    "@jupyterlab/mainmenu": "3",
-    "@jupyterlab/notebook": "3",
-    "jss": "^10.9.2",
-    "jss-preset-default": "^10.9.2"
+    "@jupyterlab/application": "3 || 4",
+    "@jupyterlab/mainmenu": "3 || 4",
+    "@jupyterlab/notebook": "3 || 4",
+    "jss": "^10.10.0",
+    "jss-preset-default": "^10.10.0"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.4",
+    "@jupyterlab/builder": "^4.0.0",
     "json-schema-to-typescript": "^11.0.2",
-    "mkdirp": "^1.0.4"
+    "mkdirp": "^3.0.1"
   },
   "jupyterlab": {
     "extension": "lib/plugin.js",

@@ -1,4 +1,4 @@
-"""jupyterlab-fonts metadata tests"""
+"""jupyterlab-fonts metadata tests."""
 import jupyterlab_fonts
 
 

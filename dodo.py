@@ -6,19 +6,18 @@
 # import re
 # import shutil
 # import sys
-from pathlib import Path
+import json
+import os
+import platform
+import shutil
 
 # import doit.action
 # import doit.tools
-
-
 import sys
-import shutil
-import platform
-import json
-import os
-from ruamel.yaml import safe_load
+from pathlib import Path
+
 from doitoml import DoiTOML
+from ruamel.yaml import safe_load
 
 
 class C:

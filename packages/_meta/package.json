@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/meta-jupyterlab-fonts",
-  "version": "2.1.2",
+  "version": "3.0.0.alpha0",
   "private": true,
   "scripts": {
     "build": "tsc -b",

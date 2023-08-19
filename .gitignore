@@ -4,6 +4,8 @@ _testoutput/
 .envs/
 .eslintcache
 .ipynb_checkpoints/
+.pnp*
+.yarn
 .yarn-packages/
 *.doit*
 *.egg-info/
