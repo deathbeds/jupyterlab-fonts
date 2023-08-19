@@ -15,7 +15,7 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3",
 ]
-dependencies = ["jupyterlab >=3,<4", "jupyter-client >=6.1.0"]
+dependencies = ["jupyterlab >=3.5,<5"]
 dynamic = ["description"]
 name = "jupyterlab_fonts"
 readme = "README.md"
@@ -74,6 +74,8 @@ all_toml = ["::ppt"]
 dodo = ["dodo.py"]
 env_build_history = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}/conda-meta/history"]
 env_build_prefix = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}"]
+env_lab_history = [".envs/lab_${THIS_SUBDIR}_${DEFAULT_LAB}/conda-meta/history"]
+env_lab_prefix = [".envs/lab_${THIS_SUBDIR}_${DEFAULT_LAB}"]
 env_lock_dir = [".github/locks"]
 git_info = ["build/git_info.json"]
 license = ["LICENSE"]
@@ -81,15 +83,17 @@ lock_build = ["build/locks"]
 lock_files = [":glob::build/locks::*.txt::/s/::build/locks::.github/locks::/s/::.txt::.conda.lock"]
 lock_headers = [":glob::build/locks::*.txt"]
 lock_preflight_yml = ["build/locks/_preflight.yml"]
+pip_freeze = ["build/pip/lab_${THIS_SUBDIR}_${DEFAULT_LAB}.txt"]
 ppt = ["pyproject.toml"]
 readme = ["README.md"]
 sdist = ["dist/${PY_NAME}-${PY_VERSION}.tar.gz"]
 wheel = ["dist/${PY_NAME}-${PY_VERSION}-py3-none-any.whl"]
 
-
 [tool.doitoml.tokens]
 conda_run = ["conda", "run", "--no-capture-output"]
 conda_run_build = ["::conda_run_prefix", "::env_build_prefix"]
+conda_run_lab = ["::conda_run_prefix", "::env_lab_prefix"]
+conda_run_lab_pip = ["::conda_run_lab", "python", "-m", "pip"]
 conda_run_prefix = ["::conda_run", "--prefix"]
 taplo_opts = [
   "--option=array_auto_collapse=true",
@@ -127,7 +131,6 @@ doc = "Format python source with `ruff` and `black`"
 file_dep = ["::ppt", "::all_py", '::env_build_history']
 task_dep = ["dt:fix:ssort"]
 
-
 [tool.doitoml.tasks.dist.preflight]
 actions = [{py = {"scripts.actions:git_info" = {}}}]
 doc = "write out git info to json"
@@ -145,6 +148,32 @@ file_dep = [
   "::git_info",
 ]
 targets = ["::wheel", "::sdist"]
+
+[tool.doitoml.tasks.dev.pip.install]
+actions = [
+  [
+    "::conda_run_lab_pip",
+    "install",
+    "-e",
+    ".",
+    "--no-deps",
+    "--no-build-isolation",
+    "--no-cache-dir",
+    "--ignore-installed",
+  ],
+]
+file_dep = ["::env_lab_history", "::ppt"]
+
+[tool.doitoml.tasks.dev.pip.check]
+actions = [["::conda_run_lab_pip", "freeze"], ["::conda_run_lab_pip", "check"]]
+file_dep = ["::ppt"]
+meta = {doitoml = {log = ["::pip_freeze"]}}
+targets = ["::pip_freeze"]
+task_dep = ["dt:dev:pip:install"]
+
+[tool.doitoml.tasks.dev.ext]
+actions = [["::conda_run_lab", "jupyter", "labextension", "develop", "--overwrite", "."]]
+file_dep = ["::pip_freeze"]
 
 [tool.ruff]
 cache-dir = "build/.cache/ruff"
