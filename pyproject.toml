@@ -56,7 +56,10 @@ MAMBA_NO_BANNER = 1
 PYTHONIOENCODING = "utf-8"
 PYTHONUNBUFFERED = 1
 READTHEDOCS = 0
+SOURCE_DATE_EPOCH = ":get|0::json::build/git_info.json::SOURCE_DATE_EPOCH"
 # our stuff
+PY_NAME = ":get::toml::pyproject.toml::project::name"
+PY_VERSION = ":get::toml::pyproject.toml::project::version"
 # locks
 DEFAULT_PY = "3.11"
 THIS_PY = "3.11"
@@ -72,11 +75,17 @@ dodo = ["dodo.py"]
 env_build_history = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}/conda-meta/history"]
 env_build_prefix = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}"]
 env_lock_dir = [".github/locks"]
+git_info = ["build/git_info.json"]
+license = ["LICENSE"]
 lock_build = ["build/locks"]
 lock_files = [":glob::build/locks::*.txt::/s/::build/locks::.github/locks::/s/::.txt::.conda.lock"]
 lock_headers = [":glob::build/locks::*.txt"]
 lock_preflight_yml = ["build/locks/_preflight.yml"]
 ppt = ["pyproject.toml"]
+readme = ["README.md"]
+sdist = ["dist/${PY_NAME}-${PY_VERSION}.tar.gz"]
+wheel = ["dist/${PY_NAME}-${PY_VERSION}-py3-none-any.whl"]
+
 
 [tool.doitoml.tokens]
 conda_run = ["conda", "run", "--no-capture-output"]
@@ -117,6 +126,25 @@ actions = [
 doc = "Format python source with `ruff` and `black`"
 file_dep = ["::ppt", "::all_py", '::env_build_history']
 task_dep = ["dt:fix:ssort"]
+
+
+[tool.doitoml.tasks.dist.preflight]
+actions = [{py = {"scripts.actions:git_info" = {}}}]
+doc = "write out git info to json"
+meta = {doitoml = {log = "::git_info"}}
+targets = ["::git_info"]
+
+[tool.doitoml.tasks.dist.flit]
+actions = [["::conda_run_build", "flit", "build"]]
+file_dep = [
+  "::js-meta::all_dist_pkg_json",
+  "::all_py_src",
+  "::ppt",
+  "::license",
+  "::readme",
+  "::git_info",
+]
+targets = ["::wheel", "::sdist"]
 
 [tool.ruff]
 cache-dir = "build/.cache/ruff"
