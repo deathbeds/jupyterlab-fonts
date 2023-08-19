@@ -20,7 +20,7 @@ export class NotebookFontsButton
    */
   createNew(
     panel: NotebookPanel,
-    context: DocumentRegistry.IContext<INotebookModel>
+    context: DocumentRegistry.IContext<INotebookModel>,
   ): IDisposable {
     let button = new ToolbarButton({
       icon: ICONS.fonts,

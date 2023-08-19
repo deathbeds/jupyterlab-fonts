@@ -29,7 +29,7 @@ export function getPanelMetadata(panelModel: INotebookModel, key: string): any {
 export function setPanelMetadata(
   panelModel: INotebookModel,
   key: string,
-  value: any
+  value: any,
 ): any {
   if (panelModel.sharedModel) {
     panelModel.sharedModel.setMetadata(key, value);

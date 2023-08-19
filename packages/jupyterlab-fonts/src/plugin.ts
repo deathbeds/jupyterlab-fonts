@@ -27,7 +27,7 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
     menu: IMainMenu,
     settingRegistry: ISettingRegistry,
     palette: ICommandPalette,
-    notebooks: INotebookTracker
+    notebooks: INotebookTracker,
   ): IFontManager {
     const manager = new FontManager(app.commands, palette, notebooks);
 

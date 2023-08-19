@@ -36,11 +36,11 @@
   },
   "devDependencies": {
     "@deathbeds/jupyterlab-fonts": "file:./jupyterlab-fonts",
-    "@jupyterlab/builder": "^4.0.0"
+    "@jupyterlab/builder": "^4.0.5"
   },
   "jupyterlab": {
     "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-fira-code",
+    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-fira-code",
     "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {

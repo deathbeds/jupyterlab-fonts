@@ -70,10 +70,11 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.8",
+    "file-loader": "^6.2.0",
     "lerna": "^7.1.5",
     "nyc": "^15.1.0",
-    "prettier": "^2.7.1",
-    "prettier-plugin-packagejson": "^2.2.11",
+    "prettier": "^3.0.2",
+    "raw-loader": "^4.0.2",
     "source-map-loader": "^4.0.1",
     "ts-node": "^10.9.1",
     "typescript": "~5.1.6",
@@ -126,10 +127,15 @@
       "all_tsconfig": [
         ":glob::.::tsconfig*.json",
         ":glob::packages::*/tsconfig*.json"
+      ],
+      "all_dist_pkg_json": [
+        "${JLF_SHARED}/jupyterlab-fonts/package.json",
+        "${JLF_SHARED}/jupyterlab-font-fira-code/package.json",
+        "${JLF_SHARED}/jupyterlab-font-anonymous-pro/package.json"
       ]
     },
     "env": {
-      "YARN_ENABLE_IMMUTABLE_INSTALLS": "false"
+      "JLF_SHARED": "src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds"
     },
     "tokens": {
       "jlpm": [
@@ -139,7 +145,8 @@
       "lerna": [
         "::jlpm",
         "lerna",
-        "run"
+        "run",
+        "--stream"
       ]
     },
     "tasks": {
@@ -152,6 +159,13 @@
         "targets": [
           "::yarn_history"
         ],
+        "meta": {
+          "doitoml": {
+            "env": {
+              "YARN_ENABLE_IMMUTABLE_INSTALLS": "false"
+            }
+          }
+        },
         "actions": [
           [
             "::jlpm",
@@ -182,7 +196,7 @@
             "::schema_targets"
           ]
         },
-        "ts": {
+        "lib": {
           "actions": [
             [
               "::lerna",
@@ -197,6 +211,22 @@
           ],
           "targets": [
             "::tsbuildinfo"
+          ]
+        },
+        "ext": {
+          "actions": [
+            [
+              "::lerna",
+              "labextension:build"
+            ]
+          ],
+          "file_dep": [
+            "::tsbuildinfo",
+            "::all_css",
+            "::all_pj"
+          ],
+          "targets": [
+            "::all_dist_pkg_json"
           ]
         }
       },

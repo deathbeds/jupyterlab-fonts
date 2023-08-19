@@ -47,7 +47,7 @@ export class Stylist {
       sheet.classList.add(DOM.modNotebook);
       panel.content.modelContentChanged.connect(
         this._debouncedNotebookContentChanged,
-        this
+        this,
       );
       panel.disposed.connect(this._onDisposed, this);
       this._onNotebookModelContentChanged(panel.content);
@@ -94,7 +94,7 @@ export class Stylist {
         notebook.model
           ? (compat.getPanelMetadata(notebook.model, PACKAGE_NAME) as SCHEMA.ISettings)
           : null,
-        notebook.parent as NotebookPanel
+        notebook.parent as NotebookPanel,
       );
       this._notebookCellCount.set(notebook, newCellCount);
     }
@@ -107,7 +107,7 @@ export class Stylist {
       panel.disposed.disconnect(this._onDisposed, this);
       panel.content.modelContentChanged.disconnect(
         this._debouncedNotebookContentChanged,
-        this
+        this,
       );
     }
     if (this._notebookCellCount.has(panel.content)) {
@@ -125,7 +125,7 @@ export class Stylist {
 
   setTransientNotebookStyle(
     panel: NotebookPanel,
-    style: SCHEMA.ISettings | null
+    style: SCHEMA.ISettings | null,
   ): void {
     if (style == null) {
       this._transientNotebookStyles.delete(panel);
@@ -190,7 +190,7 @@ export class Stylist {
       localPath = URLExt.join(
         PageConfig.getBaseUrl(),
         'files',
-        PathExt.dirname(localPath)
+        PathExt.dirname(localPath),
       );
     }
     let line: string;
@@ -212,7 +212,7 @@ export class Stylist {
   private _nbMetaToStyle(
     meta: SCHEMA.ISettings,
     panel: NotebookPanel,
-    cell: Cell<ICellModel> | null = null
+    cell: Cell<ICellModel> | null = null,
   ): SCHEMA.IStyles {
     let jss: any = { '@font-face': [], '@global': {}, '@import': [] };
     let selector = `.${DOM.notebookPanel}[id='${panel.id}']`;
@@ -336,7 +336,7 @@ export class Stylist {
           this.stylesheets.map((s) => {
             document.body.appendChild(s);
           }),
-        0
+        0,
       );
     } else {
       this.stylesheets.map((el) => el.remove());

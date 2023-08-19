@@ -84,7 +84,7 @@ export class FontEditorModel extends VDomModel {
     if (this.notebook?.model) {
       return compat.getPanelMetadata(
         this.notebook.model,
-        PACKAGE_NAME
+        PACKAGE_NAME,
       ) as SCHEMA.ISettings;
     }
   }
@@ -103,7 +103,7 @@ export class FontEditorModel extends VDomModel {
       compat.setPanelMetadata(
         this.notebook.model,
         PACKAGE_NAME,
-        JSON.parse(JSON.stringify(meta)) as any
+        JSON.parse(JSON.stringify(meta)) as any,
       );
     }
     this.stateChanged.emit(void 0);
@@ -136,12 +136,12 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           h(
             'h3',
             { key: `${kind}-header`, className: SECTION_CLASS },
-            KIND_LABELS[kind]
+            KIND_LABELS[kind],
           ),
           ...['font-family', 'font-size', 'line-height'].map((prop: TextProperty) =>
-            this.textSelect(prop, kind, { key: `${kind}-${prop}` })
+            this.textSelect(prop, kind, { key: `${kind}-${prop}` }),
           ),
-        ])
+        ]),
       ),
     ]);
   }
@@ -164,14 +164,14 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
         key: font.name,
         onClick: () => m.fonts.requestLicensePane(font),
       },
-      font.license.spdx
+      font.license.spdx,
     );
   }
 
   protected textSelect(
     prop: TextProperty,
     kind: TextKind,
-    sectionProps: ReadonlyJSONObject
+    sectionProps: ReadonlyJSONObject,
   ) {
     const m = this.model;
     const onChange = (evt: React.FormEvent<HTMLSelectElement>) => {
@@ -211,9 +211,9 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
                 value:
                   value == null ? DUMMY : prop === 'font-family' ? `'${value}'` : value,
               },
-              `${value || DUMMY}`
+              `${value || DUMMY}`,
             );
-          })
+          }),
         ),
       ]),
     ]);
@@ -238,7 +238,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           }
         },
       },
-      'Delete'
+      'Delete',
     );
   }
 
@@ -256,7 +256,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
         type: 'checkbox',
         checked: m.enabled,
         onChange,
-      })
+      }),
     );
   }
 
@@ -268,7 +268,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
     const license = m.notebookMetadata.fontLicenses[fontName];
     const size = (faces || []).reduce(
       (memo, face) => memo + `${face.src}`.length,
-      license.text.length
+      license.text.length,
     );
     const kb = parseInt(`${size / 1024}`, 10);
 
@@ -314,7 +314,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
             { className: EMBED_CLASS, key: 'embeds' },
             Object.keys((m.notebookMetadata || {}).fonts || {}).map((fontName) => {
               return this.embeddedFont(m, fontName);
-            })
+            }),
           ),
         ]),
       ];
@@ -325,7 +325,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           h(
             'h3',
             { className: SECTION_CLASS, key: 'enable-header' },
-            'Enable/Disable All Fonts'
+            'Enable/Disable All Fonts',
           ),
           this.enabler(m),
         ]),

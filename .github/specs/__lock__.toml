@@ -24,9 +24,6 @@ yaml = """
 {% for header in paths["dt:lock_headers"] %}
 {% set stem = header.split("/")[-1].replace(".txt", "") %}
 {{ stem }}:
-    meta:
-        doitoml:
-            cwd: ../../
     file_dep:
         - {{ header }}
         - ::dt::lock_preflight_yml

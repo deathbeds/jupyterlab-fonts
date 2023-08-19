@@ -49,7 +49,7 @@ export class FontManager implements IFontManager {
   constructor(
     commands: CommandRegistry,
     palette: ICommandPalette,
-    notebooks: INotebookTracker
+    notebooks: INotebookTracker,
   ) {
     this._stylist = new Stylist();
     this._stylist.cacheUpdated.connect(this.settingsUpdate, this);
@@ -113,7 +113,7 @@ export class FontManager implements IFontManager {
 
   setTransientNotebookStyle(
     panel: NotebookPanel,
-    style: SCHEMA.ISettings | null
+    style: SCHEMA.ISettings | null,
   ): void {
     this._stylist.setTransientNotebookStyle(panel, style);
   }
@@ -164,7 +164,7 @@ export class FontManager implements IFontManager {
   async setTextStyle(
     property: TextProperty,
     value: SCHEMA.ICSSOM | null,
-    { kind, notebook }: ITextStyleOptions
+    { kind, notebook }: ITextStyleOptions,
   ): Promise<void> {
     if (!notebook && !this.settings) {
       return;
@@ -305,7 +305,7 @@ export class FontManager implements IFontManager {
         }
         const meta = compat.getPanelMetadata(
           notebook.model,
-          PACKAGE_NAME
+          PACKAGE_NAME,
         ) as SCHEMA.ISettings;
         if (meta) {
           this._stylist.stylesheet(meta, notebook);

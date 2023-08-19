@@ -1,3 +1,38 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core<4,>=3.8.0"]
+
+[project]
+authors = [{name = "jupyterlab-fonts contributors", email = "deathbeds@googlegroups.com"}]
+classifiers = [
+  "Framework :: Jupyter :: JupyterLab :: 3",
+  "Framework :: Jupyter :: JupyterLab :: 4",
+  "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
+  "Framework :: Jupyter :: JupyterLab :: Extensions",
+  "Framework :: Jupyter :: JupyterLab",
+  "Framework :: Jupyter",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3",
+]
+dependencies = ["jupyterlab >=3,<4", "jupyter-client >=6.1.0"]
+dynamic = ["description"]
+name = "jupyterlab_fonts"
+readme = "README.md"
+requires-python = ">=3.8"
+version = "3.0.0a0"
+
+[project.urls]
+"Bug Tracker" = "https://github.com/deathbeds/jupyterlab-fonts/issues"
+"Changelog" = "https://github.com/deathbeds/jupyterlab-fonts/blob/main/CHANGELOG.md"
+"Source" = "https://github.com/deathbeds/jupyterlab-fonts"
+
+[tool.flit.sdist]
+include = ["src/jupyterlab_fonts/_d"]
+
+[tool.flit.external-data]
+directory = "src/jupyterlab_fonts/_d"
+
 [tool.doit]
 backend = "sqlite3"
 par_type = "thread"
@@ -147,3 +182,18 @@ select = [
 
 [tool.ruff.isort]
 known-first-party = ["jupyterlab_fonts"]
+
+[tool.pytest.ini_options]
+addopts = [
+  "--pyargs",
+  "jupyterlab_fonts",
+  "-vv",
+  # for humans
+  "--self-contained-html",
+  "--color=yes",
+  # misc
+  "--ff",
+  "--tb=long",
+]
+cache_dir = "build/.cache/pytest"
+script_launch_mode = "subprocess"

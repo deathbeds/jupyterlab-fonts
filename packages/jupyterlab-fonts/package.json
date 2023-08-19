@@ -41,14 +41,14 @@
     "jss-preset-default": "^10.10.0"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^4.0.0",
+    "@jupyterlab/builder": "^4.0.5",
     "json-schema-to-typescript": "^11.0.2",
     "mkdirp": "^3.0.1"
   },
   "jupyterlab": {
     "extension": "lib/plugin.js",
     "schemaDir": "schema",
-    "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-fonts",
+    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts",
     "webpackConfig": "./webpack.config.js"
   }
 }

@@ -76,8 +76,8 @@ conda uninstall jupyterlab-fonts
 
 ### Quick Configuration with the Jupyter Lab Menu
 
-To change your default fonts, from the main menu, select _Settings_ ▶ _Fonts_ ▶ _Code_ ▶
-_Font_ (or _Size_ or _Line Height_) and the value you'd like.
+To change your default fonts, from the main menu, select _Settings_ ▶ _Fonts_ ▶ _Code_
+▶ _Font_ (or _Size_ or _Line Height_) and the value you'd like.
 
 Some features of _Content_, i.e. your rendered Markdown and HTML, are also available,
 and more will hopefully be added over time.

@@ -131,14 +131,14 @@ export const PACKAGE_NAME: string = '@deathbeds/jupyterlab-fonts';
 export const CONFIGURED_CLASS = 'jp-fonts-configured';
 
 export const IFontManager = new Token<IFontManager>(
-  '@deathbeds/jupyterlab-fonts:IFontManager'
+  '@deathbeds/jupyterlab-fonts:IFontManager',
 );
 
 export interface IFontManagerConstructor {
   new (
     commands: CommandRegistry,
     palette: ICommandPalette,
-    notebooks: INotebookTracker
+    notebooks: INotebookTracker,
   ): IFontManager;
 }
 
@@ -153,12 +153,12 @@ export interface IFontManager {
   getVarName(property: TextProperty, options: ITextStyleOptions): SCHEMA.ICSSOM | null;
   getTextStyle(
     property: TextProperty,
-    options: ITextStyleOptions
+    options: ITextStyleOptions,
   ): SCHEMA.ICSSOM | null;
   setTextStyle(
     property: TextProperty,
     value: SCHEMA.ICSSOM | null,
-    options: ITextStyleOptions
+    options: ITextStyleOptions,
   ): void;
   dataURISrc(url: string, format: FontFormat): Promise<string>;
   setTransientNotebookStyle(panel: NotebookPanel, style: SCHEMA.ISettings | null): void;
