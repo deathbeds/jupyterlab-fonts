@@ -71,12 +71,18 @@ all_py = ["::dodo", "::all_scripts", "::all_py_src", "::all_lock_py"]
 all_py_src = [":rglob::src::*.py"]
 all_scripts = [":glob::scripts::*.py"]
 all_toml = ["::ppt"]
+atest_dir = ["atest"]
+atest_report = ["build/reports/robot/${THIS_SUBDIR}_${DEFAULT_LAB}"]
+atest_report_html = ["build/reports/robot/${THIS_SUBDIR}_${DEFAULT_LAB}/log.html"]
 dodo = ["dodo.py"]
+env_atest_history = [".envs/atest_${THIS_SUBDIR}/conda-meta/history"]
+env_atest_prefix = [".envs/atest_${THIS_SUBDIR}"]
 env_build_history = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}/conda-meta/history"]
 env_build_prefix = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}"]
 env_lab_history = [".envs/lab_${THIS_SUBDIR}_${DEFAULT_LAB}/conda-meta/history"]
 env_lab_prefix = [".envs/lab_${THIS_SUBDIR}_${DEFAULT_LAB}"]
 env_lock_dir = [".github/locks"]
+ext_list = ["build/labext/lab_${THIS_SUBDIR}_${DEFAULT_LAB}.txt"]
 git_info = ["build/git_info.json"]
 license = ["LICENSE"]
 lock_build = ["build/locks"]
@@ -94,6 +100,7 @@ wheel = ["dist/${PY_NAME}-${PY_VERSION}-py3-none-any.whl"]
 
 [tool.doitoml.tokens]
 conda_run = ["conda", "run", "--no-capture-output"]
+conda_run_atest = ["::conda_run_prefix", "::env_atest_prefix"]
 conda_run_build = ["::conda_run_prefix", "::env_build_prefix"]
 conda_run_lab = ["::conda_run_prefix", "::env_lab_prefix"]
 conda_run_lab_pip = ["::conda_run_lab", "python", "-m", "pip"]
@@ -157,15 +164,14 @@ actions = [
   [
     "::conda_run_lab_pip",
     "install",
-    "-e",
-    ".",
     "--no-deps",
     "--no-build-isolation",
     "--no-cache-dir",
     "--ignore-installed",
+    "::wheel",
   ],
 ]
-file_dep = ["::env_lab_history", "::ppt"]
+file_dep = ["::env_lab_history", "::wheel"]
 
 [tool.doitoml.tasks.dev.pip.check]
 actions = [["::conda_run_lab_pip", "freeze"], ["::conda_run_lab_pip", "check"]]
@@ -174,9 +180,11 @@ meta = {doitoml = {log = ["::pip_freeze"]}}
 targets = ["::pip_freeze"]
 task_dep = ["dt:dev:pip:install"]
 
-[tool.doitoml.tasks.dev.ext]
-actions = [["::conda_run_lab", "jupyter", "labextension", "develop", "--overwrite", "."]]
-file_dep = ["::pip_freeze"]
+[tool.doitoml.tasks.dev.ext.list]
+actions = [["::conda_run_lab", "jupyter", "labextension", "list"]]
+file_dep = ["::ppt", "::pip_freeze", "::wheel"]
+meta = {doitoml = {log = ["::ext_list"]}}
+targets = ["::ext_list"]
 
 [tool.doitoml.tasks.test.pytest]
 actions = [
@@ -201,6 +209,27 @@ file_dep = ["::ppt", "::all_py_src", "::pip_freeze"]
 meta = {doitoml = {env = {COVERAGE_FILE = "build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/.coverage"}}}
 targets = ["::pytest_html_cov"]
 
+[tool.doitoml.tasks.test.robot]
+actions = [
+  [
+    "::conda_run_atest",
+    # "robot", "--exitonfailure", "--loglevel", "TRACE",
+    "pabot",
+    "--artifactsinsubfolders",
+    "--artifacts",
+    "png,log,txt,svg,ipynb,json",
+    "--loglevel", "TRACE",
+    "--variable=ATTEMPT:0",
+    "--variable=OS:${THIS_SUBDIR}",
+    "--variable=ROOT:../../..",
+    "--outputdir",
+    "::atest_report",
+    "::atest_dir",
+  ],
+]
+file_dep = ["::env_atest_history", "::ext_list"]
+meta = {doitoml = {env = {JUPYTERLAB_CONDA_PREFIX = "::env_lab_prefix"}}}
+targets = ["::atest_report_html"]
 
 [tool.ruff]
 cache-dir = "build/.cache/ruff"

@@ -5,12 +5,82 @@ Resource            ./_variables.resource
 Library             uuid
 Library             BuiltIn
 Library             OperatingSystem
+Library     Collections
 Library             JupyterLibrary
+Library    shutil
 
+*** Variables ***
+${JUPYTERLAB_EXE}           ["jupyter-lab"]
 
 *** Keywords ***
+Initialize Jupyter Server
+    [Documentation]    Set up server with command as defined in atest.py.
+    [Arguments]    ${home_dir}
+    ${notebook_dir} =    Set Variable    ${home_dir}${/}work
+    ${port} =    Get Unused Port
+    ${token} =    Generate Random String    64
+    ${base url} =    Set Variable    /jl@f/
+    @{args} =    Build Custom JupyterLab Args    ${port}    ${token}    ${base url}
+    ${rest_args} =    Get Slice From List    ${args}    1
+    &{config} =    Create Dictionary
+    ...    stdout=${OUTPUT DIR}${/}lab.log
+    ...    stderr=STDOUT
+    ...    cwd=${notebook_dir}
+    ...    env:HOME=${home_dir}
+    ...    env:JUPYTER_PREFER_ENV_PATH=0
+    ${lab} =    Start New Jupyter Server
+    ...    ${args[0]}
+    ...    ${port}
+    ...    ${base url}
+    ...    ${notebook dir}
+    ...    ${token}
+    ...    @{rest_args}
+    ...    &{config}
+    Wait For Jupyter Server To Be Ready    ${lab}
+    RETURN    ${lab}
+
+Initialize Fake Home
+    ${home_dir} =    Set Variable    ${OUTPUT_DIR}${/}.home
+    Create Directory    ${home_dir}${/}work
+    RETURN    ${home_dir}
+
+Build Custom JupyterLab Args
+    [Documentation]    Generate some args
+    [Arguments]    ${port}    ${token}    ${base url}
+    IF  "%{JUPYTERLAB_CONDA_PREFIX}"
+        @{args} =   Set Variable
+        ...    conda
+        ...    run
+        ...    --prefix
+        ...    %{JUPYTERLAB_CONDA_PREFIX}
+        ...    --no-capture-output
+        ...    jupyter-lab
+    ELSE
+        ${args} =    Loads    ${JUPYTERLAB_EXE}
+    END
+    @{args} =    Set Variable
+    ...    @{args}
+    ...    --no-browser
+    ...    --debug
+    ...    --expose-app-in-browser
+    ...    --port\=${port}
+    ...    --ServerApp.token\=${token}
+    ...    --ServerApp.base_url\=${base url}
+    ...    --config\=${ROOT}${/}atest${/}fixtures${/}jupyter_config.json
+    Log    ${args}
+    RETURN    @{args}
+
+Get GeckoDriver
+    IF   "${OS}" == "win-64"
+        ${executable_path} =   Which   geckodriver.exe
+    ELSE
+        ${executable_path} =   Which   geckodriver
+    END
+    RETURN  ${executable_path}
+
 Make a Font Test Notebook
     ${kernel} =    Get Element Attribute    css:.jp-LauncherCard-label[title^='Python 3']    title
+    Update Globals For JupyterLab Version
     Launch a new JupyterLab Document    ${kernel}
     Add and Run JupyterLab Code Cell
     ...    from IPython.display import Markdown
@@ -76,7 +146,7 @@ Settings Should Contain
 Get Editor Content
     [Documentation]    Get CodeMirror content
     [Arguments]    ${sel}
-    ${js} =    Set Variable    return document.querySelector(`${sel}`).CodeMirror.getValue()
+    ${js} =    Set Variable    return document.querySelector(`${sel}`)${CM JS INSTANCE}.getValue()
     ${content} =    Execute JavaScript    ${js}
     RETURN    ${content}
 
@@ -93,7 +163,7 @@ Open Advanced Settings to Validate Fonts
     Wait Until Page Contains Element    ${fonts}
     Click Element    ${fonts}
     Drag And Drop By Offset    ${settings}    0    600
-    Click Element    css:.jp-Notebook .CodeMirror
+    Click Element    css:.jp-Notebook ${CM CSS EDITOR}
 
 Open the Notebook Font Editor
     [Documentation]    Use the Notebook button bar to open the notebook font editor
@@ -155,7 +225,7 @@ Set Cell Metadata
     Maybe Open Cell Metadata JSON
     ${sel} =    Set Variable    css:${JLAB CSS ACTIVE DOC CELLS}:nth-child(${idx})
     Click Element    css:${JLAB CSS ACTIVE DOC CELLS}:nth-child(${idx})
-    Set CodeMirror Value    ${CSS_LAB_CELL_META_TOOL} .CodeMirror    ${metadata}
+    Set CodeMirror Value    ${CSS_LAB_CELL_META_TOOL} ${CM CSS EDITOR}    ${metadata}
     ${commit} =    Set Variable    css:${CSS_LAB_CELL_META_TOOL} ${CSS_LAB_META_COMMIT}
     Wait Until Page Contains Element    ${commit}
     Click Element    ${commit}
