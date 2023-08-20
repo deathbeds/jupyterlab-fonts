@@ -5,12 +5,14 @@ Resource            ./_variables.resource
 Library             uuid
 Library             BuiltIn
 Library             OperatingSystem
-Library     Collections
+Library             Collections
 Library             JupyterLibrary
-Library    shutil
+Library             shutil
+
 
 *** Variables ***
-${JUPYTERLAB_EXE}           ["jupyter-lab"]
+${JUPYTERLAB_EXE}       ["jupyter-lab"]
+
 
 *** Keywords ***
 Initialize Jupyter Server
@@ -47,8 +49,8 @@ Initialize Fake Home
 Build Custom JupyterLab Args
     [Documentation]    Generate some args
     [Arguments]    ${port}    ${token}    ${base url}
-    IF  "%{JUPYTERLAB_CONDA_PREFIX}"
-        @{args} =   Set Variable
+    IF    "%{JUPYTERLAB_CONDA_PREFIX}"
+        @{args} =    Set Variable
         ...    conda
         ...    run
         ...    --prefix
@@ -71,16 +73,15 @@ Build Custom JupyterLab Args
     RETURN    @{args}
 
 Get GeckoDriver
-    IF   "${OS}" == "win-64"
-        ${executable_path} =   Which   geckodriver.exe
+    IF    "${OS}" == "win-64"
+        ${executable_path} =    Which    geckodriver.exe
     ELSE
-        ${executable_path} =   Which   geckodriver
+        ${executable_path} =    Which    geckodriver
     END
-    RETURN  ${executable_path}
+    RETURN    ${executable_path}
 
 Make a Font Test Notebook
     ${kernel} =    Get Element Attribute    css:.jp-LauncherCard-label[title^='Python 3']    title
-    Update Globals For JupyterLab Version
     Launch a new JupyterLab Document    ${kernel}
     Add and Run JupyterLab Code Cell
     ...    from IPython.display import Markdown
@@ -152,6 +153,7 @@ Get Editor Content
 
 Prepare to test a font editor
     [Documentation]    Open a notebook and settings
+    Update Globals For JupyterLab Version
     Execute JupyterLab Command    Close All Tabs
     Make a Font Test Notebook
 
@@ -215,6 +217,7 @@ Use the Menu to configure Font
 Set Attempt Screenshot Directory
     [Documentation]    Set a screenshot directory that includes the attempt
     [Arguments]    ${path}
+    Update Globals For JupyterLab Version
     Set Screenshot Directory
     ...    ${OUTPUT_DIR}${/}screenshots${/}${OS.lower()[:2]}_${ATTEMPT}${/}${path}
 

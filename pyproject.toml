@@ -69,6 +69,7 @@ THIS_SUBDIR = "linux-64"
 all_lock_py = [":glob::.github/specs::*.py"]
 all_py = ["::dodo", "::all_scripts", "::all_py_src", "::all_lock_py"]
 all_py_src = [":rglob::src::*.py"]
+all_robot = [":rglob::atest::*.robot", ":rglob::atest::*.resource"]
 all_scripts = [":glob::scripts::*.py"]
 all_toml = ["::ppt"]
 atest_dir = ["atest"]
@@ -140,6 +141,11 @@ actions = [
 doc = "Format python source with `ruff` and `black`"
 file_dep = ["::ppt", "::all_py", '::env_build_history']
 task_dep = ["dt:fix:ssort"]
+
+[tool.doitoml.tasks.fix.robot]
+actions = [["::conda_run_build", "robotidy", "::atest_dir"]]
+doc = "Format robotframework code with `robotframework-tidy`"
+file_dep = ["::all_robot"]
 
 [tool.doitoml.tasks.dist.preflight]
 actions = [{py = {"scripts.actions:git_info" = {}}}]
@@ -218,7 +224,8 @@ actions = [
     "--artifactsinsubfolders",
     "--artifacts",
     "png,log,txt,svg,ipynb,json",
-    "--loglevel", "TRACE",
+    "--loglevel",
+    "TRACE",
     "--variable=ATTEMPT:0",
     "--variable=OS:${THIS_SUBDIR}",
     "--variable=ROOT:../../..",

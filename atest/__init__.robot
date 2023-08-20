@@ -18,10 +18,10 @@ ${LOG_DIR}      ${OUTPUT_DIR}${/}logs
 
 *** Keywords ***
 Prepare for testing fonts
-    ${home_dir} =  Initialize Fake Home
-    Initialize Jupyter Server  ${home_dir}
-    ${executable_path} =  Get GeckoDriver
-    Open JupyterLab   executable_path=${executable_path}
+    ${home_dir} =    Initialize Fake Home
+    Initialize Jupyter Server    ${home_dir}
+    ${executable_path} =    Get GeckoDriver
+    Open JupyterLab    executable_path=${executable_path}
     Set Window Size    1366    768
     Disable JupyterLab Modal Command Palette
 
