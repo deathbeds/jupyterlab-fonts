@@ -127,8 +127,22 @@ Change a Font Dropdown
     [Arguments]    ${scope}    ${kind}    ${aspect}    ${value}    ${idx}=0
     ${sel} =    Set Variable    ${ED} section[title="${kind}"] select[title="${aspect}"]
     Select From List By Label    ${sel}    ${value}
+    IF    "${scope}" == "Global"
+        Settings Should Contain    ${value}
+        IF    "${aspect}" == "Font"
+            ${css} =    Execute JavaScript    return document.querySelector(`${MOD_GLOBAL}`).textContent
+            IF    "${value}" != "-"
+                Should Contain    ${css}    @font-face
+                Should Contain    ${css}    font-family: '${value}';
+                Should Contain    ${css}    src: url('
+            ELSE
+                Should Not Contain    ${css}    @font-face
+                Should Not Contain    ${css}    font-family:
+                Should Not Contain    ${css}    src: url('
+            END
+        END
+    END
     Capture Page Screenshot    ${aspect}_${idx}.png
-    IF    "${scope}" == "Global"    Settings Should Contain    ${value}
 
 Check font license is visible in Editor
     [Documentation]    Verify that the licenses are loaded
@@ -179,7 +193,7 @@ Open Advanced Settings to Validate Fonts
     ${fonts} =    Set Variable    ${SETTING_ITEM}//${ICON_FONT}
     Wait Until Page Contains Element    ${fonts}
     Click Element    ${fonts}
-    Drag And Drop By Offset    ${settings}    0    600
+    Drag And Drop By Offset    ${settings}    0    800
     Click Element    css:.jp-Notebook ${CM CSS EDITOR}
 
 Open the Notebook Font Editor

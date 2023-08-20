@@ -317,7 +317,7 @@ export class Stylist {
 
     return {
       '@global': globalStyles as any,
-      '@font-face': [flatFaces as any, ...styleFaces],
+      '@font-face': [...(flatFaces as any), ...styleFaces],
       '@import': imports as any,
     } as SCHEMA.IStyles;
   }

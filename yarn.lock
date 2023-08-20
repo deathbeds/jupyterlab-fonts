@@ -606,14 +606,14 @@ __metadata:
 
 "@deathbeds/jupyterlab-fonts@file:./packages/jupyterlab-fonts::locator=root-workspace-0b6124%40workspace%3A.":
   version: 3.0.0.alpha0
-  resolution: "@deathbeds/jupyterlab-fonts@file:./packages/jupyterlab-fonts#./packages/jupyterlab-fonts::hash=0c2ce1&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@deathbeds/jupyterlab-fonts@file:./packages/jupyterlab-fonts#./packages/jupyterlab-fonts::hash=efd41b&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@jupyterlab/application": 3 || 4
     "@jupyterlab/mainmenu": 3 || 4
     "@jupyterlab/notebook": 3 || 4
     jss: ^10.10.0
     jss-preset-default: ^10.10.0
-  checksum: 347f14be57579362061bb5d9646cdb4d72c14b8bdd06d4d1e313649ae60793cc6729c8c745c8504367fa8953e448151ea828c340302755e8af2e4b7a860df5a4
+  checksum: 8a2024a63a50b6f4c7f364a715d957d0a02ee2dd8497b40063c0da04b4546de272960c2b2cb47110f9c3e981821bce827b4d019765f05368c4965354bf27cc6d
   languageName: node
   linkType: hard
 
