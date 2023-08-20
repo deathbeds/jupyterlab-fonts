@@ -22,7 +22,7 @@ Prepare for testing fonts
     Initialize Jupyter Server    ${home_dir}
     ${executable_path} =    Get GeckoDriver
     Open JupyterLab    executable_path=${executable_path}
-    Set Window Size    1366    768
+    Set Window Size    1920    1080
     Disable JupyterLab Modal Command Palette
 
 Clean up after testing fonts

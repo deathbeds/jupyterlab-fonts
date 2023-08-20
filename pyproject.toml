@@ -145,7 +145,7 @@ task_dep = ["dt:fix:ssort"]
 [tool.doitoml.tasks.fix.robot]
 actions = [["::conda_run_build", "robotidy", "::atest_dir"]]
 doc = "Format robotframework code with `robotframework-tidy`"
-file_dep = ["::all_robot"]
+file_dep = ["::all_robot", "::env_build_history"]
 
 [tool.doitoml.tasks.dist.preflight]
 actions = [{py = {"scripts.actions:git_info" = {}}}]
@@ -237,6 +237,12 @@ actions = [
 file_dep = ["::env_atest_history", "::ext_list"]
 meta = {doitoml = {env = {JUPYTERLAB_CONDA_PREFIX = "::env_lab_prefix"}}}
 targets = ["::atest_report_html"]
+
+[tool.doitoml.tasks.serve.lab]
+actions = [["::conda_run_lab", "jupyter", "lab", "--no-browser", "--debug"]]
+file_dep = ["::ext_list"]
+uptodate = [false]
+
 
 [tool.ruff]
 cache-dir = "build/.cache/ruff"

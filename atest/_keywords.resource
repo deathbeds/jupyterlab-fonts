@@ -43,6 +43,14 @@ Initialize Jupyter Server
 
 Initialize Fake Home
     ${home_dir} =    Set Variable    ${OUTPUT_DIR}${/}.home
+    ${fixtures} =    Normalize Path    atest${/}fixtures
+    ${local} =    Set Variable    ${home_dir}${/}.local
+    OperatingSystem.Copy File
+    ...    ${fixtures}${/}overrides.json
+    ...    ${local}${/}share${/}jupyter${/}lab${/}settings${/}overrides.json
+    OperatingSystem.Copy File
+    ...    ${fixtures}${/}jupyter_config.json
+    ...    ${local}${/}etc${/}jupyter${/}jupyter_config.json
     Create Directory    ${home_dir}${/}work
     RETURN    ${home_dir}
 
@@ -74,9 +82,9 @@ Build Custom JupyterLab Args
 
 Get GeckoDriver
     IF    "${OS}" == "win-64"
-        ${executable_path} =    Which    geckodriver.exe
+        ${executable_path} =    shutil.which    geckodriver.exe
     ELSE
-        ${executable_path} =    Which    geckodriver
+        ${executable_path} =    shutil.which    geckodriver
     END
     RETURN    ${executable_path}
 
@@ -141,13 +149,19 @@ Use the Global font editor to ${what} custom fonts
 Settings Should Contain
     [Documentation]    Check the settings for a string
     [Arguments]    ${value}
-    ${settings} =    Get Editor Content    ${SETTINGS_RAW_CM}
+    ${settings} =    Get Editor Content    ${SETTINGS_RAW} ${CM CSS EDITOR}
     IF    "${value}" != '-'    Should Contain    ${settings}    ${value}
 
 Get Editor Content
     [Documentation]    Get CodeMirror content
     [Arguments]    ${sel}
-    ${js} =    Set Variable    return document.querySelector(`${sel}`)${CM JS INSTANCE}.getValue()
+    Update Globals For JupyterLab Version
+    ${js} =    Set Variable    return document.querySelector(`${sel}`)${CM JS INSTANCE}
+    IF    ${CM VERSION} == 5
+        ${js} =    Set Variable    ${js}.getValue()
+    ELSE
+        ${js} =    Set Variable    ${js}.view.state.doc.toString()
+    END
     ${content} =    Execute JavaScript    ${js}
     RETURN    ${content}
 
@@ -159,7 +173,8 @@ Prepare to test a font editor
 
 Open Advanced Settings to Validate Fonts
     [Documentation]    use advanced settings to validate changes
-    Execute JupyterLab Command    Advanced JSON Settings Editor
+    Update Globals For JupyterLab Version
+    Execute JupyterLab Command    Advanced Settings Editor
     ${settings} =    Set Variable    ${DOCK}//${TAB}//${ICON_SETTINGS}/../..
     ${fonts} =    Set Variable    ${SETTING_ITEM}//${ICON_FONT}
     Wait Until Page Contains Element    ${fonts}
@@ -224,7 +239,9 @@ Set Attempt Screenshot Directory
 Set Cell Metadata
     [Documentation]    Use the Property Inspector to update the cell metadata
     [Arguments]    ${metadata}    ${idx}=1    ${screenshot}=${EMPTY}
+    Update Globals For JupyterLab Version
     Maybe Open JupyterLab Sidebar    Property Inspector
+    Maybe Expand Panel With Title    Advanced Tools
     Maybe Open Cell Metadata JSON
     ${sel} =    Set Variable    css:${JLAB CSS ACTIVE DOC CELLS}:nth-child(${idx})
     Click Element    css:${JLAB CSS ACTIVE DOC CELLS}:nth-child(${idx})
@@ -233,6 +250,13 @@ Set Cell Metadata
     Wait Until Page Contains Element    ${commit}
     Click Element    ${commit}
     IF    ${screenshot.__len__()}    Capture Page Screenshot    ${screenshot}
+
+Maybe Expand Panel With Title
+    [Arguments]    ${label}
+    ${els} =    Get WebElements
+    ...    xpath:${XP_LAB4_COLLAPSED_PANEL_TITLE}\[contains(., '${label}')]
+    IF    not ${els.__len__()}    RETURN
+    Click Element    ${els[0]}
 
 Maybe Open Cell Metadata JSON
     [Documentation]    Ensure the Cell Metadata viewer is open.

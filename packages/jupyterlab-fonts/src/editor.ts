@@ -211,7 +211,7 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
                 value:
                   value == null ? DUMMY : prop === 'font-family' ? `'${value}'` : value,
               },
-              `${value || DUMMY}`,
+              (value || DUMMY) as any,
             );
           }),
         ),

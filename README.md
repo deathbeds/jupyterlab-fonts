@@ -115,7 +115,7 @@ Here's an example of changing how the Notebook looks when in _Presentation Mode_
       "--jp-code-font-size": "19px"
     },
     ".jp-mod-presentationMode .jp-Notebook": {
-      "& .CodeMirror": {
+      "& .CodeMirror, & .cm-editor": {
         "fontSize": "32px"
       },
       "& .jp-InputPrompt, & .jp-OutputPrompt": {
@@ -127,7 +127,9 @@ Here's an example of changing how the Notebook looks when in _Presentation Mode_
 ```
 
 Note the [use of `&`][nesting], which allows for nesting selectors, similar to other CSS
-preprocessors like [LESS].
+preprocessors like [LESS]. Additionally, supporting multiple versions of JupyterLab or
+Notebook may require investigating some version-aware selectors, such as `.CodeMirror`
+and `.cm-editor`.
 
 All JSON-compatible features of the [plugins][jss-plugins] included in
 `jss-preset-default` are enabled, with the default settings, and at present will be
