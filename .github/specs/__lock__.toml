@@ -52,7 +52,7 @@ yaml = """
     targets:
         - ../../.envs/{{ stem }}/conda-meta/history
     actions:
-        - - micromamba
+        - - mamba
           - create
           - --prefix
           - .envs/{{ stem }}
