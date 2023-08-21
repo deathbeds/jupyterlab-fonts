@@ -38,7 +38,8 @@ class C:
         "3.11": "lab4.0",
     }
     DEFAULT_PY = os.environ.get("JLF_PY", PYTHONS[-1])
-    DEFAULT_LAB = os.environ.get("JLF_LAB", PY_LABS[DEFAULT_PY])
+    DEFAULT_LAB = PY_LABS[DEFAULT_PY]
+    JLF_LAB = os.environ.get("JLF_LAB", DEFAULT_LAB)
     UTF8 = {"encoding": "utf-8"}
     JSON_FMT = {"indent": 2, "sort_keys": True}
     DEFAULT_SUBDIR = "linux-64"
@@ -95,6 +96,7 @@ class P:
 # handle dynamic sys.prefix
 os.environ.update(
     JLF_SYS_PREFIX=str(P.SYS_PREFIX),
+    JLF_LAB=C.JLF_LAB,
     THIS_PY=C.THIS_PY,
     THIS_SUBDIR=C.THIS_SUBDIR,
     DEFAULT_LAB=C.DEFAULT_LAB,
