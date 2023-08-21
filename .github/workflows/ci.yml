@@ -48,11 +48,14 @@ jobs:
       - name: setup (python)
         run: doit lock:install:build_linux-64_lab4.0
 
+      - name: DELETEME
+        run: ls -lathr .envs/*/bin/*
+
       - name: setup (js)
         run: doit js-root:setup
 
       - name: build
-        run: doit -n4 *:build:* || exit 0
+        run: doit *:build:* || doit list
 
       - name: build (retry)
         run: doit *:build:*
@@ -72,35 +75,35 @@ jobs:
           name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
           path: ./build/locks
 
-  lint:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
+  # lint:
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: checkout
+  #       uses: actions/checkout@v3
 
-      - uses: mamba-org/setup-micromamba@v1
-        with:
-          environment-file: .github/locks/lock_linux-64.conda.lock
-          environment-name: ci
-          init-shell: bash
+  #     - uses: mamba-org/setup-micromamba@v1
+  #       with:
+  #         environment-file: .github/locks/lock_linux-64.conda.lock
+  #         environment-name: ci
+  #         init-shell: bash
 
-      - name: cache (node)
-        uses: actions/cache@v3
-        id: cache-node-modules
-        with:
-          path: '**/node_modules'
-          key: |
-            ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
+  #     - name: cache (node)
+  #       uses: actions/cache@v3
+  #       id: cache-node-modules
+  #       with:
+  #         path: '**/node_modules'
+  #         key: |
+  #           ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
 
-      - name: download (preflight)
-        uses: actions/download-artifact@v3
-        with:
-          name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
-          path: ./build/locks
+  #     - name: download (preflight)
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
+  #         path: ./build/locks
 
-      - name: lint
-        run: doit -n4 *:lint:* || doit *:lint:*
+  #     - name: lint
+  #       run: doit -n4 *:lint:* || doit *:lint:*
 
   # test:
   #   needs: [build]

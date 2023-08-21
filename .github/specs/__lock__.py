@@ -120,7 +120,7 @@ def lock_one(platform: str, lockfile: Path, stack: List[Path]) -> bool:
         print(f"    ... creating {lockfile.parent}")
         lockfile.parent.mkdir(parents=True)
 
-    for solver in [["--micromamba"], ["--mamba"], ["--no-mamba"]]:
+    for solver in [["--mamba"], ["--no-mamba"]]:
         lock_args = ["conda-lock", *solver, "--kind=explicit"]
         comment = lock_comment(stack)
         for env_file in stack:

@@ -6,7 +6,6 @@
 #   - conda-lock >=2.1.2,<2.2
 #   - doitoml-with-all
 #   - mamba
-#   - micromamba
 #   - python-dotenv
 
 @EXPLICIT
@@ -48,7 +47,6 @@ https://conda.anaconda.org/conda-forge/linux-64/libsolv-0.7.24-hfc55251_1.conda#
 https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.42.0-h2797004_0.conda#fdaae20a1cf7cd62130a0973190a31b7
 https://conda.anaconda.org/conda-forge/linux-64/libssh2-1.11.0-h0841786_0.conda#1f5a58e686b13bcfde88b93f547d23fe
 https://conda.anaconda.org/conda-forge/linux-64/libxml2-2.11.5-h0d562d8_0.conda#558ab736404275d7df61c473c1af35aa
-https://conda.anaconda.org/conda-forge/linux-64/micromamba-1.4.9-0.tar.bz2#a0b34661199e87ccfbdf75dc0fdb2379
 https://conda.anaconda.org/conda-forge/linux-64/pcre2-10.40-hc3806b6_0.tar.bz2#69e2c796349cd9b273890bee0febfe1b
 https://conda.anaconda.org/conda-forge/linux-64/readline-8.2-h8228510_1.conda#47d31b792659ce70f470b5c82fdfb7a4
 https://conda.anaconda.org/conda-forge/linux-64/reproc-cpp-14.2.4-hcb278e6_0.conda#ede8e0f849f2fee2f78cb488b4ea3b33

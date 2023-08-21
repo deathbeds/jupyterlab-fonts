@@ -6,7 +6,6 @@
 #   - conda-lock >=2.1.2,<2.2
 #   - doitoml-with-all
 #   - mamba
-#   - micromamba
 #   - python-dotenv
 
 @EXPLICIT
@@ -27,7 +26,6 @@ https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.42.0-hcfcfb64_0.conda#
 https://conda.anaconda.org/conda-forge/win-64/libzlib-1.2.13-hcfcfb64_5.conda#5fdb9c6a113b6b6cb5e517fd972d5f41
 https://conda.anaconda.org/conda-forge/win-64/lz4-c-1.9.4-hcfcfb64_0.conda#e34720eb20a33fc3bfb8451dd837ab7a
 https://conda.anaconda.org/conda-forge/win-64/lzo-2.10-he774522_1000.tar.bz2#d5cf4b7eaa52316f135eed9e8548ad57
-https://conda.anaconda.org/conda-forge/win-64/micromamba-1.4.9-0.tar.bz2#cf59ab7b57f97d8bed3fd646e160ed3e
 https://conda.anaconda.org/conda-forge/win-64/openssl-3.1.2-hcfcfb64_0.conda#79b3f40f27cd80a265c276cea6714507
 https://conda.anaconda.org/conda-forge/win-64/reproc-14.2.4-hcfcfb64_0.conda#059e1351c1affff15b16aec51c6967a6
 https://conda.anaconda.org/conda-forge/win-64/tk-8.6.12-h8ffe710_0.tar.bz2#c69a5047cc9291ae40afd4a1ad6f0c0f
