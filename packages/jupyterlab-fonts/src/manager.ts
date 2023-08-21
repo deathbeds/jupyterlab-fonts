@@ -6,6 +6,7 @@ import { PromiseDelegate, PartialJSONValue } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 import { Menu } from '@lumino/widgets';
 
+import * as compat from './labcompat';
 import * as SCHEMA from './schema';
 import { Stylist } from './stylist';
 import {
@@ -23,7 +24,6 @@ import {
   IFontFaceOptions,
 } from './tokens';
 import { dataURISrc } from './util';
-import * as compat from './labcompat';
 
 const ALL_PALETTE = 'Fonts';
 

@@ -124,7 +124,7 @@ taplo_opts = [
 
 [tool.doitoml.tasks.fix.toml]
 actions = [["::conda_run_build", "taplo", "fmt", "::taplo_opts", "::all_toml"]]
-doc = "Format toml with taplo"
+doc = "Format TOML with taplo"
 file_dep = ["::all_toml", '::env_build_history']
 
 [tool.doitoml.tasks.fix.ssort]
@@ -155,6 +155,21 @@ task_dep = ["dt:fix:ssort"]
 actions = [["::conda_run_build", "robotidy", "::atest_dir"]]
 doc = "Format robotframework code with `robotframework-tidy`"
 file_dep = ["::all_robot", "::env_build_history"]
+
+[tool.doitoml.tasks.lint.toml]
+actions = [["::conda_run_build", "taplo", "check", "::all_toml"]]
+doc = "Check TOML with taplo"
+file_dep = ["::all_toml", '::env_build_history']
+
+[tool.doitoml.tasks.lint.black]
+actions = [["::conda_run_build", "black", "--quiet", "--check", "::all_py"]]
+doc = "Check Python with black"
+file_dep = ["::all_py", '::env_build_history', "::ppt"]
+
+[tool.doitoml.tasks.lint.ruff]
+actions = [["::conda_run_build", "ruff", "--quiet", "::all_py"]]
+doc = "Check Python with ruff"
+file_dep = ["::all_py", '::env_build_history', "::ppt"]
 
 [tool.doitoml.tasks.dist.preflight]
 actions = [{py = {"scripts.actions:git_info" = {}}}]
@@ -269,6 +284,8 @@ cache-dir = "build/.cache/ruff"
 ignore = [
   "D211",
   "D213",
+  # if it doesn't bother black..
+  "E501",
   # if it doesn't bother mypy...
   "ANN101",
   "ANN401",
@@ -328,6 +345,12 @@ select = [
 
 [tool.ruff.isort]
 known-first-party = ["jupyterlab_fonts"]
+
+[tool.ruff.per-file-ignores]
+"**/tests/*.py" = ["S101", "SLF001", "PLR2004"]
+"__lock__.py" = ["INP001", "T201", "ARG002", "S603"]
+"dodo.py" = ["RUF012", "S603"]
+"scripts/*.py" = ["INP001", "S603", "T201", "S607", "SIM115"]
 
 [tool.pytest.ini_options]
 addopts = [

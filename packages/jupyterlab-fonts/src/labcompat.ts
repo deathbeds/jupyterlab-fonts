@@ -1,5 +1,5 @@
-import type { INotebookModel } from '@jupyterlab/notebook';
 import type { ICellModel } from '@jupyterlab/cells';
+import type { INotebookModel } from '@jupyterlab/notebook';
 import type { ISignal } from '@lumino/signaling';
 
 export function metadataSignal(panelModel: INotebookModel): ISignal<any, any> {

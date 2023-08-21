@@ -13,13 +13,8 @@
     "clean": "jlpm clean:lib && jlpm clean:test",
     "clean:lib": "lerna exec --parallel -- rimraf lib",
     "clean:test": "rimraf _testoutput",
-    "lint": "jlpm lint:py && jlpm lint:ts && jlpm lint:sh",
-    "lint:prettier": "prettier --cache  --cache-location=build/.cache/prettier --list-different --write \"./*{json,md,yml}\" \"{packages,.github,.binder}/**/*.{ts,tsx,css,json,md}\"",
-    "lint:py": "black nbjss setup.py && flake8 nbjss setup.py",
-    "lint:robot": "python -m robot.tidy --inplace tests/**/*.robot && rflint --configure TooManyTestSteps:40 --configure TooFewKeywordSteps:0  tests/**/*.robot",
-    "lint:sh": "beautysh -i 2 postBuild",
-    "lint:ts": "jlpm lint:prettier && jlpm lint:tslint",
-    "lint:tslint": "tslint --fix -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
+    "eslint:check": "eslint --cache --config=.eslintrc.js --ext \".js,.jsx,.ts,.tsx\" packages",
+    "prettier:check": "prettier --list-different --cache --cache-location=build/.cache/prettier \"./*.{json,md,yml,js}\" \"{packages,.github,.binder}/**/*.{ts,tsx,css,json,md}\"",
     "test": "jlpm test:robot",
     "test:robot": "python -m robot -d _testoutput -X tests/acceptance",
     "watch": "cd packages/_meta && tsc -b -w",
@@ -53,15 +48,15 @@
     "skip-full": true
   },
   "devDependencies": {
-    "@ephesoft/webpack.istanbul.loader": "^2.1.0",
+    "@ephesoft/webpack.istanbul.loader": "^2.2.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.39.0",
-    "@typescript-eslint/parser": "^5.39.0",
-    "eslint": "^8.24.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.31.8",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.2",
     "file-loader": "^6.2.0",
     "lerna": "^7.1.5",
     "nyc": "^15.1.0",
@@ -99,9 +94,16 @@
         ":glob::packages::*/*.json",
         ":glob::packages::*/schema/*.json"
       ],
+      "all_yml": [
+        ":glob::.::*.yml",
+        ":rglob::.github::*.yml"
+      ],
       "all_ts": [
         ":glob::packages::*/src/**/*.ts",
         ":glob::packages::*/src/**/*.tsx"
+      ],
+      "all_js": [
+        ":glob::.::*.js"
       ],
       "all_css": [
         ":glob::packages::*/style/**/*.css"
@@ -151,7 +153,6 @@
       "setup": {
         "file_dep": [
           "::yarnrc",
-          "::pj",
           "::dt::env_build_history",
           "::all_pj"
         ],
@@ -253,7 +254,8 @@
           "actions": [
             [
               "::jlpm",
-              "lint:prettier"
+              "prettier:check",
+              "--write"
             ]
           ],
           "file_dep": [
@@ -261,7 +263,55 @@
             "::all_md",
             "::all_json",
             "::all_ts",
-            "::all_css"
+            "::all_css",
+            "::all_yml",
+            "::all_js"
+          ]
+        },
+        "eslint": {
+          "actions": [
+            [
+              "::jlpm",
+              "eslint:check",
+              "--fix"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::all_js"
+          ]
+        }
+      },
+      "lint": {
+        "prettier": {
+          "actions": [
+            [
+              "::jlpm",
+              "prettier:check"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_md",
+            "::all_json",
+            "::all_ts",
+            "::all_css",
+            "::all_yml",
+            "::all_js"
+          ]
+        },
+        "eslint": {
+          "actions": [
+            [
+              "::jlpm",
+              "eslint:check"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::all_js"
           ]
         }
       }

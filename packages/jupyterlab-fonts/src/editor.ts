@@ -3,6 +3,7 @@ import { NotebookPanel } from '@jupyterlab/notebook';
 import { ReadonlyJSONObject } from '@lumino/coreutils';
 import * as React from 'react';
 
+import * as compat from './labcompat';
 import { FontManager } from './manager';
 import * as SCHEMA from './schema';
 import {
@@ -14,7 +15,6 @@ import {
   IFontFaceOptions,
   PACKAGE_NAME,
 } from './tokens';
-import * as compat from './labcompat';
 
 import '../style/editor.css';
 

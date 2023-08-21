@@ -5,8 +5,8 @@ import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { ISignal, Signal } from '@lumino/signaling';
 
 import { ICONS } from './icons';
-import { PACKAGE_NAME, CONFIGURED_CLASS } from './tokens';
 import * as compat from './labcompat';
+import { PACKAGE_NAME, CONFIGURED_CLASS } from './tokens';
 
 /**
  * A notebook widget extension that adds a button to the toolbar.

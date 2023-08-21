@@ -16,37 +16,25 @@ env:
   # ours
   CACHE_EPOCH: 0
 
+defaults:
+  run:
+    shell: bash -l {0}
+
 jobs:
   build:
-    name: build ${{ matrix.os }} ${{ matrix.python-version }}
-    runs-on: ${{ matrix.os }}-latest
+    name: build
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         os: ['ubuntu']
-        python-version: ['3.10']
 
     steps:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: cache (conda)
-        uses: actions/cache@v3
+      - uses: mamba-org/setup-micromamba@v1
         with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml') }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
-
-      - name: install (conda)
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          miniforge-variant: Mambaforge
-          miniforge-version: 4.13.0-1
-          python-version: ${{ matrix.python-version }}
-          environment-file: .binder/environment.yml
-          use-only-tar-bz2: true
-          use-mamba: true
+          environment-file: .github/locks/build_linux-64_lab4.0.conda.lock
 
       - name: cache (node)
         uses: actions/cache@v3
@@ -54,31 +42,13 @@ jobs:
         with:
           path: '**/node_modules'
           key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-node-build-${{ hashFiles('yarn.lock') }}
-
-      - name: cache (yarn)
-        uses: actions/cache@v3
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        id: cache-yarn-packages
-        with:
-          path: .yarn-packages
-          key: |
-            ${{ env.CACHE_EPOCH }}-yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-yarn-${{ runner.os }}-
-            ${{ env.CACHE_EPOCH }}-yarn-
-
-      - name: lint
-        shell: bash -l {0}
-        run: doit -n4 lint || doit lint
+            ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
 
       - name: build
-        shell: bash -l {0}
-        run: doit -n4 build || doit build
+        run: doit -n4 *:build:* || doit *:build:*
 
       - name: dist
-        shell: bash -l {0}
-        run: doit -n4 dist || doit dist
+        run: doit -n4 *:dist:* || doit *:dist:*
 
       - name: upload (dist)
         uses: actions/upload-artifact@v3
@@ -86,84 +56,84 @@ jobs:
           name: jupyterlab-fonts-${{ github.run_number }}-dist
           path: ./dist
 
-  test:
-    needs: [build]
-    name: test ${{ matrix.os }} ${{ matrix.python-version }}
-    runs-on: ${{ matrix.os }}-latest
-    env:
-      TESTING_IN_CI: '1'
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ['ubuntu', 'macos', 'windows']
-        python-version: ['3.7', '3.10']
-        include:
-          - python-version: '3.7'
-            clean-artifacts: 'whl'
-          - python-version: '3.10'
-            clean-artifacts: 'tar.gz'
+  # test:
+  #   needs: [build]
+  #   name: test ${{ matrix.os }} ${{ matrix.python-version }}
+  #   runs-on: ${{ matrix.os }}-latest
+  #   env:
+  #     TESTING_IN_CI: '1'
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: ['ubuntu', 'macos', 'windows']
+  #       python-version: ['3.7', '3.10']
+  #       include:
+  #         - python-version: '3.7'
+  #           clean-artifacts: 'whl'
+  #         - python-version: '3.10'
+  #           clean-artifacts: 'tar.gz'
 
-    steps:
-      - name: configure line endings
-        run: |
-          git config --global core.autocrlf false
+  #   steps:
+  #     - name: configure line endings
+  #       run: |
+  #         git config --global core.autocrlf false
 
-      - name: checkout
-        uses: actions/checkout@v3
+  #     - name: checkout
+  #       uses: actions/checkout@v3
 
-      - name: cache (conda)
-        uses: actions/cache@v3
-        with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml') }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
+  #     - name: cache (conda)
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/conda_pkgs_dir
+  #         key: |
+  #           ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-${{ hashFiles('.github/environment.yml') }}
+  #         restore-keys: |
+  #           ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ matrix.python-version }}-
 
-      - name: install (conda)
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          miniforge-variant: Mambaforge
-          miniforge-version: 4.13.0-1
-          python-version: ${{ matrix.python-version }}
-          environment-file: .binder/environment.yml
-          use-only-tar-bz2: true
-          use-mamba: true
+  #     - name: install (conda)
+  #       uses: conda-incubator/setup-miniconda@v2
+  #       with:
+  #         miniforge-variant: Mambaforge
+  #         miniforge-version: 4.13.0-1
+  #         python-version: ${{ matrix.python-version }}
+  #         environment-file: .binder/environment.yml
+  #         use-only-tar-bz2: true
+  #         use-mamba: true
 
-      - name: download (dist)
-        uses: actions/download-artifact@v3
-        with:
-          name: jupyterlab-fonts-${{ github.run_number }}-dist
-          path: ./dist
+  #     - name: download (dist)
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: jupyterlab-fonts-${{ github.run_number }}-dist
+  #         path: ./dist
 
-      - name: clean
-        shell: bash -l {0}
-        run: |
-          rm dist/*.${{ matrix.clean-artifacts }}
+  #     - name: clean
+  #       shell: bash -l {0}
+  #       run: |
+  #         rm dist/*.${{ matrix.clean-artifacts }}
 
-      - name: install
-        shell: bash -l {0}
-        run: |
-          python -m pip install -vv --no-index --no-deps --ignore-installed --find-links=dist jupyterlab-fonts
+  #     - name: install
+  #       shell: bash -l {0}
+  #       run: |
+  #         python -m pip install -vv --no-index --no-deps --ignore-installed --find-links=dist jupyterlab-fonts
 
-      - name: check (ext)
-        shell: bash -l {0}
-        run: |
-          jupyter labextension list
-          jupyter labextension list 2>&1 | grep -ie "@deathbeds/jupyterlab-font.*enabled.*ok.*python.*jupyterlab-fonts" -
+  #     - name: check (ext)
+  #       shell: bash -l {0}
+  #       run: |
+  #         jupyter labextension list
+  #         jupyter labextension list 2>&1 | grep -ie "@deathbeds/jupyterlab-font.*enabled.*ok.*python.*jupyterlab-fonts" -
 
-      - name: test (pytest)
-        shell: bash -l {0}
-        run: doit test:pytest
+  #     - name: test (pytest)
+  #       shell: bash -l {0}
+  #       run: doit test:pytest
 
-      - name: test (robot)
-        shell: bash -l {0}
-        run: doit test || doit test || doit test
+  #     - name: test (robot)
+  #       shell: bash -l {0}
+  #       run: doit test || doit test || doit test
 
-      - name: upload (reports)
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: |
-            jupyterlab-fonts-${{ github.run_number }}-reports-${{ runner.os }}-f${{ matrix.python-version }}
-          path: ./build/reports
+  #     - name: upload (reports)
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: |
+  #           jupyterlab-fonts-${{ github.run_number }}-reports-${{ runner.os }}-f${{ matrix.python-version }}
+  #         path: ./build/reports

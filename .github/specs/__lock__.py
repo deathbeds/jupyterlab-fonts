@@ -17,6 +17,7 @@ EXPLICIT = "@EXPLICIT"
 
 @lru_cache(1000)
 def safe_load(path: Path) -> Dict[str, Any]:
+    """Load and cache some YAML."""
     return yaml.safe_load(path.read_bytes())
 
 
@@ -60,8 +61,14 @@ def iter_spec_stacks(spec_path, platform):
 
 
 class IndentDumper(yaml.SafeDumper):
-    def increase_indent(self, flow=False, indentless=False):
-        return super().increase_indent(flow, False)
+
+    """Safe dump with indenting."""
+
+    def increase_indent(self, flow=None, indentless=None):
+        """Add more indentation."""
+        flow = True if flow is None else flow
+        indentless = False
+        return super().increase_indent(flow=flow, indentless=indentless)
 
 
 def merge_envs(env_path: Optional[Path], stack: List[Path]) -> Optional[str]:
@@ -88,6 +95,7 @@ def merge_envs(env_path: Optional[Path], stack: List[Path]) -> Optional[str]:
 
 
 def lock_comment(stack: List[Path]) -> str:
+    """Generate a lockfile header comment."""
     return textwrap.indent(merge_envs(None, stack), "# ")
 
 
@@ -141,6 +149,7 @@ def lock_one(platform: str, lockfile: Path, stack: List[Path]) -> bool:
 
 
 def lock_stem(subdir, stack: List[Path]) -> str:
+    """Calculate the lockfile/env name stem."""
     first = stack[0]
     return "_".join(
         [first.stem, subdir] + [s.stem for s in stack if s.parent != first.parent],
@@ -174,6 +183,7 @@ def preflight(
 
 
 def lock_from_preflight(lock_dir: str, header_path: str, preflight_path: str) -> None:
+    """Generate a single lockfile from the preflight file."""
     preflight = safe_load(Path(preflight_path))
     header = Path(header_path)
     header_txt = header.read_text(**UTF8)

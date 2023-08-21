@@ -7,9 +7,9 @@ import { Signal } from '@lumino/signaling';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
 
+import * as compat from './labcompat';
 import * as SCHEMA from './schema';
 import { ROOT, IFontFaceOptions, DOM, PACKAGE_NAME } from './tokens';
-import * as compat from './labcompat';
 
 const RE_CSS_IMPORT = /^@import(.*$)/;
 const RE_CSS_REL_URL = /url\(\s*['"]?(\.[^\)'"]+)['"]?\s*\)/g;

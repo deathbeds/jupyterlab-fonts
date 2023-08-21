@@ -1,18 +1,8 @@
-# """project automation for jupyterlab-fonts"""
-# import hashlib
-# import json
-# import os
-# import platform
-# import re
-# import shutil
-# import sys
+"""project automation for jupyterlab-fonts."""
 import json
 import os
 import platform
 import shutil
-
-# import doit.action
-# import doit.tools
 import sys
 from pathlib import Path
 
@@ -391,102 +381,6 @@ globals().update(doitoml.tasks())
 #     yield dict(name="all", task_dep=["binder:labextensions"], actions=[["echo", "ok"]])
 
 
-# def task_lab():
-#     yield dict(
-#         name="launch",
-#         task_dep=["binder"],
-#         actions=[["jupyter", "lab", "--no-browser", "--debug"]],
-#     )
-
-
-# def task_dist():
-#     for pkg_json, tgz in B.JS_TARBALL.items():
-#         yield dict(
-#             name=f"js:{tgz.name}",
-#             actions=[
-#                 (doit.tools.create_folder, [P.DIST]),
-#                 doit.action.CmdAction(
-#                     ["npm", "pack", pkg_json.parent], shell=False, cwd=P.DIST
-#                 ),
-#             ],
-#             file_dep=[B.META_BUILDINFO, *U.js_deps(pkg_json)],
-#             targets=[tgz],
-#         )
-#     yield dict(
-#         name="shasums",
-#         actions=[(U.make_hashfile, [B.SHA256SUMS, B.ALL_HASH_DEPS])],
-#         targets=[B.SHA256SUMS],
-#         file_dep=[*B.ALL_HASH_DEPS],
-#     )
-
-
-# def task_watch():
-#     yield dict(
-#         name="ts",
-#         task_dep=["setup"],
-#         actions=[[*C.LERNA, "run", "--stream", "--parallel", "watch"]],
-#     )
-
-
-# def task_lint():
-#     """apply source formatting, check for mistakes"""
-#     yield dict(
-#         name="black",
-#         actions=[
-#             ["isort", *P.ALL_PY],
-#             *([["ssort", *P.ALL_PY]] if shutil.which("ssort") else []),
-#             ["black", *P.ALL_PY],
-#         ],
-#         file_dep=[*P.ALL_PY],
-#     )
-
-#     yield dict(
-#         name="robot",
-#         actions=[[*C.PYM, "robotidy", *P.ALL_ROBOT]],
-#         file_dep=P.ALL_ROBOT,
-#     )
-
-#     yield dict(
-#         name="flake8",
-#         actions=[["flake8", *P.ALL_PY]],
-#         task_dep=["lint:black"],
-#         file_dep=[*P.ALL_PY],
-#     )
-
-#     yield dict(
-#         name="prettier",
-#         actions=[
-#             [
-#                 *C.JLPM,
-#                 "prettier",
-#                 "--write",
-#                 "--list-different",
-#                 *[p.relative_to(P.ROOT) for p in P.ALL_PRETTIER],
-#             ]
-#         ],
-#         file_dep=[*P.ALL_PRETTIER, P.YARN_INTEGRITY],
-#     )
-
-#     yield dict(
-#         name="eslint",
-#         actions=[
-#             [
-#                 *C.JLPM,
-#                 "eslint",
-#                 "--cache",
-#                 "--config",
-#                 P.ESLINTRC,
-#                 "--ext",
-#                 ".js,.jsx,.ts,.tsx",
-#                 "--fix",
-#                 "packages",
-#             ]
-#         ],
-#         task_dep=["lint:prettier"],
-#         file_dep=[*P.ALL_ESLINT, P.ESLINTRC],
-#     )
-
-
 # def task_test():
 #     file_dep = [*P.ALL_ROBOT]
 #     task_dep = []
@@ -559,11 +453,3 @@ globals().update(doitoml.tasks())
 #         ],
 #         targets=[B.PYTEST_HTML, B.HTMLCOV_HTML, B.PYTEST_COV_XML],
 #     )
-
-
-# DOIT_CONFIG = {
-#     "backend": "sqlite3",
-#     "verbosity": 2,
-#     "par_type": "thread",
-#     "default_tasks": ["binder"],
-# }
