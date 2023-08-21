@@ -31,6 +31,7 @@ jobs:
         with:
           environment-file: .github/locks/build_linux-64_lab4.0.conda.lock
           environment-name: ci
+          init-shell: bash
 
       - name: cache (node)
         uses: actions/cache@v3
@@ -62,6 +63,7 @@ jobs:
         with:
           environment-file: .github/locks/build_linux-64_lab4.0.conda.lock
           environment-name: ci
+          init-shell: bash
 
       - name: cache (node)
         uses: actions/cache@v3
