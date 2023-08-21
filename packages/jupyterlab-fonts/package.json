@@ -50,5 +50,49 @@
     "schemaDir": "schema",
     "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts",
     "webpackConfig": "./webpack.config.js"
+  },
+  "doitoml": {
+    "prefix": "js-fonts",
+    "env": {
+      "JLF_VERSION": ":get::json::package.json::version"
+    },
+    "paths": {
+      "npm_dist": [
+        "../../dist/deathbeds-jupyterlab-fonts-${JLF_VERSION}.tgz"
+      ],
+      "all_style": [
+        ":rglob::style::*.*"
+      ],
+      "here": [
+        "."
+      ]
+    },
+    "tasks": {
+      "dist": {
+        "meta": {
+          "doitoml": {
+            "cwd": "../../dist"
+          }
+        },
+        "file_dep": [
+          "::all_style",
+          "::js-root::tsbuildinfo",
+          "LICENSE",
+          "package.json",
+          "README.md"
+        ],
+        "actions": [
+          [
+            "::dt::conda_run_build",
+            "npm",
+            "pack",
+            "::here"
+          ]
+        ],
+        "targets": [
+          "::npm_dist"
+        ]
+      }
+    }
   }
 }

@@ -43,7 +43,14 @@ status = true
 subtasks = true
 
 [tool.doitoml]
-config_paths = [":get::toml::.github/specs/__lock__.toml::", ":get::json::package.json::doitoml"]
+config_paths = [
+  ":get::toml::.github/specs/__lock__.toml::",
+  ":get::json::package.json::doitoml",
+  ":get::json::packages/jupyterlab-font-anonymous-pro/package.json::doitoml",
+  ":get::json::packages/jupyterlab-font-dejavu-sans-mono/package.json::doitoml",
+  ":get::json::packages/jupyterlab-font-fira-code/package.json::doitoml",
+  ":get::json::packages/jupyterlab-fonts/package.json::doitoml",
+]
 prefix = "dt"
 validate = true
 
@@ -75,6 +82,8 @@ all_toml = ["::ppt"]
 atest_dir = ["atest"]
 atest_report = ["build/reports/robot/${THIS_SUBDIR}_${JLF_LAB}"]
 atest_report_html = ["build/reports/robot/${THIS_SUBDIR}_${JLF_LAB}/log.html"]
+dist_hash_inputs = ["::wheel", "::sdist", "::*::npm_dist"]
+dist_sha256sums = ["dist/SHA256SUMS"]
 dodo = ["dodo.py"]
 env_atest_history = [".envs/atest_${THIS_SUBDIR}/conda-meta/history"]
 env_atest_prefix = [".envs/atest_${THIS_SUBDIR}"]
@@ -156,7 +165,7 @@ targets = ["::git_info"]
 [tool.doitoml.tasks.dist.flit]
 actions = [["::conda_run_build", "flit", "build"]]
 file_dep = [
-  "::js-meta::all_dist_pkg_json",
+  "::js-root::all_dist_pkg_json",
   "::all_py_src",
   "::ppt",
   "::license",
@@ -164,6 +173,17 @@ file_dep = [
   "::git_info",
 ]
 targets = ["::wheel", "::sdist"]
+
+[tool.doitoml.tasks.dist.hash]
+actions = [
+  {py = {"scripts.actions:hash_some" = {args = [
+    "::dist_sha256sums",
+    "::dist_hash_inputs",
+  ]}}},
+]
+file_dep = ["::dist_hash_inputs"]
+targets = ["::dist_sha256sums"]
+
 
 [tool.doitoml.tasks.dev.pip.install]
 actions = [

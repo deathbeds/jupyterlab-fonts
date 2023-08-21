@@ -49,5 +49,46 @@
         "singleton": true
       }
     }
+  },
+  "doitoml": {
+    "prefix": "js-font-anonymous-pro",
+    "paths": {
+      "npm_dist": [
+        "../../dist/deathbeds-jupyterlab-font-anonymous-pro-${JLF_VERSION}.tgz"
+      ],
+      "all_style": [
+        ":rglob::style::*.*"
+      ],
+      "here": [
+        "."
+      ]
+    },
+    "tasks": {
+      "dist": {
+        "meta": {
+          "doitoml": {
+            "cwd": "../../dist"
+          }
+        },
+        "file_dep": [
+          "::all_style",
+          "::js-root::tsbuildinfo",
+          "LICENSE",
+          "package.json",
+          "README.md"
+        ],
+        "actions": [
+          [
+            "::dt::conda_run_build",
+            "npm",
+            "pack",
+            "::here"
+          ]
+        ],
+        "targets": [
+          "::npm_dist"
+        ]
+      }
+    }
   }
 }

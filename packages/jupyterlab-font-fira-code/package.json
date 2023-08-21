@@ -48,5 +48,46 @@
         "singleton": true
       }
     }
+  },
+  "doitoml": {
+    "prefix": "js-font-fira-code",
+    "paths": {
+      "npm_dist": [
+        "../../dist/deathbeds-jupyterlab-font-fira-code-${JLF_VERSION}.tgz"
+      ],
+      "all_style": [
+        ":rglob::style::*.*"
+      ],
+      "here": [
+        "."
+      ]
+    },
+    "tasks": {
+      "dist": {
+        "meta": {
+          "doitoml": {
+            "cwd": "../../dist"
+          }
+        },
+        "file_dep": [
+          "::all_style",
+          "::js-root::tsbuildinfo",
+          "LICENSE",
+          "package.json",
+          "README.md"
+        ],
+        "actions": [
+          [
+            "::dt::conda_run_build",
+            "npm",
+            "pack",
+            "::here"
+          ]
+        ],
+        "targets": [
+          "::npm_dist"
+        ]
+      }
+    }
   }
 }

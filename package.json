@@ -73,7 +73,7 @@
     "yarn-berry-deduplicate": "^6.1.1"
   },
   "doitoml": {
-    "prefix": "js-meta",
+    "prefix": "js-root",
     "paths": {
       "pj": [
         "package.json"
