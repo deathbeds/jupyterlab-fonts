@@ -4,21 +4,19 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "jlpm || jlpm || jlpm && jlpm lint && jlpm bootstrap:js",
-    "bootstrap:js": "jlpm lerna bootstrap && jlpm build",
-    "build": "jlpm build:schema && lerna run prebuild && jlpm build:ts",
+    "build": "yarn build:schema && lerna run prebuild && yarn build:ts",
     "build:schema": "lerna run build:schema",
-    "build:static": "jlpm webpack -p",
+    "build:static": "yarn webpack -p",
     "build:ts": "cd packages && cd _meta && tsc -b",
-    "clean": "jlpm clean:lib && jlpm clean:test",
+    "clean": "yarn clean:lib && yarn clean:test",
     "clean:lib": "lerna exec --parallel -- rimraf lib",
     "clean:test": "rimraf _testoutput",
     "eslint:check": "eslint --cache --config=.eslintrc.js --ext \".js,.jsx,.ts,.tsx\" packages",
     "prettier:check": "prettier --list-different --cache --cache-location=build/.cache/prettier \"./*.{json,md,yml,js}\" \"{packages,.github,.binder}/**/*.{ts,tsx,css,json,md}\"",
-    "test": "jlpm test:robot",
+    "test": "yarn test:robot",
     "test:robot": "python -m robot -d _testoutput -X tests/acceptance",
     "watch": "cd packages/_meta && tsc -b -w",
-    "watch:schema": "jlpm lerna run watch:schema --parallel"
+    "watch:schema": "yarn lerna run watch:schema --parallel"
   },
   "prettier": {
     "printWidth": 88,
