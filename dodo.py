@@ -71,7 +71,7 @@ class P:
 
     SYS_PREFIX = sys.prefix if C.CI or C.DEMO_IN_BINDER else str(DEV_PREFIX)
     SAFE_PATHS = [
-        str(ROOT),
+        ROOT.as_posix(),
         *([str(SYS_PREFIX)] if C.CI or C.DEMO_IN_BINDER else []),
     ]
 
