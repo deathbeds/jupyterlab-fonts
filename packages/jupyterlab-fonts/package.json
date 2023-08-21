@@ -27,7 +27,7 @@
   "scripts": {
     "labextension:build": "jupyter labextension build .",
     "labextension:build:cov": "tsc -b tsconfig.cov.json && jupyter labextension build .",
-    "prebuild": "yarn prebuild:prep && jlpm prebuild:schema && jlpm prebuild:copy",
+    "prebuild": "yarn prebuild:prep && yarn prebuild:schema && yarn prebuild:copy",
     "prebuild:copy": "prettier src/_schema.d.ts > lib/_schema.d.ts",
     "prebuild:prep": "mkdirp lib",
     "prebuild:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
