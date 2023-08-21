@@ -15,6 +15,7 @@ env:
   MAMBA_NO_BANNER: 1
   # ours
   CACHE_EPOCH: 0
+  DOIT_LINUX: set -eux && source /home/runner/micromamba/envs/ci/bin/activate && doit
 
 
 jobs:
@@ -39,13 +40,19 @@ jobs:
             ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
 
       - name: preflight
-        run: set -eux && source /home/runner/micromamba/envs/ci/bin/activate && doit lock:preflight
+        run: $DOIT_LINUX lock:preflight
+
+      - name: setup (js)
+        run: $DOIT_LINUX js-root:setup
 
       - name: build
-        run: set -eux && source /home/runner/micromamba/envs/ci/bin/activate && doit -n4 *:build:* || doit *:build:*
+        run: $DOIT_LINUX -n4 *:build:* || exit 0
+
+      - name: build (retry)
+        run: $DOIT_LINUX *:build:*
 
       - name: dist
-        run: set -eux && source /home/runner/micromamba/envs/ci/bin/activate && doit -n4 *:dist:* || doit *:dist:*
+        run: $DOIT_LINUX *:dist:* || doit *:dist:*
 
       - name: upload (dist)
         uses: actions/upload-artifact@v3
@@ -87,7 +94,7 @@ jobs:
           path: ./build/locks
 
       - name: lint
-        run: set -eux && source /home/runner/micromamba/envs/ci/bin/activate && doit -n4 *:lint:* || doit *:lint:*
+        run: $DOIT_LINUX -n4 *:lint:* || doit *:lint:*
 
   # test:
   #   needs: [build]
