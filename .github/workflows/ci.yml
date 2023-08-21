@@ -22,12 +22,7 @@ defaults:
 
 jobs:
   build:
-    name: build
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: ['ubuntu']
-
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -55,6 +50,27 @@ jobs:
         with:
           name: jupyterlab-fonts-${{ github.run_number }}-dist
           path: ./dist
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: .github/locks/build_linux-64_lab4.0.conda.lock
+
+      - name: cache (node)
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: '**/node_modules'
+          key: |
+            ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
+
+      - name: lint
+        run: doit -n4 *:lint:* || doit *:lint:*
 
   # test:
   #   needs: [build]

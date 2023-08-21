@@ -279,7 +279,7 @@ actions = [
     "::atest_dir",
   ],
 ]
-file_dep = ["::env_atest_history", "::ext_list"]
+file_dep = ["::env_atest_history", "::ext_list", "::wheel"]
 meta = {doitoml = {env = {JUPYTERLAB_CONDA_PREFIX = "::env_lab_prefix"}}}
 targets = ["::atest_report_html"]
 
