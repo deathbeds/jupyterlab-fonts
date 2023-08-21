@@ -48,14 +48,14 @@ class C:
             or shutil.which("python3")
             or shutil.which("python.exe"),
         ).resolve()
-        CONDA = Path(
+        CONDA_EXE = Path(
             shutil.which("conda")
             or shutil.which("conda.exe")
             or shutil.which("conda.cmd"),
         ).resolve()
     else:
         PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
-        CONDA = "conda"
+        CONDA_EXE = "conda"
     PYM = [PY, "-m"]
 
 
@@ -78,12 +78,17 @@ class P:
 
 # handle dynamic sys.prefix
 os.environ.update(
-    JLF_SYS_PREFIX=str(P.SYS_PREFIX),
-    JLF_LAB=C.JLF_LAB,
-    THIS_PY=C.THIS_PY,
-    THIS_SUBDIR=C.THIS_SUBDIR,
-    DEFAULT_LAB=C.DEFAULT_LAB,
-    CONDA_EXE=C.CONDA
+    {
+        k: str(v)
+        for k, v in {
+            "CONDA_EXE": C.CONDA_EXE,
+            "DEFAULT_LAB": C.DEFAULT_LAB,
+            "JLF_LAB": C.JLF_LAB,
+            "JLF_SYS_PREFIX": P.SYS_PREFIX,
+            "THIS_PY": C.THIS_PY,
+            "THIS_SUBDIR": C.THIS_SUBDIR,
+        }.items()
+    },
 )
 
 # configure doitoml, allowing changing `sys.prefix` in CI
