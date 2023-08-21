@@ -14,7 +14,7 @@ env:
   PYTHONUNBUFFERED: 1
   MAMBA_NO_BANNER: 1
   # ours
-  CACHE_EPOCH: 1
+  CACHE_EPOCH: 2
 
 defaults:
   run:
@@ -46,7 +46,7 @@ jobs:
         with:
           path: |-
             **/node_modules
-            build/.cache`/yarn
+            build/.cache/yarn
           key: |
             ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
 
@@ -103,7 +103,7 @@ jobs:
         with:
           path: |-
             **/node_modules
-            build/.cache`/yarn
+            build/.cache/yarn
           key: |
             ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
 
