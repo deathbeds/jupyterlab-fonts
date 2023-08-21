@@ -27,11 +27,12 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - uses: mamba-org/setup-micromamba@v1
+      - name: install (conda)
+        uses: conda-incubator/setup-miniconda@v2
         with:
+          miniforge-variant: Mambaforge
           environment-file: .github/locks/lock_linux-64.conda.lock
-          environment-name: ci
-          init-shell: bash
+          use-mamba: true
 
       - name: cache (node)
         uses: actions/cache@v3
@@ -43,6 +44,9 @@ jobs:
 
       - name: preflight
         run: doit lock:preflight
+
+      - name: setup (python)
+        run: doit lock:install:build_linux-64_lab4.0
 
       - name: setup (js)
         run: doit js-root:setup
