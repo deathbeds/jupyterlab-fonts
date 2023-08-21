@@ -143,6 +143,8 @@
       ],
       "build_labext": [
         "::dt::conda_run_build",
+        "python",
+        "-m",
         "jupyter",
         "labextension",
         "build"
