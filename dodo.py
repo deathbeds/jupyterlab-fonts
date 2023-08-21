@@ -35,7 +35,6 @@ class C:
     DEFAULT_SUBDIR = "linux-64"
     CI = bool(json.loads(os.environ.get("CI", "0")))
     RTD = os.environ.get("READTHEDOCS") == "True"
-    SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("SKIP_JLPM_IF_CACHED", "0")))
     DOCS_IN_CI = bool(json.loads(os.environ.get("DOCS_IN_CI", "0")))
     TEST_IN_CI = bool(json.loads(os.environ.get("TEST_IN_CI", "0")))
     DOCS_OR_TEST_IN_CI = DOCS_IN_CI or TEST_IN_CI
@@ -54,15 +53,9 @@ class C:
             or shutil.which("conda.exe")
             or shutil.which("conda.cmd"),
         ).resolve()
-        JLPM = Path(
-            shutil.which("jlpm")
-            or shutil.which("jlpm.exe")
-            or shutil.which("jlpm.cmd"),
-        ).resolve()
     else:
         PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
         CONDA = "conda"
-        JLPM = "jlpm"
     PYM = [PY, "-m"]
 
 
@@ -104,7 +97,6 @@ globals().update(doitoml.tasks())
 # class C:
 #     """constants"""
 
-#     JLPM = ["jlpm"]
 #     LERNA = [*JLPM, "lerna"]
 #     PY = [sys.executable]
 #     PYM = [*PY, "-m"]
