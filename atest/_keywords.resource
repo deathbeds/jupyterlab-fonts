@@ -59,7 +59,7 @@ Build Custom JupyterLab Args
     [Arguments]    ${port}    ${token}    ${base url}
     IF    "%{JUPYTERLAB_CONDA_PREFIX}"
         @{args} =    Set Variable
-        ...    conda
+        ...    %{CONDA_EXE}
         ...    run
         ...    --prefix
         ...    %{JUPYTERLAB_CONDA_PREFIX}

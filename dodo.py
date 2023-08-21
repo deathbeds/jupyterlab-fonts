@@ -83,6 +83,7 @@ os.environ.update(
     THIS_PY=C.THIS_PY,
     THIS_SUBDIR=C.THIS_SUBDIR,
     DEFAULT_LAB=C.DEFAULT_LAB,
+    CONDA_EXE=C.CONDA
 )
 
 # configure doitoml, allowing changing `sys.prefix` in CI
