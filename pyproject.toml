@@ -60,6 +60,8 @@ SOURCE_DATE_EPOCH = ":get|0::json::build/git_info.json::SOURCE_DATE_EPOCH"
 # our stuff
 PY_NAME = ":get::toml::pyproject.toml::project::name"
 PY_VERSION = ":get::toml::pyproject.toml::project::version"
+# new yarn is dumb
+YARN_ENABLE_IMMUTABLE_INSTALLS = "false"
 # locks
 DEFAULT_PY = "3.11"
 THIS_PY = "3.11"

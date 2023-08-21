@@ -541,12 +541,12 @@ __metadata:
 
 "@deathbeds/jupyterlab-font-anonymous-pro@file:./packages/jupyterlab-font-anonymous-pro::locator=root-workspace-0b6124%40workspace%3A.":
   version: 3.0.0.alpha0
-  resolution: "@deathbeds/jupyterlab-font-anonymous-pro@file:./packages/jupyterlab-font-anonymous-pro#./packages/jupyterlab-font-anonymous-pro::hash=3b9352&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@deathbeds/jupyterlab-font-anonymous-pro@file:./packages/jupyterlab-font-anonymous-pro#./packages/jupyterlab-font-anonymous-pro::hash=0d811f&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@deathbeds/jupyterlab-fonts": ~3.0.0.alpha0
     "@jupyterlab/application": 3 || 4
     typeface-anonymous-pro: ^1.1.13
-  checksum: 422466b76ec2a21ae4e21282487df4175ba86f2d9ac7a3e74dde78e638899ebe75a3b65ed3036b8247f3fe197985b58648b7d5f0c33b7bac1b8e9db16632420c
+  checksum: ef4b9125c3a3dfeeea2f671ebd5567faf8cfc03fb2a9b542ff1880e2b569b19f7df142a63159ae9dd397454404e249f78bd9e6abed07652a82179c74992ce4f7
   languageName: node
   linkType: hard
 
@@ -563,11 +563,11 @@ __metadata:
 
 "@deathbeds/jupyterlab-font-dejavu-sans-mono@file:./packages/jupyterlab-font-dejavu-sans-mono::locator=root-workspace-0b6124%40workspace%3A.":
   version: 3.0.0.alpha0
-  resolution: "@deathbeds/jupyterlab-font-dejavu-sans-mono@file:./packages/jupyterlab-font-dejavu-sans-mono#./packages/jupyterlab-font-dejavu-sans-mono::hash=f94a53&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@deathbeds/jupyterlab-font-dejavu-sans-mono@file:./packages/jupyterlab-font-dejavu-sans-mono#./packages/jupyterlab-font-dejavu-sans-mono::hash=d76490&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@deathbeds/jupyterlab-fonts": ~3.0.0.alpha0
     "@jupyterlab/application": 3 || 4
-  checksum: 5d243a6f520fbfc390a3ea0c08f83a9fa00317aef48b61336634ea45fa316d8ffa8a7d4c0e722aac5e01e2d2cbdafe9fb4cdddc616af324c5b7e89d7310be159
+  checksum: 84ce0bf443c56ddef7cbba68b4d3d70ecc75b312af8ac989f13f9f56f3aabb7dc04966f283ee97aad938c466ba10d5c929d7f9f46b3936ade77d93e43c092362
   languageName: node
   linkType: hard
 
@@ -584,12 +584,12 @@ __metadata:
 
 "@deathbeds/jupyterlab-font-fira-code@file:./packages/jupyterlab-font-fira-code::locator=root-workspace-0b6124%40workspace%3A.":
   version: 3.0.0.alpha0
-  resolution: "@deathbeds/jupyterlab-font-fira-code@file:./packages/jupyterlab-font-fira-code#./packages/jupyterlab-font-fira-code::hash=b3eafe&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@deathbeds/jupyterlab-font-fira-code@file:./packages/jupyterlab-font-fira-code#./packages/jupyterlab-font-fira-code::hash=a49721&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@deathbeds/jupyterlab-fonts": ~3.0.0.alpha0
     "@jupyterlab/application": 3 || 4
     firacode: ^6.2.0
-  checksum: c5c25568676a0a5644d234bb17d08de6b1930a45075d1c153996dda22947aecf83bd572a2ec40497a83314ad53fc072215d66b527a9ecc658b3273eff2ed27f6
+  checksum: 9ecae40e8db5af447c98d41834e2c79821c8f8f507819a65f393d8cde826b1a1c3522824f6d00e1dd45de1874af9598c1cdef4a6288ccca7ae6b4ad8cee16d82
   languageName: node
   linkType: hard
 
@@ -606,14 +606,14 @@ __metadata:
 
 "@deathbeds/jupyterlab-fonts@file:./packages/jupyterlab-fonts::locator=root-workspace-0b6124%40workspace%3A.":
   version: 3.0.0.alpha0
-  resolution: "@deathbeds/jupyterlab-fonts@file:./packages/jupyterlab-fonts#./packages/jupyterlab-fonts::hash=efd41b&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@deathbeds/jupyterlab-fonts@file:./packages/jupyterlab-fonts#./packages/jupyterlab-fonts::hash=a417ee&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@jupyterlab/application": 3 || 4
     "@jupyterlab/mainmenu": 3 || 4
     "@jupyterlab/notebook": 3 || 4
     jss: ^10.10.0
     jss-preset-default: ^10.10.0
-  checksum: 8a2024a63a50b6f4c7f364a715d957d0a02ee2dd8497b40063c0da04b4546de272960c2b2cb47110f9c3e981821bce827b4d019765f05368c4965354bf27cc6d
+  checksum: b6aea9e3e4c99a967a2d1d41bc7b0debda54bf41d340625768cd60e9771f83d57a1735721063665a5d6ac5d77f3231209c6e85f753b70638b3ea728bc4cdc39a
   languageName: node
   linkType: hard
 
