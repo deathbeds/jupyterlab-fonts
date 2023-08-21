@@ -38,6 +38,9 @@ jobs:
           key: |
             ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
 
+      - name: preflight
+        run: set -eux && source /home/runner/micromamba/envs/ci/bin/activate && doit lock:preflight
+
       - name: build
         run: set -eux && source /home/runner/micromamba/envs/ci/bin/activate && doit -n4 *:build:* || doit *:build:*
 
@@ -50,7 +53,14 @@ jobs:
           name: jupyterlab-fonts-${{ github.run_number }}-dist
           path: ./dist
 
+      - name: upload (preflight)
+        uses: actions/upload-artifact@v3
+        with:
+          name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
+          path: ./build/locks
+
   lint:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -69,6 +79,12 @@ jobs:
           path: '**/node_modules'
           key: |
             ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
+
+      - name: download (preflight)
+        uses: actions/download-artifact@v3
+        with:
+          name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
+          path: ./build/locks
 
       - name: lint
         run: set -eux && source /home/runner/micromamba/envs/ci/bin/activate && doit -n4 *:lint:* || doit *:lint:*
