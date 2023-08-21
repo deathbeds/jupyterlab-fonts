@@ -188,7 +188,11 @@ Prepare to test a font editor
 Open Advanced Settings to Validate Fonts
     [Documentation]    use advanced settings to validate changes
     Update Globals For JupyterLab Version
-    Execute JupyterLab Command    Advanced Settings Editor
+    IF    ${CM VERSION} == 6
+        Execute JupyterLab Command    Advanced Settings Editor
+    ELSE
+        Execute JupyterLab Command    Advanced JSON Settings Editor
+    END
     ${settings} =    Set Variable    ${DOCK}//${TAB}//${ICON_SETTINGS}/../..
     ${fonts} =    Set Variable    ${SETTING_ITEM}//${ICON_FONT}
     Wait Until Page Contains Element    ${fonts}

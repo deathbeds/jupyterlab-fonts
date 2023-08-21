@@ -539,85 +539,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@deathbeds/jupyterlab-font-anonymous-pro@file:./packages/jupyterlab-font-anonymous-pro::locator=root-workspace-0b6124%40workspace%3A.":
-  version: 3.0.0.alpha0
-  resolution: "@deathbeds/jupyterlab-font-anonymous-pro@file:./packages/jupyterlab-font-anonymous-pro#./packages/jupyterlab-font-anonymous-pro::hash=0d811f&locator=root-workspace-0b6124%40workspace%3A."
-  dependencies:
-    "@deathbeds/jupyterlab-fonts": ~3.0.0.alpha0
-    "@jupyterlab/application": 3 || 4
-    typeface-anonymous-pro: ^1.1.13
-  checksum: ef4b9125c3a3dfeeea2f671ebd5567faf8cfc03fb2a9b542ff1880e2b569b19f7df142a63159ae9dd397454404e249f78bd9e6abed07652a82179c74992ce4f7
-  languageName: node
-  linkType: hard
-
-"@deathbeds/jupyterlab-font-anonymous-pro@workspace:packages/jupyterlab-font-anonymous-pro":
+"@deathbeds/jupyterlab-font-anonymous-pro@workspace:*, @deathbeds/jupyterlab-font-anonymous-pro@workspace:packages/jupyterlab-font-anonymous-pro":
   version: 0.0.0-use.local
   resolution: "@deathbeds/jupyterlab-font-anonymous-pro@workspace:packages/jupyterlab-font-anonymous-pro"
   dependencies:
-    "@deathbeds/jupyterlab-fonts": "file:./jupyterlab-fonts"
+    "@deathbeds/jupyterlab-fonts": "workspace:*"
     "@jupyterlab/application": 3 || 4
     "@jupyterlab/builder": ^4.0.5
     typeface-anonymous-pro: ^1.1.13
   languageName: unknown
   linkType: soft
 
-"@deathbeds/jupyterlab-font-dejavu-sans-mono@file:./packages/jupyterlab-font-dejavu-sans-mono::locator=root-workspace-0b6124%40workspace%3A.":
-  version: 3.0.0.alpha0
-  resolution: "@deathbeds/jupyterlab-font-dejavu-sans-mono@file:./packages/jupyterlab-font-dejavu-sans-mono#./packages/jupyterlab-font-dejavu-sans-mono::hash=d76490&locator=root-workspace-0b6124%40workspace%3A."
-  dependencies:
-    "@deathbeds/jupyterlab-fonts": ~3.0.0.alpha0
-    "@jupyterlab/application": 3 || 4
-  checksum: 84ce0bf443c56ddef7cbba68b4d3d70ecc75b312af8ac989f13f9f56f3aabb7dc04966f283ee97aad938c466ba10d5c929d7f9f46b3936ade77d93e43c092362
-  languageName: node
-  linkType: hard
-
-"@deathbeds/jupyterlab-font-dejavu-sans-mono@workspace:packages/jupyterlab-font-dejavu-sans-mono":
+"@deathbeds/jupyterlab-font-dejavu-sans-mono@workspace:*, @deathbeds/jupyterlab-font-dejavu-sans-mono@workspace:packages/jupyterlab-font-dejavu-sans-mono":
   version: 0.0.0-use.local
   resolution: "@deathbeds/jupyterlab-font-dejavu-sans-mono@workspace:packages/jupyterlab-font-dejavu-sans-mono"
   dependencies:
-    "@deathbeds/jupyterlab-fonts": "file:./jupyterlab-fonts"
+    "@deathbeds/jupyterlab-fonts": "workspace:*"
     "@jupyterlab/application": 3 || 4
     "@jupyterlab/builder": ^4.0.5
     dejavu-fonts-ttf: ^2.37.3
   languageName: unknown
   linkType: soft
 
-"@deathbeds/jupyterlab-font-fira-code@file:./packages/jupyterlab-font-fira-code::locator=root-workspace-0b6124%40workspace%3A.":
-  version: 3.0.0.alpha0
-  resolution: "@deathbeds/jupyterlab-font-fira-code@file:./packages/jupyterlab-font-fira-code#./packages/jupyterlab-font-fira-code::hash=a49721&locator=root-workspace-0b6124%40workspace%3A."
-  dependencies:
-    "@deathbeds/jupyterlab-fonts": ~3.0.0.alpha0
-    "@jupyterlab/application": 3 || 4
-    firacode: ^6.2.0
-  checksum: 9ecae40e8db5af447c98d41834e2c79821c8f8f507819a65f393d8cde826b1a1c3522824f6d00e1dd45de1874af9598c1cdef4a6288ccca7ae6b4ad8cee16d82
-  languageName: node
-  linkType: hard
-
-"@deathbeds/jupyterlab-font-fira-code@workspace:packages/jupyterlab-font-fira-code":
+"@deathbeds/jupyterlab-font-fira-code@workspace:*, @deathbeds/jupyterlab-font-fira-code@workspace:packages/jupyterlab-font-fira-code":
   version: 0.0.0-use.local
   resolution: "@deathbeds/jupyterlab-font-fira-code@workspace:packages/jupyterlab-font-fira-code"
   dependencies:
-    "@deathbeds/jupyterlab-fonts": "file:./jupyterlab-fonts"
+    "@deathbeds/jupyterlab-fonts": "workspace:*"
     "@jupyterlab/application": 3 || 4
     "@jupyterlab/builder": ^4.0.5
     firacode: ^6.2.0
   languageName: unknown
   linkType: soft
 
-"@deathbeds/jupyterlab-fonts@file:./packages/jupyterlab-fonts::locator=root-workspace-0b6124%40workspace%3A.":
-  version: 3.0.0.alpha0
-  resolution: "@deathbeds/jupyterlab-fonts@file:./packages/jupyterlab-fonts#./packages/jupyterlab-fonts::hash=a417ee&locator=root-workspace-0b6124%40workspace%3A."
-  dependencies:
-    "@jupyterlab/application": 3 || 4
-    "@jupyterlab/mainmenu": 3 || 4
-    "@jupyterlab/notebook": 3 || 4
-    jss: ^10.10.0
-    jss-preset-default: ^10.10.0
-  checksum: b6aea9e3e4c99a967a2d1d41bc7b0debda54bf41d340625768cd60e9771f83d57a1735721063665a5d6ac5d77f3231209c6e85f753b70638b3ea728bc4cdc39a
-  languageName: node
-  linkType: hard
-
-"@deathbeds/jupyterlab-fonts@workspace:packages/jupyterlab-fonts":
+"@deathbeds/jupyterlab-fonts@workspace:*, @deathbeds/jupyterlab-fonts@workspace:packages/jupyterlab-fonts":
   version: 0.0.0-use.local
   resolution: "@deathbeds/jupyterlab-fonts@workspace:packages/jupyterlab-fonts"
   dependencies:
@@ -636,10 +591,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@deathbeds/meta-jupyterlab-fonts@workspace:packages/_meta"
   dependencies:
-    "@deathbeds/jupyterlab-font-anonymous-pro": "file:../jupyterlab-font-anonymous-pro"
-    "@deathbeds/jupyterlab-font-dejavu-sans-mono": "file:../jupyterlab-font-dejavu-sans-mono"
-    "@deathbeds/jupyterlab-font-fira-code": "file:../jupyterlab-font-fira-code"
-    "@deathbeds/jupyterlab-fonts": "file:../jupyterlab-fonts"
+    "@deathbeds/jupyterlab-font-anonymous-pro": "workspace:*"
+    "@deathbeds/jupyterlab-font-dejavu-sans-mono": "workspace:*"
+    "@deathbeds/jupyterlab-font-fira-code": "workspace:*"
+    "@deathbeds/jupyterlab-fonts": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -790,12 +745,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/schemas@npm:^29.6.0":
-  version: 29.6.0
-  resolution: "@jest/schemas@npm:29.6.0"
+"@jest/schemas@npm:^29.6.3":
+  version: 29.6.3
+  resolution: "@jest/schemas@npm:29.6.3"
   dependencies:
     "@sinclair/typebox": ^0.27.8
-  checksum: c00511c69cf89138a7d974404d3a5060af375b5a52b9c87215d91873129b382ca11c1ff25bd6d605951404bb381ddce5f8091004a61e76457da35db1f5c51365
+  checksum: 910040425f0fc93cd13e68c750b7885590b8839066dfa0cd78e7def07bbb708ad869381f725945d66f2284de5663bbecf63e8fdd856e2ae6e261ba30b1687e93
   languageName: node
   linkType: hard
 
@@ -1590,14 +1545,14 @@ __metadata:
   linkType: hard
 
 "@lezer/generator@npm:^1.2.2":
-  version: 1.4.2
-  resolution: "@lezer/generator@npm:1.4.2"
+  version: 1.5.0
+  resolution: "@lezer/generator@npm:1.5.0"
   dependencies:
     "@lezer/common": ^1.0.2
     "@lezer/lr": ^1.3.0
   bin:
     lezer-generator: src/lezer-generator.cjs
-  checksum: 7ad7fbd2ec019067de65e6a24981f68998471def23be8556b637b8d1b00b65a3eb6e4c06bdbe3b4d7133a81fbad6c101742726c50a8dddab26a36384a0e86aa0
+  checksum: ef585cced8468df7005020011e60faa6372a7fd43cf6f221c7b03a7537231c19c72846922a076383f21e6756a9030eba1e28eee374e40a9801ad77c093b8b20a
   languageName: node
   linkType: hard
 
@@ -3656,9 +3611,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001517":
-  version: 1.0.30001521
-  resolution: "caniuse-lite@npm:1.0.30001521"
-  checksum: be2a2b2cd3be03401887aaa31b89f3e7c6230289e6ef704e224268389cc136480fca502ac9e5001a65ff1e50459d3d95f8c4b2d39f878ab9843af3d6f372c8bb
+  version: 1.0.30001522
+  resolution: "caniuse-lite@npm:1.0.30001522"
+  checksum: 56e3551c02ae595085114073cf242f7d9d54d32255c80893ca9098a44f44fc6eef353936f234f31c7f4cb894dd2b6c9c4626e30649ee29e04d70aa127eeefeb0
   languageName: node
   linkType: hard
 
@@ -4376,10 +4331,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diff-sequences@npm:^29.4.3":
-  version: 29.4.3
-  resolution: "diff-sequences@npm:29.4.3"
-  checksum: 28b265e04fdddcf7f9f814effe102cc95a9dec0564a579b5aed140edb24fc345c611ca52d76d725a3cab55d3888b915b5e8a4702e0f6058968a90fa5f41fcde7
+"diff-sequences@npm:^29.6.3":
+  version: 29.6.3
+  resolution: "diff-sequences@npm:29.6.3"
+  checksum: f4914158e1f2276343d98ff5b31fc004e7304f5470bf0f1adb2ac6955d85a531a6458d33e87667f98f6ae52ebd3891bb47d420bb48a5bd8b7a27ee25b20e33aa
   languageName: node
   linkType: hard
 
@@ -6155,8 +6110,8 @@ __metadata:
   linkType: hard
 
 "inquirer@npm:^8.2.4":
-  version: 8.2.4
-  resolution: "inquirer@npm:8.2.4"
+  version: 8.2.6
+  resolution: "inquirer@npm:8.2.6"
   dependencies:
     ansi-escapes: ^4.2.1
     chalk: ^4.1.1
@@ -6172,8 +6127,8 @@ __metadata:
     string-width: ^4.1.0
     strip-ansi: ^6.0.0
     through: ^2.3.6
-    wrap-ansi: ^7.0.0
-  checksum: dfcb6529d3af443dfea2241cb471508091b51f5121a088fdb8728b23ec9b349ef0a5e13a0ef2c8e19457b0bed22f7cbbcd561f7a4529d084c562a58c605e2655
+    wrap-ansi: ^6.0.1
+  checksum: 387ffb0a513559cc7414eb42c57556a60e302f820d6960e89d376d092e257a919961cd485a1b4de693dbb5c0de8bc58320bfd6247dfd827a873aa82a4215a240
   languageName: node
   linkType: hard
 
@@ -6726,21 +6681,21 @@ __metadata:
   linkType: hard
 
 "jest-diff@npm:>=29.4.3 < 30":
-  version: 29.6.2
-  resolution: "jest-diff@npm:29.6.2"
+  version: 29.6.3
+  resolution: "jest-diff@npm:29.6.3"
   dependencies:
     chalk: ^4.0.0
-    diff-sequences: ^29.4.3
-    jest-get-type: ^29.4.3
-    pretty-format: ^29.6.2
-  checksum: 0effd66a0c23f8c139ebf7ca99ed30b479b86fff66f19ad4869f130aaf7ae6a24ca1533f697b7e4930cbe2ddffc85387723fcca673501c653fb77a38f538e959
+    diff-sequences: ^29.6.3
+    jest-get-type: ^29.6.3
+    pretty-format: ^29.6.3
+  checksum: 23b0a88efeab36566386f059f3da340754d2860969cbc34805154e2377714e37e3130e21a791fc68008fb460bbf5edd7ec43c16d96d15797b32ccfae5160fe37
   languageName: node
   linkType: hard
 
-"jest-get-type@npm:^29.4.3":
-  version: 29.4.3
-  resolution: "jest-get-type@npm:29.4.3"
-  checksum: 6ac7f2dde1c65e292e4355b6c63b3a4897d7e92cb4c8afcf6d397f2682f8080e094c8b0b68205a74d269882ec06bf696a9de6cd3e1b7333531e5ed7b112605ce
+"jest-get-type@npm:^29.6.3":
+  version: 29.6.3
+  resolution: "jest-get-type@npm:29.6.3"
+  checksum: 88ac9102d4679d768accae29f1e75f592b760b44277df288ad76ce5bf038c3f5ce3719dea8aa0f035dac30e9eb034b848ce716b9183ad7cc222d029f03e92205
   languageName: node
   linkType: hard
 
@@ -8992,14 +8947,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:^29.6.2":
-  version: 29.6.2
-  resolution: "pretty-format@npm:29.6.2"
+"pretty-format@npm:^29.6.3":
+  version: 29.6.3
+  resolution: "pretty-format@npm:29.6.3"
   dependencies:
-    "@jest/schemas": ^29.6.0
+    "@jest/schemas": ^29.6.3
     ansi-styles: ^5.0.0
     react-is: ^18.0.0
-  checksum: a0f972a44f959023c0df9cdfe9eed7540264d7f7ddf74667db8a5294444d5aa153fd47d20327df10ae86964e2ceec10e46ea06b1a5c9c12e02348b78c952c9fc
+  checksum: 4e1c0db48e65571c22e80ff92123925ff8b3a2a89b71c3a1683cfde711004d492de32fe60c6bc10eea8bf6c678e5cbe544ac6c56cb8096e1eb7caf856928b1c4
   languageName: node
   linkType: hard
 
@@ -11209,7 +11164,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wrap-ansi@npm:^6.2.0":
+"wrap-ansi@npm:^6.0.1, wrap-ansi@npm:^6.2.0":
   version: 6.2.0
   resolution: "wrap-ansi@npm:6.2.0"
   dependencies:

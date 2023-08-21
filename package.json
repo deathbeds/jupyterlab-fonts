@@ -1,10 +1,8 @@
 {
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "bootstrap": "jlpm || jlpm || jlpm && jlpm lint && jlpm bootstrap:js",
     "bootstrap:js": "jlpm lerna bootstrap && jlpm build",
@@ -16,7 +14,7 @@
     "clean:lib": "lerna exec --parallel -- rimraf lib",
     "clean:test": "rimraf _testoutput",
     "lint": "jlpm lint:py && jlpm lint:ts && jlpm lint:sh",
-    "lint:prettier": "prettier --list-different --write \"./*{json,md,yml}\" \"{packages,.github,.binder}/**/*.{ts,tsx,css,json,md}\"",
+    "lint:prettier": "prettier --cache  --cache-location=build/.cache/prettier --list-different --write \"./*{json,md,yml}\" \"{packages,.github,.binder}/**/*.{ts,tsx,css,json,md}\"",
     "lint:py": "black nbjss setup.py && flake8 nbjss setup.py",
     "lint:robot": "python -m robot.tidy --inplace tests/**/*.robot && rflint --configure TooManyTestSteps:40 --configure TooFewKeywordSteps:0  tests/**/*.robot",
     "lint:sh": "beautysh -i 2 postBuild",
@@ -54,12 +52,6 @@
     ],
     "skip-full": true
   },
-  "resolutions": {
-    "@deathbeds/jupyterlab-font-anonymous-pro": "file:./packages/jupyterlab-font-anonymous-pro",
-    "@deathbeds/jupyterlab-font-dejavu-sans-mono": "file:./packages/jupyterlab-font-dejavu-sans-mono",
-    "@deathbeds/jupyterlab-font-fira-code": "file:./packages/jupyterlab-font-fira-code",
-    "@deathbeds/jupyterlab-fonts": "file:./packages/jupyterlab-fonts"
-  },
   "devDependencies": {
     "@ephesoft/webpack.istanbul.loader": "^2.1.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
@@ -86,12 +78,15 @@
       "pj": [
         "package.json"
       ],
+      "yarnrc": [
+        ".yarnrc.yml"
+      ],
       "all_pj": [
         "::pj",
         ":glob::packages::*/package.json"
       ],
       "yarn_history": [
-        ".yarn/install-state.gz"
+        "node_modules/.yarn-state.yml"
       ],
       "all_md": [
         ":glob::.::*.md",
@@ -135,7 +130,10 @@
       ]
     },
     "env": {
-      "JLF_SHARED": "src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds"
+      "JLF_SHARED": "src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds",
+      "NX_CACHE_DIRECTORY": "build/.cache/nx",
+      "NX_PROJECT_GRAPH_CACHE_DIRECTORY": "build/.cache/nx",
+      "YARN_CACHE_FOLDER": "build/.cache/yarn"
     },
     "tokens": {
       "jlpm": [
@@ -152,6 +150,7 @@
     "tasks": {
       "setup": {
         "file_dep": [
+          "::yarnrc",
           "::pj",
           "::dt::env_build_history",
           "::all_pj"
@@ -170,7 +169,14 @@
             "--strategy=fewer",
             "--fail"
           ]
-        ]
+        ],
+        "meta": {
+          "doitoml": {
+            "env": {
+              "YARN_ENABLE_IMMUTABLE_INSTALLS": "false"
+            }
+          }
+        }
       },
       "build": {
         "pre": {

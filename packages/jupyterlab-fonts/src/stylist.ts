@@ -67,6 +67,7 @@ export class Stylist {
     const oldCellCount = this._notebookCellCount.get(notebook) || -1;
 
     let needsUpdate = newCellCount !== oldCellCount;
+
     for (const cell of notebook.widgets) {
       cell.node.dataset.jpfCellId = cell.model.id;
       let tags = [
@@ -78,26 +79,26 @@ export class Stylist {
         delete cell.node.dataset.jpfCellTags;
       }
 
-      if (!needsUpdate) {
-        const meta =
-          compat.getCellMetadata(cell.model, PACKAGE_NAME) || JSONExt.emptyObject;
-        let cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
-        if (!JSONExt.deepEqual(meta, cached)) {
-          needsUpdate = true;
-        }
-        this._cellStyleCache.set(cell.model.id, meta);
+      const meta =
+        compat.getCellMetadata(cell.model, PACKAGE_NAME) || JSONExt.emptyObject;
+      let cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
+      if (!JSONExt.deepEqual(meta, cached)) {
+        needsUpdate = true;
       }
+      this._cellStyleCache.set(cell.model.id, meta);
     }
 
-    if (needsUpdate) {
-      this.stylesheet(
-        notebook.model
-          ? (compat.getPanelMetadata(notebook.model, PACKAGE_NAME) as SCHEMA.ISettings)
-          : null,
-        notebook.parent as NotebookPanel,
-      );
-      this._notebookCellCount.set(notebook, newCellCount);
+    if (!needsUpdate) {
+      return;
     }
+
+    this.stylesheet(
+      notebook.model
+        ? (compat.getPanelMetadata(notebook.model, PACKAGE_NAME) as SCHEMA.ISettings)
+        : null,
+      notebook.parent as NotebookPanel,
+    );
+    this._notebookCellCount.set(notebook, newCellCount);
   }
 
   private _onDisposed(panel: NotebookPanel) {

@@ -1,14 +1,10 @@
 __pycache__
 _d/
 _testoutput/
-.coverage
 .envs/
 .eslintcache
 .ipynb_checkpoints/
 .pabotsuitenames
-.pnp*
-.yarn
-.yarn-packages/
 *.doit*
 *.egg-info/
 *.log
@@ -17,7 +13,6 @@ _testoutput/
 build/
 dist/
 lib/
-nbjss/static/nbjss.js
 node_modules/
 packages/*/lib
 Untitled*.ipynb

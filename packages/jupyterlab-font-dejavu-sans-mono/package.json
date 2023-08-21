@@ -36,7 +36,7 @@
     "@jupyterlab/application": "3 || 4"
   },
   "devDependencies": {
-    "@deathbeds/jupyterlab-fonts": "file:./jupyterlab-fonts",
+    "@deathbeds/jupyterlab-fonts": "workspace:*",
     "@jupyterlab/builder": "^4.0.5",
     "dejavu-fonts-ttf": "^2.37.3"
   },

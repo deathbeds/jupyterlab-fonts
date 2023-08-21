@@ -35,7 +35,7 @@
     "firacode": "^6.2.0"
   },
   "devDependencies": {
-    "@deathbeds/jupyterlab-fonts": "file:./jupyterlab-fonts",
+    "@deathbeds/jupyterlab-fonts": "workspace:*",
     "@jupyterlab/builder": "^4.0.5"
   },
   "jupyterlab": {
