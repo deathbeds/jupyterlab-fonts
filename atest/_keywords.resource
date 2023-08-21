@@ -34,7 +34,7 @@ Initialize Jupyter Server
     ...    ${args[0]}
     ...    ${port}
     ...    ${base url}
-    ...    ${notebook dir}
+    ...    ${notebook_dir}
     ...    ${token}
     ...    @{rest_args}
     ...    &{config}
@@ -66,7 +66,7 @@ Build Custom JupyterLab Args
         ...    --no-capture-output
         ...    jupyter-lab
     ELSE
-        ${args} =    Loads    ${JUPYTERLAB_EXE}
+        @{args} =    Loads    ${JUPYTERLAB_EXE}
     END
     @{args} =    Set Variable
     ...    @{args}
@@ -261,7 +261,6 @@ Set Cell Metadata
     Maybe Open JupyterLab Sidebar    Property Inspector
     Maybe Expand Panel With Title    Advanced Tools
     Maybe Open Cell Metadata JSON
-    ${sel} =    Set Variable    css:${JLAB CSS ACTIVE DOC CELLS}:nth-child(${idx})
     Click Element    css:${JLAB CSS ACTIVE DOC CELLS}:nth-child(${idx})
     Set CodeMirror Value    ${CSS_LAB_CELL_META_TOOL} ${CM CSS EDITOR}    ${metadata}
     ${commit} =    Set Variable    css:${CSS_LAB_CELL_META_TOOL} ${CSS_LAB_META_COMMIT}

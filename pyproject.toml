@@ -171,6 +171,16 @@ actions = [["::conda_run_build", "ruff", "--quiet", "::all_py"]]
 doc = "Check Python with ruff"
 file_dep = ["::all_py", '::env_build_history', "::ppt"]
 
+[tool.doitoml.tasks.lint.ssort]
+actions = [["::conda_run_build", "ssort", "--diff", "--check", "::all_py"]]
+doc = "Check python source with `ssort`"
+file_dep = ["::ppt", "::all_py", '::env_build_history']
+
+[tool.doitoml.tasks.lint.robot]
+actions = [["::conda_run_build", "robocop", "::atest_dir"]]
+doc = "Check robotframework code with `robotframework-robocop`"
+file_dep = ["::all_robot", "::env_build_history"]
+
 [tool.doitoml.tasks.dist.preflight]
 actions = [{py = {"scripts.actions:git_info" = {}}}]
 doc = "write out git info to json"
@@ -366,3 +376,17 @@ addopts = [
 ]
 cache_dir = "build/.cache/pytest"
 script_launch_mode = "subprocess"
+
+
+[tool.robocop]
+exclude = [
+  "inline-if-can-be-used",
+  "missing-doc-keyword",
+  "missing-doc-test-case",
+  "too-many-calls-in-test-case",
+  "unnecessary-string-conversion",
+  "wrong-case-in-keyword-name",
+  "too-long-test-case",
+  "wrong-import-order",
+  "too-many-calls-in-keyword",
+]

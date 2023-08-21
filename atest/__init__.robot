@@ -9,7 +9,7 @@ Resource            ./_keywords.resource
 Suite Setup         Prepare for testing fonts
 Suite Teardown      Clean up after testing fonts
 
-Force Tags          py:${py}    os:${os}    attempt:${attempt}
+Test Tags           py:${py}    os:${os}    attempt:${attempt}
 
 
 *** Variables ***
