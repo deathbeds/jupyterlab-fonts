@@ -56,6 +56,9 @@
       "npm_dist": [
         "../../dist/deathbeds-jupyterlab-font-anonymous-pro-${JLF_VERSION}.tgz"
       ],
+      "dist_pkg_json": [
+        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-anonymous-pro/package.json"
+      ],
       "all_style": [
         ":rglob::style::*.*"
       ],
@@ -64,6 +67,21 @@
       ]
     },
     "tasks": {
+      "ext": {
+        "actions": [
+          [
+            "::js-root::build_labext"
+          ]
+        ],
+        "file_dep": [
+          "::all_style",
+          "::js-root::tsbuildinfo",
+          "::js-root::yarn_history"
+        ],
+        "targets": [
+          "::dist_pkg_json"
+        ]
+      },
       "dist": {
         "meta": {
           "doitoml": {

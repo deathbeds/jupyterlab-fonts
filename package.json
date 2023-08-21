@@ -122,11 +122,6 @@
       "all_tsconfig": [
         ":glob::.::tsconfig*.json",
         ":glob::packages::*/tsconfig*.json"
-      ],
-      "all_dist_pkg_json": [
-        "${JLF_SHARED}/jupyterlab-fonts/package.json",
-        "${JLF_SHARED}/jupyterlab-font-fira-code/package.json",
-        "${JLF_SHARED}/jupyterlab-font-anonymous-pro/package.json"
       ]
     },
     "env": {
@@ -145,6 +140,12 @@
         "lerna",
         "run",
         "--stream"
+      ],
+      "build_labext": [
+        "::dt::conda_run_build",
+        "jupyter",
+        "labextension",
+        "build"
       ]
     },
     "tasks": {
@@ -209,22 +210,6 @@
           ],
           "targets": [
             "::tsbuildinfo"
-          ]
-        },
-        "ext": {
-          "actions": [
-            [
-              "::lerna",
-              "labextension:build"
-            ]
-          ],
-          "file_dep": [
-            "::tsbuildinfo",
-            "::all_css",
-            "::all_pj"
-          ],
-          "targets": [
-            "::all_dist_pkg_json"
           ]
         }
       },

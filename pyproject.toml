@@ -189,14 +189,7 @@ targets = ["::git_info"]
 
 [tool.doitoml.tasks.dist.flit]
 actions = [["::conda_run_build", "flit", "build"]]
-file_dep = [
-  "::js-root::all_dist_pkg_json",
-  "::all_py_src",
-  "::ppt",
-  "::license",
-  "::readme",
-  "::git_info",
-]
+file_dep = ["::js-*::dist_pkg_json", "::all_py_src", "::ppt", "::license", "::readme", "::git_info"]
 targets = ["::wheel", "::sdist"]
 
 [tool.doitoml.tasks.dist.hash]

@@ -60,9 +60,27 @@
       ],
       "here": [
         "."
+      ],
+      "dist_pkg_json": [
+        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-fira-code/package.json"
       ]
     },
     "tasks": {
+      "ext": {
+        "actions": [
+          [
+            "::js-root::build_labext"
+          ]
+        ],
+        "file_dep": [
+          "::all_style",
+          "::js-root::tsbuildinfo",
+          "::js-root::yarn_history"
+        ],
+        "targets": [
+          "::dist_pkg_json"
+        ]
+      },
       "dist": {
         "meta": {
           "doitoml": {
