@@ -74,6 +74,10 @@ jobs:
           name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
           path: ./build/locks
 
+      - name: Rename uncached conda packages
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
+
+
   lint:
     needs: [build]
     runs-on: ubuntu-latest
@@ -112,6 +116,9 @@ jobs:
 
       - name: lint
         run: doit *:lint:*
+
+      - name: Rename uncached conda packages
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
 
   test:
     needs: [build]
@@ -179,3 +186,6 @@ jobs:
           name: |
             jupyterlab-fonts-${{ github.run_number }}-reports-${{ runner.os }}-f${{ matrix.lab-version }}
           path: ./build/reports
+
+      - name: Rename uncached conda packages
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
