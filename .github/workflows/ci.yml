@@ -161,21 +161,21 @@ jobs:
           path: ./dist
 
       - name: test (pytest)
-        run: doit test:pytest || doit list
+        run: doit dt:test:pytest || doit list
 
       - name: test (pytest, retry)
-        run: doit test:pytest
+        run: doit dt:test:pytest
 
       - name: test (robot)
-        run: doit test || doit list
+        run: doit dt:test:robot || doit list
 
       - name: test (robot, retry)
-        run: doit test
+        run: doit dt:test:robot
 
       - name: upload (reports)
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: |
-            jupyterlab-fonts-${{ github.run_number }}-reports-${{ runner.os }}-f${{ matrix.python-version }}
+            jupyterlab-fonts-${{ github.run_number }}-reports-${{ runner.os }}-f${{ matrix.lab-version }}
           path: ./build/reports
