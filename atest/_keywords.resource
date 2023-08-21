@@ -64,10 +64,14 @@ Build Custom JupyterLab Args
         ...    --prefix
         ...    %{JUPYTERLAB_CONDA_PREFIX}
         ...    --no-capture-output
-        ...    jupyter-lab
+        ...    python
+        ...    -m
+        ...    jupyter
+        ...    lab
     ELSE
         @{args} =    Loads    ${JUPYTERLAB_EXE}
     END
+    ${config} =    Normalize Path    ${ROOT}${/}atest${/}fixtures${/}jupyter_config.json
     @{args} =    Set Variable
     ...    @{args}
     ...    --no-browser
@@ -76,7 +80,7 @@ Build Custom JupyterLab Args
     ...    --port\=${port}
     ...    --ServerApp.token\=${token}
     ...    --ServerApp.base_url\=${base url}
-    ...    --config\=${ROOT}${/}atest${/}fixtures${/}jupyter_config.json
+    ...    --config\=${config}
     Log    ${args}
     RETURN    @{args}
 
