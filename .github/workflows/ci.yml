@@ -14,7 +14,7 @@ env:
   PYTHONUNBUFFERED: 1
   MAMBA_NO_BANNER: 1
   # ours
-  CACHE_EPOCH: 0
+  CACHE_EPOCH: 1
 
 defaults:
   run:
@@ -34,22 +34,21 @@ jobs:
           environment-file: .github/locks/lock_linux-64.conda.lock
           use-mamba: true
 
-      - name: cache (node)
-        uses: actions/cache@v3
-        id: cache-node-modules
-        with:
-          path: '**/node_modules'
-          key: |
-            ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
-
       - name: preflight
         run: doit lock:preflight
 
       - name: setup (python)
         run: doit lock:install:build_linux-64_lab4.0
 
-      - name: DELETEME
-        run: ls -lathr .envs/*/bin/*
+      - name: cache (node)
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: |-
+            **/node_modules
+            build/.cache`/yarn
+          key: |
+            ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
 
       - name: setup (js)
         run: doit js-root:setup
@@ -75,35 +74,44 @@ jobs:
           name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
           path: ./build/locks
 
-  # lint:
-  #   needs: [build]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: checkout
-  #       uses: actions/checkout@v3
+  lint:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
 
-  #     - uses: mamba-org/setup-micromamba@v1
-  #       with:
-  #         environment-file: .github/locks/lock_linux-64.conda.lock
-  #         environment-name: ci
-  #         init-shell: bash
+      - name: install (conda)
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniforge-variant: Mambaforge
+          environment-file: .github/locks/lock_linux-64.conda.lock
+          use-mamba: true
 
-  #     - name: cache (node)
-  #       uses: actions/cache@v3
-  #       id: cache-node-modules
-  #       with:
-  #         path: '**/node_modules'
-  #         key: |
-  #           ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
+      - name: download (preflight)
+        uses: actions/download-artifact@v3
+        with:
+          name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
+          path: ./build/locks
 
-  #     - name: download (preflight)
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
-  #         path: ./build/locks
+      - name: setup (python)
+        run: doit lock:install:build_linux-64_lab4.0
 
-  #     - name: lint
-  #       run: doit -n4 *:lint:* || doit *:lint:*
+      - name: cache (node)
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: |-
+            **/node_modules
+            build/.cache`/yarn
+          key: |
+            ${{ env.CACHE_EPOCH }}-ubuntu-node-modules-${{ hashFiles('yarn.lock') }}
+
+      - name: setup (js)
+        run: doit js-root:setup
+
+      - name: lint
+        run: doit *:lint:*
 
   # test:
   #   needs: [build]
