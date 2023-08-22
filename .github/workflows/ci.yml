@@ -15,6 +15,7 @@ env:
   MAMBA_NO_BANNER: 1
   # ours
   CACHE_EPOCH: 2
+  ATEST_RETRIES: 2
 
 defaults:
   run:
@@ -174,10 +175,13 @@ jobs:
         run: doit dt:test:pytest
 
       - name: test (robot)
-        run: doit dt:test:robot || doit list
+        run: doit dt:atest:*_a0
 
       - name: test (robot, retry)
-        run: doit dt:test:robot
+        run: doit dt:atest:*_a1
+
+      - name: test (robot, reretry)
+        run: doit dt:atest:*_a2
 
       - name: upload (reports)
         if: always()

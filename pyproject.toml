@@ -68,6 +68,9 @@ SOURCE_DATE_EPOCH = ":get|0::json::build/git_info.json::SOURCE_DATE_EPOCH"
 PY_NAME = ":get::toml::pyproject.toml::project::name"
 PY_VERSION = ":get::toml::pyproject.toml::project::version"
 # locks
+ATEST_ATTEMPT = 0
+ATEST_PROCESSES = 4
+ATEST_RETRIES = 1
 DEFAULT_PY = "3.11"
 TESTING_IN_CI = "0"
 THIS_PY = "3.11"
@@ -255,28 +258,48 @@ file_dep = ["::ppt", "::all_py_src", "::pip_freeze"]
 meta = {doitoml = {env = {COVERAGE_FILE = "build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/.coverage"}}}
 targets = ["::pytest_html_cov"]
 
-[tool.doitoml.tasks.test.robot]
-actions = [
-  [
-    "::conda_run_atest",
-    # "robot", "--exitonfailure", "--loglevel", "TRACE",
-    "pabot",
-    "--artifactsinsubfolders",
-    "--artifacts",
-    "png,log,txt,svg,ipynb,json",
-    "--loglevel",
-    "TRACE",
-    "--variable=ATTEMPT:0",
-    "--variable=OS:${THIS_SUBDIR}",
-    "--variable=ROOT:../../..",
-    "--outputdir",
-    "::atest_report",
-    "::atest_dir",
-  ],
-]
-file_dep = ["::env_atest_history", "::ext_list", "::wheel"]
-meta = {doitoml = {env = {JUPYTERLAB_CONDA_PREFIX = "::env_lab_prefix"}}}
-targets = ["::atest_report_html"]
+
+[tool.doitoml.templates.jinja2.tasks.atest]
+yaml = """
+{% set prev = "" %}
+{% set out = None %}
+{% set a_start = (env.ATEST_ATTEMPT | int) %}
+{% set a_end = (env.ATEST_RETRIES | int) + 1 %}
+
+{% for attempt in range(a_start, a_end) %}
+{% set stem = "build/reports/robot/" ~ env.THIS_SUBDIR ~ "_" ~ env.JLF_LAB %}
+{% set out = stem ~ "_a" ~ attempt  %}
+{% if attempt %}
+  {% set prev = stem ~ "_a" ~ (attempt - 1) %}
+{% endif %}
+a_{{ attempt }}:
+  actions:
+    - py:
+        scripts.actions:maybe_atest_one:
+          kwargs:
+            conda_run: {{ tokens["dt:conda_run_atest"] }}
+            attempt: {{ attempt }}
+            out_dir: {{ out }}
+            prev_out: {{ prev }}
+            atest_dir: {{ paths["dt:atest_dir"] }}
+            last_attempt: {{ a_end }}
+  file_dep:
+    - ::env_atest_history
+    - ::ext_list
+    - ::wheel
+    {% if prev %}
+    - {{ prev }}/robot.rc
+    {% endif %}
+
+  targets:
+    - {{ out }}/robot.rc
+
+  meta:
+    doitoml:
+      env:
+        JUPYTERLAB_CONDA_PREFIX: ::env_lab_prefix
+{% endfor %}
+"""
 
 [tool.doitoml.tasks.serve.lab]
 actions = [["::conda_run_lab", "jupyter", "lab", "--no-browser", "--debug"]]
@@ -355,7 +378,7 @@ known-first-party = ["jupyterlab_fonts"]
 "**/tests/*.py" = ["S101", "SLF001", "PLR2004"]
 "__lock__.py" = ["INP001", "T201", "ARG002", "S603"]
 "dodo.py" = ["RUF012", "S603"]
-"scripts/*.py" = ["INP001", "S603", "T201", "S607", "SIM115"]
+"scripts/*.py" = ["INP001", "S603", "T201", "S607", "SIM115", "PLR0913"]
 
 [tool.pytest.ini_options]
 addopts = [

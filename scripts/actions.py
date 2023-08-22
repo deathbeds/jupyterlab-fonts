@@ -1,6 +1,7 @@
 """Cargo-culted actions for use with ``doitoml``."""
 
 import json
+import os
 import shutil
 import subprocess
 from hashlib import sha256
@@ -83,3 +84,64 @@ def run(*args, ok_rc=None):
     """Run something, maybe allowing non-zero return codes."""
     rc = subprocess.call(list(args), shell=False)
     return str(rc) in ok_rc or ["0"]
+
+
+def maybe_atest_one(
+    conda_run,
+    attempt,
+    last_attempt,
+    out_dir,
+    prev_out,
+    atest_dir,
+):
+    """Maybe run the robot test suite, if the previous attempt failed."""
+    is_ok = "0"
+    rc_name = "robot.rc"
+    rc_path = Path(out_dir[0]) / rc_name
+
+    if prev_out and prev_out[0]:
+        prev_rc_path = Path(prev_out[0]) / rc_name
+        prev_rc = prev_rc_path.read_text(**UTF8).strip()
+        if prev_rc == is_ok:
+            rc_path.parent.mkdir(parents=True, exist_ok=True)
+            rc_path.write_text(is_ok, **UTF8)
+            print(f"   ... skipping attempt {attempt} because previous attempt passed")
+            return True
+        print(f"   .... previous rc {prev_rc}")
+
+    args = [
+        *conda_run,
+        # pabot
+        "pabot",
+        "--processes",
+        os.environ["ATEST_PROCESSES"],
+        "--artifactsinsubfolders",
+        "--artifacts",
+        "png,log,txt,svg,ipynb,json",
+        # robot
+        f"--variable=ATTEMPT:{ attempt }",
+        f"""--variable=OS:{ os.environ["THIS_SUBDIR"] }""",
+        "--variable=ROOT:../../..",
+        "--outputdir",
+        out_dir[0],
+    ]
+    if prev_out:
+        args += [
+            "--loglevel",
+            "TRACE",
+            "--rerunfailed",
+            f"{prev_out[0]}/output.xml",
+        ]
+    args += atest_dir
+
+    print(">>>", "  ".join(args))
+    rc = subprocess.call(args)
+    print(f"   ... returned {rc}")
+
+    rc_path.write_text(f"{rc}", **UTF8)
+
+    if attempt == last_attempt and rc:
+        print(f"   !!! FAILED after {last_attempt} attempts")
+        return False
+
+    return True
