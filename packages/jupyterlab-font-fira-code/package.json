@@ -74,6 +74,7 @@
             ]
           ],
           "file_dep": [
+            "package.json",
             "::all_style",
             "::js-root::tsbuildinfo",
             "::js-root::yarn_history"

@@ -63,6 +63,13 @@
       "all_style": [
         ":rglob::style::*.*"
       ],
+      "all_schema": [
+        ":glob::schema::*.json"
+      ],
+      "all_ts": [
+        ":rglob::src::*.ts",
+        ":rglob::src::*.tsx"
+      ],
       "here": [
         "."
       ],
@@ -79,7 +86,10 @@
             ]
           ],
           "file_dep": [
+            "package.json",
             "::all_style",
+            "::all_ts",
+            "::all_schema",
             "::js-root::tsbuildinfo",
             "::js-root::yarn_history"
           ],
