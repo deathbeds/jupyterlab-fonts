@@ -15,7 +15,7 @@ env:
   MAMBA_NO_BANNER: 1
   # ours
   CACHE_EPOCH: 2
-  ATEST_RETRIES: 2
+  ATEST_RETRIES: 3
 
 defaults:
   run:
@@ -122,7 +122,7 @@ jobs:
         run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
 
   test:
-    needs: [build]
+    needs: [build, lint]
     name: test ${{ matrix.os }} ${{ matrix.lab-version }}
     runs-on: ${{ matrix.os }}-latest
     env:
@@ -175,13 +175,13 @@ jobs:
         run: doit dt:test:pytest
 
       - name: test (robot)
-        run: doit dt:atest:*_a0
+        run: doit dt:atest:a_1
 
-      - name: test (robot, retry)
-        run: doit dt:atest:*_a1
+      - name: test (robot, retry 1)
+        run: doit dt:atest:a_2
 
-      - name: test (robot, reretry)
-        run: doit dt:atest:*_a2
+      - name: test (robot, retry 2)
+        run: doit dt:atest:a_3
 
       - name: upload (reports)
         if: always()

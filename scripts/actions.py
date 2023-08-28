@@ -93,13 +93,16 @@ def maybe_atest_one(
     out_dir,
     prev_out,
     atest_dir,
+    atest_args=None,
 ):
     """Maybe run the robot test suite, if the previous attempt failed."""
     is_ok = "0"
     rc_name = "robot.rc"
     rc_path = Path(out_dir[0]) / rc_name
 
-    if prev_out and prev_out[0]:
+    dry_run = not attempt
+
+    if attempt >= 2 and prev_out and prev_out[0]:
         prev_rc_path = Path(prev_out[0]) / rc_name
         prev_rc = prev_rc_path.read_text(**UTF8).strip()
         if prev_rc == is_ok:
@@ -109,23 +112,35 @@ def maybe_atest_one(
             return True
         print(f"   .... previous rc {prev_rc}")
 
-    args = [
-        *conda_run,
-        # pabot
-        "pabot",
-        "--processes",
-        os.environ["ATEST_PROCESSES"],
-        "--artifactsinsubfolders",
-        "--artifacts",
-        "png,log,txt,svg,ipynb,json",
+    args = [*conda_run]
+
+    if dry_run:
+        args += [
+            "robot",
+            "--dry-run",
+        ]
+    else:
+        args += [
+            # pabot
+            "pabot",
+            "--processes",
+            os.environ["ATEST_PROCESSES"],
+            "--artifactsinsubfolders",
+            "--artifacts",
+            "png,log,txt,svg,ipynb,json",
+        ]
+
+    args += [
         # robot
         f"--variable=ATTEMPT:{ attempt }",
         f"""--variable=OS:{ os.environ["THIS_SUBDIR"] }""",
         "--variable=ROOT:../../..",
         "--outputdir",
         out_dir[0],
+        *(atest_args or []),
     ]
-    if prev_out:
+
+    if attempt >= 2:
         args += [
             "--loglevel",
             "TRACE",
@@ -140,8 +155,13 @@ def maybe_atest_one(
 
     rc_path.write_text(f"{rc}", **UTF8)
 
-    if attempt == last_attempt and rc:
-        print(f"   !!! FAILED after {last_attempt} attempts")
-        return False
+    if rc:
+        if dry_run or attempt == last_attempt:
+            print(f"   !!! FAILED after {last_attempt} attempts")
+            return False
+        print(
+            f"   !!! FAILED attempt {attempt}: {rc}, "
+            f"run dt:atest:a_{last_attempt} (or dt:atest:a_*) for a real error code",
+        )
 
     return True

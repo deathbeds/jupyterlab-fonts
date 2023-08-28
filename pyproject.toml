@@ -272,7 +272,17 @@ yaml = """
 {% if attempt %}
   {% set prev = stem ~ "_a" ~ (attempt - 1) %}
 {% endif %}
+{% if attempt %}
 a_{{ attempt }}:
+{% else %}
+lint:dryrun:
+{% endif %}
+  doc: |
+    {% if not attempt %}
+    dry-run robot
+    {% else %}
+    run robot tests with `pabot` (attempt {{ attempt }})
+    {% endif %}
   actions:
     - py:
         scripts.actions:maybe_atest_one:
@@ -283,10 +293,17 @@ a_{{ attempt }}:
             prev_out: {{ prev }}
             atest_dir: {{ paths["dt:atest_dir"] }}
             last_attempt: {{ a_end }}
+            {% if env.JLF_LAB < "lab4.0" %}
+            atest_args:
+              - --exclude=app:nb
+            {% endif %}
   file_dep:
+    - ::all_robot
     - ::env_atest_history
+    {% if attempt %}
     - ::ext_list
     - ::wheel
+    {% endif %}
     {% if prev %}
     - {{ prev }}/robot.rc
     {% endif %}
@@ -378,7 +395,7 @@ known-first-party = ["jupyterlab_fonts"]
 "**/tests/*.py" = ["S101", "SLF001", "PLR2004"]
 "__lock__.py" = ["INP001", "T201", "ARG002", "S603"]
 "dodo.py" = ["RUF012", "S603"]
-"scripts/*.py" = ["INP001", "S603", "T201", "S607", "SIM115", "PLR0913"]
+"scripts/*.py" = ["INP001", "S603", "T201", "S607", "SIM115", "PLR0913", "PLR2004"]
 
 [tool.pytest.ini_options]
 addopts = [

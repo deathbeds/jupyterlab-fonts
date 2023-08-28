@@ -30,5 +30,6 @@ ${CSS_LAB_META_COMMIT}                  [data-icon="ui-components:check"]
 # lab4/nb7
 ${XP_LAB4_COLLAPSED_PANEL}              //*[contains(@class, 'jp-Collapse-header-collapsed')]
 ${XP_LAB4_COLLAPSED_PANEL_TITLE}        ${XP_LAB4_COLLAPSED_PANEL}//*[contains(@class, 'jp-Collapser-title')]
+${CSS_LAB4_OPEN_IN_NOTEBOOK}            .jp-ToolbarButtonComponent[data-command="jupyter-notebook:open-notebook"]
 # rfjl bugs
 ${CM CSS EDITOR}                        .CodeMirror

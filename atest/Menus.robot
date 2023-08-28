@@ -5,6 +5,8 @@ Resource            ./_keywords.resource
 
 Suite Setup         Prepare Menu Test
 
+Test Tags           app:lab
+
 
 *** Test Cases ***
 Customize code font with the JupyterLab Menu

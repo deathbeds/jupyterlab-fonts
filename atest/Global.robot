@@ -3,6 +3,8 @@ Documentation       The font editor allows changing fonts in notebooks
 
 Resource            ./_keywords.resource
 
+Test Tags           app:lab
+
 
 *** Test Cases ***
 Global Font Editor

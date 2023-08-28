@@ -302,3 +302,11 @@ Stylesheet Should Not Contain
     [Documentation]    Check whether style "stuck",
     [Arguments]    ${text}    ${mod}=${MOD_NOTEBOOK}
     Stylesheet Should Contain    ${text}    ${mod}    inverse=${TRUE}
+
+Open Notebook in Notebook Tab
+    Wait Until Element Is Visible    css:${CSS_LAB4_OPEN_IN_NOTEBOOK}
+    Click Element    css:${CSS_LAB4_OPEN_IN_NOTEBOOK}
+    ${old} =    Switch Window    NEW
+    Wait Until Element Is Visible    xpath://${ICON_FONT}
+    Wait Until JupyterLab Kernel Is Idle
+    RETURN    ${old}
