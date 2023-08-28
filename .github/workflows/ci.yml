@@ -80,7 +80,6 @@ jobs:
 
 
   lint:
-    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -93,11 +92,8 @@ jobs:
           environment-file: .github/locks/lock_linux-64.conda.lock
           use-mamba: true
 
-      - name: download (preflight)
-        uses: actions/download-artifact@v3
-        with:
-          name: jupyterlab-fonts-${{ github.run_number }}-lock-preflight
-          path: ./build/locks
+      - name: preflight
+        run: doit lock:preflight
 
       - name: setup (python)
         run: doit lock:install:build_linux-64_lab4.0
