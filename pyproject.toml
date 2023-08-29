@@ -75,6 +75,8 @@ DEFAULT_PY = "3.11"
 TESTING_IN_CI = "0"
 THIS_PY = "3.11"
 THIS_SUBDIR = "linux-64"
+# js
+WITH_JS_COV = 0
 
 [tool.doitoml.paths]
 all_lock_py = [":glob::.github/specs::*.py"]
@@ -98,11 +100,14 @@ env_lab_prefix = [".envs/lab_${THIS_SUBDIR}_${JLF_LAB}"]
 env_lock_dir = [".github/locks"]
 ext_list = ["build/labext/lab_${THIS_SUBDIR}_${JLF_LAB}.txt"]
 git_info = ["build/git_info.json"]
+jscov = ["build/reports/robot/jscov"]
 license = ["LICENSE"]
 lock_build = ["build/locks"]
 lock_files = [":glob::build/locks::*.txt::/s/::build/locks::.github/locks::/s/::.txt::.conda.lock"]
 lock_headers = [":glob::build/locks::*.txt"]
 lock_preflight_yml = ["build/locks/_preflight.yml"]
+nyc_html = ["build/reports/nyc"]
+nyc_html_index = ["build/reports/nyc/index.html"]
 pip_freeze = ["build/pip/lab_${THIS_SUBDIR}_${JLF_LAB}.txt"]
 ppt = ["pyproject.toml"]
 pytest_html_cov = ["build/reports/pytest/${THIS_SUBDIR}_${JLF_LAB}/htmlcov/index.html"]
@@ -293,6 +298,7 @@ lint:dryrun:
             prev_out: {{ prev }}
             atest_dir: {{ paths["dt:atest_dir"] }}
             last_attempt: {{ a_end }}
+            jscov: {{ paths["dt:jscov"] }}
             {% if env.JLF_LAB < "lab4.0" %}
             atest_args:
               - --exclude=app:nb

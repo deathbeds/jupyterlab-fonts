@@ -191,6 +191,50 @@
           ],
           "targets": [
             "::tsbuildinfo"
+          ],
+          "meta": {
+            "doitoml": {
+              "skip": "${WITH_JS_COV}"
+            }
+          }
+        },
+        "lib:cov": {
+          "actions": [
+            [
+              "::lerna",
+              "build:cov"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::all_tsconfig",
+            "::schema_targets"
+          ],
+          "targets": [
+            "::tsbuildinfo"
+          ],
+          "meta": {
+            "doitoml": {
+              "skip": {
+                "not": "${WITH_JS_COV}"
+              }
+            }
+          }
+        }
+      },
+      "report": {
+        "nyc": {
+          "actions": [
+            [
+              "::jlpm",
+              "nyc",
+              "report",
+              "--report-dir",
+              "::dt::nyc_html",
+              "--temp-dir",
+              "::dt::jscov"
+            ]
           ]
         }
       },

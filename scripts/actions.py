@@ -93,6 +93,7 @@ def maybe_atest_one(
     out_dir,
     prev_out,
     atest_dir,
+    jscov,
     atest_args=None,
 ):
     """Maybe run the robot test suite, if the previous attempt failed."""
@@ -134,6 +135,7 @@ def maybe_atest_one(
         # robot
         f"--variable=ATTEMPT:{ attempt }",
         f"""--variable=OS:{ os.environ["THIS_SUBDIR"] }""",
+        f"--variable=JSCOV:{jscov[0]}",
         "--variable=ROOT:../../..",
         "--outputdir",
         out_dir[0],
