@@ -1,14 +1,16 @@
 # Changelog
 
-## v2.1.2 (unreleased)
+## v3.0.0a0
 
-> TBD
+- Support JupyterLab 4
+- Support Notebook 7
+- Fix global typefaces
 
 ## v2.1.1
 
-- fix some errors when disposing notebooks
-- normalize generated CSS
-- allow for dereferencing local asset `url()`s for `@import`, etc.
+- Fix some errors when disposing notebooks
+- Normalize generated CSS
+- Allow for dereferencing local asset `url()`s for `@import`, etc.
 
 ## v2.1.0
 
