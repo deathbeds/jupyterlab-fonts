@@ -2,28 +2,20 @@
   "name": "@deathbeds/jupyterlab-font-dejavu-sans-mono",
   "version": "3.0.0.alpha0",
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
-  "keywords": [
-    "fonts",
-    "jss",
-    "jupyter",
-    "jupyterlab-extension",
-    "jupyterlab"
-  ],
-  "bugs": {
-    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
-  },
+  "license": "BSD-3-Clause",
+  "author": "Dead Pixels Collective",
   "repository": {
     "type": "git",
     "url": "https://github.com/deathbeds/jupyterlab-fonts"
   },
-  "license": "BSD-3-Clause",
-  "author": "Dead Pixels Collective",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "files": [
-    "{lib,style,src}/**/*.{d.ts,js,css,woff2,ts,tsx,js.map}",
+    "vendor/dejavu-fonts-ttf/LICENSE",
     "{README.md,LICENSE}",
-    "vendor/dejavu-fonts-ttf/LICENSE"
+    "{lib,style,src}/**/*.{d.ts,js,css,woff2,ts,tsx,js.map}"
   ],
   "scripts": {
     "labextension:build": "jupyter labextension build .",
@@ -31,6 +23,7 @@
     "prebuild": "python scripts/convert.py",
     "watch": "jupyter labextension watch --debug ."
   },
+  "types": "lib/index.d.ts",
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "~3.0.0.alpha0",
     "@jupyterlab/application": "3 || 4"
@@ -40,17 +33,13 @@
     "@jupyterlab/builder": "^4.0.5",
     "dejavu-fonts-ttf": "^2.37.3"
   },
-  "jupyterlab": {
-    "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
-    "webpackConfig": "./webpack.config.js",
-    "sharedPackages": {
-      "@deathbeds/jupyterlab-fonts": {
-        "bundled": false,
-        "singleton": true
-      }
-    }
-  },
+  "keywords": [
+    "fonts",
+    "jss",
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
   "doitoml": {
     "prefix": "js-font-dejavu-sans-mono",
     "paths": {
@@ -110,6 +99,17 @@
         "targets": [
           "::npm_dist"
         ]
+      }
+    }
+  },
+  "jupyterlab": {
+    "extension": true,
+    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
+    "webpackConfig": "./webpack.config.js",
+    "sharedPackages": {
+      "@deathbeds/jupyterlab-fonts": {
+        "bundled": false,
+        "singleton": true
       }
     }
   }

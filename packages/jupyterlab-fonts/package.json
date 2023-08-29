@@ -2,27 +2,19 @@
   "name": "@deathbeds/jupyterlab-fonts",
   "version": "3.0.0.alpha0",
   "description": "Interactive Typography and Style for JupyterLab",
-  "keywords": [
-    "fonts",
-    "jss",
-    "jupyter",
-    "jupyterlab-extension",
-    "jupyterlab"
-  ],
-  "bugs": {
-    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
-  },
+  "license": "BSD-3-Clause",
+  "author": "Dead Pixels Collective",
   "repository": {
     "type": "git",
     "url": "https://github.com/deathbeds/jupyterlab-fonts"
   },
-  "license": "BSD-3-Clause",
-  "author": "Dead Pixels Collective",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "files": [
-    "{lib,style,schema,src}/**/*.{d.ts,js,css,svg,json,ts,tsx,js.map}",
-    "{LICENSE,README.md}"
+    "{LICENSE,README.md}",
+    "{lib,style,schema,src}/**/*.{d.ts,js,css,svg,json,ts,tsx,js.map}"
   ],
   "scripts": {
     "labextension:build": "jupyter labextension build .",
@@ -33,6 +25,7 @@
     "prebuild:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
     "watch": "jupyter labextension watch --debug ."
   },
+  "types": "lib/index.d.ts",
   "dependencies": {
     "@jupyterlab/application": "3 || 4",
     "@jupyterlab/mainmenu": "3 || 4",
@@ -45,12 +38,13 @@
     "json-schema-to-typescript": "^11.0.2",
     "mkdirp": "^3.0.1"
   },
-  "jupyterlab": {
-    "extension": "lib/plugin.js",
-    "schemaDir": "schema",
-    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts",
-    "webpackConfig": "./webpack.config.js"
-  },
+  "keywords": [
+    "fonts",
+    "jss",
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
   "doitoml": {
     "prefix": "js-fonts",
     "env": {
@@ -124,5 +118,11 @@
         ]
       }
     }
+  },
+  "jupyterlab": {
+    "extension": "lib/plugin.js",
+    "schemaDir": "schema",
+    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts",
+    "webpackConfig": "./webpack.config.js"
   }
 }

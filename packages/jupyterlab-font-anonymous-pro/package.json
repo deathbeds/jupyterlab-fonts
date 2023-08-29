@@ -2,34 +2,27 @@
   "name": "@deathbeds/jupyterlab-font-anonymous-pro",
   "version": "3.0.0.alpha0",
   "description": "Anonymous Pro Fonts for JupyterLab",
-  "keywords": [
-    "fonts",
-    "jss",
-    "jupyter",
-    "jupyterlab-extension",
-    "jupyterlab"
-  ],
-  "bugs": {
-    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
-  },
+  "license": "BSD-3-Clause",
+  "author": "Dead Pixels Collective",
   "repository": {
     "type": "git",
     "url": "https://github.com/deathbeds/jupyterlab-fonts"
   },
-  "license": "BSD-3-Clause",
-  "author": "Dead Pixels Collective",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "files": [
-    "{lib,style,src}/**/*.{d.ts,js,css,ts,tsx,js.map}",
+    "vendor/anonymous-pro/LICENSE",
     "{README.md,LICENSE}",
-    "vendor/anonymous-pro/LICENSE"
+    "{lib,style,src}/**/*.{d.ts,js,css,ts,tsx,js.map}"
   ],
   "scripts": {
     "labextension:build": "jupyter labextension build .",
     "labextension:build:cov": "tsc -b tsconfig.cov.json && jupyter labextension build .",
     "watch": "jupyter labextension watch --debug ."
   },
+  "types": "lib/index.d.ts",
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "~3.0.0.alpha0",
     "@jupyterlab/application": "3 || 4",
@@ -39,17 +32,13 @@
     "@deathbeds/jupyterlab-fonts": "workspace:*",
     "@jupyterlab/builder": "^4.0.5"
   },
-  "jupyterlab": {
-    "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-anonymous-pro",
-    "webpackConfig": "./webpack.config.js",
-    "sharedPackages": {
-      "@deathbeds/jupyterlab-fonts": {
-        "bundled": false,
-        "singleton": true
-      }
-    }
-  },
+  "keywords": [
+    "fonts",
+    "jss",
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
   "doitoml": {
     "prefix": "js-font-anonymous-pro",
     "paths": {
@@ -109,6 +98,17 @@
         "targets": [
           "::npm_dist"
         ]
+      }
+    }
+  },
+  "jupyterlab": {
+    "extension": true,
+    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-anonymous-pro",
+    "webpackConfig": "./webpack.config.js",
+    "sharedPackages": {
+      "@deathbeds/jupyterlab-fonts": {
+        "bundled": false,
+        "singleton": true
       }
     }
   }
