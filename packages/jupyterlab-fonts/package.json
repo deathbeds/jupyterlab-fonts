@@ -19,8 +19,8 @@
   "scripts": {
     "labextension:build": "jupyter labextension build .",
     "labextension:build:cov": "tsc -b tsconfig.cov.json && jupyter labextension build .",
-    "prebuild": "yarn prebuild:prep && yarn prebuild:schema && yarn prebuild:copy",
-    "prebuild:copy": "prettier src/_schema.d.ts > lib/_schema.d.ts",
+    "prebuild": "jlpm prebuild:prep && jlpm prebuild:schema && jlpm prebuild:copy",
+    "prebuild:copy": "jlpm prettier src/_schema.d.ts > lib/_schema.d.ts",
     "prebuild:prep": "mkdirp lib",
     "prebuild:schema": "json2ts schema/fonts.json --strictIndexSignatures | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
     "watch": "jupyter labextension watch --debug ."
@@ -36,7 +36,8 @@
   "devDependencies": {
     "@jupyterlab/builder": "^4.0.5",
     "json-schema-to-typescript": "^11.0.2",
-    "mkdirp": "^3.0.1"
+    "mkdirp": "^3.0.1",
+    "prettier": "^3.0.2"
   },
   "keywords": [
     "fonts",
@@ -69,10 +70,32 @@
       ],
       "dist_pkg_json": [
         "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts/package.json"
+      ],
+      "prebuild_deps": [
+        "schema/fonts.json"
+      ],
+      "prebuild_targets": [
+        "src/_schema.d.ts",
+        "lib/_schema.d.ts"
       ]
     },
     "tasks": {
       "build": {
+        "pre": {
+          "actions": [
+            [
+              "::js-root::jlpm",
+              "prebuild"
+            ]
+          ],
+          "file_dep": [
+            "::prebuild_deps",
+            "::js-root::yarn_history"
+          ],
+          "targets": [
+            "::prebuild_targets"
+          ]
+        },
         "ext": {
           "actions": [
             [

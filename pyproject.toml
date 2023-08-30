@@ -101,6 +101,7 @@ env_lock_dir = [".github/locks"]
 ext_list = ["build/labext/lab_${THIS_SUBDIR}_${JLF_LAB}.txt"]
 git_info = ["build/git_info.json"]
 jscov = ["build/reports/robot/jscov"]
+lab_home = ["build/.homes/${JLF_LAB}"]
 license = ["LICENSE"]
 lock_build = ["build/locks"]
 lock_files = [":glob::build/locks::*.txt::/s/::build/locks::.github/locks::/s/::.txt::.conda.lock"]
@@ -325,8 +326,12 @@ lint:dryrun:
 """
 
 [tool.doitoml.tasks.serve.lab]
-actions = [["::conda_run_lab", "jupyter", "lab", "--no-browser", "--debug"]]
+actions = [
+  # {py = {"doit.tools:create_folder" = {args = ["::dt::lab_home"]}}},
+  ["::conda_run_lab", "jupyter", "lab", "--no-browser", "--debug"],
+]
 file_dep = ["::ext_list"]
+meta = {doitoml = {env = {HOME = "::dt::lab_home"}}}
 uptodate = [false]
 
 

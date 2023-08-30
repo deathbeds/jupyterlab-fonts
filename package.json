@@ -1,19 +1,19 @@
 {
   "private": true,
   "scripts": {
-    "build": "yarn build:schema && lerna run prebuild && yarn build:ts",
+    "build": "jlpm build:schema && lerna run prebuild && jlpm build:ts",
     "build:schema": "lerna run build:schema",
-    "build:static": "yarn webpack -p",
+    "build:static": "jlpm webpack -p",
     "build:ts": "cd packages && cd _meta && tsc -b",
-    "clean": "yarn clean:lib && yarn clean:test",
+    "clean": "jlpm clean:lib && jlpm clean:test",
     "clean:lib": "lerna exec --parallel -- rimraf lib",
     "clean:test": "rimraf _testoutput",
     "eslint:check": "eslint --cache --config=.eslintrc.js --ext \".js,.jsx,.ts,.tsx\" packages",
     "prettier:check": "prettier --list-different --cache --cache-location=build/.cache/prettier \"./*.{json,md,yml,js}\" \"{packages,.github,.binder}/**/*.{ts,tsx,css,json,md}\"",
-    "test": "yarn test:robot",
+    "test": "jlpm test:robot",
     "test:robot": "python -m robot -d _testoutput -X tests/acceptance",
     "watch": "cd packages/_meta && tsc -b -w",
-    "watch:schema": "yarn lerna run watch:schema --parallel"
+    "watch:schema": "jlpm lerna run watch:schema --parallel"
   },
   "workspaces": [
     "packages/*"
@@ -85,16 +85,6 @@
       "all_css": [
         ":glob::packages::*/style/**/*.css"
       ],
-      "schema_deps": [
-        "packages/jupyterlab-fonts/schema/fonts.json"
-      ],
-      "schema_targets": [
-        "packages/jupyterlab-fonts/src/_schema.d.ts",
-        "packages/jupyterlab-fonts/lib/_schema.d.ts"
-      ],
-      "prebuild_deps": [
-        "packages/jupyterlab-font-dejavu-sans-mono/scripts/convert.py"
-      ],
       "tsbuildinfo": [
         "packages/_meta/tsconfig.tsbuildinfo"
       ],
@@ -160,22 +150,6 @@
         }
       },
       "build": {
-        "pre": {
-          "actions": [
-            [
-              "::lerna",
-              "prebuild"
-            ]
-          ],
-          "file_dep": [
-            "::yarn_history",
-            "::prebuild_deps",
-            "::schema_deps"
-          ],
-          "targets": [
-            "::schema_targets"
-          ]
-        },
         "lib": {
           "actions": [
             [
@@ -187,7 +161,7 @@
             "::yarn_history",
             "::all_ts",
             "::all_tsconfig",
-            "::schema_targets"
+            "::*::prebuild_targets"
           ],
           "targets": [
             "::tsbuildinfo"
@@ -209,7 +183,7 @@
             "::yarn_history",
             "::all_ts",
             "::all_tsconfig",
-            "::schema_targets"
+            "::*::prebuild_targets"
           ],
           "targets": [
             "::tsbuildinfo"
@@ -253,7 +227,7 @@
           "file_dep": [
             "::yarn_history",
             "::all_ts",
-            "::schema_targets"
+            "::*::prebuild_targets"
           ]
         }
       },

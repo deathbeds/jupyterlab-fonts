@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc -b --sourceMap",
     "build:cov": "tsc -b --inlineSourceMap",
-    "watch": "yarn build --watch --preserveWatchOutput"
+    "watch": "jlpm build --watch --preserveWatchOutput"
   },
   "devDependencies": {
     "@deathbeds/jupyterlab-font-anonymous-pro": "workspace:*",

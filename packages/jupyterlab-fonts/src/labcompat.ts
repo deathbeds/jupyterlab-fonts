@@ -3,26 +3,27 @@ import type { INotebookModel } from '@jupyterlab/notebook';
 import type { ISignal } from '@lumino/signaling';
 
 export function metadataSignal(panelModel: INotebookModel): ISignal<any, any> {
-  if (panelModel.sharedModel) {
-    return panelModel.sharedModel.metadataChanged;
+  if (panelModel?.metadata?.changed) {
+    return panelModel.metadata.changed as any;
   }
 
-  if (panelModel) {
-    return (panelModel as any).metadata.changed;
+  if (panelModel.sharedModel) {
+    return panelModel.sharedModel.metadataChanged;
   }
 
   throw new Error('no metadata for panel');
 }
 
 export function getPanelMetadata(panelModel: INotebookModel, key: string): any {
+  if (typeof panelModel.metadata.get === 'function') {
+    return (panelModel as any).metadata.get(key);
+  }
+
   if (panelModel.sharedModel) {
     return panelModel.sharedModel.getMetadata(key);
   }
 
-  if (panelModel) {
-    return (panelModel as any).metadata.get(key);
-  }
-
+  console.error('panel', panelModel);
   throw new Error('no metadata for panel');
 }
 
@@ -31,36 +32,27 @@ export function setPanelMetadata(
   key: string,
   value: any,
 ): any {
+  if (typeof panelModel.metadata.set === 'function') {
+    return (panelModel as any).metadata.set(key, value);
+  }
+
   if (panelModel.sharedModel) {
-    panelModel.sharedModel.setMetadata(key, value);
+    return panelModel.sharedModel.setMetadata(key, value);
   }
 
-  if (panelModel) {
-    (panelModel as any).metadata.set(key, value);
-  }
-
+  console.error('panel', panelModel);
   throw new Error('no metadata for panel');
 }
 
 export function getCellMetadata(cellModel: ICellModel, key: string): any {
+  if (typeof cellModel.metadata.get === 'function') {
+    return (cellModel as any).metadata.get(key);
+  }
+
   if (cellModel.sharedModel) {
     return cellModel.sharedModel.getMetadata(key);
   }
 
-  if (cellModel) {
-    return (cellModel as any).metadata.get(key);
-  }
-
-  throw new Error('no metadata for cell');
-}
-export function setCellMetadata(cellModel: ICellModel, key: string, value: any): any {
-  if (cellModel.sharedModel) {
-    cellModel.sharedModel.setMetadata(key, value);
-  }
-
-  if (cellModel) {
-    (cellModel as any).metadata.set(key, value);
-  }
-
+  console.error('cell', cellModel);
   throw new Error('no metadata for cell');
 }

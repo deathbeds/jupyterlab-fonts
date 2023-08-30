@@ -584,6 +584,7 @@ __metadata:
     jss: ^10.10.0
     jss-preset-default: ^10.10.0
     mkdirp: ^3.0.1
+    prettier: ^3.0.2
   languageName: unknown
   linkType: soft
 

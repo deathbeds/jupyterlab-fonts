@@ -132,7 +132,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ['ubuntu', 'macos', 'windows']
-        lab-version: ['lab3.6', 'lab4.0']
+        lab-version: ['lab3.5', 'lab4.0']
         include:
           - os: ubuntu
             subdir: linux-64
