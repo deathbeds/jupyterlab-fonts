@@ -2,8 +2,17 @@
 set -eux
 source activate $NB_PYTHON_PREFIX
 
-doit binder
+doit dt:dist:flit
 
-mkdir -p ~/.jupyter
-cp .binder/jupyter_config.json ~/.jupyter/
+python -m pip install \
+    -vv \
+    --find-links=dist \
+    --no-index-url \
+    --no-deps \
+    jupyterlab-fonts
+
 cp .binder/overrides.json $NB_PYTHON_PREFIX/share/jupyter/lab/settings
+
+jupyter labextension disable @jupyterlab/extensionmanager-extension:plugin
+jupyter labextension disable @jupyterlab/apputils-extension:announcements
+jupyter labextension disable offlinenotebook
