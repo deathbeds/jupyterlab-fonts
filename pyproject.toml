@@ -198,7 +198,7 @@ meta = {doitoml = {log = "::git_info"}}
 targets = ["::git_info"]
 
 [tool.doitoml.tasks.dist.flit]
-actions = [["::conda_run_build", "flit", "build"]]
+actions = [["::conda_run_build", "flit", "--debug", "build"]]
 file_dep = ["::js-*::dist_pkg_json", "::all_py_src", "::ppt", "::license", "::readme", "::git_info"]
 meta = {doitoml = {skip = {any = ["${TESTING_IN_CI}"]}}}
 targets = ["::wheel", "::sdist"]
