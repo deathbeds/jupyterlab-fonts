@@ -19,7 +19,7 @@ def _get_labextension_metadata(module):
 
 federated_labextensions._get_labextension_metadata = _get_labextension_metadata
 
-federated_labextensions._ensure_builder = lambda: Path(BUILDER)
+federated_labextensions._ensure_builder = lambda *_args: Path(BUILDER)
 
 main = LabExtensionApp.launch_instance
 
