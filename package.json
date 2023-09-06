@@ -67,7 +67,6 @@
       ],
       "all_json": [
         ":glob::.::*.json",
-        ":glob::.binder::*.json",
         ":glob::packages::*/*.json",
         ":glob::packages::*/schema/*.json"
       ],
@@ -95,9 +94,9 @@
     },
     "env": {
       "JLF_SHARED": "src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds",
-      "NX_CACHE_DIRECTORY": "build/.cache/nx",
-      "NX_PROJECT_GRAPH_CACHE_DIRECTORY": "build/.cache/nx",
-      "YARN_CACHE_FOLDER": "build/.cache/yarn"
+      "NX_CACHE_DIRECTORY": "${JLF_ROOT}/build/.cache/nx",
+      "NX_PROJECT_GRAPH_CACHE_DIRECTORY": "${JLF_ROOT}/build/.cache/nx",
+      "YARN_CACHE_FOLDER": "${JLF_ROOT}/build/.cache/yarn"
     },
     "tokens": {
       "jlpm": [

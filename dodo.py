@@ -44,8 +44,8 @@ class C:
 
     if CI:
         PY = Path(
-            shutil.which("python")
-            or shutil.which("python3")
+            shutil.which("python3")
+            or shutil.which("python")
             or shutil.which("python.exe"),
         ).resolve()
         CONDA_EXE = Path(
@@ -81,6 +81,7 @@ os.environ.update(
     {
         k: str(v)
         for k, v in {
+            "JLF_ROOT": P.ROOT,
             "CONDA_EXE": C.CONDA_EXE,
             "DEFAULT_LAB": C.DEFAULT_LAB,
             "JLF_LAB": C.JLF_LAB,

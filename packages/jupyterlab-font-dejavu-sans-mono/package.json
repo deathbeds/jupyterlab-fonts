@@ -47,7 +47,7 @@
         "../../dist/deathbeds-jupyterlab-font-dejavu-sans-mono-${JLF_VERSION}.tgz"
       ],
       "all_style": [
-        ":rglob::style::*.*"
+        "::prebuild_targets"
       ],
       "here": [
         "."

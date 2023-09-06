@@ -77,6 +77,8 @@ THIS_PY = "3.11"
 THIS_SUBDIR = "linux-64"
 # js
 WITH_JS_COV = 0
+# binder
+IN_BINDER = 0
 
 [tool.doitoml.paths]
 all_lock_py = [":glob::.github/specs::*.py"]
@@ -123,14 +125,53 @@ conda_run = ["conda", "run", "--no-capture-output"]
 conda_run_atest = ["::conda_run_prefix", "::env_atest_prefix"]
 conda_run_build = ["::conda_run_prefix", "::env_build_prefix"]
 conda_run_lab = ["::conda_run_prefix", "::env_lab_prefix"]
-conda_run_lab_pip = ["::conda_run_lab", "python", "-m", "pip"]
+conda_run_lab_pip = ["::conda_run_lab", "::pip"]
 conda_run_prefix = ["::conda_run", "--prefix"]
+labext = ["jupyter", "labextension"]
+labext_binder_ext = [
+  "@jupyterlab/extensionmanager-extension:plugin",
+  "@jupyterlab/apputils-extension:announcements",
+  "offlinenotebook",
+]
+labext_dev = ["::labext", "develop"]
+labext_disable = ["::labext", "disable"]
+pip = ["::pym", "pip"]
+pym = ["python", "-m"]
 taplo_opts = [
   "--option=array_auto_collapse=true",
   "--option=compact_inline_tables=true",
   "--option=column_width=100",
   "--option=reorder_keys=true",
 ]
+
+[tool.doitoml.tasks.binder]
+actions = [
+  [
+    "::pip",
+    "install",
+    "-vv",
+    "-e",
+    ".",
+    "--no-deps",
+    "--ignore-installed",
+  ],
+  [
+    "::labext_dev",
+    ".",
+    "--overwrite",
+  ],
+  [
+    "::pip",
+    "check",
+  ],
+  [
+    "::labext_disable",
+    "::labext_binder_ext",
+  ],
+]
+doc = "perform editable install in binder"
+file_dep = ["::js-*::dist_pkg_json"]
+meta = {doitoml = {skip = {not = "${IN_BINDER}"}}}
 
 [tool.doitoml.tasks.fix.toml]
 actions = [["::conda_run_build", "taplo", "fmt", "::taplo_opts", "::all_toml"]]
