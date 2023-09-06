@@ -19,6 +19,8 @@ def _get_labextension_metadata(module):
 
 federated_labextensions._get_labextension_metadata = _get_labextension_metadata
 
+federated_labextensions._ensure_builder = lambda: Path(BUILDER)
+
 main = LabExtensionApp.launch_instance
 
 if __name__ == "__main__":
