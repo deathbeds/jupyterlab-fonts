@@ -5,4 +5,4 @@ source activate "${NB_PYTHON_PREFIX}"
 export IN_BINDER=1
 
 doit lock:preflight
-doit binder:*
+doit dt:binder

@@ -45,10 +45,11 @@
 
 # Prerequisites
 
-- JupyterLab >=3
-- Python >=3.7
-
-> for specific JupyterLab compatibility, see the [changelog].
+- Python >=3.8
+- a Jupyter client
+  - JupyterLab >=3,<5
+    - _for specific JupyterLab compatibility, see the [changelog]._
+  - Jupyter Notebook >=7,<8
 
 # Installing
 
@@ -62,8 +63,6 @@ conda install -c conda-forge jupyterlab-fonts
 
 We're sorry to see you go!
 
-## JupyterLab Extensions
-
 ```bash
 pip uninstall jupyterlab-fonts
 # or
@@ -72,7 +71,7 @@ conda uninstall jupyterlab-fonts
 
 # Usage
 
-## JupyterLab Extensions
+## JupyterLab
 
 ### Quick Configuration with the Jupyter Lab Menu
 
@@ -89,7 +88,7 @@ _Global Fonts..._. These values will be stored in your JupyterLab settings.
 
 ### Notebook-specific Configuration
 
-When viewing a notebook, you can change just the fonts for _that notebook_ by clicking
+When viewing an `.ipynb`, change just the fonts for _that file_ by clicking
 ![fonts-icon] in the Notebook toolbar (right now, next to cell type). The font, style
 changes, and its license information will be stored in the Notebook metadata.
 
@@ -101,11 +100,12 @@ changes, and its license information will be stored in the Notebook metadata.
 
 ### Advanced Configuration
 
-You can pretty much do anything you want from the _![fonts-icon] Fonts_ section of
-_Advanced Settings_... even things entirely unrelated to fonts. There's no guarantee
-that super-customized styles will work nicely with the _Font Editor_!
+In JupyterLab, the _![fonts-icon] Fonts_ section of _Advanced JSON Settings_ can control
+things entirely unrelated to fonts. There's no guarantee that highly-customized styles
+will work nicely with the _Font Editor_, or with downstream applications of
+`jupyterlab-fonts` metadata.
 
-Here's an example of changing how the Notebook looks when in _Presentation Mode_.
+Here's an example of changing how a _Notebook_ file looks when in _Presentation Mode_.
 
 ```json
 {
@@ -126,34 +126,72 @@ Here's an example of changing how the Notebook looks when in _Presentation Mode_
 }
 ```
 
-Note the [use of `&`][nesting], which allows for nesting selectors, similar to other CSS
-preprocessors like [LESS]. Additionally, supporting multiple versions of JupyterLab or
-Notebook may require investigating some version-aware selectors, such as `.CodeMirror`
-and `.cm-editor`.
+### Notebooks
 
-All JSON-compatible features of the [plugins][jss-plugins] included in
-`jss-preset-default` are enabled, with the default settings, and at present will be
-wrapped in a `@global` selector.
+Similarly, the JupyterLab _Property Inspector_ enables these customizations in a
+specific `.ipynb` file, at both the document and cell level: these are dynamically
+generated, and scoped to the document/cell `id`.
+
+### Supporting Multiple Application Versions
+
+The above example shows how different versions of JupyterLab (or Notebook) may use
+different DOM classes for the same logical content, such as:
+
+| Element       | JupyterLab <4 | JupyterLab 4 |
+| ------------- | ------------- | ------------ |
+| a code editor | `.CodeMirror` | `.cm-editor` |
+
+#### JSS Plugins
+
+All JSON-compatible features of the [`jss-preset-default` plugins][jss-plugins] are
+enabled with the default settings, with some specific notes below. For portability,
+dynamic JS-based features are not supported.
+
+##### Nesting
+
+The the [`&` (ampersand)][jss-nesting] allows for nesting selectors, as standardized by
+the [W3C CSS Nesting Module][nesting-w3c] and implemented in [many
+browsers][nesting-browsers].
+
+##### Global
+
+All settings-derived styles will be wrapped in a [`@global`][jss-global] selector.
+
+### In Jupyter Workflows
 
 #### Use in `overrides.json`
 
 `overrides.json` allows for simple, declarative configuration of JupyterLab core and
 third-party extensions, even after the lab server has been started.
 
-```yaml
-{ '@deathbeds/jupyterlab-fonts:fonts': {} }
-# that stuff up there
+```json
+{
+  "@deathbeds/jupyterlab-fonts:fonts": {
+    "styles": {
+      ":root": {
+        "--jp-code-font-family": "'Fira Code Regular', 'Source Code Pro', monospace",
+        "--jp-code-font-size": "19px"
+      }
+    }
+  }
+}
 ```
+
+##### Binder
 
 In [binder], one might deploy this with a `postBuild` script:
 
 ```bash
 #!/usr/bin/env bash
-cp overrides.json $NB_PYTHON_PREFIX/share/jupyter/lab/settings
+set -eux
+mkdir -p "${NB_PYTHON_PREFIX}/share/jupyter/lab/settings"
+cp overrides.json "${NB_PYTHON_PREFIX}/share/jupyter/lab/settings"
 ```
 
+##### JupyterLite
+
 Similarly, this is a well-known file to [JupyterLite][lite-well-known], making it
-straightforward to do light customization without needing to build and distribute a
+straightforward to do light customization without needing to build and distribute a full
 theme [plugin][jupyterlab-plugins].
 
 [jupyterlab-plugins]:
@@ -166,7 +204,9 @@ theme [plugin][jupyterlab-plugins].
   https://jupyterlab.readthedocs.io/en/stable/user/directories.html#overrides-json
   'JupyterLab settings overrides'
 [jss-plugins]: http://cssinjs.org/plugins#jss-plugins 'JSS plugins'
-[less]: http://lesscss.org/features/#extend-feature-extending-nested-selectors
-[nesting]:
+[jss-nesting]:
   https://github.com/cssinjs/jss-nested#use--to-reference-selector-of-the-parent-rule
-  'using nested selectors'
+  'using nested selectors in JSS'
+[jss-global]: https://cssinjs.org/jss-plugin-global 'the JSS global plugin'
+[nesting-browsers]: https://caniuse.com/css-nesting 'browsers that support & nesting'
+[nesting-w3c]: https://www.w3.org/TR/css-nesting-1 'the CSS nesting standard'
