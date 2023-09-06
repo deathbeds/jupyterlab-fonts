@@ -3,12 +3,17 @@ channels:
   - nodefaults
 dependencies:
   - brotlipy
+  - conda <22.11.1
+  - conda-lock >=2.1.2,<2.2
+  - doitoml-with-all
   - flit >=3.9.0,<4
   - fonttools
   - jupyterhub-singleuser
   - jupyterlab >=4.0,<5
+  - mamba
   - nodejs >=18,<19
   - notebook >=7,<8
   - pip
   - python ==3.11.*
+  - python-dotenv
   - twine >=3.7.1

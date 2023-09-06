@@ -9,6 +9,7 @@ _inherit_from:
   - _node.yml
   - _build.yml
   - _lab/lab4.0.yml
+  - lock.yml
 
 _target: ../../.binder/environment.yml
 
