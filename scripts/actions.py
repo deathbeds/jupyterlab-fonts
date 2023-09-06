@@ -71,13 +71,14 @@ def hash_some(hash_file, *hash_inputs):
     hash_path.write_text(output, encoding="utf-8")
 
 
-def clean_some(*paths):
+def clean_some(*paths) -> bool:
     """Clean up some paths."""
     for path in [Path(p) for p in paths]:
         if path.is_dir():
             shutil.rmtree(path)
         elif path.exists():
             path.unlink()
+    return True
 
 
 def run(*args, ok_rc=None):

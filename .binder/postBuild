@@ -6,4 +6,5 @@ export DEMO_IN_BINDER=1
 set -eux
 
 doit lock:preflight
-doit dt:binder || doit dt:binder || cat /tmp/jupyterlab-debug-* && exit 1
+doit -n8 dt:binder || doist list && doit dt:binder
+git clean -dxf node_modules build

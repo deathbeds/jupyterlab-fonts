@@ -173,10 +173,6 @@ actions = [
     "::labext",
     "list",
   ],
-  {py = {"scripts.actions:clean_some" = {args = [
-    "node_modules",
-    "build",
-  ]}}}
 ]
 doc = "perform editable install in binder"
 file_dep = ["::js-*::dist_pkg_json"]
