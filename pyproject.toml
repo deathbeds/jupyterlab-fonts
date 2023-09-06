@@ -154,10 +154,12 @@ actions = [
     ".",
     "--no-deps",
     "--ignore-installed",
+    "--no-build-isolation",
   ],
   [
     "::labext_dev",
     ".",
+    "--debug",
     "--overwrite",
   ],
   [
