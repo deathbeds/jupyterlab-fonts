@@ -133,7 +133,7 @@ labext_binder_ext = [
   "@jupyterlab/apputils-extension:announcements",
   "offlinenotebook",
 ]
-labext_dev = ["::pym", "_scripts.labextension", "develop"]
+labext_dev = ["::py", "scripts/labextension.py", "develop"]
 labext_disable = ["::labext", "disable"]
 pip = ["::pym", "pip"]
 pym = ["python", "-m"]
