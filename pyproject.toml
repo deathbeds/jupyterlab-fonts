@@ -158,26 +158,24 @@ actions = [
     "--no-build-isolation",
   ],
   [
-    "::labext_dev",
-    "jupyterlab_fonts",
-    "--debug",
-    "--overwrite",
-  ],
-  [
     "::pip",
     "check",
   ],
+  {py = {"scripts.actions:copy_labextensions" = {args = [
+    "::js-*::dist_pkg_json",
+  ]}}},
   [
     "::labext_disable",
     "::labext_binder_ext",
   ],
   [
-    "rm",
-    "-rf",
-    ".envs/",
-    "node_modules/",
-    "build",
+    "::labext",
+    "list",
   ],
+  {py = {"scripts.actions:clean_some" = {args = [
+    "node_modules",
+    "build",
+  ]}}},
   [
     "mamba",
     "clean",

@@ -6,6 +6,7 @@ import shutil
 import subprocess
 from hashlib import sha256
 from pathlib import Path
+from typing import List
 
 UTF8 = {"encoding": "utf-8"}
 JSON_FMT = {"indent": 2, "sort_keys": True}
@@ -167,3 +168,16 @@ def maybe_atest_one(
         )
 
     return True
+
+
+def copy_labextensions(pkg_jsons: List[Path]):
+    """Deploy the labextensions."""
+    ns = "@deathbeds"
+    share_root = Path(
+        os.environ["JLF_BUILD_PREFIX"],
+        f"share/jupyter/labextensions/{ns}",
+    )
+    share_root.mkdir(parents=True)
+    for pkg in pkg_jsons:
+        parent = Path(pkg).parent
+        shutil.copytree(parent, share_root / parent.name)
