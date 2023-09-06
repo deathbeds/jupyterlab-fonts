@@ -133,7 +133,7 @@ labext_binder_ext = [
   "@jupyterlab/apputils-extension:announcements",
   "offlinenotebook",
 ]
-labext_dev = ["::labext", "develop"]
+labext_dev = ["::pym", "_scripts.labextension", "develop"]
 labext_disable = ["::labext", "disable"]
 pip = ["::pym", "pip"]
 pym = ["python", "-m"]
@@ -461,7 +461,7 @@ known-first-party = ["jupyterlab_fonts"]
 "**/tests/*.py" = ["S101", "SLF001", "PLR2004"]
 "__lock__.py" = ["INP001", "T201", "ARG002", "S603"]
 "dodo.py" = ["RUF012", "S603"]
-"scripts/*.py" = ["INP001", "S603", "T201", "S607", "SIM115", "PLR0913", "PLR2004"]
+"scripts/*.py" = ["INP001", "S603", "T201", "S607", "SIM115", "PLR0913", "PLR2004", "SLF001"]
 
 [tool.pytest.ini_options]
 addopts = [
