@@ -6,7 +6,6 @@ import shutil
 import subprocess
 from hashlib import sha256
 from pathlib import Path
-from typing import List
 
 UTF8 = {"encoding": "utf-8"}
 JSON_FMT = {"indent": 2, "sort_keys": True}
@@ -170,14 +169,27 @@ def maybe_atest_one(
     return True
 
 
-def copy_labextensions(pkg_jsons: List[Path]):
-    """Deploy the labextensions."""
-    ns = "@deathbeds"
-    share_root = Path(
-        os.environ["JLF_BUILD_PREFIX"],
-        f"share/jupyter/labextensions/{ns}",
-    )
-    share_root.mkdir(parents=True)
+def copy_labextensions(prefix: str, *pkg_jsons: str) -> None:
+    """Deploy already-built labextensions."""
+    labextensions_root = Path(prefix) / "share/jupyter/labextensions"
     for pkg in pkg_jsons:
-        parent = Path(pkg).parent
-        shutil.copytree(parent, share_root / parent.name)
+        pkg_path = Path(pkg)
+        pkg_dir = pkg_path.parent
+        print("... labextension:", pkg_dir)
+        pkg_data = json.loads(pkg_path.read_text(**UTF8))
+        pkg_name = f"""{pkg_data["name"]}"""
+        dest = labextensions_root / pkg_name
+        if dest.exists():
+            shutil.rmtree(dest)
+        if not dest.parent.exists():
+            dest.parent.mkdir(parents=True)
+        shutil.copytree(pkg_dir, dest)
+        print("    ... copied to:", dest)
+
+
+def touch(*paths: str) -> None:
+    """Ensure some paths exist (including parent folders)."""
+    for path in map(Path, paths):
+        if not path.parent.exists():
+            path.parent.mkdir(parents=True)
+        path.touch()

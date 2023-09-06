@@ -65,6 +65,9 @@
         ":rglob::.github::*.md",
         ":glob::packages::*/*.md"
       ],
+      "all_empty_node_modules": [
+        ":glob::packages::*/package.json::/s/::package.json::node_modules/.empty"
+      ],
       "all_json": [
         ":glob::.::*.json",
         ":glob::packages::*/*.json",
@@ -90,6 +93,9 @@
       "all_tsconfig": [
         ":glob::.::tsconfig*.json",
         ":glob::packages::*/tsconfig*.json"
+      ],
+      "labext_script": [
+        "scripts/labextension.py"
       ]
     },
     "env": {
@@ -112,10 +118,9 @@
       "build_labext": [
         "::dt::conda_run_build",
         "python",
-        "-m",
-        "jupyter",
-        "labextension",
-        "build"
+        "::labext_script",
+        "build",
+        "--debug"
       ]
     },
     "tasks": {
@@ -129,6 +134,15 @@
           "::yarn_history"
         ],
         "actions": [
+          {
+            "py": {
+              "scripts.actions:touch": {
+                "args": [
+                  "::all_empty_node_modules"
+                ]
+              }
+            }
+          },
           [
             "::jlpm",
             "install"

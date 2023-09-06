@@ -162,6 +162,7 @@ actions = [
     "check",
   ],
   {py = {"scripts.actions:copy_labextensions" = {args = [
+    "${JLF_BUILD_PREFIX}",
     "::js-*::dist_pkg_json",
   ]}}},
   [
