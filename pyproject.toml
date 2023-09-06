@@ -176,12 +176,7 @@ actions = [
   {py = {"scripts.actions:clean_some" = {args = [
     "node_modules",
     "build",
-  ]}}},
-  [
-    "mamba",
-    "clean",
-    "-yaf",
-  ],
+  ]}}}
 ]
 doc = "perform editable install in binder"
 file_dep = ["::js-*::dist_pkg_json"]
