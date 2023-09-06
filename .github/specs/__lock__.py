@@ -28,6 +28,11 @@ def iter_spec_stacks(spec_path, platform):
     base_stack = [spec_path]
     stacks = [base_stack]
 
+    platforms = spec.get("platforms")
+
+    if platforms and platform not in platforms:
+        return
+
     for inherit in spec.get("_inherit_from", []):
         substacks = [*iter_spec_stacks(spec_path.parent / inherit, platform)]
         if substacks:
@@ -94,9 +99,9 @@ def merge_envs(env_path: Optional[Path], stack: List[Path]) -> Optional[str]:
     return env_str
 
 
-def lock_comment(stack: List[Path]) -> str:
+def lock_comment(stack: List[Path], indent="# ") -> str:
     """Generate a lockfile header comment."""
-    return textwrap.indent(merge_envs(None, stack), "# ")
+    return textwrap.indent(merge_envs(None, stack), indent)
 
 
 def needs_lock(lockfile: Path, stack: List[Path]) -> bool:
@@ -120,9 +125,10 @@ def lock_one(platform: str, lockfile: Path, stack: List[Path]) -> bool:
         print(f"    ... creating {lockfile.parent}")
         lockfile.parent.mkdir(parents=True)
 
+    comment = lock_comment(stack)
+
     for solver in [["--mamba"], ["--no-mamba"]]:
         lock_args = ["conda-lock", *solver, "--kind=explicit"]
-        comment = lock_comment(stack)
         for env_file in stack:
             lock_args += ["--file", env_file]
         lock_args += [f"--platform={platform}"]
@@ -172,6 +178,10 @@ def preflight(
     for spec_path in specs:
         for subdir in subdirs:
             for stack in iter_spec_stacks(spec_path, subdir):
+                first = safe_load(stack[0])
+                target = first.get("_target")
+                if target:
+                    Path(target).write_text(lock_comment(stack, ""), **UTF8)
                 stem = lock_stem(subdir, stack)
                 txt = lock_build / f"{stem}.txt"
                 txt.write_text(lock_comment(stack), **UTF8)

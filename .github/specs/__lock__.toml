@@ -47,6 +47,7 @@ yaml = """
     meta:
         doitoml:
             cwd: ../../
+            skip: "${DEMO_IN_BINDER}"
     file_dep:
         - {{ paths["dt:env_lock_dir"][0] }}/{{ stem }}.conda.lock
     targets:

@@ -76,20 +76,23 @@ class P:
     ]
 
 
+env_patches = {
+    "JLF_ROOT": P.ROOT,
+    "CONDA_EXE": C.CONDA_EXE,
+    "DEFAULT_LAB": C.DEFAULT_LAB,
+    "JLF_LAB": C.JLF_LAB,
+    "JLF_SYS_PREFIX": P.SYS_PREFIX,
+    "THIS_PY": C.THIS_PY,
+    "THIS_SUBDIR": C.THIS_SUBDIR,
+}
+
+if C.DEMO_IN_BINDER:
+    env_patches["JLF_BUILD_PREFIX"] = P.SYS_PREFIX
+    __import__("pprint").pprint(env_patches)
+
 # handle dynamic sys.prefix
 os.environ.update(
-    {
-        k: str(v)
-        for k, v in {
-            "JLF_ROOT": P.ROOT,
-            "CONDA_EXE": C.CONDA_EXE,
-            "DEFAULT_LAB": C.DEFAULT_LAB,
-            "JLF_LAB": C.JLF_LAB,
-            "JLF_SYS_PREFIX": P.SYS_PREFIX,
-            "THIS_PY": C.THIS_PY,
-            "THIS_SUBDIR": C.THIS_SUBDIR,
-        }.items()
-    },
+    {k: str(v) for k, v in env_patches.items()},
 )
 
 # configure doitoml, allowing changing `sys.prefix` in CI

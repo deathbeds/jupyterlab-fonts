@@ -78,7 +78,8 @@ THIS_SUBDIR = "linux-64"
 # js
 WITH_JS_COV = 0
 # binder
-IN_BINDER = 0
+DEMO_IN_BINDER = 0
+JLF_BUILD_PREFIX = ".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}"
 
 [tool.doitoml.paths]
 all_lock_py = [":glob::.github/specs::*.py"]
@@ -95,8 +96,8 @@ dist_sha256sums = ["dist/SHA256SUMS"]
 dodo = ["dodo.py"]
 env_atest_history = [".envs/atest_${THIS_SUBDIR}/conda-meta/history"]
 env_atest_prefix = [".envs/atest_${THIS_SUBDIR}"]
-env_build_history = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}/conda-meta/history"]
-env_build_prefix = [".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}"]
+env_build_history = ["${JLF_BUILD_PREFIX}/conda-meta/history"]
+env_build_prefix = ["${JLF_BUILD_PREFIX}"]
 env_lab_history = [".envs/lab_${THIS_SUBDIR}_${JLF_LAB}/conda-meta/history"]
 env_lab_prefix = [".envs/lab_${THIS_SUBDIR}_${JLF_LAB}"]
 env_lock_dir = [".github/locks"]
@@ -158,7 +159,7 @@ actions = [
   ],
   [
     "::labext_dev",
-    ".",
+    "jupyterlab_fonts",
     "--debug",
     "--overwrite",
   ],
@@ -185,7 +186,7 @@ actions = [
 ]
 doc = "perform editable install in binder"
 file_dep = ["::js-*::dist_pkg_json"]
-meta = {doitoml = {skip = {not = "${IN_BINDER}"}}}
+meta = {doitoml = {skip = {not = "${DEMO_IN_BINDER}"}}}
 
 [tool.doitoml.tasks.fix.toml]
 actions = [["::conda_run_build", "taplo", "fmt", "::taplo_opts", "::all_toml"]]

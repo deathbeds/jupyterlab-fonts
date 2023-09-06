@@ -2,7 +2,7 @@
 set -eux
 source activate "${NB_PYTHON_PREFIX}"
 
-export IN_BINDER=1
+export DEMO_IN_BINDER=1
 
 doit lock:preflight
 doit dt:binder || doit dt:binder || cat /tmp/jupyterlab-debug-* && exit 1
