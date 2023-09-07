@@ -70,17 +70,13 @@ export class Stylist {
 
     for (const cell of notebook.widgets) {
       cell.node.dataset.jpfCellId = cell.model.id;
-      console.warn(
-        'DELETEME NOTEBOOK',
-        cell,
-        compat.getCellMetadata(cell.model, 'tags'),
-      );
       let tags = [
         ...((compat.getCellMetadata(cell.model, 'tags') ||
           JSONExt.emptyArray) as string[]),
-      ].join(',');
-      if (tags) {
-        cell.node.dataset.jpfCellTags = `,${tags},`;
+      ];
+      if (tags && tags.length) {
+        tags.sort();
+        cell.node.dataset.jpfCellTags = `,${tags.join(',')},`;
       } else {
         delete cell.node.dataset.jpfCellTags;
       }
