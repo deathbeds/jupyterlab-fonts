@@ -71,7 +71,7 @@ export async function makeFace(options: IMakeFaceOptions): Promise<IFontFacePrim
   return {
     ...options.primitive,
     'font-family': `${options.name} ${options.variant}`,
-    src: await dataURISrc((await options.woff2).default, FontFormat.woff2),
+    src: await dataURISrc((await options.woff2()).default, FontFormat.woff2),
   };
 }
 
@@ -91,7 +91,7 @@ export function makePlugin(options: IPluginOptions): JupyterFrontEndPlugin<void>
           const variants = await options.variants();
           for (const [variant, faces] of Object.entries(variants)) {
             fonts.registerFontFace({
-              name: `${options.fontName} ${variant}`,
+              name: `${options.fontName} ${variant}`.trim(),
               license: {
                 ...options.license,
                 text: async () => await options.licenseText(),
@@ -104,7 +104,7 @@ export function makePlugin(options: IPluginOptions): JupyterFrontEndPlugin<void>
                       name: options.fontName,
                       variant,
                       woff2: face.woff2,
-                      primitive: face.style,
+                      primitive: face.style || {},
                     }),
                   );
                 }

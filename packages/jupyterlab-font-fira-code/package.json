@@ -44,9 +44,6 @@
       "npm_dist": [
         "../../dist/deathbeds-jupyterlab-font-fira-code-${JLF_VERSION}.tgz"
       ],
-      "all_style": [
-        ":rglob::style::*.*"
-      ],
       "here": [
         "."
       ],
@@ -64,7 +61,6 @@
           ],
           "file_dep": [
             "package.json",
-            "::all_style",
             "::js-root::tsbuildinfo",
             "::js-root::yarn_history"
           ],
@@ -80,7 +76,6 @@
           }
         },
         "file_dep": [
-          "::all_style",
           "::js-root::tsbuildinfo",
           "LICENSE",
           "package.json",

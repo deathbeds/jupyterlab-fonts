@@ -15,7 +15,7 @@
   "files": [
     "vendor/anonymous-pro/LICENSE",
     "{README.md,LICENSE}",
-    "{lib,style,src}/**/*.{d.ts,js,css,ts,tsx,js.map}"
+    "{lib,src}/**/*.{d.ts,js,css,ts,tsx,js.map}"
   ],
   "scripts": {
     "labextension:build": "jupyter labextension build .",
@@ -48,9 +48,6 @@
       "dist_pkg_json": [
         "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-anonymous-pro/package.json"
       ],
-      "all_style": [
-        ":rglob::style::*.*"
-      ],
       "here": [
         "."
       ]
@@ -65,7 +62,6 @@
           ],
           "file_dep": [
             "package.json",
-            "::all_style",
             "::js-root::tsbuildinfo",
             "::js-root::yarn_history"
           ],
@@ -81,7 +77,6 @@
           }
         },
         "file_dep": [
-          "::all_style",
           "::js-root::tsbuildinfo",
           "LICENSE",
           "package.json",

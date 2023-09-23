@@ -175,13 +175,13 @@ export interface ITextStyleOptions {
 export interface IMakeFaceOptions {
   name: string;
   variant: string;
-  woff2: Promise<typeof import('*.woff2')>;
+  woff2(): Promise<typeof import('*.woff2')>;
   primitive?: Partial<IFontFacePrimitive>;
 }
 
 export interface IPluginVariantOptions {
-  woff2: Promise<typeof import('*.woff2')>;
-  style: Omit<IFontFacePrimitive, 'src'>;
+  woff2(): Promise<typeof import('*.woff2')>;
+  style?: Omit<IFontFacePrimitive, 'src'>;
 }
 
 export interface IPluginOptions {

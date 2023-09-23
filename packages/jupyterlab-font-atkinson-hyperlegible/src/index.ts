@@ -20,53 +20,61 @@ const plugin = makePlugin({
     return {
       Regular: [
         {
-          woff2: import(
-            `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2`
-          ),
+          woff2: () =>
+            import(
+              `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2`
+            ),
           style: { ...regular },
         },
         {
-          woff2: import(
-            `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-ext-400-normal.woff2`
-          ),
+          woff2: () =>
+            import(
+              `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-ext-400-normal.woff2`
+            ),
           style: { ...regular },
         },
         {
-          woff2: import(
-            `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-italic.woff2`
-          ),
+          woff2: () =>
+            import(
+              `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-italic.woff2`
+            ),
           style: { ...regular, ...italic },
         },
         {
-          woff2: import(
-            `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-ext-400-italic.woff2`
-          ),
+          woff2: () =>
+            import(
+              `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-ext-400-italic.woff2`
+            ),
           style: { ...regular, ...italic },
         },
       ],
       Bold: [
         {
-          woff2: import(
-            `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-normal.woff2`
-          ),
+          woff2: () =>
+            import(
+              `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-normal.woff2`
+            ),
           style: { ...regular, ...bold },
         },
         {
-          woff2: import(
-            `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-italic.woff2`
-          ),
+          woff2: () =>
+            import(
+              `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-italic.woff2`
+            ),
           style: { ...regular, ...bold, ...italic },
         },
         {
-          woff2: import(
-            `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-ext-700-normal.woff2`
-          ),
+          woff2: () =>
+            import(
+              `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-ext-700-normal.woff2`
+            ),
           style: { ...regular, ...bold },
         },
         {
-          woff2: import(
-            `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-ext-700-italic.woff2`
-          ),
+          woff2: () =>
+            import(
+              `!!file-loader!@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-ext-700-italic.woff2`
+            ),
           style: { ...regular, ...bold, ...italic },
         },
       ],
