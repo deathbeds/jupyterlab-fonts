@@ -5,6 +5,7 @@ import { Token } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 import { Menu } from '@lumino/widgets';
 
+import { IFontFacePrimitive } from './_schema';
 import * as SCHEMA from './schema';
 
 export type Scope = 'global' | 'notebook';
@@ -169,4 +170,24 @@ export interface ITextStyleOptions {
   kind: TextKind;
   scope?: Scope;
   notebook?: NotebookPanel;
+}
+
+export interface IMakeFaceOptions {
+  name: string;
+  variant: string;
+  woff2: Promise<typeof import('*.woff2')>;
+  primitive?: Partial<IFontFacePrimitive>;
+}
+
+export interface IPluginVariantOptions {
+  woff2: Promise<typeof import('*.woff2')>;
+  style: Omit<IFontFacePrimitive, 'src'>;
+}
+
+export interface IPluginOptions {
+  id: string;
+  fontName: string;
+  license: Omit<IFontLicense, 'text'>;
+  licenseText(): Promise<string>;
+  variants(): Promise<Record<string, IPluginVariantOptions[]>>;
 }

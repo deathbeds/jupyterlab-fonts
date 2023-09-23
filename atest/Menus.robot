@@ -37,6 +37,8 @@ Customize code font with the JupyterLab Menu
     Content    Font    Fira Code Light
     Content    Font    Fira Code Medium
     Content    Font    Fira Code Regular
+    Content    Font    Atkinson Hyperlegible Regular
+    Content    Font    Atkinson Hyperlegible Bold
     Content    Font    Default Content Font
     Content    Line Height    Default Content Line Height
     Content    Line Height    2

@@ -47,6 +47,7 @@ config_paths = [
   ":get::toml::.github/specs/__lock__.toml::",
   ":get::json::package.json::doitoml",
   ":get::json::packages/jupyterlab-font-anonymous-pro/package.json::doitoml",
+  ":get::json::packages/jupyterlab-font-atkinson-hyperlegible/package.json::doitoml",
   ":get::json::packages/jupyterlab-font-dejavu-sans-mono/package.json::doitoml",
   ":get::json::packages/jupyterlab-font-fira-code/package.json::doitoml",
   ":get::json::packages/jupyterlab-fonts/package.json::doitoml",

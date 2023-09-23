@@ -550,6 +550,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@deathbeds/jupyterlab-font-atkinson-hyperlegible@workspace:*, @deathbeds/jupyterlab-font-atkinson-hyperlegible@workspace:packages/jupyterlab-font-atkinson-hyperlegible":
+  version: 0.0.0-use.local
+  resolution: "@deathbeds/jupyterlab-font-atkinson-hyperlegible@workspace:packages/jupyterlab-font-atkinson-hyperlegible"
+  dependencies:
+    "@deathbeds/jupyterlab-fonts": "workspace:*"
+    "@fontsource/atkinson-hyperlegible": ^5.0.12
+    "@jupyterlab/application": 3 || 4
+    "@jupyterlab/builder": ^4.0.6
+  languageName: unknown
+  linkType: soft
+
 "@deathbeds/jupyterlab-font-dejavu-sans-mono@workspace:*, @deathbeds/jupyterlab-font-dejavu-sans-mono@workspace:packages/jupyterlab-font-dejavu-sans-mono":
   version: 0.0.0-use.local
   resolution: "@deathbeds/jupyterlab-font-dejavu-sans-mono@workspace:packages/jupyterlab-font-dejavu-sans-mono"
@@ -593,6 +604,7 @@ __metadata:
   resolution: "@deathbeds/meta-jupyterlab-fonts@workspace:packages/_meta"
   dependencies:
     "@deathbeds/jupyterlab-font-anonymous-pro": "workspace:*"
+    "@deathbeds/jupyterlab-font-atkinson-hyperlegible": "workspace:*"
     "@deathbeds/jupyterlab-font-dejavu-sans-mono": "workspace:*"
     "@deathbeds/jupyterlab-font-fira-code": "workspace:*"
     "@deathbeds/jupyterlab-fonts": "workspace:*"
@@ -659,6 +671,13 @@ __metadata:
   version: 8.50.0
   resolution: "@eslint/js@npm:8.50.0"
   checksum: 302478f2acaaa7228729ec6a04f56641590185e1d8cd1c836a6db8a6b8009f80a57349341be9fbb9aa1721a7a569d1be3ffc598a33300d22816f11832095386c
+  languageName: node
+  linkType: hard
+
+"@fontsource/atkinson-hyperlegible@npm:^5.0.12":
+  version: 5.0.12
+  resolution: "@fontsource/atkinson-hyperlegible@npm:5.0.12"
+  checksum: 3731879e913532514f68b141e60b51829b07f4c4448d1f9b9032407c8de37b169c5d126a5260f92580ea20e100cca67716b8e001589d802aa726c3df8592bacc
   languageName: node
   linkType: hard
 

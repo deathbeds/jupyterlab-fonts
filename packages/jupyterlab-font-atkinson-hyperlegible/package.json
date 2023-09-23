@@ -1,0 +1,110 @@
+{
+  "name": "@deathbeds/jupyterlab-font-atkinson-hyperlegible",
+  "version": "3.0.0.alpha0",
+  "description": "Atkinson Hyperlegible for JupyterLab",
+  "license": "BSD-3-Clause",
+  "author": "Dead Pixels Collective",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deathbeds/jupyterlab-fonts"
+  },
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "{README.md,LICENSE}",
+    "{lib,src}/*.{d.ts,js,css,ts,tsx,js.map}"
+  ],
+  "scripts": {
+    "labextension:build": "jupyter labextension build .",
+    "labextension:build:cov": "tsc -b tsconfig.cov.json && jupyter labextension build .",
+    "watch": "jupyter labextension watch --debug ."
+  },
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@deathbeds/jupyterlab-fonts": "~3.0.0.alpha0",
+    "@fontsource/atkinson-hyperlegible": "^5.0.12",
+    "@jupyterlab/application": "3 || 4"
+  },
+  "devDependencies": {
+    "@deathbeds/jupyterlab-fonts": "workspace:*",
+    "@jupyterlab/builder": "^4.0.6"
+  },
+  "keywords": [
+    "atkinson-hyperlegible",
+    "fonts",
+    "jss",
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "doitoml": {
+    "prefix": "js-font-atkinson-hyperlegible",
+    "paths": {
+      "npm_dist": [
+        "../../dist/deathbeds-jupyterlab-font-atkinson-hyperlegible-${JLF_VERSION}.tgz"
+      ],
+      "here": [
+        "."
+      ],
+      "dist_pkg_json": [
+        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-atkinson-hyperlegible/package.json"
+      ]
+    },
+    "tasks": {
+      "build": {
+        "ext": {
+          "actions": [
+            [
+              "::js-root::build_labext"
+            ]
+          ],
+          "file_dep": [
+            "package.json",
+            "::js-root::tsbuildinfo",
+            "::js-root::yarn_history"
+          ],
+          "targets": [
+            "::dist_pkg_json"
+          ]
+        }
+      },
+      "dist": {
+        "meta": {
+          "doitoml": {
+            "cwd": "../../dist"
+          }
+        },
+        "file_dep": [
+          "::js-root::tsbuildinfo",
+          "LICENSE",
+          "package.json",
+          "README.md"
+        ],
+        "actions": [
+          [
+            "::dt::conda_run_build",
+            "npm",
+            "pack",
+            "::here"
+          ]
+        ],
+        "targets": [
+          "::npm_dist"
+        ]
+      }
+    }
+  },
+  "jupyterlab": {
+    "extension": true,
+    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-atkinson-hyperlegible",
+    "webpackConfig": "./webpack.config.js",
+    "sharedPackages": {
+      "@deathbeds/jupyterlab-fonts": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
+  }
+}

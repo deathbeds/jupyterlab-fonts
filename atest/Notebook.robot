@@ -29,4 +29,6 @@ Notebook Font Editor
     Notebook    Content    Fira Code Light
     Notebook    Content    Fira Code Medium
     Notebook    Content    Fira Code Regular
+    Notebook    Content    Atkinson Hyperlegible Regular
+    Notebook    Content    Atkinson Hyperlegible Bold
     [Teardown]    Close the Font Editor    Untitled

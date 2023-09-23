@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@deathbeds/jupyterlab-font-anonymous-pro": "workspace:*",
+    "@deathbeds/jupyterlab-font-atkinson-hyperlegible": "workspace:*",
     "@deathbeds/jupyterlab-font-dejavu-sans-mono": "workspace:*",
     "@deathbeds/jupyterlab-font-fira-code": "workspace:*",
     "@deathbeds/jupyterlab-fonts": "workspace:*"

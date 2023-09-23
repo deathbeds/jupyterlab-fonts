@@ -1,7 +1,7 @@
 """jupyterlab-fonts metadata tests."""
 import jupyterlab_fonts
 
-EXPECTED_EXT_COUNT = 4
+EXPECTED_EXT_COUNT = 5
 
 
 def test_version():

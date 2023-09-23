@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfigbase",
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "inlineSourceMap": true,
+    "sourceMap": false
+  },
+  "include": ["src/**/*"],
+  "references": [
+    {
+      "path": "../jupyterlab-fonts"
+    }
+  ]
+}

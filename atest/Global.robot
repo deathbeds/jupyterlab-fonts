@@ -27,4 +27,6 @@ Global Font Editor
     Global    Content    Fira Code Light
     Global    Content    Fira Code Medium
     Global    Content    Fira Code Regular
+    Global    Content    Atkinson Hyperlegible Regular
+    Global    Content    Atkinson Hyperlegible Bold
     [Teardown]    Close the Font Editor    Global
