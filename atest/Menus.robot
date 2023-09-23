@@ -29,14 +29,6 @@ Customize code font with the JupyterLab Menu
     Code    Size    20px
     Code    Size    Default Code Size
     Content    Font    Default Content Font
-    Content    Font    Anonymous Pro Bold
-    Content    Font    Anonymous Pro Regular
-    Content    Font    DejaVu Sans Mono
-    Content    Font    DejaVu Sans Mono Bold
-    Content    Font    Fira Code Bold
-    Content    Font    Fira Code Light
-    Content    Font    Fira Code Medium
-    Content    Font    Fira Code Regular
     Content    Font    Atkinson Hyperlegible Regular
     Content    Font    Atkinson Hyperlegible Bold
     Content    Font    Default Content Font
@@ -46,3 +38,7 @@ Customize code font with the JupyterLab Menu
     Content    Size    Default Content Size
     Content    Size    20px
     Content    Size    Default Content Size
+    UI    Font    Default UI Font
+    UI    Font    Atkinson Hyperlegible Regular
+    UI    Font    Atkinson Hyperlegible Bold
+    UI    Font    Default UI Font

@@ -13,11 +13,13 @@ export type Scope = 'global' | 'notebook';
 export enum TextKind {
   code = 'code',
   content = 'content',
+  ui = 'ui',
 }
 
 export const KIND_LABELS: { [key in TextKind]: string } = {
   code: 'Code',
   content: 'Content',
+  ui: 'UI',
 };
 
 export enum FontFormat {
@@ -62,6 +64,9 @@ export const CMD = {
     fontFamily: 'content-font-family',
     lineHeight: 'content-line-height',
   },
+  ui: {
+    fontFamily: 'ui-font-family',
+  },
   editFonts: 'font-editor:open',
   customFonts: {
     disable: 'custom-fonts:disable',
@@ -72,7 +77,7 @@ export const CMD = {
 export const ROOT = ':root';
 
 export type ICSSVars = {
-  [key in TextKind]: { [key in TextProperty]: SCHEMA.ICSSOM };
+  [key in TextKind]: { [key in TextProperty]?: SCHEMA.ICSSOM };
 };
 
 export const CSS: ICSSVars = {
@@ -85,6 +90,9 @@ export const CSS: ICSSVars = {
     'font-family': '--jp-content-font-family',
     'font-size': '--jp-content-font-size1',
     'line-height': '--jp-content-line-height',
+  },
+  ui: {
+    'font-family': '--jp-ui-font-family',
   },
 };
 

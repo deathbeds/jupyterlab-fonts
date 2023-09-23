@@ -143,6 +143,18 @@ export class FontEditor extends VDomRenderer<FontEditorModel> {
           ),
         ]),
       ),
+      ...[TextKind.ui].map((kind) =>
+        h('section', { key: `${kind}-section`, title: KIND_LABELS[kind] }, [
+          h(
+            'h3',
+            { key: `${kind}-header`, className: SECTION_CLASS },
+            KIND_LABELS[kind],
+          ),
+          ...['font-family'].map((prop: TextProperty) =>
+            this.textSelect(prop, kind, { key: `${kind}-${prop}` }),
+          ),
+        ]),
+      ),
     ]);
   }
 

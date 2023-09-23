@@ -119,10 +119,12 @@ Use the font editor to configure fonts
     Set Attempt Screenshot Directory    editor${/}${scope}${/}${kind}${/}${font}
     Change a Font Dropdown    ${scope}    ${kind}    Font    ${font}    0
     IF    "${scope}" == "Global"    Check font license is visible in Editor
-    Change a Font Dropdown    ${scope}    ${kind}    Size    -    0
-    FOR    ${size}    IN RANGE    12    20    4
-        Change a Font Dropdown    ${scope}    ${kind}    Size    ${size}px    ${size}
-        IF    "${scope}" == "Global"    Settings Should Contain    ${font}
+    IF    "${kind}" != "UI"
+        Change a Font Dropdown    ${scope}    ${kind}    Size    -    0
+        FOR    ${size}    IN RANGE    12    20    4
+            Change a Font Dropdown    ${scope}    ${kind}    Size    ${size}px    ${size}
+            IF    "${scope}" == "Global"    Settings Should Contain    ${font}
+        END
     END
     Change a Font Dropdown    ${scope}    ${kind}    Font    -    99
 

@@ -5,6 +5,8 @@
 - Support JupyterLab 4
 - Support Notebook 7
 - Fix global typefaces
+- Adds UI font to the editor, commands, and menus
+- Adds Atkinson Hyperlegible font
 
 ## v2.1.1
 
