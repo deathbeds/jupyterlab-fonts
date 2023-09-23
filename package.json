@@ -26,22 +26,22 @@
   "devDependencies": {
     "@ephesoft/webpack.istanbul.loader": "^2.2.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@typescript-eslint/eslint-plugin": "^6.4.0",
-    "@typescript-eslint/parser": "^6.4.0",
-    "eslint": "^8.47.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "^7.33.2",
     "file-loader": "^6.2.0",
-    "lerna": "^7.1.5",
+    "lerna": "^7.3.0",
     "nyc": "^15.1.0",
-    "prettier": "^3.0.2",
+    "prettier": "^3.0.3",
     "prettier-package-json": "^2.8.0",
     "raw-loader": "^4.0.2",
     "source-map-loader": "^4.0.1",
     "ts-node": "^10.9.1",
-    "typescript": "~5.1.6",
+    "typescript": "~5.2.2",
     "yarn-berry-deduplicate": "^6.1.1"
   },
   "doitoml": {
@@ -212,6 +212,9 @@
       },
       "report": {
         "nyc": {
+          "file_dep": [
+            "::yarn_history"
+          ],
           "actions": [
             [
               "::jlpm",
@@ -255,7 +258,8 @@
             ]
           ],
           "file_dep": [
-            "::all_pj"
+            "::all_pj",
+            "::yarn_history"
           ]
         },
         "prettier": {

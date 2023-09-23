@@ -34,7 +34,7 @@
     "jss-preset-default": "^10.10.0"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^4.0.5",
+    "@jupyterlab/builder": "^4.0.6",
     "json-schema-to-typescript": "^11.0.2",
     "mkdirp": "^3.0.1",
     "prettier": "^3.0.2"
@@ -49,7 +49,8 @@
   "doitoml": {
     "prefix": "js-fonts",
     "env": {
-      "JLF_VERSION": ":get::json::package.json::version"
+      "JLF_VERSION": ":get::json::package.json::version",
+      "JLF_NAME": ":get::json::package.json::name"
     },
     "paths": {
       "npm_dist": [

@@ -9,10 +9,10 @@ dependencies:
   - flit >=3.9.0,<4
   - fonttools
   - jupyterhub-singleuser
-  - jupyterlab >=4.0,<5
+  - jupyterlab >=4.0.6,<5.0.0a0
   - mamba
   - nodejs >=18,<19
-  - notebook >=7,<8
+  - notebook >=7.0.4,<8.0.0a0
   - pip
   - python ==3.11.*
   - python-dotenv

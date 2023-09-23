@@ -58,13 +58,13 @@ jobs:
         run: doit js-root:setup
 
       - name: build
-        run: doit *:build:* || doit list
+        run: doit build || doit list
 
       - name: build (retry)
-        run: doit *:build:*
+        run: doit build
 
       - name: dist
-        run: doit *:dist:* || doit *:dist:*
+        run: doit dist
 
       - name: upload (dist)
         uses: actions/upload-artifact@v3
@@ -115,7 +115,7 @@ jobs:
         run: doit js-root:setup
 
       - name: lint
-        run: doit *:lint:*
+        run: doit lint
 
       - name: Rename uncached conda packages
         run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"

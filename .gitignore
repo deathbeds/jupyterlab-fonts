@@ -1,6 +1,7 @@
 __pycache__
 _d/
 _testoutput/
+.env
 .envs/
 .eslintcache
 .ipynb_checkpoints/

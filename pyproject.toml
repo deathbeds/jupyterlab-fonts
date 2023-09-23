@@ -79,7 +79,12 @@ THIS_SUBDIR = "linux-64"
 WITH_JS_COV = 0
 # binder
 DEMO_IN_BINDER = 0
+# shorthand
+JLF_ATEST_PREFIX = ".envs/atest_${THIS_SUBDIR}"
 JLF_BUILD_PREFIX = ".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}"
+JLF_LAB_PREFIX = ".envs/lab_${THIS_SUBDIR}_${JLF_LAB}"
+JLF_PYTEST_REPORT = "build/reports/pytest/${THIS_SUBDIR}_${JLF_LAB}"
+JLF_ROBOT_REPORT = "build/reports/robot/${THIS_SUBDIR}_${JLF_LAB}"
 
 [tool.doitoml.paths]
 all_lock_py = [":glob::.github/specs::*.py"]
@@ -89,17 +94,18 @@ all_robot = [":rglob::atest::*.robot", ":rglob::atest::*.resource"]
 all_scripts = [":glob::scripts::*.py"]
 all_toml = ["::ppt"]
 atest_dir = ["atest"]
-atest_report = ["build/reports/robot/${THIS_SUBDIR}_${JLF_LAB}"]
-atest_report_html = ["build/reports/robot/${THIS_SUBDIR}_${JLF_LAB}/log.html"]
+atest_report = ["${JLF_ROBOT_REPORT}"]
+atest_report_html = ["${JLF_ROBOT_REPORT}/log.html"]
 dist_hash_inputs = ["::wheel", "::sdist", "::*::npm_dist"]
 dist_sha256sums = ["dist/SHA256SUMS"]
 dodo = ["dodo.py"]
-env_atest_history = [".envs/atest_${THIS_SUBDIR}/conda-meta/history"]
-env_atest_prefix = [".envs/atest_${THIS_SUBDIR}"]
+env_atest_history = ["${JLF_ATEST_PREFIX}/conda-meta/history"]
+env_atest_prefix = ["${JLF_ATEST_PREFIX}"]
 env_build_history = ["${JLF_BUILD_PREFIX}/conda-meta/history"]
 env_build_prefix = ["${JLF_BUILD_PREFIX}"]
-env_lab_history = [".envs/lab_${THIS_SUBDIR}_${JLF_LAB}/conda-meta/history"]
-env_lab_prefix = [".envs/lab_${THIS_SUBDIR}_${JLF_LAB}"]
+env_lab_dist_pkg = ["${JLF_LAB_PREFIX}/share/jupyter/labextensions/${JLF_NAME}/package.json"]
+env_lab_history = ["${JLF_LAB_PREFIX}/conda-meta/history"]
+env_lab_prefix = ["${JLF_LAB_PREFIX}"]
 env_lock_dir = [".github/locks"]
 ext_list = ["build/labext/lab_${THIS_SUBDIR}_${JLF_LAB}.txt"]
 git_info = ["build/git_info.json"]
@@ -114,9 +120,9 @@ nyc_html = ["build/reports/nyc"]
 nyc_html_index = ["build/reports/nyc/index.html"]
 pip_freeze = ["build/pip/lab_${THIS_SUBDIR}_${JLF_LAB}.txt"]
 ppt = ["pyproject.toml"]
-pytest_html_cov = ["build/reports/pytest/${THIS_SUBDIR}_${JLF_LAB}/htmlcov/index.html"]
-pytest_html_cov_index = ["build/reports/pytest/${THIS_SUBDIR}_${JLF_LAB}/htmlcov"]
-pytest_html_report = ["build/reports/pytest/${THIS_SUBDIR}_${JLF_LAB}/index.html"]
+pytest_html_cov = ["${JLF_PYTEST_REPORT}/htmlcov/index.html"]
+pytest_html_cov_index = ["${JLF_PYTEST_REPORT}/htmlcov"]
+pytest_html_report = ["${JLF_PYTEST_REPORT}/index.html"]
 readme = ["README.md"]
 sdist = ["dist/${PY_NAME}-${PY_VERSION}.tar.gz"]
 wheel = ["dist/${PY_NAME}-${PY_VERSION}-py3-none-any.whl"]
@@ -273,17 +279,17 @@ actions = [
   ],
 ]
 file_dep = ["::env_lab_history", "::wheel"]
+targets = ["::env_lab_dist_pkg"]
 
 [tool.doitoml.tasks.dev.pip.check]
 actions = [["::conda_run_lab_pip", "freeze"], ["::conda_run_lab_pip", "check"]]
-file_dep = ["::ppt"]
+file_dep = ["::ppt", "::env_lab_dist_pkg"]
 meta = {doitoml = {log = ["::pip_freeze"]}}
 targets = ["::pip_freeze"]
-task_dep = ["dt:dev:pip:install"]
 
 [tool.doitoml.tasks.dev.ext.list]
 actions = [["::conda_run_lab", "jupyter", "labextension", "list"]]
-file_dep = ["::ppt", "::pip_freeze", "::wheel"]
+file_dep = ["::ppt", "::pip_freeze", "::wheel", "::env_lab_dist_pkg"]
 meta = {doitoml = {log = ["::ext_list"]}}
 targets = ["::ext_list"]
 
@@ -372,10 +378,7 @@ lint:dryrun:
 """
 
 [tool.doitoml.tasks.serve.lab]
-actions = [
-  # {py = {"doit.tools:create_folder" = {args = ["::dt::lab_home"]}}},
-  ["::conda_run_lab", "jupyter", "lab", "--no-browser", "--debug"],
-]
+actions = [["::conda_run_lab", "jupyter", "lab", "--no-browser", "--debug"]]
 file_dep = ["::ext_list"]
 meta = {doitoml = {env = {HOME = "::dt::lab_home"}}}
 uptodate = [false]
@@ -451,7 +454,7 @@ known-first-party = ["jupyterlab_fonts"]
 [tool.ruff.per-file-ignores]
 "**/tests/*.py" = ["S101", "SLF001", "PLR2004"]
 "__lock__.py" = ["INP001", "T201", "ARG002", "S603"]
-"dodo.py" = ["RUF012", "S603"]
+"dodo.py" = ["RUF012", "S603", "T201"]
 "scripts/*.py" = ["INP001", "S603", "T201", "S607", "SIM115", "PLR0913", "PLR2004", "SLF001"]
 
 [tool.pytest.ini_options]

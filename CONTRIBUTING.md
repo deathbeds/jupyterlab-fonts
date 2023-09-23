@@ -22,7 +22,7 @@ doit list
 ## Build Once
 
 ```bash
-doit build
+doit dist
 ```
 
 ## Lab
@@ -31,25 +31,28 @@ doit build
 doit lab
 ```
 
-## Always Be Building
+### More Labs
 
-```bash
-doit watch
+Create a `.env` file:
+
+```ini
+# .env
+JLF_LAB=lab3.5  # default: lab4.0
 ```
 
-This starts:
+then
 
-- a TypeScript build process
-- JupyterLab extension builders
+```bash
+doit lab
+```
 
 ## Thinking about Committing
 
 ```bash
-doit lint
-# doit test
+doit fix lint dist test
 ```
 
-## Updating environmentsss
+## Updating environments
 
 - change the files in `.github/specs`
 - run `doit lock:solve:*`
