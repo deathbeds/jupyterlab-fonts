@@ -10,14 +10,19 @@ from pathlib import Path
 from doitoml import DoiTOML
 from ruamel.yaml import safe_load
 
-if Path(".env").exists():
+DOT_ENV = Path(".env")
+
+dotenv_loaded = {}
+
+if DOT_ENV.exists():
     try:
         import dotenv
 
+        dotenv_loaded = dotenv.dotenv_values(DOT_ENV)
         dotenv.load_dotenv()
     except ImportError as err:
         warnings.warn(
-            f"""{Path(".env")} found, but cannot load python-dotenv: {err}""",
+            f"{DOT_ENV} found, but cannot load python-dotenv: {err}",
             stacklevel=1,
         )
 
@@ -135,3 +140,7 @@ _phony("dist")
 _phony("build", "*:build:*")
 _phony("test", "*:atest:*")
 _phony("lab", "dt:serve:lab")
+_phony("report")
+
+if dotenv_loaded:
+    os.environ.update(dotenv_loaded)

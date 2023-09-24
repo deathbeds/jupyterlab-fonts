@@ -95,6 +95,7 @@ all_py_test = [":rglob::tests::*.py"]
 all_robot = [":rglob::atest::*.robot", ":rglob::atest::*.resource"]
 all_scripts = [":glob::scripts::*.py"]
 all_toml = ["::ppt"]
+atest_all_report = ["build/reports/robot/log.html"]
 atest_dir = ["atest"]
 atest_report = ["${JLF_ROBOT_REPORT}"]
 atest_report_html = ["${JLF_ROBOT_REPORT}/log.html"]
@@ -376,6 +377,21 @@ lint:dryrun:
       env:
         JUPYTERLAB_CONDA_PREFIX: ::env_lab_prefix
 {% endfor %}
+
+report:rebot:
+  doc: combine robot reports from multiple runs
+  uptodate:
+    - false
+  actions:
+    - py:
+        scripts.actions:rebot:
+          kwargs:
+            log_html: ::atest_all_report
+            conda_run: {{ tokens["dt:conda_run_atest"] }}
+  file_dep:
+    - ::env_atest_history
+  targets:
+    - ::atest_all_report
 """
 
 [tool.doitoml.tasks.serve.lab]

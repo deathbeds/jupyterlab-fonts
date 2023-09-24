@@ -46,6 +46,31 @@ then
 doit lab
 ```
 
+## Testing
+
+```bash
+doit test
+```
+
+### Advanced testing
+
+Create a `.env` file:
+
+```ini
+WITH_JS_COV=1
+```
+
+Run
+
+```bash
+doit test
+# run some other excursions, by env var or `.env` file e.g.
+# JLF_LAB=lab3.5 doit test
+doit report
+```
+
+See `build/reports/nyc/index.html`.
+
 ## Thinking about Committing
 
 ```bash

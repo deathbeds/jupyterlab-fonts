@@ -147,6 +147,14 @@
     "extension": "lib/plugin.js",
     "schemaDir": "schema",
     "outputDir": "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts",
-    "webpackConfig": "./webpack.config.js"
+    "webpackConfig": "./webpack.config.js",
+    "sharedPackages": {
+      "jss": {
+        "bundled": true
+      },
+      "jss-preset-default": {
+        "bundled": true
+      }
+    }
   }
 }
