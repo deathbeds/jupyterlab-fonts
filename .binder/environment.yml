@@ -1,36 +1,19 @@
-name: jupyterlab-fonts-dev
-
 channels:
   - conda-forge
-
+  - nodefaults
 dependencies:
-  # run
-  - jupyterlab >=3.4.8,<4
-  - python >=3.7,<3.11
-  # build
   - brotlipy
-  - doit-with-toml
+  - conda <22.11.1
+  - conda-lock >=2.1.2,<2.2
+  - doitoml-with-all
+  - flit >=3.9.0,<4
   - fonttools
+  - jupyterhub-singleuser
+  - jupyterlab >=4.0.6,<5.0.0a0
+  - mamba
   - nodejs >=18,<19
+  - notebook >=7.0.4,<8.0.0a0
   - pip
-  - twine
-  - wheel
-  # qa
-  - black
-  - flake8
-  - isort
-  # - ssort # only works on py3.8+
-  # utest
-  - pytest-cov
-  - pytest-html
-  # atest
-  - firefox =102
-  - geckodriver
-  - robotframework >=6
-  - robotframework-jupyterlibrary >=0.4.1
-  - robotframework-pabot
-  - robotframework-robocop >=2.6.0
-  - robotframework-tidy >=3.3.1
-  # demo toys
-  - jupyterlab-link-share
-  - ipywidgets
+  - python ==3.11.*
+  - python-dotenv
+  - twine >=3.7.1

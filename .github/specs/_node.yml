@@ -1,0 +1,2 @@
+dependencies:
+  - nodejs >=18,<19

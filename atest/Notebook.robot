@@ -3,6 +3,8 @@ Documentation       The font editor allows changing fonts in notebooks
 
 Resource            ./_keywords.resource
 
+Test Tags           app:lab
+
 
 *** Test Cases ***
 Notebook Font Editor
@@ -19,12 +21,9 @@ Notebook Font Editor
     Notebook    Code    Fira Code Medium
     Notebook    Code    Fira Code Regular
     Notebook    Content    -
-    Notebook    Content    Anonymous Pro Bold
-    Notebook    Content    Anonymous Pro Regular
-    Notebook    Content    DejaVu Sans Mono
-    Notebook    Content    DejaVu Sans Mono Bold
-    Notebook    Content    Fira Code Bold
-    Notebook    Content    Fira Code Light
-    Notebook    Content    Fira Code Medium
-    Notebook    Content    Fira Code Regular
+    Notebook    Content    Atkinson Hyperlegible Regular
+    Notebook    Content    Atkinson Hyperlegible Bold
+    Notebook    UI    -
+    Notebook    UI    Atkinson Hyperlegible Regular
+    Notebook    UI    Atkinson Hyperlegible Bold
     [Teardown]    Close the Font Editor    Untitled

@@ -1,0 +1,488 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core<4,>=3.8.0"]
+
+[project]
+authors = [{name = "jupyterlab-fonts contributors", email = "deathbeds@googlegroups.com"}]
+classifiers = [
+  "Framework :: Jupyter :: JupyterLab :: 3",
+  "Framework :: Jupyter :: JupyterLab :: 4",
+  "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
+  "Framework :: Jupyter :: JupyterLab :: Extensions",
+  "Framework :: Jupyter :: JupyterLab",
+  "Framework :: Jupyter",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3",
+]
+dependencies = ["jupyterlab >=3.5,<5"]
+dynamic = ["description"]
+name = "jupyterlab_fonts"
+readme = "README.md"
+requires-python = ">=3.8"
+version = "3.0.0a0"
+
+[project.urls]
+"Bug Tracker" = "https://github.com/deathbeds/jupyterlab-fonts/issues"
+"Changelog" = "https://github.com/deathbeds/jupyterlab-fonts/blob/main/CHANGELOG.md"
+"Source" = "https://github.com/deathbeds/jupyterlab-fonts"
+
+[tool.flit.sdist]
+include = ["src/jupyterlab_fonts/_d"]
+
+[tool.flit.external-data]
+directory = "src/jupyterlab_fonts/_d"
+
+[tool.doit]
+backend = "sqlite3"
+par_type = "thread"
+verbosity = 2
+
+[tool.doit.commands.list]
+status = true
+subtasks = true
+
+[tool.doitoml]
+config_paths = [
+  ":get::toml::.github/specs/__lock__.toml::",
+  ":get::json::package.json::doitoml",
+  ":get::json::packages/jupyterlab-font-anonymous-pro/package.json::doitoml",
+  ":get::json::packages/jupyterlab-font-atkinson-hyperlegible/package.json::doitoml",
+  ":get::json::packages/jupyterlab-font-dejavu-sans-mono/package.json::doitoml",
+  ":get::json::packages/jupyterlab-font-fira-code/package.json::doitoml",
+  ":get::json::packages/jupyterlab-fonts/package.json::doitoml",
+]
+prefix = "dt"
+validate = true
+
+[tool.doitoml.env]
+# other people's stuff
+CI = 0
+CONDARC = ".github/.condarc"
+JUPYTER_PLATFORM_DIRS = 1
+MAMBA_NO_BANNER = 1
+PYTHONIOENCODING = "utf-8"
+PYTHONUNBUFFERED = 1
+READTHEDOCS = 0
+SOURCE_DATE_EPOCH = ":get|0::json::build/git_info.json::SOURCE_DATE_EPOCH"
+# our stuff
+PY_NAME = ":get::toml::pyproject.toml::project::name"
+PY_VERSION = ":get::toml::pyproject.toml::project::version"
+# locks
+ATEST_ATTEMPT = 0
+ATEST_PROCESSES = 4
+ATEST_RETRIES = 1
+DEFAULT_PY = "3.11"
+TESTING_IN_CI = "0"
+THIS_PY = "3.11"
+THIS_SUBDIR = "linux-64"
+# js
+WITH_JS_COV = 0
+# binder
+DEMO_IN_BINDER = 0
+# shorthand
+JLF_ATEST_PREFIX = ".envs/atest_${THIS_SUBDIR}"
+JLF_BUILD_PREFIX = ".envs/build_${THIS_SUBDIR}_${DEFAULT_LAB}"
+JLF_LAB_PREFIX = ".envs/lab_${THIS_SUBDIR}_${JLF_LAB}"
+JLF_PYTEST_REPORT = "build/reports/pytest/${THIS_SUBDIR}_${JLF_LAB}"
+JLF_ROBOT_REPORT = "build/reports/robot/${THIS_SUBDIR}_${JLF_LAB}"
+
+[tool.doitoml.paths]
+all_lock_py = [":glob::.github/specs::*.py"]
+all_py = ["::dodo", "::all_scripts", "::all_py_src", "::all_lock_py"]
+all_py_src = [":rglob::src::*.py"]
+all_robot = [":rglob::atest::*.robot", ":rglob::atest::*.resource"]
+all_scripts = [":glob::scripts::*.py"]
+all_toml = ["::ppt"]
+atest_dir = ["atest"]
+atest_report = ["${JLF_ROBOT_REPORT}"]
+atest_report_html = ["${JLF_ROBOT_REPORT}/log.html"]
+dist_hash_inputs = ["::wheel", "::sdist", "::*::npm_dist"]
+dist_sha256sums = ["dist/SHA256SUMS"]
+dodo = ["dodo.py"]
+env_atest_history = ["${JLF_ATEST_PREFIX}/conda-meta/history"]
+env_atest_prefix = ["${JLF_ATEST_PREFIX}"]
+env_build_history = ["${JLF_BUILD_PREFIX}/conda-meta/history"]
+env_build_prefix = ["${JLF_BUILD_PREFIX}"]
+env_lab_dist_pkg = ["${JLF_LAB_PREFIX}/share/jupyter/labextensions/${JLF_NAME}/package.json"]
+env_lab_history = ["${JLF_LAB_PREFIX}/conda-meta/history"]
+env_lab_prefix = ["${JLF_LAB_PREFIX}"]
+env_lock_dir = [".github/locks"]
+ext_list = ["build/labext/lab_${THIS_SUBDIR}_${JLF_LAB}.txt"]
+git_info = ["build/git_info.json"]
+jscov = ["build/reports/robot/jscov"]
+lab_home = ["build/.homes/${JLF_LAB}"]
+license = ["LICENSE"]
+lock_build = ["build/locks"]
+lock_files = [":glob::build/locks::*.txt::/s/::build/locks::.github/locks::/s/::.txt::.conda.lock"]
+lock_headers = [":glob::build/locks::*.txt"]
+lock_preflight_yml = ["build/locks/_preflight.yml"]
+nyc_html = ["build/reports/nyc"]
+nyc_html_index = ["build/reports/nyc/index.html"]
+pip_freeze = ["build/pip/lab_${THIS_SUBDIR}_${JLF_LAB}.txt"]
+ppt = ["pyproject.toml"]
+pytest_html_cov = ["${JLF_PYTEST_REPORT}/htmlcov/index.html"]
+pytest_html_cov_index = ["${JLF_PYTEST_REPORT}/htmlcov"]
+pytest_html_report = ["${JLF_PYTEST_REPORT}/index.html"]
+readme = ["README.md"]
+sdist = ["dist/${PY_NAME}-${PY_VERSION}.tar.gz"]
+wheel = ["dist/${PY_NAME}-${PY_VERSION}-py3-none-any.whl"]
+
+[tool.doitoml.tokens]
+conda_run = ["conda", "run", "--no-capture-output"]
+conda_run_atest = ["::conda_run_prefix", "::env_atest_prefix"]
+conda_run_build = ["::conda_run_prefix", "::env_build_prefix"]
+conda_run_lab = ["::conda_run_prefix", "::env_lab_prefix"]
+conda_run_lab_pip = ["::conda_run_lab", "::pip"]
+conda_run_prefix = ["::conda_run", "--prefix"]
+labext = ["jupyter", "labextension"]
+labext_binder_ext = [
+  "@jupyterlab/extensionmanager-extension:plugin",
+  "@jupyterlab/apputils-extension:announcements",
+  "offlinenotebook",
+]
+labext_dev = ["python", "scripts/labextension.py", "develop"]
+labext_disable = ["::labext", "disable"]
+pip = ["::pym", "pip"]
+pym = ["python", "-m"]
+taplo_opts = [
+  "--option=array_auto_collapse=true",
+  "--option=compact_inline_tables=true",
+  "--option=column_width=100",
+  "--option=reorder_keys=true",
+]
+
+[tool.doitoml.tasks.binder]
+actions = [
+  [
+    "::pip",
+    "install",
+    "-vv",
+    "-e",
+    ".",
+    "--no-deps",
+    "--ignore-installed",
+    "--no-build-isolation",
+  ],
+  [
+    "::pip",
+    "check",
+  ],
+  {py = {"scripts.actions:copy_labextensions" = {args = [
+    "${JLF_BUILD_PREFIX}",
+    "::js-*::dist_pkg_json",
+  ]}}},
+  [
+    "::labext_disable",
+    "::labext_binder_ext",
+  ],
+  [
+    "::labext",
+    "list",
+  ],
+]
+doc = "perform editable install in binder"
+file_dep = ["::js-*::dist_pkg_json"]
+meta = {doitoml = {skip = {not = "${DEMO_IN_BINDER}"}}}
+
+[tool.doitoml.tasks.fix.toml]
+actions = [["::conda_run_build", "taplo", "fmt", "::taplo_opts", "::all_toml"]]
+doc = "Format TOML with taplo"
+file_dep = ["::all_toml", '::env_build_history']
+
+[tool.doitoml.tasks.fix.ssort]
+actions = [["::conda_run_build", "ssort", "::all_py"]]
+doc = "Predictably order python source with `ssort`"
+file_dep = ["::ppt", "::all_py", '::env_build_history']
+
+[tool.doitoml.tasks.fix.black]
+actions = [
+  [
+    "::conda_run_build",
+    "ruff",
+    "--fix-only",
+    "--quiet",
+    "::all_py",
+  ],
+  [
+    "::conda_run_build",
+    "black",
+    "::all_py",
+  ],
+]
+doc = "Format python source with `ruff` and `black`"
+file_dep = ["::ppt", "::all_py", '::env_build_history']
+task_dep = ["dt:fix:ssort"]
+
+[tool.doitoml.tasks.fix.robot]
+actions = [["::conda_run_build", "robotidy", "::atest_dir"]]
+doc = "Format robotframework code with `robotframework-tidy`"
+file_dep = ["::all_robot", "::env_build_history"]
+
+[tool.doitoml.tasks.lint.toml]
+actions = [["::conda_run_build", "taplo", "check", "::all_toml"]]
+doc = "Check TOML with taplo"
+file_dep = ["::all_toml", '::env_build_history']
+
+[tool.doitoml.tasks.lint.black]
+actions = [["::conda_run_build", "black", "--quiet", "--check", "::all_py"]]
+doc = "Check Python with black"
+file_dep = ["::all_py", '::env_build_history', "::ppt"]
+
+[tool.doitoml.tasks.lint.ruff]
+actions = [["::conda_run_build", "ruff", "--quiet", "::all_py"]]
+doc = "Check Python with ruff"
+file_dep = ["::all_py", '::env_build_history', "::ppt"]
+
+[tool.doitoml.tasks.lint.ssort]
+actions = [["::conda_run_build", "ssort", "--diff", "--check", "::all_py"]]
+doc = "Check python source with `ssort`"
+file_dep = ["::ppt", "::all_py", '::env_build_history']
+
+[tool.doitoml.tasks.lint.robot]
+actions = [["::conda_run_build", "robocop", "::atest_dir"]]
+doc = "Check robotframework code with `robotframework-robocop`"
+file_dep = ["::all_robot", "::env_build_history"]
+
+[tool.doitoml.tasks.dist.preflight]
+actions = [{py = {"scripts.actions:git_info" = {}}}]
+doc = "write out git info to json"
+meta = {doitoml = {log = "::git_info"}}
+targets = ["::git_info"]
+
+[tool.doitoml.tasks.dist.flit]
+actions = [["::conda_run_build", "flit", "--debug", "build"]]
+file_dep = ["::js-*::dist_pkg_json", "::all_py_src", "::ppt", "::license", "::readme", "::git_info"]
+meta = {doitoml = {skip = {any = ["${TESTING_IN_CI}"]}}}
+targets = ["::wheel", "::sdist"]
+
+[tool.doitoml.tasks.dist.hash]
+actions = [
+  {py = {"scripts.actions:hash_some" = {args = [
+    "::dist_sha256sums",
+    "::dist_hash_inputs",
+  ]}}},
+]
+file_dep = ["::dist_hash_inputs"]
+targets = ["::dist_sha256sums"]
+
+
+[tool.doitoml.tasks.dev.pip.install]
+actions = [
+  [
+    "::conda_run_lab_pip",
+    "install",
+    "--no-deps",
+    "--no-build-isolation",
+    "--no-cache-dir",
+    "--ignore-installed",
+    "::wheel",
+  ],
+]
+file_dep = ["::env_lab_history", "::wheel"]
+targets = ["::env_lab_dist_pkg"]
+
+[tool.doitoml.tasks.dev.pip.check]
+actions = [["::conda_run_lab_pip", "freeze"], ["::conda_run_lab_pip", "check"]]
+file_dep = ["::ppt", "::env_lab_dist_pkg"]
+meta = {doitoml = {log = ["::pip_freeze"]}}
+targets = ["::pip_freeze"]
+
+[tool.doitoml.tasks.dev.ext.list]
+actions = [["::conda_run_lab", "jupyter", "labextension", "list"]]
+file_dep = ["::ppt", "::pip_freeze", "::wheel", "::env_lab_dist_pkg"]
+meta = {doitoml = {log = ["::ext_list"]}}
+targets = ["::ext_list"]
+
+[tool.doitoml.tasks.test.pytest]
+actions = [
+  [
+    "::conda_run_lab",
+    "pytest",
+    "--pyargs",
+    "${PY_NAME}",
+    "--cov",
+    "${PY_NAME}",
+    "--cov-branch",
+    "--no-cov-on-fail",
+    "--cov-fail-under=100",
+    "--cov-report=term-missing:skip-covered",
+    "--cov-report=html:build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/htmlcov",
+    "--html",
+    "::pytest_html_report",
+    "--self-contained-html",
+  ],
+]
+file_dep = ["::ppt", "::all_py_src", "::pip_freeze"]
+meta = {doitoml = {env = {COVERAGE_FILE = "build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/.coverage"}}}
+targets = ["::pytest_html_cov"]
+
+
+[tool.doitoml.templates.jinja2.tasks.atest]
+yaml = """
+{% set prev = "" %}
+{% set out = None %}
+{% set a_start = (env.ATEST_ATTEMPT | int) %}
+{% set a_end = (env.ATEST_RETRIES | int) + 1 %}
+
+{% for attempt in range(a_start, a_end) %}
+{% set stem = "build/reports/robot/" ~ env.THIS_SUBDIR ~ "_" ~ env.JLF_LAB %}
+{% set out = stem ~ "_a" ~ attempt  %}
+{% if attempt %}
+  {% set prev = stem ~ "_a" ~ (attempt - 1) %}
+{% endif %}
+{% if attempt %}
+a_{{ attempt }}:
+{% else %}
+lint:dryrun:
+{% endif %}
+  doc: |
+    {% if not attempt %}
+    dry-run robot
+    {% else %}
+    run robot tests with `pabot` (attempt {{ attempt }})
+    {% endif %}
+  actions:
+    - py:
+        scripts.actions:maybe_atest_one:
+          kwargs:
+            conda_run: {{ tokens["dt:conda_run_atest"] }}
+            attempt: {{ attempt }}
+            out_dir: {{ out }}
+            prev_out: {{ prev }}
+            atest_dir: {{ paths["dt:atest_dir"] }}
+            last_attempt: {{ a_end }}
+            jscov: {{ paths["dt:jscov"] }}
+            {% if env.JLF_LAB < "lab4.0" %}
+            atest_args:
+              - --exclude=app:nb
+            {% endif %}
+  file_dep:
+    - ::all_robot
+    - ::env_atest_history
+    {% if attempt %}
+    - ::ext_list
+    - ::wheel
+    {% endif %}
+    {% if prev %}
+    - {{ prev }}/robot.rc
+    {% endif %}
+
+  targets:
+    - {{ out }}/robot.rc
+
+  meta:
+    doitoml:
+      env:
+        JUPYTERLAB_CONDA_PREFIX: ::env_lab_prefix
+{% endfor %}
+"""
+
+[tool.doitoml.tasks.serve.lab]
+actions = [["::conda_run_lab", "jupyter", "lab", "--no-browser", "--debug"]]
+file_dep = ["::ext_list"]
+meta = {doitoml = {env = {HOME = "::dt::lab_home"}}}
+uptodate = [false]
+
+
+[tool.ruff]
+cache-dir = "build/.cache/ruff"
+ignore = [
+  "D211",
+  "D213",
+  # if it doesn't bother black..
+  "E501",
+  # if it doesn't bother mypy...
+  "ANN101",
+  "ANN401",
+  "PGH003",
+  # keep 3.8 compat
+  "UP006",
+  "UP007",
+  # meh
+  "N812",
+]
+select = [
+  "A",
+  "ARG",
+  "B",
+  "BLE",
+  "C4",
+  "C90",
+  "COM",
+  "D",
+  "DJ",
+  "DTZ",
+  "E",
+  "EM",
+  # "ERA", # causes syntax errors, check later
+  "EXE",
+  "F",
+  "FBT",
+  "G",
+  "I",
+  "ICN",
+  "INP",
+  "ISC",
+  "N",
+  "NPY",
+  "PD",
+  "PGH",
+  "PIE",
+  "PL",
+  "PT",
+  "PTH",
+  "PYI",
+  "Q",
+  "RET",
+  "RSE",
+  "RUF",
+  "S",
+  "SIM",
+  "SLF",
+  "T10",
+  "T20",
+  "TCH",
+  "TID",
+  "UP",
+  "W",
+  "YTT",
+]
+
+[tool.ruff.isort]
+known-first-party = ["jupyterlab_fonts"]
+
+[tool.ruff.per-file-ignores]
+"**/tests/*.py" = ["S101", "SLF001", "PLR2004"]
+"__lock__.py" = ["INP001", "T201", "ARG002", "S603"]
+"dodo.py" = ["RUF012", "S603", "T201"]
+"scripts/*.py" = ["INP001", "S603", "T201", "S607", "SIM115", "PLR0913", "PLR2004", "SLF001"]
+
+[tool.pytest.ini_options]
+addopts = [
+  "--pyargs",
+  "jupyterlab_fonts",
+  "-vv",
+  # for humans
+  "--self-contained-html",
+  "--color=yes",
+  # misc
+  "--ff",
+  "--tb=long",
+]
+cache_dir = "build/.cache/pytest"
+script_launch_mode = "subprocess"
+
+
+[tool.robocop]
+exclude = [
+  "inline-if-can-be-used",
+  "missing-doc-keyword",
+  "missing-doc-test-case",
+  "too-many-calls-in-test-case",
+  "unnecessary-string-conversion",
+  "wrong-case-in-keyword-name",
+  "too-long-test-case",
+  "wrong-import-order",
+  "too-many-calls-in-keyword",
+]

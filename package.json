@@ -1,11 +1,6 @@
 {
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "bootstrap": "jlpm || jlpm || jlpm && jlpm lint && jlpm bootstrap:js",
-    "bootstrap:js": "jlpm lerna bootstrap && jlpm build",
     "build": "jlpm build:schema && lerna run prebuild && jlpm build:ts",
     "build:schema": "lerna run build:schema",
     "build:static": "jlpm webpack -p",
@@ -13,23 +8,326 @@
     "clean": "jlpm clean:lib && jlpm clean:test",
     "clean:lib": "lerna exec --parallel -- rimraf lib",
     "clean:test": "rimraf _testoutput",
-    "lint": "jlpm lint:py && jlpm lint:ts && jlpm lint:sh",
-    "lint:prettier": "prettier --write *.json *.md *.yml && prettier --write 'packages/**/*.{ts,tsx,css,json,md}'",
-    "lint:py": "black nbjss setup.py && flake8 nbjss setup.py",
-    "lint:robot": "python -m robot.tidy --inplace tests/**/*.robot && rflint --configure TooManyTestSteps:40 --configure TooFewKeywordSteps:0  tests/**/*.robot",
-    "lint:sh": "beautysh -i 2 postBuild",
-    "lint:ts": "jlpm lint:prettier && jlpm lint:tslint",
-    "lint:tslint": "tslint --fix -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
+    "eslint:check": "eslint --cache --config=.eslintrc.js --ext \".js,.jsx,.ts,.tsx\" packages",
+    "prettier:check": "prettier --list-different --cache --cache-location=build/.cache/prettier \"./*.{json,md,yml,js}\" \"{packages,.github,.binder}/**/*.{ts,tsx,css,json,md}\"",
     "test": "jlpm test:robot",
     "test:robot": "python -m robot -d _testoutput -X tests/acceptance",
     "watch": "cd packages/_meta && tsc -b -w",
     "watch:schema": "jlpm lerna run watch:schema --parallel"
   },
-  "prettier": {
-    "printWidth": 88,
-    "proseWrap": "always",
-    "semi": true,
-    "singleQuote": true
+  "workspaces": [
+    "packages/*"
+  ],
+  "resolutions": {
+    "http-cache-semantics": "^4.1.1",
+    "json5": "^2.2.3",
+    "webpack": "^5.76.1"
+  },
+  "devDependencies": {
+    "@ephesoft/webpack.istanbul.loader": "^2.2.0",
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "file-loader": "^6.2.0",
+    "lerna": "^7.3.0",
+    "nyc": "^15.1.0",
+    "prettier": "^3.0.3",
+    "prettier-package-json": "^2.8.0",
+    "raw-loader": "^4.0.2",
+    "source-map-loader": "^4.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "~5.2.2",
+    "yarn-berry-deduplicate": "^6.1.1"
+  },
+  "doitoml": {
+    "prefix": "js-root",
+    "paths": {
+      "pj": [
+        "package.json"
+      ],
+      "yarnrc": [
+        ".yarnrc.yml"
+      ],
+      "all_pj": [
+        "::pj",
+        ":glob::packages::*/package.json"
+      ],
+      "yarn_history": [
+        "node_modules/.yarn-state.yml"
+      ],
+      "all_md": [
+        ":glob::.::*.md",
+        ":rglob::.github::*.md",
+        ":glob::packages::*/*.md"
+      ],
+      "all_empty_node_modules": [
+        ":glob::packages::*/package.json::/s/::package.json::node_modules/.empty"
+      ],
+      "all_json": [
+        ":glob::.::*.json",
+        ":glob::packages::*/*.json",
+        ":glob::packages::*/schema/*.json"
+      ],
+      "all_yml": [
+        ":glob::.::*.yml",
+        ":rglob::.github::*.yml"
+      ],
+      "all_ts": [
+        ":glob::packages::*/src/**/*.ts",
+        ":glob::packages::*/src/**/*.tsx"
+      ],
+      "all_js": [
+        ":glob::.::*.js"
+      ],
+      "all_css": [
+        ":glob::packages::*/style/**/*.css"
+      ],
+      "tsbuildinfo": [
+        "packages/_meta/tsconfig.tsbuildinfo"
+      ],
+      "all_tsconfig": [
+        ":glob::.::tsconfig*.json",
+        ":glob::packages::*/tsconfig*.json"
+      ],
+      "labext_script": [
+        "scripts/labextension.py"
+      ]
+    },
+    "env": {
+      "JLF_SHARED": "src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds",
+      "NX_CACHE_DIRECTORY": "${JLF_ROOT}/build/.cache/nx",
+      "NX_PROJECT_GRAPH_CACHE_DIRECTORY": "${JLF_ROOT}/build/.cache/nx",
+      "YARN_CACHE_FOLDER": "${JLF_ROOT}/build/.cache/yarn"
+    },
+    "tokens": {
+      "jlpm": [
+        "::dt::conda_run_build",
+        "jlpm"
+      ],
+      "lerna": [
+        "::jlpm",
+        "lerna",
+        "run",
+        "--stream"
+      ],
+      "build_labext": [
+        "::dt::conda_run_build",
+        "python",
+        "::labext_script",
+        "build",
+        "--debug"
+      ]
+    },
+    "tasks": {
+      "setup": {
+        "file_dep": [
+          "::yarnrc",
+          "::dt::env_build_history",
+          "::all_pj"
+        ],
+        "targets": [
+          "::yarn_history"
+        ],
+        "actions": [
+          {
+            "py": {
+              "scripts.actions:touch": {
+                "args": [
+                  "::all_empty_node_modules"
+                ]
+              }
+            }
+          },
+          [
+            "::jlpm",
+            "install"
+          ],
+          [
+            "::jlpm",
+            "yarn-berry-deduplicate",
+            "--strategy=fewer",
+            "--fail"
+          ]
+        ],
+        "meta": {
+          "doitoml": {
+            "env": {
+              "YARN_ENABLE_IMMUTABLE_INSTALLS": "false"
+            }
+          }
+        }
+      },
+      "build": {
+        "lib": {
+          "actions": [
+            [
+              "::lerna",
+              "build"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::all_tsconfig",
+            "::*::prebuild_targets"
+          ],
+          "targets": [
+            "::tsbuildinfo"
+          ],
+          "meta": {
+            "doitoml": {
+              "skip": "${WITH_JS_COV}"
+            }
+          }
+        },
+        "lib:cov": {
+          "actions": [
+            [
+              "::lerna",
+              "build:cov"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::all_tsconfig",
+            "::*::prebuild_targets"
+          ],
+          "targets": [
+            "::tsbuildinfo"
+          ],
+          "meta": {
+            "doitoml": {
+              "skip": {
+                "not": "${WITH_JS_COV}"
+              }
+            }
+          }
+        }
+      },
+      "report": {
+        "nyc": {
+          "file_dep": [
+            "::yarn_history"
+          ],
+          "actions": [
+            [
+              "::jlpm",
+              "nyc",
+              "report",
+              "--report-dir",
+              "::dt::nyc_html",
+              "--temp-dir",
+              "::dt::jscov"
+            ]
+          ]
+        }
+      },
+      "watch": {
+        "ts": {
+          "uptodate": [
+            false
+          ],
+          "actions": [
+            [
+              "::lerna",
+              "--scope=@deathbeds/meta-jupyterlab-fonts",
+              "watch"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::*::prebuild_targets"
+          ]
+        }
+      },
+      "fix": {
+        "prettier-package-json": {
+          "actions": [
+            [
+              "::jlpm",
+              "prettier-package-json",
+              "--write",
+              "::all_pj"
+            ]
+          ],
+          "file_dep": [
+            "::all_pj",
+            "::yarn_history"
+          ]
+        },
+        "prettier": {
+          "actions": [
+            [
+              "::jlpm",
+              "prettier:check",
+              "--write"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_md",
+            "::all_json",
+            "::all_ts",
+            "::all_css",
+            "::all_yml",
+            "::all_js"
+          ]
+        },
+        "eslint": {
+          "actions": [
+            [
+              "::jlpm",
+              "eslint:check",
+              "--fix"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::all_js"
+          ]
+        }
+      },
+      "lint": {
+        "prettier": {
+          "actions": [
+            [
+              "::jlpm",
+              "prettier:check"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_md",
+            "::all_json",
+            "::all_ts",
+            "::all_css",
+            "::all_yml",
+            "::all_js"
+          ]
+        },
+        "eslint": {
+          "actions": [
+            [
+              "::jlpm",
+              "eslint:check"
+            ]
+          ],
+          "file_dep": [
+            "::yarn_history",
+            "::all_ts",
+            "::all_js"
+          ]
+        }
+      }
+    }
   },
   "nyc": {
     "all": true,
@@ -52,23 +350,10 @@
     ],
     "skip-full": true
   },
-  "devDependencies": {
-    "@ephesoft/webpack.istanbul.loader": "^2.1.0",
-    "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.39.0",
-    "@typescript-eslint/parser": "^5.39.0",
-    "eslint": "^8.24.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.31.8",
-    "lerna": "^6.0.1",
-    "nyc": "^15.1.0",
-    "prettier": "^2.7.1",
-    "prettier-plugin-packagejson": "^2.2.11",
-    "source-map-loader": "^4.0.1",
-    "ts-node": "^10.9.1",
-    "typescript": "~4.8.4",
-    "yarn-deduplicate": "^6.0.0"
+  "prettier": {
+    "printWidth": 88,
+    "proseWrap": "always",
+    "semi": true,
+    "singleQuote": true
   }
 }

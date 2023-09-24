@@ -1,0 +1,8 @@
+dependencies:
+  - coverage
+  - pytest-asyncio
+  - pytest-console-scripts
+  - pytest-cov
+  - pytest-html
+  - pytest-json-report
+  - pytest-xdist

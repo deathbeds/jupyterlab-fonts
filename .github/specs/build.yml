@@ -1,0 +1,10 @@
+# builds the various packages
+
+_inherit_from:
+  - _base.yml
+  - _node.yml
+  - _build.yml
+  - _lab/lab4.0.yml
+  - _lint.yml
+
+dependencies: []

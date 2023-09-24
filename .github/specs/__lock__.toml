@@ -1,0 +1,63 @@
+prefix = "lock"
+
+[paths]
+all_specs = [":rglob::.::*.yml"]
+all_specs_to_lock = [":glob::.::*.yml::!_"]
+lock_py = ["__lock__.py"]
+lock_toml = ["__lock__.toml"]
+
+[tokens]
+subdirs = ["linux-64", "osx-64", "win-64"]
+
+[tasks.preflight]
+doc = "generate a description of the lockfiles that will be created"
+file_dep = ["::all_specs", "::lock_py", "::lock_toml"]
+targets = ["::dt::lock_preflight_yml"]
+actions = [
+    {py={"__lock__:preflight" = {args=[
+        "::dt::lock_preflight_yml", "::all_specs_to_lock"
+        ], kwargs={subdirs=["::subdirs"]}}}}
+]
+
+[templates.jinja2.tasks.solve]
+yaml = """
+{% for header in paths["dt:lock_headers"] %}
+{% set stem = header.split("/")[-1].replace(".txt", "") %}
+{{ stem }}:
+    file_dep:
+        - {{ header }}
+        - ::dt::lock_preflight_yml
+    targets:
+        - {{ paths["dt:env_lock_dir"][0] }}/{{ stem }}.conda.lock
+    actions:
+        - py:
+            __lock__:lock_from_preflight:
+                args:
+                    - ::dt::env_lock_dir
+                    - {{ header }}
+                    - ::dt::lock_preflight_yml
+{% endfor %}
+"""
+
+[templates.jinja2.tasks.install]
+yaml = """
+{% for header in paths["dt:lock_headers"] %}
+{% set stem = header.split("/")[-1].replace(".txt", "") %}
+{{ stem }}:
+    meta:
+        doitoml:
+            cwd: ../../
+            skip: "${DEMO_IN_BINDER}"
+    file_dep:
+        - {{ paths["dt:env_lock_dir"][0] }}/{{ stem }}.conda.lock
+    targets:
+        - ../../.envs/{{ stem }}/conda-meta/history
+    actions:
+        - - mamba
+          - create
+          - --prefix
+          - .envs/{{ stem }}
+          - --file
+          - {{ paths["dt:env_lock_dir"][0] }}/{{ stem }}.conda.lock
+{% endfor %}
+"""

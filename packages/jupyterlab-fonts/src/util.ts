@@ -1,4 +1,13 @@
-import { FONT_FORMATS, FontFormat } from './tokens';
+import { JupyterFrontEnd, JupyterFrontEndPlugin } from '@jupyterlab/application';
+
+import { IFontFacePrimitive } from './_schema';
+import {
+  FONT_FORMATS,
+  FontFormat,
+  IFontManager,
+  IMakeFaceOptions,
+  IPluginOptions,
+} from './tokens';
 
 /* below from https://gist.github.com/viljamis/c4016ff88745a0846b94 */
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -56,4 +65,61 @@ export function getBinary(url: string) {
     };
     xhr.send();
   });
+}
+
+export async function makeFace(options: IMakeFaceOptions): Promise<IFontFacePrimitive> {
+  return {
+    ...options.primitive,
+    'font-family': `${options.name} ${options.variant}`,
+    src: await dataURISrc((await options.woff2()).default, FontFormat.woff2),
+  };
+}
+
+/**
+ * Create an simple JupyterFrontEnd plugin for providing a font.
+ *
+ * This will lazily load its font assets when needed.
+ */
+export function makePlugin(options: IPluginOptions): JupyterFrontEndPlugin<void> {
+  const plugin: JupyterFrontEndPlugin<void> = {
+    id: options.id,
+    autoStart: true,
+    requires: [IFontManager],
+    activate: (app: JupyterFrontEnd, fonts: IFontManager): void => {
+      fonts.ready
+        .then(async () => {
+          const variants = await options.variants();
+          for (const [variant, faces] of Object.entries(variants)) {
+            fonts.registerFontFace({
+              name: `${options.fontName} ${variant}`.trim(),
+              license: {
+                ...options.license,
+                text: async () => await options.licenseText(),
+              },
+              faces: async () => {
+                const promises: Promise<IFontFacePrimitive>[] = [];
+                for (const face of faces) {
+                  promises.push(
+                    makeFace({
+                      name: options.fontName,
+                      variant,
+                      woff2: face.woff2,
+                      primitive: face.style || {},
+                    }),
+                  );
+                }
+                try {
+                  return await Promise.all(promises);
+                } catch (err) {
+                  console.warn(err);
+                  return [];
+                }
+              },
+            });
+          }
+        })
+        .catch(console.warn);
+    },
+  };
+  return plugin;
 }

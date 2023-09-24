@@ -13,7 +13,7 @@ ${ICON_NOTEBOOK}                        *[@data-icon = 'ui-components:notebook']
 ${ICON_CLOSE}                           div[contains(@class, 'lm-TabBar-tabCloseIcon')]
 ${BUTTON}                               .jp-FontsEditor-button
 ${SETTING_ITEM}                         //div[contains(@class, 'jp-PluginList')]//div
-${SETTINGS_RAW_CM}                      .jp-SettingsRawEditor-user .CodeMirror
+${SETTINGS_RAW}                         .jp-SettingsRawEditor-user
 ${SHEET}                                .jp-Fonts-Sheet
 ${MOD_GLOBAL}                           .jp-fonts-mod-global
 ${MOD_NOTEBOOK}                         .jp-fonts-mod-notebook
@@ -27,3 +27,9 @@ ${CSS_LAB_ADVANCED_COLLAPSE}            .jp-NotebookTools .jp-Collapse-header
 ${CSS_LAB_CELL_META_TOOL}               .jp-RankedPanel .jp-MetadataEditorTool:nth-child(1)
 ${CSS_LAB_NOTEBOOK_META_TOOL}           .jp-RankedPanel .jp-MetadataEditorTool:nth-child(2)
 ${CSS_LAB_META_COMMIT}                  [data-icon="ui-components:check"]
+# lab4/nb7
+${XP_LAB4_COLLAPSED_PANEL}              //*[contains(@class, 'jp-Collapse-header-collapsed')]
+${XP_LAB4_COLLAPSED_PANEL_TITLE}        ${XP_LAB4_COLLAPSED_PANEL}//*[contains(@class, 'jp-Collapser-title')]
+${CSS_LAB4_OPEN_IN_NOTEBOOK}            .jp-ToolbarButtonComponent[data-command="jupyter-notebook:open-notebook"]
+# rfjl bugs
+${CM CSS EDITOR}                        .CodeMirror

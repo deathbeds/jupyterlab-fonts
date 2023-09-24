@@ -1,4 +1,8 @@
-import { JupyterLab, JupyterFrontEndPlugin } from '@jupyterlab/application';
+import {
+  JupyterFrontEndPlugin,
+  JupyterFrontEnd,
+  ILabShell,
+} from '@jupyterlab/application';
 import { ICommandPalette } from '@jupyterlab/apputils';
 import { IMainMenu } from '@jupyterlab/mainmenu';
 import { INotebookTracker } from '@jupyterlab/notebook';
@@ -21,15 +25,19 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
   id: PLUGIN_ID,
   autoStart: true,
   requires: [IMainMenu, ISettingRegistry, ICommandPalette, INotebookTracker],
+  optional: [ILabShell],
   provides: IFontManager,
   activate: function (
-    app: JupyterLab,
+    app: JupyterFrontEnd,
     menu: IMainMenu,
     settingRegistry: ISettingRegistry,
     palette: ICommandPalette,
-    notebooks: INotebookTracker
+    notebooks: INotebookTracker,
+    labShell?: ILabShell | null,
   ): IFontManager {
     const manager = new FontManager(app.commands, palette, notebooks);
+
+    const area = labShell ? 'main' : 'right';
 
     manager.licensePaneRequested.connect((it, font: IFontFaceOptions) => {
       let license = new LicenseViewer({ font });
@@ -37,7 +45,7 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
       license.title.label = font.name;
       license.title.closable = true;
       license.title.icon = ICONS.license;
-      app.shell.add(license, 'main');
+      app.shell.add(license, area);
       app.shell.activateById(license.id);
     });
 
@@ -64,7 +72,8 @@ const plugin: JupyterFrontEndPlugin<IFontManager> = {
           model.notebook.disposed.connect(() => editor.dispose());
         }
 
-        app.shell.add(editor, 'main', { mode: 'split-right' });
+        app.shell.add(editor, area, { mode: 'split-right' });
+        app.shell.activateById(editor.id);
       },
     });
 

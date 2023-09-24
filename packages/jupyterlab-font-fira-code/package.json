@@ -1,45 +1,103 @@
 {
   "name": "@deathbeds/jupyterlab-font-fira-code",
-  "version": "2.1.2",
+  "version": "3.0.0.alpha0",
   "description": "Fira Code Fonts for JupyterLab",
-  "keywords": [
-    "fonts",
-    "jss",
-    "jupyter",
-    "jupyterlab-extension",
-    "jupyterlab"
-  ],
-  "bugs": {
-    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
-  },
+  "license": "BSD-3-Clause",
+  "author": "Dead Pixels Collective",
   "repository": {
     "type": "git",
     "url": "https://github.com/deathbeds/jupyterlab-fonts"
   },
-  "license": "BSD-3-Clause",
-  "author": "Dead Pixels Collective",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "files": [
-    "{lib,style,src}/*.{d.ts,js,css,ts,tsx,js.map}",
-    "{README.md,LICENSE}"
+    "{README.md,LICENSE}",
+    "{lib,style,src}/*.{d.ts,js,css,ts,tsx,js.map}"
   ],
   "scripts": {
     "labextension:build": "jupyter labextension build .",
     "labextension:build:cov": "tsc -b tsconfig.cov.json && jupyter labextension build .",
     "watch": "jupyter labextension watch --debug ."
   },
+  "types": "lib/index.d.ts",
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~2.1.2",
-    "@jupyterlab/application": "3",
+    "@deathbeds/jupyterlab-fonts": "~3.0.0.alpha0",
+    "@jupyterlab/application": "3 || 4",
     "firacode": "^6.2.0"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.4"
+    "@deathbeds/jupyterlab-fonts": "workspace:*",
+    "@jupyterlab/builder": "^4.0.6"
+  },
+  "keywords": [
+    "fonts",
+    "jss",
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "doitoml": {
+    "prefix": "js-font-fira-code",
+    "paths": {
+      "npm_dist": [
+        "../../dist/deathbeds-jupyterlab-font-fira-code-${JLF_VERSION}.tgz"
+      ],
+      "here": [
+        "."
+      ],
+      "dist_pkg_json": [
+        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-fira-code/package.json"
+      ]
+    },
+    "tasks": {
+      "build": {
+        "ext": {
+          "actions": [
+            [
+              "::js-root::build_labext"
+            ]
+          ],
+          "file_dep": [
+            "package.json",
+            "::js-root::tsbuildinfo",
+            "::js-root::yarn_history"
+          ],
+          "targets": [
+            "::dist_pkg_json"
+          ]
+        }
+      },
+      "dist": {
+        "meta": {
+          "doitoml": {
+            "cwd": "../../dist"
+          }
+        },
+        "file_dep": [
+          "::js-root::tsbuildinfo",
+          "LICENSE",
+          "package.json",
+          "README.md"
+        ],
+        "actions": [
+          [
+            "::dt::conda_run_build",
+            "npm",
+            "pack",
+            "::here"
+          ]
+        ],
+        "targets": [
+          "::npm_dist"
+        ]
+      }
+    }
   },
   "jupyterlab": {
     "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-fira-code",
+    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-fira-code",
     "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {

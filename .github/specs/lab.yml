@@ -1,0 +1,11 @@
+# runs the packages for tests
+_matrix:
+  - _lab
+
+_inherit_from:
+  - _base.yml
+  - _run.yml
+  - _utest.yml
+
+dependencies:
+  - ipywidgets

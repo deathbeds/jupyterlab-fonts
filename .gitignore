@@ -1,9 +1,11 @@
 __pycache__
+_d/
 _testoutput/
-.coverage
+.env
+.envs/
 .eslintcache
 .ipynb_checkpoints/
-.yarn-packages/
+.pabotsuitenames
 *.doit*
 *.egg-info/
 *.log
@@ -11,10 +13,7 @@ _testoutput/
 *.woff2
 build/
 dist/
-envs/
 lib/
-nbjss/static/nbjss.js
 node_modules/
 packages/*/lib
-src/jupyterlab_fonts/labextensions
 Untitled*.ipynb

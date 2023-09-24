@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+source activate "${NB_PYTHON_PREFIX}"
+
+export DEMO_IN_BINDER=1
+
 set -eux
-source activate $NB_PYTHON_PREFIX
 
-doit binder
-
-mkdir -p ~/.jupyter
-cp .binder/jupyter_config.json ~/.jupyter/
-cp .binder/overrides.json $NB_PYTHON_PREFIX/share/jupyter/lab/settings
+doit lock:preflight
+doit -n8 dt:binder || doist list && doit dt:binder
+git clean -dxf node_modules build

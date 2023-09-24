@@ -3,6 +3,8 @@ Documentation       The font editor allows changing fonts in notebooks
 
 Resource            ./_keywords.resource
 
+Test Tags           app:lab
+
 
 *** Test Cases ***
 Global Font Editor
@@ -17,12 +19,8 @@ Global Font Editor
     Global    Code    Fira Code Light
     Global    Code    Fira Code Medium
     Global    Code    Fira Code Regular
-    Global    Content    Anonymous Pro Bold
-    Global    Content    Anonymous Pro Regular
-    Global    Content    DejaVu Sans Mono
-    Global    Content    DejaVu Sans Mono Bold
-    Global    Content    Fira Code Bold
-    Global    Content    Fira Code Light
-    Global    Content    Fira Code Medium
-    Global    Content    Fira Code Regular
+    Global    Content    Atkinson Hyperlegible Regular
+    Global    Content    Atkinson Hyperlegible Bold
+    Global    UI    Atkinson Hyperlegible Regular
+    Global    UI    Atkinson Hyperlegible Bold
     [Teardown]    Close the Font Editor    Global

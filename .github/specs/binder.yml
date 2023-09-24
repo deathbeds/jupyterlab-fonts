@@ -1,0 +1,17 @@
+# demos the package
+
+platforms:
+  - linux-64
+
+_inherit_from:
+  - _base.yml
+  - _run.yml
+  - _node.yml
+  - _build.yml
+  - _lab/lab4.0.yml
+  - lock.yml
+
+_target: ../../.binder/environment.yml
+
+dependencies:
+  - jupyterhub-singleuser

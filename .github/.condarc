@@ -4,12 +4,13 @@ always_yes: True
 auto_update_conda: False
 local_repodata_ttl: 99999
 notify_outdated_conda: False
-remote_connect_timeout_secs: 600.0
+remote_connect_timeout_secs: 600
 remote_max_retries: 10
-remote_read_timeout_secs: 600.0
+remote_read_timeout_secs: 600
 show_channel_urls: True
 show_sources: True
 unsatisfiable_hints_check_depth: 0
 use_only_tar_bz2: True
 repodata_fns:
+  - repodata.json.zst
   - repodata.json

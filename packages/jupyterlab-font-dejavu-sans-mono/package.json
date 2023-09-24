@@ -1,29 +1,21 @@
 {
   "name": "@deathbeds/jupyterlab-font-dejavu-sans-mono",
-  "version": "2.1.2",
+  "version": "3.0.0.alpha0",
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
-  "keywords": [
-    "fonts",
-    "jss",
-    "jupyter",
-    "jupyterlab-extension",
-    "jupyterlab"
-  ],
-  "bugs": {
-    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
-  },
+  "license": "BSD-3-Clause",
+  "author": "Dead Pixels Collective",
   "repository": {
     "type": "git",
     "url": "https://github.com/deathbeds/jupyterlab-fonts"
   },
-  "license": "BSD-3-Clause",
-  "author": "Dead Pixels Collective",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-fonts/issues"
+  },
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "files": [
-    "{lib,style,src}/**/*.{d.ts,js,css,woff2,ts,tsx,js.map}",
+    "vendor/dejavu-fonts-ttf/LICENSE",
     "{README.md,LICENSE}",
-    "vendor/dejavu-fonts-ttf/LICENSE"
+    "{lib,style,src}/**/*.{d.ts,js,css,woff2,ts,tsx,js.map}"
   ],
   "scripts": {
     "labextension:build": "jupyter labextension build .",
@@ -31,17 +23,111 @@
     "prebuild": "python scripts/convert.py",
     "watch": "jupyter labextension watch --debug ."
   },
+  "types": "lib/index.d.ts",
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~2.1.2",
-    "@jupyterlab/application": "3"
+    "@deathbeds/jupyterlab-fonts": "~3.0.0.alpha0",
+    "@jupyterlab/application": "3 || 4"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.4",
+    "@deathbeds/jupyterlab-fonts": "workspace:*",
+    "@jupyterlab/builder": "^4.0.6",
     "dejavu-fonts-ttf": "^2.37.3"
+  },
+  "keywords": [
+    "fonts",
+    "jss",
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "doitoml": {
+    "prefix": "js-font-dejavu-sans-mono",
+    "paths": {
+      "npm_dist": [
+        "../../dist/deathbeds-jupyterlab-font-dejavu-sans-mono-${JLF_VERSION}.tgz"
+      ],
+      "all_style": [
+        "::prebuild_targets"
+      ],
+      "here": [
+        "."
+      ],
+      "dist_pkg_json": [
+        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono/package.json"
+      ],
+      "prebuild_targets": [
+        "style/fonts/DejaVuSansMono-Bold.woff2",
+        "style/fonts/DejaVuSansMono.woff2"
+      ],
+      "prebuild_deps": [
+        "scripts/convert.py"
+      ]
+    },
+    "tasks": {
+      "build": {
+        "pre": {
+          "actions": [
+            [
+              "::js-root::jlpm",
+              "prebuild"
+            ]
+          ],
+          "file_dep": [
+            "::prebuild_deps",
+            "::js-root::yarn_history"
+          ],
+          "targets": [
+            "::prebuild_targets"
+          ]
+        },
+        "ext": {
+          "actions": [
+            [
+              "::js-root::build_labext"
+            ]
+          ],
+          "file_dep": [
+            "package.json",
+            "::all_style",
+            "::js-root::tsbuildinfo",
+            "::js-root::yarn_history",
+            "::prebuild_targets"
+          ],
+          "targets": [
+            "::dist_pkg_json"
+          ]
+        }
+      },
+      "dist": {
+        "meta": {
+          "doitoml": {
+            "cwd": "../../dist"
+          }
+        },
+        "file_dep": [
+          "::all_style",
+          "::js-root::tsbuildinfo",
+          "LICENSE",
+          "package.json",
+          "README.md"
+        ],
+        "actions": [
+          [
+            "::dt::conda_run_build",
+            "npm",
+            "pack",
+            "::here"
+          ]
+        ],
+        "targets": [
+          "::npm_dist"
+        ]
+      }
+    }
   },
   "jupyterlab": {
     "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
+    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
     "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {

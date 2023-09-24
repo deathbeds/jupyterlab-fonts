@@ -7,6 +7,7 @@ import { Signal } from '@lumino/signaling';
 import * as JSS from 'jss';
 import jssPresetDefault from 'jss-preset-default';
 
+import * as compat from './labcompat';
 import * as SCHEMA from './schema';
 import { ROOT, IFontFaceOptions, DOM, PACKAGE_NAME } from './tokens';
 
@@ -46,7 +47,7 @@ export class Stylist {
       sheet.classList.add(DOM.modNotebook);
       panel.content.modelContentChanged.connect(
         this._debouncedNotebookContentChanged,
-        this
+        this,
       );
       panel.disposed.connect(this._onDisposed, this);
       this._onNotebookModelContentChanged(panel.content);
@@ -66,32 +67,40 @@ export class Stylist {
     const oldCellCount = this._notebookCellCount.get(notebook) || -1;
 
     let needsUpdate = newCellCount !== oldCellCount;
+
     for (const cell of notebook.widgets) {
       cell.node.dataset.jpfCellId = cell.model.id;
-      let tags = [...((cell.model.metadata.get('tags') || []) as string[])].join(',');
-      if (tags) {
-        cell.node.dataset.jpfCellTags = `,${tags},`;
+      let tags = [
+        ...((compat.getCellMetadata(cell.model, 'tags') ||
+          JSONExt.emptyArray) as string[]),
+      ];
+      if (tags && tags.length) {
+        tags.sort();
+        cell.node.dataset.jpfCellTags = `,${tags.join(',')},`;
       } else {
         delete cell.node.dataset.jpfCellTags;
       }
 
-      if (!needsUpdate) {
-        const meta = cell.model.metadata.get(PACKAGE_NAME) || JSONExt.emptyObject;
-        let cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
-        if (!JSONExt.deepEqual(meta, cached)) {
-          needsUpdate = true;
-        }
-        this._cellStyleCache.set(cell.model.id, meta);
+      const meta =
+        compat.getCellMetadata(cell.model, PACKAGE_NAME) || JSONExt.emptyObject;
+      let cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
+      if (!JSONExt.deepEqual(meta, cached)) {
+        needsUpdate = true;
       }
+      this._cellStyleCache.set(cell.model.id, meta);
     }
 
-    if (needsUpdate) {
-      this.stylesheet(
-        notebook.model?.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings,
-        notebook.parent as NotebookPanel
-      );
-      this._notebookCellCount.set(notebook, newCellCount);
+    if (!needsUpdate) {
+      return;
     }
+
+    this.stylesheet(
+      notebook.model
+        ? (compat.getPanelMetadata(notebook.model, PACKAGE_NAME) as SCHEMA.ISettings)
+        : null,
+      notebook.parent as NotebookPanel,
+    );
+    this._notebookCellCount.set(notebook, newCellCount);
   }
 
   private _onDisposed(panel: NotebookPanel) {
@@ -101,7 +110,7 @@ export class Stylist {
       panel.disposed.disconnect(this._onDisposed, this);
       panel.content.modelContentChanged.disconnect(
         this._debouncedNotebookContentChanged,
-        this
+        this,
       );
     }
     if (this._notebookCellCount.has(panel.content)) {
@@ -119,14 +128,16 @@ export class Stylist {
 
   setTransientNotebookStyle(
     panel: NotebookPanel,
-    style: SCHEMA.ISettings | null
+    style: SCHEMA.ISettings | null,
   ): void {
     if (style == null) {
       this._transientNotebookStyles.delete(panel);
     } else {
       this._transientNotebookStyles.set(panel, style);
     }
-    const meta = panel.model?.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings;
+    const meta = panel.model
+      ? (compat.getPanelMetadata(panel.model, PACKAGE_NAME) as SCHEMA.ISettings)
+      : null;
     this.stylesheet(meta, panel);
   }
 
@@ -156,7 +167,7 @@ export class Stylist {
       }
       for (const cell of panel.content.widgets) {
         let cellMeta =
-          (cell.model.metadata.get(PACKAGE_NAME) as SCHEMA.ISettings) ||
+          (compat.getCellMetadata(cell.model, PACKAGE_NAME) as SCHEMA.ISettings) ||
           JSONExt.emptyObject;
         style = this._nbMetaToStyle(cellMeta, panel, cell);
         jss = this._jss.createStyleSheet(style as any);
@@ -182,7 +193,7 @@ export class Stylist {
       localPath = URLExt.join(
         PageConfig.getBaseUrl(),
         'files',
-        PathExt.dirname(localPath)
+        PathExt.dirname(localPath),
       );
     }
     let line: string;
@@ -204,7 +215,7 @@ export class Stylist {
   private _nbMetaToStyle(
     meta: SCHEMA.ISettings,
     panel: NotebookPanel,
-    cell: Cell<ICellModel> | null = null
+    cell: Cell<ICellModel> | null = null,
   ): SCHEMA.IStyles {
     let jss: any = { '@font-face': [], '@global': {}, '@import': [] };
     let selector = `.${DOM.notebookPanel}[id='${panel.id}']`;
@@ -309,7 +320,7 @@ export class Stylist {
 
     return {
       '@global': globalStyles as any,
-      '@font-face': [flatFaces as any, ...styleFaces],
+      '@font-face': [...(flatFaces as any), ...styleFaces],
       '@import': imports as any,
     } as SCHEMA.IStyles;
   }
@@ -328,7 +339,7 @@ export class Stylist {
           this.stylesheets.map((s) => {
             document.body.appendChild(s);
           }),
-        0
+        0,
       );
     } else {
       this.stylesheets.map((el) => el.remove());

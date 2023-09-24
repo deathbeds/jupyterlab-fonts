@@ -1,15 +1,17 @@
 {
-  "name": "@deathbeds/meta-jupyterlab-fonts",
-  "version": "2.1.2",
   "private": true,
+  "name": "@deathbeds/meta-jupyterlab-fonts",
+  "version": "3.0.0.alpha0",
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc -b --sourceMap",
+    "build:cov": "tsc -b --inlineSourceMap",
     "watch": "jlpm build --watch --preserveWatchOutput"
   },
-  "dependencies": {
-    "@deathbeds/jupyterlab-font-anonymous-pro": "file:../jupyterlab-font-anonymous-pro",
-    "@deathbeds/jupyterlab-font-dejavu-sans-mono": "file:../jupyterlab-font-dejavu-sans-mono",
-    "@deathbeds/jupyterlab-font-fira-code": "file:../jupyterlab-font-fira-code",
-    "@deathbeds/jupyterlab-fonts": "file:../jupyterlab-fonts"
+  "devDependencies": {
+    "@deathbeds/jupyterlab-font-anonymous-pro": "workspace:*",
+    "@deathbeds/jupyterlab-font-atkinson-hyperlegible": "workspace:*",
+    "@deathbeds/jupyterlab-font-dejavu-sans-mono": "workspace:*",
+    "@deathbeds/jupyterlab-font-fira-code": "workspace:*",
+    "@deathbeds/jupyterlab-fonts": "workspace:*"
   }
 }

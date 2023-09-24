@@ -1,0 +1,2 @@
+_inherit_from:
+  - _py/py3.11.yml

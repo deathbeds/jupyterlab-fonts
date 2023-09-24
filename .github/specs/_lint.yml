@@ -1,0 +1,13 @@
+dependencies:
+  - black-jupyter
+  - ruff
+  - mypy
+  - taplo
+  - pytest
+  - robotframework-robocop
+  - robotframework-seleniumlibrary
+  - robotframework-tidy
+  - ssort
+  - types-jsonschema
+  - types-ujson
+  - types-pyyaml

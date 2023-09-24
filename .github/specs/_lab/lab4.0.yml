@@ -1,0 +1,4 @@
+dependencies:
+  - python ==3.11.*
+  - jupyterlab >=4.0.6,<5.0.0a0
+  - notebook >=7.0.4,<8.0.0a0

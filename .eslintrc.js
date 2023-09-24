@@ -52,7 +52,6 @@ module.exports = {
     'no-useless-escape': 'off',
     'prefer-const': 'off',
     'import/no-unresolved': 'off',
-    // the default, but for reference...
     'import/order': [
       'warn',
       {
@@ -66,13 +65,31 @@ module.exports = {
           'unknown',
         ],
         pathGroups: [
-          { pattern: 'react/**', group: 'builtin', order: 'after' },
-          { pattern: 'codemirror/**', group: 'external', order: 'before' },
-          { pattern: '@lumino/**', group: 'builtin', order: 'before' },
-          { pattern: '@jupyterlab/**', group: 'external', order: 'after' },
+          {
+            pattern: 'react/**',
+            group: 'builtin',
+            position: 'after',
+          },
+          {
+            pattern: 'codemirror/**',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: '@lumino/**',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: '@jupyterlab/**',
+            group: 'external',
+            position: 'after',
+          },
         ],
         'newlines-between': 'always',
-        alphabetize: { order: 'asc' },
+        alphabetize: {
+          order: 'asc',
+        },
       },
     ],
     // deviations from jupyterlab, should probably be fixed

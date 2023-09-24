@@ -5,6 +5,7 @@ import { Token } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 import { Menu } from '@lumino/widgets';
 
+import { IFontFacePrimitive } from './_schema';
 import * as SCHEMA from './schema';
 
 export type Scope = 'global' | 'notebook';
@@ -12,11 +13,13 @@ export type Scope = 'global' | 'notebook';
 export enum TextKind {
   code = 'code',
   content = 'content',
+  ui = 'ui',
 }
 
 export const KIND_LABELS: { [key in TextKind]: string } = {
   code: 'Code',
   content: 'Content',
+  ui: 'UI',
 };
 
 export enum FontFormat {
@@ -61,6 +64,9 @@ export const CMD = {
     fontFamily: 'content-font-family',
     lineHeight: 'content-line-height',
   },
+  ui: {
+    fontFamily: 'ui-font-family',
+  },
   editFonts: 'font-editor:open',
   customFonts: {
     disable: 'custom-fonts:disable',
@@ -71,7 +77,7 @@ export const CMD = {
 export const ROOT = ':root';
 
 export type ICSSVars = {
-  [key in TextKind]: { [key in TextProperty]: SCHEMA.ICSSOM };
+  [key in TextKind]: { [key in TextProperty]?: SCHEMA.ICSSOM };
 };
 
 export const CSS: ICSSVars = {
@@ -84,6 +90,9 @@ export const CSS: ICSSVars = {
     'font-family': '--jp-content-font-family',
     'font-size': '--jp-content-font-size1',
     'line-height': '--jp-content-line-height',
+  },
+  ui: {
+    'font-family': '--jp-ui-font-family',
   },
 };
 
@@ -131,14 +140,14 @@ export const PACKAGE_NAME: string = '@deathbeds/jupyterlab-fonts';
 export const CONFIGURED_CLASS = 'jp-fonts-configured';
 
 export const IFontManager = new Token<IFontManager>(
-  '@deathbeds/jupyterlab-fonts:IFontManager'
+  '@deathbeds/jupyterlab-fonts:IFontManager',
 );
 
 export interface IFontManagerConstructor {
   new (
     commands: CommandRegistry,
     palette: ICommandPalette,
-    notebooks: INotebookTracker
+    notebooks: INotebookTracker,
   ): IFontManager;
 }
 
@@ -153,12 +162,12 @@ export interface IFontManager {
   getVarName(property: TextProperty, options: ITextStyleOptions): SCHEMA.ICSSOM | null;
   getTextStyle(
     property: TextProperty,
-    options: ITextStyleOptions
+    options: ITextStyleOptions,
   ): SCHEMA.ICSSOM | null;
   setTextStyle(
     property: TextProperty,
     value: SCHEMA.ICSSOM | null,
-    options: ITextStyleOptions
+    options: ITextStyleOptions,
   ): void;
   dataURISrc(url: string, format: FontFormat): Promise<string>;
   setTransientNotebookStyle(panel: NotebookPanel, style: SCHEMA.ISettings | null): void;
@@ -169,4 +178,24 @@ export interface ITextStyleOptions {
   kind: TextKind;
   scope?: Scope;
   notebook?: NotebookPanel;
+}
+
+export interface IMakeFaceOptions {
+  name: string;
+  variant: string;
+  woff2(): Promise<typeof import('*.woff2')>;
+  primitive?: Partial<IFontFacePrimitive>;
+}
+
+export interface IPluginVariantOptions {
+  woff2(): Promise<typeof import('*.woff2')>;
+  style?: Omit<IFontFacePrimitive, 'src'>;
+}
+
+export interface IPluginOptions {
+  id: string;
+  fontName: string;
+  license: Omit<IFontLicense, 'text'>;
+  licenseText(): Promise<string>;
+  variants(): Promise<Record<string, IPluginVariantOptions[]>>;
 }
