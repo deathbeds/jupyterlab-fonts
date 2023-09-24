@@ -20,7 +20,7 @@ dynamic = ["description"]
 name = "jupyterlab_fonts"
 readme = "README.md"
 requires-python = ">=3.8"
-version = "3.0.0a0"
+version = "3.0.0a1"
 
 [project.urls]
 "Bug Tracker" = "https://github.com/deathbeds/jupyterlab-fonts/issues"

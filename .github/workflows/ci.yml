@@ -17,7 +17,7 @@ env:
   PYTHONUNBUFFERED: 1
   MAMBA_NO_BANNER: 1
   # ours
-  CACHE_EPOCH: 2
+  CACHE_EPOCH: 3
   ATEST_RETRIES: 3
 
 defaults:

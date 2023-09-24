@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-fonts",
-  "version": "3.0.0.alpha0",
+  "version": "3.0.0-alpha.1",
   "description": "Interactive Typography and Style for JupyterLab",
   "license": "BSD-3-Clause",
   "author": "Dead Pixels Collective",
