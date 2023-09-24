@@ -89,8 +89,9 @@ JLF_ROBOT_REPORT = "build/reports/robot/${THIS_SUBDIR}_${JLF_LAB}"
 
 [tool.doitoml.paths]
 all_lock_py = [":glob::.github/specs::*.py"]
-all_py = ["::dodo", "::all_scripts", "::all_py_src", "::all_lock_py"]
+all_py = ["::dodo", "::all_scripts", "::all_py_src", "::all_lock_py", "::all_py_test"]
 all_py_src = [":rglob::src::*.py"]
+all_py_test = [":rglob::tests::*.py"]
 all_robot = [":rglob::atest::*.robot", ":rglob::atest::*.resource"]
 all_scripts = [":glob::scripts::*.py"]
 all_toml = ["::ppt"]
@@ -299,8 +300,7 @@ actions = [
   [
     "::conda_run_lab",
     "pytest",
-    "--pyargs",
-    "${PY_NAME}",
+    "tests",
     "--cov",
     "${PY_NAME}",
     "--cov-branch",
@@ -313,7 +313,7 @@ actions = [
     "--self-contained-html",
   ],
 ]
-file_dep = ["::ppt", "::all_py_src", "::pip_freeze"]
+file_dep = ["::ppt", "::all_py_test", "::all_py_src", "::pip_freeze"]
 meta = {doitoml = {env = {COVERAGE_FILE = "build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/.coverage"}}}
 targets = ["::pytest_html_cov"]
 
