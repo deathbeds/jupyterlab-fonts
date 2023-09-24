@@ -12,6 +12,7 @@ Library             shutil
 
 *** Variables ***
 ${JUPYTERLAB_EXE}       ["jupyter-lab"]
+${JSCOV}                ${EMPTY}
 
 
 *** Keywords ***

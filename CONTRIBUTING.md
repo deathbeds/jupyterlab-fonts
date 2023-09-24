@@ -46,6 +46,49 @@ then
 doit lab
 ```
 
+## Testing
+
+```bash
+doit test
+```
+
+### Advanced testing
+
+#### JS Bundle analysis
+
+Create a `.env` file:
+
+```ini
+WITH_JS_VIZ=1
+```
+
+Then run:
+
+```bash
+doit dist
+```
+
+See `build/reports/webpack`.
+
+#### JS Coverage
+
+Create a `.env` file:
+
+```ini
+WITH_JS_COV=1
+```
+
+Run
+
+```bash
+doit test
+# run some other excursions, by env var or `.env` file e.g.
+# JLF_LAB=lab3.5 doit test
+doit report
+```
+
+See `build/reports/nyc/index.html`.
+
 ## Thinking about Committing
 
 ```bash

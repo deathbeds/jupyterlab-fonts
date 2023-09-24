@@ -1,11 +1,10 @@
 import { Cell, ICellModel } from '@jupyterlab/cells';
 import { PathExt, PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { Notebook, NotebookPanel } from '@jupyterlab/notebook';
-import { JSONExt } from '@lumino/coreutils';
+import { JSONExt, PromiseDelegate } from '@lumino/coreutils';
 import { Debouncer } from '@lumino/polling';
 import { Signal } from '@lumino/signaling';
-import * as JSS from 'jss';
-import jssPresetDefault from 'jss-preset-default';
+import type * as JSS from 'jss';
 
 import * as compat from './labcompat';
 import * as SCHEMA from './schema';
@@ -20,7 +19,7 @@ export class Stylist {
   private _globalStyles: HTMLStyleElement;
   private _notebookStyles = new Map<NotebookPanel, HTMLStyleElement>();
   private _transientNotebookStyles = new Map<NotebookPanel, SCHEMA.ISettings>();
-  private _jss = JSS.create(jssPresetDefault());
+  private _jss: JSS.Jss | null;
   private _fontCache = new Map<string, SCHEMA.IFontFacePrimitive[]>();
   private _cacheUpdated = new Signal<this, void>(this);
   private _cellStyleCache = new Map<string, any>();
@@ -31,10 +30,11 @@ export class Stylist {
     this._globalStyles = document.createElement('style');
     this._globalStyles.classList.add(DOM.sheet);
     this._globalStyles.classList.add(DOM.modGlobal);
-    this._notebookContentDebouncer = new Debouncer((notebook: Notebook) => {
-      this._onNotebookModelContentChanged(notebook);
+    this._notebookContentDebouncer = new Debouncer(async (notebook: Notebook) => {
+      await this._onNotebookModelContentChanged(notebook);
     }, 100);
   }
+
   get cacheUpdated() {
     return this._cacheUpdated;
   }
@@ -50,10 +50,18 @@ export class Stylist {
         this,
       );
       panel.disposed.connect(this._onDisposed, this);
-      this._onNotebookModelContentChanged(panel.content);
+      this._onNotebookModelContentChanged(panel.content)
+        .then(() => this.hack())
+        .catch(console.warn);
       this.hack();
     } else {
       this._onDisposed(panel);
+    }
+  }
+
+  async ensureJss() {
+    if (!this._jss) {
+      this._jss = await Private.ensureJSS();
     }
   }
 
@@ -62,7 +70,7 @@ export class Stylist {
   }
 
   /** hoist cell metadata to data attributes */
-  private _onNotebookModelContentChanged(notebook: Notebook) {
+  private async _onNotebookModelContentChanged(notebook: Notebook): Promise<void> {
     const newCellCount = notebook.widgets.length;
     const oldCellCount = this._notebookCellCount.get(notebook) || -1;
 
@@ -83,7 +91,8 @@ export class Stylist {
 
       const meta =
         compat.getCellMetadata(cell.model, PACKAGE_NAME) || JSONExt.emptyObject;
-      let cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
+      const cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
+      console.log(meta, cached);
       if (!JSONExt.deepEqual(meta, cached)) {
         needsUpdate = true;
       }
@@ -93,6 +102,8 @@ export class Stylist {
     if (!needsUpdate) {
       return;
     }
+
+    await this.ensureJss();
 
     this.stylesheet(
       notebook.model
@@ -145,7 +156,11 @@ export class Stylist {
     return this._transientNotebookStyles.get(panel) || null;
   }
 
-  stylesheet(meta: SCHEMA.ISettings | null, panel?: NotebookPanel, clear = false) {
+  stylesheet(meta: SCHEMA.ISettings | null, panel?: NotebookPanel) {
+    if (!this._jss) {
+      console.error('JSS not loaded yet');
+      return;
+    }
     let sheet = panel ? this._notebookStyles.get(panel) : this._globalStyles;
 
     let style: SCHEMA.IStyles | null = null;
@@ -344,5 +359,26 @@ export class Stylist {
     } else {
       this.stylesheets.map((el) => el.remove());
     }
+  }
+}
+
+namespace Private {
+  let _jss: JSS.Jss;
+  let _loading: PromiseDelegate<JSS.Jss> | null;
+
+  export async function ensureJSS(): Promise<JSS.Jss> {
+    if (_jss) {
+      return _jss;
+    }
+    if (!_loading) {
+      _loading = new PromiseDelegate();
+      const [jss, jssPresetDefault] = await Promise.all([
+        import('jss'),
+        import('jss-preset-default'),
+      ]);
+      _jss = jss.create(jssPresetDefault.default());
+      _loading.resolve(_jss);
+    }
+    return _loading.promise;
   }
 }

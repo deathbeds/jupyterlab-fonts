@@ -20,7 +20,7 @@ dynamic = ["description"]
 name = "jupyterlab_fonts"
 readme = "README.md"
 requires-python = ">=3.8"
-version = "3.0.0a0"
+version = "3.0.0a1"
 
 [project.urls]
 "Bug Tracker" = "https://github.com/deathbeds/jupyterlab-fonts/issues"
@@ -28,10 +28,10 @@ version = "3.0.0a0"
 "Source" = "https://github.com/deathbeds/jupyterlab-fonts"
 
 [tool.flit.sdist]
-include = ["src/jupyterlab_fonts/_d"]
+include = ["src/_d"]
 
 [tool.flit.external-data]
-directory = "src/jupyterlab_fonts/_d"
+directory = "src/_d"
 
 [tool.doit]
 backend = "sqlite3"
@@ -78,6 +78,7 @@ THIS_PY = "3.11"
 THIS_SUBDIR = "linux-64"
 # js
 WITH_JS_COV = 0
+WITH_JS_VIZ = 0
 # binder
 DEMO_IN_BINDER = 0
 # shorthand
@@ -89,11 +90,13 @@ JLF_ROBOT_REPORT = "build/reports/robot/${THIS_SUBDIR}_${JLF_LAB}"
 
 [tool.doitoml.paths]
 all_lock_py = [":glob::.github/specs::*.py"]
-all_py = ["::dodo", "::all_scripts", "::all_py_src", "::all_lock_py"]
+all_py = ["::dodo", "::all_scripts", "::all_py_src", "::all_lock_py", "::all_py_test"]
 all_py_src = [":rglob::src::*.py"]
+all_py_test = [":rglob::tests::*.py"]
 all_robot = [":rglob::atest::*.robot", ":rglob::atest::*.resource"]
 all_scripts = [":glob::scripts::*.py"]
 all_toml = ["::ppt"]
+atest_all_report = ["build/reports/robot/ALL/log.html"]
 atest_dir = ["atest"]
 atest_report = ["${JLF_ROBOT_REPORT}"]
 atest_report_html = ["${JLF_ROBOT_REPORT}/log.html"]
@@ -299,8 +302,7 @@ actions = [
   [
     "::conda_run_lab",
     "pytest",
-    "--pyargs",
-    "${PY_NAME}",
+    "tests",
     "--cov",
     "${PY_NAME}",
     "--cov-branch",
@@ -313,7 +315,7 @@ actions = [
     "--self-contained-html",
   ],
 ]
-file_dep = ["::ppt", "::all_py_src", "::pip_freeze"]
+file_dep = ["::ppt", "::all_py_test", "::all_py_src", "::pip_freeze"]
 meta = {doitoml = {env = {COVERAGE_FILE = "build/reports/pytest/${THIS_SUBDIR}_${DEFAULT_LAB}/.coverage"}}}
 targets = ["::pytest_html_cov"]
 
@@ -376,6 +378,21 @@ lint:dryrun:
       env:
         JUPYTERLAB_CONDA_PREFIX: ::env_lab_prefix
 {% endfor %}
+
+report:rebot:
+  doc: combine robot reports from multiple runs
+  uptodate:
+    - false
+  actions:
+    - py:
+        scripts.actions:rebot:
+          kwargs:
+            log_html: ::atest_all_report
+            conda_run: {{ tokens["dt:conda_run_atest"] }}
+  file_dep:
+    - ::env_atest_history
+  targets:
+    - ::atest_all_report
 """
 
 [tool.doitoml.tasks.serve.lab]

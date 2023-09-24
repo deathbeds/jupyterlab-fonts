@@ -42,6 +42,7 @@
     "source-map-loader": "^4.0.1",
     "ts-node": "^10.9.1",
     "typescript": "~5.2.2",
+    "webpack-bundle-analyzer": "^4.9.1",
     "yarn-berry-deduplicate": "^6.1.1"
   },
   "doitoml": {
@@ -99,7 +100,6 @@
       ]
     },
     "env": {
-      "JLF_SHARED": "src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds",
       "NX_CACHE_DIRECTORY": "${JLF_ROOT}/build/.cache/nx",
       "NX_PROJECT_GRAPH_CACHE_DIRECTORY": "${JLF_ROOT}/build/.cache/nx",
       "YARN_CACHE_FOLDER": "${JLF_ROOT}/build/.cache/yarn"
@@ -212,6 +212,9 @@
       },
       "report": {
         "nyc": {
+          "uptodate": [
+            false
+          ],
           "file_dep": [
             "::yarn_history"
           ],

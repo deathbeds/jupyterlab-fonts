@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-dejavu-sans-mono",
-  "version": "3.0.0.alpha0",
+  "version": "3.0.0-alpha.1",
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "license": "BSD-3-Clause",
   "author": "Dead Pixels Collective",
@@ -25,7 +25,7 @@
   },
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~3.0.0.alpha0",
+    "@deathbeds/jupyterlab-fonts": "~3.0.0-alpha.1",
     "@jupyterlab/application": "3 || 4"
   },
   "devDependencies": {
@@ -53,7 +53,10 @@
         "."
       ],
       "dist_pkg_json": [
-        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono/package.json"
+        "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono/package.json"
+      ],
+      "webpack_config": [
+        "webpack.config.js"
       ],
       "prebuild_targets": [
         "style/fonts/DejaVuSansMono-Bold.woff2",
@@ -87,6 +90,7 @@
             ]
           ],
           "file_dep": [
+            "::webpack_config",
             "package.json",
             "::all_style",
             "::js-root::tsbuildinfo",
@@ -127,7 +131,7 @@
   },
   "jupyterlab": {
     "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
+    "outputDir": "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
     "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {

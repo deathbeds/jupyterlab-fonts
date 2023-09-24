@@ -136,6 +136,8 @@ def maybe_atest_one(
         # robot
         f"--variable=ATTEMPT:{ attempt }",
         f"""--variable=OS:{ os.environ["THIS_SUBDIR"] }""",
+        f"""--variable=PY:{ os.environ.get("JLF_PY", os.environ.get("THIS_PY")) }""",
+        f"""--variable=LAB:{ os.environ["JLF_LAB"] }""",
         f"--variable=JSCOV:{jscov[0]}",
         "--variable=ROOT:../../..",
         "--outputdir",
@@ -194,3 +196,38 @@ def touch(*paths: str) -> None:
         if not path.parent.exists():
             path.parent.mkdir(parents=True)
         path.touch()
+
+
+def rebot(log_html, conda_run):
+    """Merge robot reports.
+
+    In the future:
+    - fix relative paths
+    - maybe run libdoc
+    """
+    cwd = Path(log_html[0]).parent
+    log_root = cwd.parent
+    if not log_root.is_dir():
+        print(f"Can't even look for `output.xml` in missing {log_root}")
+        return False
+    shutil.rmtree(cwd, ignore_errors=True)
+    cwd.mkdir()
+    all_output = sorted(
+        p
+        for p in log_root.glob("*/output.xml")
+        if not p.parent.name.endswith("a_0") or p.parent.name == "ALL"
+    )
+    if not all_output:
+        print(f"No robot non dry-run `output.xml` files found in {log_root}")
+        return False
+    subprocess.call(
+        [
+            *conda_run,
+            "rebot",
+            "--processemptysuite",
+            "--nostatusrc",
+            *all_output,
+        ],
+        cwd=str(cwd),
+    )
+    return True

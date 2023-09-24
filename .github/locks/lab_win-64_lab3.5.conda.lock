@@ -29,7 +29,7 @@ https://conda.anaconda.org/conda-forge/win-64/libsodium-1.0.18-h8d14728_1.tar.bz
 https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.43.0-hcfcfb64_0.conda#16c6f482e70cb3da41d0bee5d49c6bf3
 https://conda.anaconda.org/conda-forge/win-64/libzlib-1.2.13-hcfcfb64_5.conda#5fdb9c6a113b6b6cb5e517fd972d5f41
 https://conda.anaconda.org/conda-forge/win-64/openssl-3.1.3-hcfcfb64_0.conda#16b2c80ad196f18acd31b588ef28cb9a
-https://conda.anaconda.org/conda-forge/win-64/tk-8.6.12-h8ffe710_0.tar.bz2#c69a5047cc9291ae40afd4a1ad6f0c0f
+https://conda.anaconda.org/conda-forge/win-64/tk-8.6.13-hcfcfb64_0.conda#74405f2ccbb40af409fee1a71ce70dc6
 https://conda.anaconda.org/conda-forge/win-64/xz-5.2.6-h8d14728_0.tar.bz2#515d77642eaa3639413c6b1bc3f94219
 https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h8ffe710_2.tar.bz2#adbfb9f45d1004a26763652246a33764
 https://conda.anaconda.org/conda-forge/win-64/python-3.8.17-h4de0772_0_cpython.conda#be2296eaf70eeb1cb83c4e95136e694a
@@ -42,7 +42,7 @@ https://conda.anaconda.org/conda-forge/noarch/cached_property-1.5.2-pyha770c72_1
 https://conda.anaconda.org/conda-forge/noarch/certifi-2023.7.22-pyhd8ed1ab_0.conda#7f3dbc9179b4dde7da98dfb151d0ad22
 https://conda.anaconda.org/conda-forge/noarch/charset-normalizer-3.2.0-pyhd8ed1ab_0.conda#313516e9a4b08b12dfb1e1cd390a96e3
 https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_0.tar.bz2#3faab06a954c2a04039983f2c4a50d99
-https://conda.anaconda.org/conda-forge/win-64/debugpy-1.8.0-py38hd3f51b4_0.conda#7567ccff874a7822bc9061ffc3c9dc9d
+https://conda.anaconda.org/conda-forge/win-64/debugpy-1.8.0-py38hd3f51b4_1.conda#7a11964db637a30b25586fdf5e5d3b5c
 https://conda.anaconda.org/conda-forge/noarch/decorator-5.1.1-pyhd8ed1ab_0.tar.bz2#43afe5ab04e35e17ba28649471dd7364
 https://conda.anaconda.org/conda-forge/noarch/defusedxml-0.7.1-pyhd8ed1ab_0.tar.bz2#961b3a227b437d82ad7054484cfa71b2
 https://conda.anaconda.org/conda-forge/noarch/entrypoints-0.4-pyhd8ed1ab_0.tar.bz2#3cf04868fee0a029769bd41f4b2fbf2d

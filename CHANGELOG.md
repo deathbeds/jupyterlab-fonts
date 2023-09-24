@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.0.0a1
+
+- remove tests and duplicated assets from wheel
+- fix npm version numbers
+- lazily load JSS and friends
+
 ## v3.0.0a0
 
 - Support JupyterLab 4

@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-atkinson-hyperlegible",
-  "version": "3.0.0.alpha0",
+  "version": "3.0.0-alpha.1",
   "description": "Atkinson Hyperlegible for JupyterLab",
   "license": "BSD-3-Clause",
   "author": "Dead Pixels Collective",
@@ -23,7 +23,7 @@
   },
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~3.0.0.alpha0",
+    "@deathbeds/jupyterlab-fonts": "~3.0.0-alpha.1",
     "@fontsource/atkinson-hyperlegible": "^5.0.12",
     "@jupyterlab/application": "3 || 4"
   },
@@ -49,7 +49,10 @@
         "."
       ],
       "dist_pkg_json": [
-        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-atkinson-hyperlegible/package.json"
+        "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-atkinson-hyperlegible/package.json"
+      ],
+      "webpack_config": [
+        "webpack.config.js"
       ]
     },
     "tasks": {
@@ -61,6 +64,7 @@
             ]
           ],
           "file_dep": [
+            "::webpack_config",
             "package.json",
             "::js-root::tsbuildinfo",
             "::js-root::yarn_history"
@@ -98,7 +102,7 @@
   },
   "jupyterlab": {
     "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-atkinson-hyperlegible",
+    "outputDir": "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-atkinson-hyperlegible",
     "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {
