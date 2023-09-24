@@ -211,6 +211,9 @@
       },
       "report": {
         "nyc": {
+          "uptodate": [
+            false
+          ],
           "file_dep": [
             "::yarn_history"
           ],

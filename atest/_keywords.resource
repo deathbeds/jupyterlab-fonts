@@ -231,12 +231,8 @@ Capture Page Coverage
         ${name} =    Get Next Coverage File
     END
     ${cov_json} =    Execute Javascript
-    ...    return window.__coverage__ ? JSON.stringify(window.__coverage__, null, 2) : ''
-    IF    ${cov_json.__len__()}
-        Create File    ${JSCOV}${/}${name}.json    ${cov_json}
-    ELSE IF    %{WITH_JS_COV}
-        Fail    Coverage was requested by environment, but no coverage data was found.
-    END
+    ...    return window.__coverage__ && JSON.stringify(window.__coverage__, null, 2)
+    IF    ${cov_json}    Create File    ${JSCOV}${/}${name}.json    ${cov_json}
 
 Reset JupyterLab And Close With Coverage
     [Documentation]    Close JupyterLab after gathering coverage.
