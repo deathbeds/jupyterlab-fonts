@@ -54,6 +54,24 @@ doit test
 
 ### Advanced testing
 
+#### JS Bundle analysis
+
+Create a `.env` file:
+
+```ini
+WITH_JS_VIZ=1
+```
+
+Then run:
+
+```bash
+doit dist
+```
+
+See `build/reports/webpack`.
+
+#### JS Coverage
+
 Create a `.env` file:
 
 ```ini

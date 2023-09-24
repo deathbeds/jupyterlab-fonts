@@ -78,6 +78,7 @@ THIS_PY = "3.11"
 THIS_SUBDIR = "linux-64"
 # js
 WITH_JS_COV = 0
+WITH_JS_VIZ = 0
 # binder
 DEMO_IN_BINDER = 0
 # shorthand

@@ -78,6 +78,9 @@
       "prebuild_targets": [
         "src/_schema.d.ts",
         "lib/_schema.d.ts"
+      ],
+      "webpack_config": [
+        "webpack.config.js"
       ]
     },
     "tasks": {
@@ -104,6 +107,7 @@
             ]
           ],
           "file_dep": [
+            "::webpack_config",
             "package.json",
             "::all_style",
             "::all_ts",

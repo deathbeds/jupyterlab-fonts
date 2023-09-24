@@ -50,6 +50,9 @@
       ],
       "dist_pkg_json": [
         "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-atkinson-hyperlegible/package.json"
+      ],
+      "webpack_config": [
+        "webpack.config.js"
       ]
     },
     "tasks": {
@@ -61,6 +64,7 @@
             ]
           ],
           "file_dep": [
+            "::webpack_config",
             "package.json",
             "::js-root::tsbuildinfo",
             "::js-root::yarn_history"

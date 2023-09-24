@@ -55,6 +55,9 @@
       "dist_pkg_json": [
         "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono/package.json"
       ],
+      "webpack_config": [
+        "webpack.config.js"
+      ],
       "prebuild_targets": [
         "style/fonts/DejaVuSansMono-Bold.woff2",
         "style/fonts/DejaVuSansMono.woff2"
@@ -87,6 +90,7 @@
             ]
           ],
           "file_dep": [
+            "::webpack_config",
             "package.json",
             "::all_style",
             "::js-root::tsbuildinfo",

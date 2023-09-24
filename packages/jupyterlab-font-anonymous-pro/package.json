@@ -50,6 +50,9 @@
       ],
       "here": [
         "."
+      ],
+      "webpack_config": [
+        "webpack.config.js"
       ]
     },
     "tasks": {
@@ -62,6 +65,7 @@
           ],
           "file_dep": [
             "package.json",
+            "::webpack_config",
             "::js-root::tsbuildinfo",
             "::js-root::yarn_history"
           ],
