@@ -1,16 +1,13 @@
+let rules = [];
+
+if(JSON.parse((process.env.WITH_JS_COV || '').toLowerCase())) {
+  rules.push([
+    { test: /\.js$/, use: ['@ephesoft/webpack.istanbul.loader'] },
+  ])
+}
+
 module.exports = {
-  output: {
-    clean: true,
-  },
+  output: { clean: true },
   devtool: 'source-map',
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        use: process.env.WITH_JS_COV
-          ? ['@ephesoft/webpack.istanbul.loader']
-          : ['source-map-loader'],
-      },
-    ],
-  },
+  module: { rules },
 };

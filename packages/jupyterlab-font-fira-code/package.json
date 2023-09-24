@@ -48,7 +48,7 @@
         "."
       ],
       "dist_pkg_json": [
-        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-fira-code/package.json"
+        "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-fira-code/package.json"
       ]
     },
     "tasks": {
@@ -97,7 +97,7 @@
   },
   "jupyterlab": {
     "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-fira-code",
+    "outputDir": "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-fira-code",
     "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {

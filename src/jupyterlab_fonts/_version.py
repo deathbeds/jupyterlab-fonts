@@ -4,9 +4,9 @@ from importlib.metadata import version
 from pathlib import Path
 
 HERE = Path(__file__).parent
-_D = HERE / "_d"
+_D = HERE.parent / "_d"
 
-__prefix__ = _D if _D.exists() else Path(sys.prefix)
+__prefix__ = _D if _D.exists() and _D.parent.name == "src" else Path(sys.prefix)
 
 __pkg__ = {
     f"{p.parent.parent.name}/{p.parent.name}": p

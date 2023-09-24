@@ -53,7 +53,7 @@
         "."
       ],
       "dist_pkg_json": [
-        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono/package.json"
+        "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono/package.json"
       ],
       "prebuild_targets": [
         "style/fonts/DejaVuSansMono-Bold.woff2",
@@ -127,7 +127,7 @@
   },
   "jupyterlab": {
     "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
+    "outputDir": "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-dejavu-sans-mono",
     "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {

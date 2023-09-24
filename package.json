@@ -99,7 +99,6 @@
       ]
     },
     "env": {
-      "JLF_SHARED": "src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds",
       "NX_CACHE_DIRECTORY": "${JLF_ROOT}/build/.cache/nx",
       "NX_PROJECT_GRAPH_CACHE_DIRECTORY": "${JLF_ROOT}/build/.cache/nx",
       "YARN_CACHE_FOLDER": "${JLF_ROOT}/build/.cache/yarn"

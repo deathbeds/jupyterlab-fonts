@@ -28,10 +28,10 @@ version = "3.0.0a1"
 "Source" = "https://github.com/deathbeds/jupyterlab-fonts"
 
 [tool.flit.sdist]
-include = ["src/jupyterlab_fonts/_d"]
+include = ["src/_d"]
 
 [tool.flit.external-data]
-directory = "src/jupyterlab_fonts/_d"
+directory = "src/_d"
 
 [tool.doit]
 backend = "sqlite3"

@@ -110,7 +110,7 @@ export class FontManager implements IFontManager {
     if (settings) {
       settings.changed.connect(this.settingsUpdate, this);
     }
-    this.settingsUpdate();
+    void this.settingsUpdate();
   }
 
   setTransientNotebookStyle(
@@ -471,12 +471,13 @@ export class FontManager implements IFontManager {
     });
   }
 
-  settingsUpdate(): void {
+  async settingsUpdate(): Promise<void> {
     let meta: SCHEMA.ISettings = {
       styles: this._settings.get('styles').composite as SCHEMA.IStyles,
     };
-    if (this.enabled) {
-      this._stylist.stylesheet(meta, void 0, true);
+    if (this.enabled && meta.styles && Object.keys(meta.styles).length) {
+      await this._stylist.ensureJss();
+      this._stylist.stylesheet(meta);
     } else {
       this._stylist.hack(false);
     }

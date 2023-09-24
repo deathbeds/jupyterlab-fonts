@@ -70,7 +70,7 @@
         "."
       ],
       "dist_pkg_json": [
-        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts/package.json"
+        "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts/package.json"
       ],
       "prebuild_deps": [
         "schema/fonts.json"
@@ -146,7 +146,7 @@
   "jupyterlab": {
     "extension": "lib/plugin.js",
     "schemaDir": "schema",
-    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts",
+    "outputDir": "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-fonts",
     "webpackConfig": "./webpack.config.js"
   }
 }

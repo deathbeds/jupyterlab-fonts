@@ -46,7 +46,7 @@
         "../../dist/deathbeds-jupyterlab-font-anonymous-pro-${JLF_VERSION}.tgz"
       ],
       "dist_pkg_json": [
-        "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-anonymous-pro/package.json"
+        "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-anonymous-pro/package.json"
       ],
       "here": [
         "."
@@ -98,7 +98,7 @@
   },
   "jupyterlab": {
     "extension": true,
-    "outputDir": "../../src/jupyterlab_fonts/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-anonymous-pro",
+    "outputDir": "../../src/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-font-anonymous-pro",
     "webpackConfig": "./webpack.config.js",
     "sharedPackages": {
       "@deathbeds/jupyterlab-fonts": {
