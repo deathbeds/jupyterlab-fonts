@@ -141,6 +141,7 @@ _phony("build", "*:build:*")
 _phony("test", "*:atest:*")
 _phony("lab", "dt:serve:lab")
 _phony("report")
+_phony("preflight", "*:preflight")
 
 if dotenv_loaded:
     os.environ.update(dotenv_loaded)

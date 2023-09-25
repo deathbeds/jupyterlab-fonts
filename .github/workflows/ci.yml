@@ -39,7 +39,7 @@ jobs:
           use-mamba: true
 
       - name: preflight
-        run: doit lock:preflight
+        run: doit preflight
 
       - name: setup (python)
         run: doit lock:install:build_linux-64_lab4.0

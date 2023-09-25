@@ -16,11 +16,13 @@ labels: maintenance
   - [ ] upload the artifacts
 - [ ] actually upload to npm.com, pypi.org
   ```bash
+  #!/usr/bin/env bash
+  set -eux
   cd dist
   twine upload *.tar.gz *.whl
   npm login
-  for tarball in deathbeds-jupyterlab-font*.tar.gz; do
-    npm publish .tgz
+  for tarball in deathbeds-jupyterlab-font*.tgz; do
+    npm publish $tarball
   done
   npm logout
   ```

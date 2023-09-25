@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-dejavu-sans-mono",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "description": "Dejavu Sans Mono Fonts for JupyterLab",
   "license": "BSD-3-Clause",
   "author": "Dead Pixels Collective",
@@ -25,7 +25,7 @@
   },
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@deathbeds/jupyterlab-fonts": "~3.0.0-alpha.1",
+    "@deathbeds/jupyterlab-fonts": "~3.0.0-alpha.2",
     "@jupyterlab/application": "3 || 4"
   },
   "devDependencies": {
