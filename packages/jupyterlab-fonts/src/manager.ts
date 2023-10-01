@@ -476,11 +476,15 @@ export class FontManager implements IFontManager {
       styles: this._settings.get('styles').composite as SCHEMA.IStyles,
     };
     if (this.enabled && meta.styles && Object.keys(meta.styles).length) {
-      await this._stylist.ensureJss();
+      await this.ensureJss();
       this._stylist.stylesheet(meta);
     } else {
       this._stylist.hack(false);
     }
+  }
+
+  async ensureJss(): Promise<void> {
+    await this._stylist.ensureJss();
   }
 
   private registerFontCommands(options: IFontFaceOptions) {
