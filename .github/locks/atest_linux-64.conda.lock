@@ -2,7 +2,7 @@
 #   - conda-forge
 #   - nodefaults
 # dependencies:
-#   - firefox =102
+#   - firefox >=115,<116
 #   - geckodriver
 #   - pip
 #   - robotframework >=6.1
@@ -20,7 +20,7 @@ https://conda.anaconda.org/conda-forge/linux-64/libgomp-13.2.0-h807b86a_2.conda#
 https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-2_gnu.tar.bz2#73aaf86a425cc6e73fcf236a5a46396d
 https://conda.anaconda.org/conda-forge/linux-64/libgcc-ng-13.2.0-h807b86a_2.conda#c28003b0be0494f9a7664389146716ff
 https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-h7f98852_4.tar.bz2#a1fd65c7ccbf10880423d82bca54eb54
-https://conda.anaconda.org/conda-forge/linux-64/firefox-102.15.1esr-hd3aeb46_0.conda#4477128a0c9d79c8b520fa810dd06563
+https://conda.anaconda.org/conda-forge/linux-64/firefox-115.3.1esr-hd3aeb46_0.conda#4d2ab0783a561cc930a83e4b0e1fcf6e
 https://conda.anaconda.org/conda-forge/linux-64/geckodriver-0.33.0-hd2f7af9_0.conda#83664049f2b276cc23bd67d41eb9a4ee
 https://conda.anaconda.org/conda-forge/linux-64/libexpat-2.5.0-hcb278e6_1.conda#6305a3dd2752c76335295da4e581f2fd
 https://conda.anaconda.org/conda-forge/linux-64/libffi-3.4.2-h7f98852_5.tar.bz2#d645c6d2ac96843a2bfaccd2d62b3ac3

@@ -1,5 +1,5 @@
 dependencies:
-  - firefox =102
+  - firefox >=115,<116
   - geckodriver
   - robotframework >=6.1
   - robotframework-jupyterlibrary >=0.5.0
