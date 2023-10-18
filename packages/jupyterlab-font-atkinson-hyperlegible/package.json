@@ -24,12 +24,12 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "@deathbeds/jupyterlab-fonts": "~3.0.0-alpha.2",
-    "@fontsource/atkinson-hyperlegible": "^5.0.12",
+    "@fontsource/atkinson-hyperlegible": "^5.0.15",
     "@jupyterlab/application": "3 || 4"
   },
   "devDependencies": {
     "@deathbeds/jupyterlab-fonts": "workspace:*",
-    "@jupyterlab/builder": "^4.0.6"
+    "@jupyterlab/builder": "^4.0.7"
   },
   "keywords": [
     "atkinson-hyperlegible",
