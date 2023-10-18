@@ -56,3 +56,16 @@ export function getCellMetadata(cellModel: ICellModel, key: string): any {
   console.error('cell', cellModel);
   throw new Error('no metadata for cell');
 }
+
+export function setCellMetadata(cellModel: ICellModel, key: string, value: any): void {
+  if (typeof cellModel.metadata.set === 'function') {
+    return (cellModel as any).metadata.set(key, value);
+  }
+
+  if (cellModel.sharedModel) {
+    return cellModel.sharedModel.setMetadata(key, value);
+  }
+
+  console.error('cell', cellModel);
+  throw new Error('no metadata for cell');
+}

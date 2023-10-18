@@ -4,15 +4,15 @@ channels:
 dependencies:
   - brotlipy
   - conda <22.11.1
-  - conda-lock >=2.1.2,<2.2
+  - conda-lock >=2.3,<2.4
   - doitoml-with-all
   - flit >=3.9.0,<4
   - fonttools
   - jupyterhub-singleuser
-  - jupyterlab >=4.0.6,<5.0.0a0
+  - jupyterlab >=4.0.7,<5.0.0a0
   - mamba
-  - nodejs >=18,<19
-  - notebook >=7.0.4,<8.0.0a0
+  - nodejs >=20,<21
+  - notebook >=7.0.6,<8.0.0a0
   - pip
   - python ==3.11.*
   - python-dotenv

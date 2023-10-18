@@ -1,7 +1,7 @@
 dependencies:
   - black-jupyter
-  - ruff
-  - mypy
+  - ruff >=0.1.0
+  - mypy >=1.6
   - taplo
   - pytest
   - robotframework-robocop

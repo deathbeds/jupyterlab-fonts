@@ -1,11 +1,11 @@
 __pycache__
-src/_d/
 _testoutput/
 .env
 .envs/
 .eslintcache
 .ipynb_checkpoints/
 .pabotsuitenames
+.venv/
 *.doit*
 *.egg-info/
 *.log
@@ -16,4 +16,5 @@ dist/
 lib/
 node_modules/
 packages/*/lib
+src/_d/
 Untitled*.ipynb
