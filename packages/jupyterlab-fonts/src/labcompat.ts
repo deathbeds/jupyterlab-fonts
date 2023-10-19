@@ -69,3 +69,16 @@ export function setCellMetadata(cellModel: ICellModel, key: string, value: any):
   console.error('cell', cellModel);
   throw new Error('no metadata for cell');
 }
+
+export function deleteMetadata(cellModel: ICellModel, key: string): void {
+  if (typeof cellModel.metadata.delete === 'function') {
+    return (cellModel as any).metadata.delete(key);
+  }
+
+  if (cellModel.sharedModel) {
+    return cellModel.sharedModel.deleteMetadata(key);
+  }
+
+  console.error('cell', cellModel);
+  throw new Error('no metadata for cell');
+}
