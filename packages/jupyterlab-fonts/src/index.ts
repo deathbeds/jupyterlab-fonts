@@ -1,4 +1,5 @@
 export * from './button';
+export * from './labcompat';
 export * from './license';
 export * from './manager';
 export * from './plugin';
