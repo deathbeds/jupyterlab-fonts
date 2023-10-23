@@ -104,6 +104,11 @@ def maybe_atest_one(
 
     dry_run = not attempt
 
+    env = dict(os.environ)
+
+    if "MOZ_HEADLESS" not in env:
+        env.update(MOZ_HEADLESS="1")
+
     if attempt >= 2 and prev_out and prev_out[0]:
         prev_rc_path = Path(prev_out[0]) / rc_name
         prev_rc = prev_rc_path.read_text(**UTF8).strip()
@@ -155,7 +160,7 @@ def maybe_atest_one(
     args += atest_dir
 
     print(">>>", "  ".join(args))
-    rc = subprocess.call(args)
+    rc = subprocess.call(args, env=env)
     print(f"   ... returned {rc}")
 
     rc_path.write_text(f"{rc}", **UTF8)

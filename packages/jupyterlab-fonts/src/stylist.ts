@@ -92,7 +92,6 @@ export class Stylist {
       const meta =
         compat.getCellMetadata(cell.model, PACKAGE_NAME) || JSONExt.emptyObject;
       const cached = this._cellStyleCache.get(cell.model.id) || JSONExt.emptyObject;
-      console.log(meta, cached);
       if (!JSONExt.deepEqual(meta, cached)) {
         needsUpdate = true;
       }

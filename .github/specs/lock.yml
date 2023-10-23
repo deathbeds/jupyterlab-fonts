@@ -6,7 +6,7 @@ channels:
 
 dependencies:
   - conda <22.11.1
-  - conda-lock >=2.1.2,<2.2
+  - conda-lock >=2.3,<2.4
   - doitoml-with-all
   - mamba
   - python-dotenv
