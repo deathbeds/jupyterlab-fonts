@@ -70,7 +70,7 @@ export function setCellMetadata(cellModel: ICellModel, key: string, value: any):
   throw new Error('no metadata for cell');
 }
 
-export function deleteMetadata(cellModel: ICellModel, key: string): void {
+export function deleteCellMetadata(cellModel: ICellModel, key: string): void {
   if (typeof cellModel.metadata.delete === 'function') {
     return (cellModel as any).metadata.delete(key);
   }

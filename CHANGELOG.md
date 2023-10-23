@@ -2,7 +2,7 @@
 
 ## v3.0.0a3
 
-- hoist Lab 3/4 compatibility methods to public API
+- hoist, update Lab 3/4 compatibility methods to public API
 
 ## v3.0.0a2
 
