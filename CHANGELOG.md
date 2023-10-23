@@ -1,8 +1,12 @@
 # Changelog
 
-## v3.0.0a2
+## v3.0.0a3
 
 > TBD
+
+## v3.0.0a2
+
+- add more Lab 3/4 compatibility methods
 
 ## v3.0.0a1
 
