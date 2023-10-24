@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-font-atkinson-hyperlegible",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "description": "Atkinson Hyperlegible for JupyterLab",
   "license": "BSD-3-Clause",
   "author": "Dead Pixels Collective",
