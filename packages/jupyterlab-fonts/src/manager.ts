@@ -291,8 +291,7 @@ export class FontManager implements IFontManager {
       compat.metadataSignal(panel.model).connect(watcher);
     }
     panel.disposed.connect(this._onNotebookDisposed, this);
-    watcher();
-    this.hack();
+    void watcher().then(() => this.hack());
   }
 
   private _onNotebookDisposed(panel: NotebookPanel) {
@@ -300,8 +299,8 @@ export class FontManager implements IFontManager {
   }
 
   private _notebookMetaWatcher(panel: NotebookPanel) {
-    return () => {
-      this._notebooks.forEach((notebook) => {
+    return async () => {
+      this._notebooks.forEach(async (notebook) => {
         if (notebook.id !== panel.id || !notebook.model) {
           return;
         }
@@ -310,6 +309,7 @@ export class FontManager implements IFontManager {
           PACKAGE_NAME,
         ) as SCHEMA.ISettings;
         if (meta) {
+          await this.ensureJss();
           this._stylist.stylesheet(meta, notebook);
         }
       });
