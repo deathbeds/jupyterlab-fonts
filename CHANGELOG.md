@@ -1,8 +1,13 @@
 # Changelog
 
+## v3.0.0a4
+
+> TBD
+
 ## v3.0.0a3
 
 - hoist, update Lab 3/4 compatibility methods to public API
+- fix notebook metadata watching when no app-level styles are present
 
 ## v3.0.0a2
 
