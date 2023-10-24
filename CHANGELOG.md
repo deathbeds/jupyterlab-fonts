@@ -1,8 +1,12 @@
 # Changelog
 
+## v3.0.0a3
+
+- hoist, update Lab 3/4 compatibility methods to public API
+
 ## v3.0.0a2
 
-> TBD
+- add more Lab 3/4 compatibility methods
 
 ## v3.0.0a1
 
