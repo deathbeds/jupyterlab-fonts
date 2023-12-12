@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.1
+
+> TBD
+
 ## v3.0.0
 
 - see `3.0.0` alpha releases below

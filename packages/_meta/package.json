@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@deathbeds/meta-jupyterlab-fonts",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "scripts": {
     "build": "tsc -b --sourceMap",
     "build:cov": "tsc -b --inlineSourceMap",
