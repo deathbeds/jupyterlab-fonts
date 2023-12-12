@@ -8,7 +8,7 @@ import warnings
 from pathlib import Path
 
 from doitoml import DoiTOML
-from ruamel.yaml import safe_load
+from yaml import safe_load
 
 DOT_ENV = Path(".env")
 
